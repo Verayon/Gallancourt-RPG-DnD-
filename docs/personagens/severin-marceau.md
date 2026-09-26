@@ -45,8 +45,8 @@ L'Ordre depende de uma liderança centralizada nele.
 | Com | Tipo | Marca | Descrição |
 |---|---|---|---|
 | ← [Thibault de la Rivière](thibault-de-la-riviere.md) | 🐍 Traição | `CANON` | Passou informações estratégicas da Aliança a L'Ordre e se ofereceu a ele. |
-| → [Scyras Corbeau](scyras-corbeau.md) | 🗡️ Conspiração de assassinato | `POSSIBILIDADE` `SEGREDO` | Para L'Ordre, a frota de Dodixie é o maior obstáculo a uma nova guerra. Matar a duquesa antes da invasão deixaria a marinha do norte sem cabeça. |
-| ← [Thalin](thalin.md) | 🗡️ Conspiração de assassinato | `POSSIBILIDADE` `SEGREDO` | A vingança de Thalin tem um alvo: o homem cuja doutrina matou sua gente. Um assassinato fracassado do Primat poderia servir de pretexto para a guerra. |
+| → [Scyras Corbeau](scyras-corbeau.md) | 🗡️ Conspiração de assassinato | `POSSIBILIDADE` `SEGREDO` | Para L'Ordre, a frota de Dodixie é o maior poder naval inimigo, e Scyras é a voz mais implacável contra a doutrina da pureza. Matar a duquesa deixaria a marinha do norte sem cabeça. |
+| ← [Thalin](thalin.md) | 🗡️ Conspiração de assassinato | `POSSIBILIDADE` `SEGREDO` | A vingança de Thalin tem um alvo: o homem cuja doutrina matou sua gente. |
 
 → este personagem age sobre o outro; ← o outro age sobre este personagem.
 

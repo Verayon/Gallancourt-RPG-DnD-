@@ -5,7 +5,7 @@ tags:
 
 # Gallancourt em uma página
 
-O essencial do cenário para entender a campanha antes de mergulhar na wiki.
+O essencial do cenário, como ele está quando a campanha começa.
 
 ## 1. O reino partido
 
@@ -56,7 +56,7 @@ Cada par de cidades tem um motivo positivo e um negativo para manter contato. Re
 | Dodixie × Valynesse | 🟠 Tenso | Política e espionagem | Duas redes de espiões |
 | Saint-Armand × Valynesse | 🔴 Hostil velado | O exército e quem paga por ele | O golpe de Armand |
 
-Tabela completa, matriz e ganchos em **[Relações entre cidades](mundo/relacoes-entre-cidades.md)**.
+Tabela completa e matriz em **[Relações entre cidades](mundo/relacoes-entre-cidades.md)**.
 
 ## 4. A nobreza: alianças, rivalidades e facas
 
@@ -74,12 +74,6 @@ infiltrados e **conspirações de assassinato**. Alguns exemplos:
 
 Mapa completo em **[Intrigas da nobreza](mundo/intrigas-da-nobreza.md)**.
 
-## 5. O que vem a seguir
-
-A Guerra Fria está prestes a esquentar. A próxima fase da campanha é
-**[A Segunda Guerra de Gallancourt](campanha/index.md)**: L'Ordre tenta usar as rivalidades da
-Aliança para dividi-la antes de invadir.
-
 ## Como navegar
 
 | Quero saber sobre… | Vá para |
@@ -89,5 +83,4 @@ Aliança para dividi-la antes de invadir.
 | Uma pessoa | [Personagens](personagens/index.md) |
 | Uma família ou organização | [Facções](faccoes/index.md) |
 | Quem odeia quem | [Relações entre cidades](mundo/relacoes-entre-cidades.md) · [Intrigas da nobreza](mundo/intrigas-da-nobreza.md) |
-| O próximo arco | [Campanha](campanha/index.md) |
 | O que ainda não foi decidido | [Lacunas em aberto](mestre/lacunas.md) |

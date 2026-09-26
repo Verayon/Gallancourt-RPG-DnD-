@@ -20,7 +20,6 @@ docs/
 ├── personagens/    Uma página por NPC
 ├── mundo/          Conflitos, teia política, relações entre cidades, intrigas da nobreza,
 │                   religião, economia, operações clandestinas, glossário
-├── campanha/       A Segunda Guerra de Gallancourt (proposta de próximo arco)
 └── mestre/         Referência rápida, lacunas, manutenção do cânone, inconsistências, fontes
 fontes/             Dossiê original usado como fonte
 ```

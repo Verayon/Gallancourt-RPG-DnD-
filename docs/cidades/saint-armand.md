@@ -71,7 +71,7 @@ vigilância do leste.
 | [Nouvelle-Montagne](nouvelle-montagne.md) | 🟢 Aliado | Alimento em troca de proteção: o pacto nascido no Massacre da Aurora Velada, mantido por Juliette Clermont. | Dependência gera ressentimento: os clãs discutem se o preço da proteção é justo, e Élodie quer renegociá-lo. Um golpe de Armand só funcionaria com o grão de Helga, que tem a chave nas mãos. |
 | [Valynesse](valynesse.md) | 🔴 Hostil velado | Saint-Armand é a espada da Aliança; Valynesse paga por ela. | Armand considerou um golpe, e o alvo natural é a centralidade de Valynesse. Beaumont vigia o exército. Saint-Armand lembra que segurou o istmo enquanto os outros entravam na capital. |
 
-Estados e ganchos são `POSSIBILIDADE`. Detalhes em
+Estados e motivos negativos são `POSSIBILIDADE`. Detalhes em
 [Relações entre cidades](../mundo/relacoes-entre-cidades.md).
 
 !!! question "Em aberto"

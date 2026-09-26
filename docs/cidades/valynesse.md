@@ -73,7 +73,7 @@ Aliança quanto um dos maiores centros de espionagem.
 | [Nouvelle-Montagne](nouvelle-montagne.md) | 🟠 Tenso | Nouvelle-Montagne alimenta a antiga capital. | Choque entre o poder do dinheiro (Magnetér) e o poder da comida (Roche). Valynesse se lembra de que sua fome tem dono. |
 | [Saint-Armand](saint-armand.md) | 🔴 Hostil velado | Saint-Armand é a espada da Aliança; Valynesse paga por ela. | Armand considerou um golpe, e o alvo natural é a centralidade de Valynesse. Beaumont vigia o exército. Saint-Armand lembra que segurou o istmo enquanto os outros entravam na capital. |
 
-Estados e ganchos são `POSSIBILIDADE`. Detalhes em
+Estados e motivos negativos são `POSSIBILIDADE`. Detalhes em
 [Relações entre cidades](../mundo/relacoes-entre-cidades.md).
 
 !!! question "Em aberto"

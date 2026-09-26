@@ -50,10 +50,6 @@ A guerra acabou. A guerra política apenas começou.
 
     Religião, economia, teia política e operações clandestinas.
 
--   **[Campanha](campanha/index.md)**
-
-    A Segunda Guerra de Gallancourt: estopim, frentes, atos e finais possíveis.
-
 -   **[Referência do Mestre](mestre/index.md)**
 
     Tabelas rápidas, lacunas em aberto e regras de manutenção do cânone.

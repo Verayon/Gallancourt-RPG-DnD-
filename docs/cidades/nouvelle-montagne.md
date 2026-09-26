@@ -73,7 +73,7 @@ abastecimento e proteção. No pós-guerra, reconstruiu suas terras e consolidou
 | [Saint-Armand](saint-armand.md) | 🟢 Aliado | Alimento em troca de proteção: o pacto nascido no Massacre da Aurora Velada, mantido por Juliette Clermont. | Dependência gera ressentimento: os clãs discutem se o preço da proteção é justo, e Élodie quer renegociá-lo. Um golpe de Armand só funcionaria com o grão de Helga, que tem a chave nas mãos. |
 | [Valynesse](valynesse.md) | 🟠 Tenso | Nouvelle-Montagne alimenta a antiga capital. | Choque entre o poder do dinheiro (Magnetér) e o poder da comida (Roche). Valynesse se lembra de que sua fome tem dono. |
 
-Estados e ganchos são `POSSIBILIDADE`. Detalhes em
+Estados e motivos negativos são `POSSIBILIDADE`. Detalhes em
 [Relações entre cidades](../mundo/relacoes-entre-cidades.md).
 
 !!! question "Em aberto"

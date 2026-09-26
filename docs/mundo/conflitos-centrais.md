@@ -52,7 +52,7 @@ A Fraternidade foi formada por oposição ao Édito, mas cada casa conservou seu
     L'Ordre possui centralização religiosa, mas sua estabilidade e suas relações internas ainda
     podem ser desenvolvidas.
 
-## Ganchos de campanha
+## Tipos de história que o cenário sustenta
 
 O material já estabelece uma base forte para histórias de:
 

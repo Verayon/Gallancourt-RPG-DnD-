@@ -74,7 +74,7 @@ quatro poderes, e o material não estabelece que um deles comande os demais.
 | [Saint-Armand](saint-armand.md) | 🟠 Tenso | A Torre do Trovão poderia dar à fronteira magia de guerra que nenhum exército tem. | Kaelen Thorne se recusa a pôr a Torre a serviço do exército; Armand quer tempestades como arma. A fé tradicional de Saint-Armand desconfia de uma cidade governada por magos. |
 | [Valynesse](valynesse.md) | 🔵 Cordial | Comércio e política: Baie vende, Valynesse financia. | Os financistas de Valynesse querem taxar as rotas de Vigny; a Casa Lumière teme ser reduzida a província do Doge. |
 
-Estados e ganchos são `POSSIBILIDADE`. Detalhes em
+Estados e motivos negativos são `POSSIBILIDADE`. Detalhes em
 [Relações entre cidades](../mundo/relacoes-entre-cidades.md).
 
 !!! question "Em aberto"

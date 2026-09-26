@@ -24,7 +24,7 @@ busca por vingança.
 | Com | Tipo | Marca | Descrição |
 |---|---|---|---|
 | ← [Alfonse Enry](alfonse-enry.md) | 📜 Mentor | `CANON` | Enry treinou Thalin nas artes da resistência. |
-| → [Severin Marceau](severin-marceau.md) | 🗡️ Conspiração de assassinato | `POSSIBILIDADE` `SEGREDO` | A vingança de Thalin tem um alvo: o homem cuja doutrina matou sua gente. Um assassinato fracassado do Primat poderia servir de pretexto para a guerra. |
+| → [Severin Marceau](severin-marceau.md) | 🗡️ Conspiração de assassinato | `POSSIBILIDADE` `SEGREDO` | A vingança de Thalin tem um alvo: o homem cuja doutrina matou sua gente. |
 
 → este personagem age sobre o outro; ← o outro age sobre este personagem.
 

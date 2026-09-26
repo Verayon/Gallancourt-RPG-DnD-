@@ -72,7 +72,7 @@ economia do porto, e uma estrutura clandestina que convive com a vida pública (
 | [Saint-Armand](saint-armand.md) | ⚪ Neutro | Saint-Armand garante a proteção terrestre que uma cidade naval não tem. | Corbeau vê um exército cada vez maior como ameaça à própria autonomia; Saint-Armand se ressente de que a marinha fique com a glória e o dinheiro. As redes de espionagem de Corbeau podem saber dos planos de golpe de Armand. |
 | [Valynesse](valynesse.md) | 🟠 Tenso | Política e espionagem: Valynesse coordena, Dodixie informa e financia. | Duas redes de espionagem (Corbeau e Beaumont) vigiam uma à outra. Scyras desconfia de que o Doge governa como um rei sem coroa. |
 
-Estados e ganchos são `POSSIBILIDADE`. Detalhes em
+Estados e motivos negativos são `POSSIBILIDADE`. Detalhes em
 [Relações entre cidades](../mundo/relacoes-entre-cidades.md).
 
 !!! question "Em aberto"

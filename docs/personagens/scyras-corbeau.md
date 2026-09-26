@@ -44,7 +44,7 @@ e naval, vitorioso na [Queda das Velas Negras](../eventos/queda-das-velas-negras
 |---|---|---|---|
 | ↔ [Alaric Duvant](alaric-duvant.md) | ⚖️ Cooperação e rivalidade | `CANON` | Duvant reconhece a liderança de Corbeau, mas tem ambições próprias em Dodixie. |
 | ↔ [Étienne Rochefort](etienne-rochefort.md) | 🕯️ Clandestina | `CANON` `SEGREDO` | Acordo secreto: o corsário ataca inimigos da casa e obtém seus próprios ganhos. |
-| ← [Severin Marceau](severin-marceau.md) | 🗡️ Conspiração de assassinato | `POSSIBILIDADE` `SEGREDO` | Para L'Ordre, a frota de Dodixie é o maior obstáculo a uma nova guerra. Matar a duquesa antes da invasão deixaria a marinha do norte sem cabeça. |
+| ← [Severin Marceau](severin-marceau.md) | 🗡️ Conspiração de assassinato | `POSSIBILIDADE` `SEGREDO` | Para L'Ordre, a frota de Dodixie é o maior poder naval inimigo, e Scyras é a voz mais implacável contra a doutrina da pureza. Matar a duquesa deixaria a marinha do norte sem cabeça. |
 
 → este personagem age sobre o outro; ← o outro age sobre este personagem.
 

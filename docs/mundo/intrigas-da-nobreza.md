@@ -103,8 +103,8 @@ graph LR
 ## Conspirações de assassinato
 
 - 🗡️ **[Jean Vigny](../personagens/jean-vigny.md) → [Étienne Rochefort](../personagens/etienne-rochefort.md)** `POSSIBILIDADE` `SEGREDO`: Os ataques de Rochefort afundam as cargas de Vigny. O comodoro contratou La Voile Noire para matá-lo, sem saber que o corsário trabalha para Scyras.
-- 🗡️ **[Severin Marceau](../personagens/severin-marceau.md) → [Scyras Corbeau](../personagens/scyras-corbeau.md)** `POSSIBILIDADE` `SEGREDO`: Para L'Ordre, a frota de Dodixie é o maior obstáculo a uma nova guerra. Matar a duquesa antes da invasão deixaria a marinha do norte sem cabeça.
-- 🗡️ **[Thalin](../personagens/thalin.md) → [Severin Marceau](../personagens/severin-marceau.md)** `POSSIBILIDADE` `SEGREDO`: A vingança de Thalin tem um alvo: o homem cuja doutrina matou sua gente. Um assassinato fracassado do Primat poderia servir de pretexto para a guerra.
+- 🗡️ **[Severin Marceau](../personagens/severin-marceau.md) → [Scyras Corbeau](../personagens/scyras-corbeau.md)** `POSSIBILIDADE` `SEGREDO`: Para L'Ordre, a frota de Dodixie é o maior poder naval inimigo, e Scyras é a voz mais implacável contra a doutrina da pureza. Matar a duquesa deixaria a marinha do norte sem cabeça.
+- 🗡️ **[Thalin](../personagens/thalin.md) → [Severin Marceau](../personagens/severin-marceau.md)** `POSSIBILIDADE` `SEGREDO`: A vingança de Thalin tem um alvo: o homem cuja doutrina matou sua gente.
 
 ## Todas as relações
 
@@ -120,8 +120,8 @@ graph LR
 | [Thibault de la Rivière](../personagens/thibault-de-la-riviere.md) | → | [Severin Marceau](../personagens/severin-marceau.md) | 🐍 Traição | `CANON` | Passou informações estratégicas da Aliança a L'Ordre e se ofereceu a ele. |
 | [Jeanesse Lumière](../personagens/jeanesse-lumiere.md) | ↔ | [Kaelen Thorne](../personagens/kaelen-thorne.md) | ⚔️ Rivalidade | `CANON` | A aristocracia Lumière contra a autonomia da Torre do Trovão. |
 | [Jean Vigny](../personagens/jean-vigny.md) | → | [Étienne Rochefort](../personagens/etienne-rochefort.md) | 🗡️ Conspiração de assassinato | `POSSIBILIDADE` `SEGREDO` | Os ataques de Rochefort afundam as cargas de Vigny. O comodoro contratou La Voile Noire para matá-lo, sem saber que o corsário trabalha para Scyras. |
-| [Severin Marceau](../personagens/severin-marceau.md) | → | [Scyras Corbeau](../personagens/scyras-corbeau.md) | 🗡️ Conspiração de assassinato | `POSSIBILIDADE` `SEGREDO` | Para L'Ordre, a frota de Dodixie é o maior obstáculo a uma nova guerra. Matar a duquesa antes da invasão deixaria a marinha do norte sem cabeça. |
-| [Thalin](../personagens/thalin.md) | → | [Severin Marceau](../personagens/severin-marceau.md) | 🗡️ Conspiração de assassinato | `POSSIBILIDADE` `SEGREDO` | A vingança de Thalin tem um alvo: o homem cuja doutrina matou sua gente. Um assassinato fracassado do Primat poderia servir de pretexto para a guerra. |
+| [Severin Marceau](../personagens/severin-marceau.md) | → | [Scyras Corbeau](../personagens/scyras-corbeau.md) | 🗡️ Conspiração de assassinato | `POSSIBILIDADE` `SEGREDO` | Para L'Ordre, a frota de Dodixie é o maior poder naval inimigo, e Scyras é a voz mais implacável contra a doutrina da pureza. Matar a duquesa deixaria a marinha do norte sem cabeça. |
+| [Thalin](../personagens/thalin.md) | → | [Severin Marceau](../personagens/severin-marceau.md) | 🗡️ Conspiração de assassinato | `POSSIBILIDADE` `SEGREDO` | A vingança de Thalin tem um alvo: o homem cuja doutrina matou sua gente. |
 | [Armand Saint-Laurent](../personagens/armand-saint-laurent.md) | ↔ | [Lorenzo Magnetér](../personagens/lorenzo-magneter.md) | 🔥 Hostilidade | `POSSIBILIDADE` | Armand acha que o Doge governa como um rei sem coroa; Lorenzo teme o exército. O golpe que Armand considerou teria Valynesse como alvo. |
 | [Philippe Beaumont](../personagens/philippe-beaumont.md) | → | [Armand Saint-Laurent](../personagens/armand-saint-laurent.md) | 👁️ Vigilância | `POSSIBILIDADE` `SEGREDO` | Beaumont sabe dos planos de golpe e guarda a informação como moeda de troca, sem contá-la nem ao Doge. |
 | [Henri du Valois](../personagens/henri-du-valois.md) | → | [Armand Saint-Laurent](../personagens/armand-saint-laurent.md) | 🕯️ Clandestina | `POSSIBILIDADE` `SEGREDO` | Os "movimentos políticos" que Henri financia incluem o golpe de Armand. Alternativa: Henri financia simpatizantes da doutrina da pureza dentro da Aliança. |
