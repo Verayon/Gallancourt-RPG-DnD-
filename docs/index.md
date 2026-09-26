@@ -61,7 +61,7 @@ A guerra acabou. A guerra política apenas começou.
 Sob o rei **[Thibault d'Aubren](personagens/thibault-d-aubren.md)**, o Primat
 **[Severin Marceau](personagens/severin-marceau.md)** convenceu a Coroa a proclamar o
 **[Édito da Pureza](eventos/edito-da-pureza.md)**. Seguiu-se o
-**[Mês de Sangue](eventos/mes-de-sangue.md)**, e cinco famílias —
+**[Ano de Sangue](eventos/ano-de-sangue.md)**, e cinco famílias —
 [Magnetér](faccoes/casa-magneter.md), [Corbeau](faccoes/casa-corbeau.md),
 [Lumière](faccoes/casa-lumiere.md), [Saint-Laurent](faccoes/casa-saint-laurent.md) e
 [Roche](faccoes/casa-roche.md) — formaram a

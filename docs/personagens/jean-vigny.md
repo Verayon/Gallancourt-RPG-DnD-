@@ -2,6 +2,7 @@
 tags:
   - Personagens
   - Baie de l'Éclair
+  - Naval
 ---
 
 # Jean Vigny
@@ -12,29 +13,29 @@ tags:
 |---|---|
 | **Título** | Comodoro |
 | **Cidade** | [Baie de l'Éclair](../cidades/baie-de-l-eclair.md) |
-| **Esfera** | Comércio; controle de rotas comerciais |
+| **Esfera** | Maior frota mercante do reino; monopólio de rotas comerciais |
 
 </div>
 
-Magnata mercante que domina o comércio de Baie de l'Éclair, conhecido por sua impiedade e por
-controlar importantes rotas comerciais.
+Um homem feito por si mesmo, cuja vasta frota mercante não foi herdada, mas **construída sobre
+a ruína de seus rivais** — entre eles a linhagem de [Étienne Rochefort](etienne-rochefort.md). É
+a face da ambição não-mágica de Baie de l'Éclair.
 
-## Relações
-
-| Com | Natureza |
-|---|---|
-| [Bromli Stonehammer](bromli-stonehammer.md) / [guilda naval](../faccoes/guilda-dos-construtores-navais.md) | Tensão econômica: a guilda depende do comércio, mas o monopólio de Vigny ameaça sua autonomia |
+Impiedoso e ganancioso, explora suas tripulações e usa táticas predatórias para manter seu
+monopólio. Não comanda lealdade, apenas medo, e sabe que seu império ruirá ao primeiro sinal de
+fraqueza.
 
 ## Intrigas
 
 | Com | Tipo | Marca | Descrição |
 |---|---|---|---|
-| ↔ [Bromli Stonehammer](bromli-stonehammer.md) | ⚔️ Rivalidade | `CANON` | A guilda naval depende do comércio de Vigny, mas teme virar instrumento de seu monopólio. |
-| → [Étienne Rochefort](etienne-rochefort.md) | 🗡️ Conspiração de assassinato | `POSSIBILIDADE` `SEGREDO` | Os ataques de Rochefort afundam as cargas de Vigny. O comodoro contratou La Voile Noire para matá-lo, sem saber que o corsário trabalha para Scyras. |
+| ← [Étienne Rochefort](etienne-rochefort.md) | 🔥 Hostilidade | `CANON` | Vigny construiu sua frota sobre a ruína da linhagem de Rochefort. O corsário ataca seus navios para derrubá-lo e tomar seu lugar. |
+| ↔ [Louis de Montclair](louis-de-montclair.md) | ⚔️ Rivalidade | `CANON` | Simbiose e desprezo: a imprudência de Vigny e os piratas garantem a demanda pelos navios de Louis, que despreza o Comodoro e busca em segredo outro patrono. |
+| → [Étienne Rochefort](etienne-rochefort.md) | 🗡️ Conspiração de assassinato | `POSSIBILIDADE` `SEGREDO` | O Comodoro, que governa pelo medo, contratou La Voile Noire para matar o corsário, sem saber que ele trabalha para Scyras. |
 
 → este personagem age sobre o outro; ← o outro age sobre este personagem.
 
 Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
 
 !!! question "Em aberto"
-    Autoridade formal de Vigny.
+    Autoridade formal de Vigny no governo da cidade.

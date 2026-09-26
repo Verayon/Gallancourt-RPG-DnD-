@@ -23,6 +23,12 @@ A família depende da relação delicada entre aristocracia, comerciantes e a
 [Torre do Trovão](torre-do-trovao.md). Ocupa uma posição de intermediação entre a nobreza, o
 comércio e a magia.
 
+O líder da Torre, o [Arquimago Elian Lumière](../personagens/elian-lumiere.md), leva o nome da
+família, mas governa a Magocracia com autonomia e vê a política da Aliança como distração.
+
 A autonomia dos atores econômicos ([Jean Vigny](../personagens/jean-vigny.md), a
-[guilda naval](guilda-dos-construtores-navais.md)) e arcanos ([Kaelen Thorne](../personagens/kaelen-thorne.md))
-impede que a influência Lumière seja automaticamente confundida com controle absoluto da cidade.
+[guilda naval](guilda-dos-construtores-navais.md)) e arcanos (a Torre) impede que a influência
+Lumière seja automaticamente confundida com controle absoluto da cidade.
+
+!!! question "Em aberto"
+    Qual é o parentesco entre o Duque Jeanesse e o Arquimago Elian Lumière?

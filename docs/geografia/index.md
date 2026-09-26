@@ -5,23 +5,45 @@ tags:
 
 # Geografia de Gallancourt
 
-Gallancourt é uma **península** cercada por grandes corpos d'água, com litoral recortado,
-áreas de planície e uma **grande cordilheira** que atravessa o interior e divide o território.
-O mar é estrada, mercado e arma; as montanhas são barreira e fronteira.
+Gallancourt é uma **península de difícil acesso por terra**, o que favorece o comércio marítimo.
+É cercada por grandes corpos d'água, com litoral recortado, áreas de planície e uma **grande
+cordilheira** que atravessa o interior e divide o território. O mar é estrada, mercado e arma; as
+montanhas são barreira e fronteira.
+
+## O mundo além de Gallancourt
+
+Gallancourt fica no continente de **Nirador**. Pelas rotas marítimas chegam imigrantes e mercadorias
+de todo o continente, principalmente dos outros reinos da região com acesso ao mar:
+
+| Reino | O que se sabe |
+|---|---|
+| **Mannellaín** | Reino marítimo de Nirador; fonte de imigrantes e comércio |
+| **Coltaria** | Reino marítimo de Nirador; fonte de imigrantes e comércio |
+| **Sagreiras** | Reino marítimo de Nirador; fonte de imigrantes e comércio |
+| **Castomar** | Reino marítimo de Nirador; fonte de imigrantes e comércio |
+
+O [Édito da Pureza](../eventos/edito-da-pureza.md) afetou as relações de Gallancourt com esses
+reinos: alguns foram favoráveis à perseguição, outros repudiaram a monarquia. Valynesse exporta
+artigos de luxo para reinos vizinhos, e Baie de l'Éclair é a principal porta de entrada dos
+produtos internacionais.
+
+!!! question "Em aberto"
+    Quais reinos apoiaram e quais repudiaram o Édito? Como cada um se relaciona hoje com
+    Gallancourt e com L'Ordre?
 
 ## Posição relativa das principais cidades
 
-!!! info "Leitura cartográfica"
-    As posições abaixo derivam da leitura visual dos mapas. São relativas, não coordenadas
-    exatas. Ver [Mapas](mapas.md).
+!!! info "Fontes"
+    As posições combinam a leitura visual dos mapas com as descrições das cidades. São relativas,
+    não coordenadas exatas. Ver [Mapas](mapas.md).
 
 | Região | Cidade | Por que importa |
 |---|---|---|
-| Norte | [Dodixie](../cidades/dodixie.md) | Junto ao mar: comércio, navegação, defesa naval e comunicação com outras regiões costeiras |
-| Oeste | [Baie de l'Éclair](../cidades/baie-de-l-eclair.md) | Posição costeira coerente com seu porto e domínio marítimo |
-| Centro / interior | [Valynesse](../cidades/valynesse.md) | Antiga capital; favorece o controle político das rotas terrestres |
-| Sul | [Nouvelle-Montagne](../cidades/nouvelle-montagne.md) | Setor meridional, coerente com o caráter agrícola |
-| Faixa montanhosa / fronteira | [Saint-Armand](../cidades/saint-armand.md) | Transição entre as terras da Aliança e a cordilheira; explica seu papel de fortaleza |
+| Norte | [Dodixie](../cidades/dodixie.md) | Construída sobre o mar dentro de uma grande baía, protegida por recifes |
+| Oeste | [Baie de l'Éclair](../cidades/baie-de-l-eclair.md) | Baía de águas profundas entre penhascos de ardósia; maior porto do reino |
+| Centro / interior | [Valynesse](../cidades/valynesse.md) | Vale fértil no coração do reino, ao pé da cordilheira; capital e centro do comércio terrestre |
+| Sul | [Nouvelle-Montagne](../cidades/nouvelle-montagne.md) | Vales férteis, colinas ondulantes e rios que descem das montanhas |
+| Faixa montanhosa / fronteira | [Saint-Armand](../cidades/saint-armand.md) | Platô rochoso na fronteira leste, com vista sobre as planícies da Cicatriz |
 | Leste | [Montclair de Lune](../cidades/montclair-de-lune.md), [Chantépierre](../cidades/chantepierre.md), [Valmire-sur-Rose](../cidades/valmire-sur-rose.md) | Concentradas no território montanhoso de L'Ordre de Célestien |
 | Mar próximo | [Ilhas do Relâmpago](ilhas-do-relampago.md) | Rotas marítimas; ligação com Baie de l'Éclair |
 

@@ -69,7 +69,7 @@ Depois da queda da Casa D'Aubren, a antiga unidade política de Gallancourt desa
 |---|---|---|
 | **Território** | Antiga Gallancourt ocidental, controlada pelas cinco famílias | Território oriental organizado por Severin Marceau |
 | **Principais centros** | Dodixie, Valynesse, Baie de l'Éclair, Nouvelle-Montagne, Saint-Armand | Montclair de Lune (capital), Chantépierre, Valmire-sur-Rose |
-| **Estrutura** | Aristocracia compartilhada entre as cinco grandes casas | Teocracia baseada na nova doutrina de pureza |
+| **Estrutura** | Aristocracia compartilhada, governada pelo Conseil des Seigneurs | Teocracia baseada na nova doutrina de pureza |
 
 A [Cicatriz](a-cicatriz.md) e a [cordilheira](grande-cordilheira.md) são referências da
 fronteira, mas a delimitação cartográfica precisa permanece em aberto.

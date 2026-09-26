@@ -5,8 +5,29 @@ tags:
 
 # Fontes e método
 
-Esta wiki foi organizada a partir do **Dossiê Geral Expandido de Gallancourt** (*Crônicas de
-Gallancourt — História, geografia, cidades, famílias e divisão territorial*), que reúne:
+A wiki usa duas fontes:
+
+| # | Fonte | Arquivo | Prioridade |
+|---|---|---|---|
+| 1 | *Crônicas de Gallancourt: Um Reino Dividido (Versão Revisada)* — documento do autor | `fontes/Historia_Gallancourt.pdf` | **Prevalece** em caso de divergência |
+| 2 | *Dossiê Geral Expandido de Gallancourt* | `fontes/Gallancourt_Dossie_Geral_Expandido.md` | Completa o que o PDF não cobre |
+
+As divergências entre as duas fontes, e como foram resolvidas, estão em
+[Inconsistências a revisar](inconsistencias.md#divergencias-entre-o-pdf-e-o-dossie).
+
+## O documento do autor (PDF)
+
+A parte revisada do PDF (páginas 1 a 8) traz a história resumida, as cinco cidades com geografia,
+gente, figuras de poder e pontos de interesse, e as relações entre as cidades. As páginas
+seguintes são rascunhos anteriores (listas de nobres com títulos a definir, a estrutura do
+Conseil des Seigneurs e as notas de criação das cidades de L'Ordre). Dos rascunhos, a wiki usa o
+que não conflita com a versão revisada; os títulos de nobreza divergentes estão registrados em
+Inconsistências.
+
+## O dossiê
+
+O **Dossiê Geral Expandido de Gallancourt** (*Crônicas de Gallancourt — História, geografia,
+cidades, famílias e divisão territorial*) reúne:
 
 - as crônicas previamente consolidadas;
 - a leitura de duas imagens cartográficas (território de L'Ordre e região de Gallancourt);
@@ -17,7 +38,7 @@ Gallancourt — História, geografia, cidades, famílias e divisão territorial*
     elaboração do dossiê. Portanto, o conteúdo desse arquivo não está incorporado aqui. Onde
     faltam informações, elas estão registradas como lacunas, sem preenchimento especulativo.
 
-## Como o dossiê foi dividido
+### Como o dossiê foi dividido
 
 | Seção do dossiê | Onde está na wiki |
 |---|---|

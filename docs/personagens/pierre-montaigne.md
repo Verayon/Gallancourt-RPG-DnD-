@@ -12,22 +12,21 @@ tags:
 |---|---|
 | **Título** | Chefe |
 | **Cidade** | [Nouvelle-Montagne](../cidades/nouvelle-montagne.md) |
-| **Facção interna** | Facção pragmática |
+| **Facção interna** | Facção pragmática do conselho de clãs |
 
 </div>
 
-Representante da facção pragmática de Nouvelle-Montagne, uma das correntes que disputam a forma
-de empregar a riqueza agrícola da região.
+Homem pragmático e resiliente, líder da facção pragmática no conselho de clãs. Argumenta que **a
+neutralidade é uma forma de submissão** e defende ativamente a formação de um **bloco de poder
+com Dodixie e Saint-Armand** para confrontar a exploração econômica de Valynesse e de Baie de
+l'Éclair — e livrar a cidade das taxas abusivas de Jean Vigny.
 
 ## Intrigas
 
 | Com | Tipo | Marca | Descrição |
 |---|---|---|---|
-| ↔ [Élodie Vaucluse](elodie-vaucluse.md) | ⚔️ Rivalidade | `POSSIBILIDADE` | Élodie quer usar o grão como arma política; Montaigne prefere vender e prosperar. Disputam o voto do conselho de chefes. |
+| ↔ [Élodie Vaucluse](elodie-vaucluse.md) | ⚔️ Rivalidade | `CANON` | Facção radical contra facção pragmática no conselho de clãs: embargos de grãos contra um bloco com Dodixie e Saint-Armand. |
 
 → este personagem age sobre o outro; ← o outro age sobre este personagem.
 
 Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
-
-!!! question "Em aberto"
-    Composição do conselho de chefes e o lugar de Montaigne nele.

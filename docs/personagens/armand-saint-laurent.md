@@ -11,43 +11,37 @@ tags:
 
 | | |
 |---|---|
-| **Título** | Lorde Comandante |
+| **Título** | Lorde Comandante — líder supremo do exército de Gallancourt |
 | **Casa** | [Saint-Laurent](../faccoes/casa-saint-laurent.md) (figura central) |
 | **Cidade** | [Saint-Armand](../cidades/saint-armand.md) |
 | **Facção** | [Aliança dos Lordes](../faccoes/alianca-dos-lordes.md) |
 
 </div>
 
-Veterano da guerra e principal líder de Saint-Armand. Respeitado como comandante, mas com
-ambições políticas maiores do que sua posição militar: **passou a considerar a possibilidade de
-um golpe**. Essa consideração é uma fonte importante de instabilidade dentro da Aliança, já que
-a Casa Saint-Laurent é seu braço militar indispensável.
+Veterano da guerra civil, viu em primeira mão como a corrupção e a decadência da monarquia
+quase destruíram o reino. Acredita com fervor que a aristocracia atual está cometendo os mesmos
+erros e que **apenas um governo militar**, baseado em ordem, disciplina e mérito, pode salvar a
+nação.
 
-## Relações
-
-| Com | Natureza |
-|---|---|
-| [Juliette Clermont](juliette-clermont.md) | Sua Intendente-Geral |
-| [Thibault de la Rivière](thibault-de-la-riviere.md) | Oficial que traiu Saint-Armand |
-
-## Tensões
-
-- dever de defesa versus ambição política.
+!!! warning "SEGREDO"
+    Armand está secretamente **sondando seus oficiais mais leais para um golpe de Estado**, que
+    ele vê como seu dever patriótico.
 
 ## Intrigas
 
 | Com | Tipo | Marca | Descrição |
 |---|---|---|---|
+| ↔ [Lorenzo Magnetér](lorenzo-magneter.md) | 🔥 Hostilidade | `CANON` | A capital teme uma tomada de poder; Armand acredita que só um governo militar pode salvar o reino da aristocracia corrupta. |
+| ← [Juliette Clermont](juliette-clermont.md) | 👁️ Vigilância | `CANON` `SEGREDO` | Ciente das ambições de Armand, Juliette trabalha sutilmente para frustrar o golpe, temendo uma nova guerra civil. |
 | ↔ [Helga Roche](helga-roche.md) | 🔗 Dependência | `CANON` | Alimento em troca de proteção, desde o Massacre da Aurora Velada. |
-| ↔ [Lorenzo Magnetér](lorenzo-magneter.md) | 🔥 Hostilidade | `POSSIBILIDADE` | Armand acha que o Doge governa como um rei sem coroa; Lorenzo teme o exército. O golpe que Armand considerou teria Valynesse como alvo. |
-| ← [Philippe Beaumont](philippe-beaumont.md) | 👁️ Vigilância | `POSSIBILIDADE` `SEGREDO` | Beaumont sabe dos planos de golpe e guarda a informação como moeda de troca, sem contá-la nem ao Doge. |
-| ← [Henri du Valois](henri-du-valois.md) | 🕯️ Clandestina | `POSSIBILIDADE` `SEGREDO` | Os "movimentos políticos" que Henri financia incluem o golpe de Armand. Alternativa: Henri financia simpatizantes da doutrina da pureza dentro da Aliança. |
-| ↔ [Kaelen Thorne](kaelen-thorne.md) | 🔥 Hostilidade | `POSSIBILIDADE` | Armand quer a Torre como arma de guerra; Kaelen quer ser deixado em paz com suas tempestades. |
+| ← [Philippe Beaumont](philippe-beaumont.md) | 👁️ Vigilância | `POSSIBILIDADE` `SEGREDO` | Beaumont, que sabe de quase todas as conspirações, conhece os planos de golpe e guarda a informação como moeda de troca. |
+| ← [Henri du Valois](henri-du-valois.md) | 🕯️ Clandestina | `POSSIBILIDADE` `SEGREDO` | Henri, que financia movimentos contra a opressão da elite, vê no golpe de Armand uma forma de derrubar a aristocracia corrupta. |
+| ↔ [Elian Lumière](elian-lumiere.md) | 🔥 Hostilidade | `POSSIBILIDADE` | Armand quer a Torre como arma; Elian vê a política como uma distração de suas tempestades. |
 
 → este personagem age sobre o outro; ← o outro age sobre este personagem.
 
 Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
 
 !!! question "Em aberto"
-    - Armand Saint-Laurent ainda planeja um golpe? Qual a extensão dos planos?
+    - Quantos oficiais já aderiram, e qual é a extensão dos planos de golpe?
     - Relação de Armand com as demais casas.

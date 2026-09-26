@@ -8,79 +8,96 @@ tags:
 
 # Baie de l'Éclair
 
-*Porto, tempestades e poder arcano.*
+*O Portão do Mundo — o maior porto do reino.*
 
 <div class="ficha" markdown>
 
 | | |
 |---|---|
-| **Estado** | [Aliança dos Lordes](../faccoes/alianca-dos-lordes.md) |
-| **Localização** | Oeste costeiro |
+| **Estado** | Gallancourt ([Aliança dos Lordes](../faccoes/alianca-dos-lordes.md)) |
+| **Localização** | Baía de águas profundas na costa oeste |
 | **Casa principal** | [Lumière](../faccoes/casa-lumiere.md) |
-| **Instituição arcana** | [Torre do Trovão](../faccoes/torre-do-trovao.md) |
+| **Instituição dominante** | [Magocracia da Torre do Trovão](../faccoes/torre-do-trovao.md) |
 | **Guilda** | [Construtores navais](../faccoes/guilda-dos-construtores-navais.md) |
 | **Cor no mapa** | Azul |
 
 </div>
 
-## Características
+## Geografia e recursos
 
-Cidade portuária do oeste, cosmopolita e profundamente ligada ao mar, marcada pelas
-tempestades, pelo comércio e pela presença da **Magocracia da Torre do Trovão**, centro de poder
-arcano associado ao domínio das tempestades.
+A cidade está aninhada em uma baía de águas profundas, um porto natural quase perfeito. A região
+é dramaticamente recortada por **penhascos de ardósia** constantemente açoitados pelo oceano. A
+baía é infame por suas **tempestades súbitas e violentas**, que deram nome ao local.
+
+Os recursos incluem ricas zonas de pesca, **leitos de pérolas** em águas mais calmas e madeiras
+resistentes das florestas costeiras. A energia caótica das tempestades é, por si só, um **recurso
+arcano** para os magos da cidade.
+
+É a principal conexão marítima do reino: recebe produtos de todo o mundo e é responsável pela
+entrada e saída da maioria dos produtos internacionais. Seus estaleiros produzem **as melhores
+embarcações de Gallancourt**, e sua influência sobre a força naval a torna um ator político
+poderoso.
+
+## A cidade e sua gente
+
+Uma cidade de contrastes. O ar é carregado com o cheiro de sal, peixe e o ozônio residual de
+relâmpagos; o som das ondas, dos sinos de navios e do ocasional trovão forma a sinfonia da
+cidade. **Runas brilhantes de proteção arcana** adornam os edifícios para afastar o pior das
+tempestades.
+
+É um porto cosmopolita e barulhento, cheio de marinheiros de terras distantes, mas tudo opera sob
+o olhar vigilante e elitista da Magocracia da Torre do Trovão. O poder aqui não é medido em
+terras, mas em **conhecimento arcano e controle sobre os mares**.
+
+A cidade sofre com ataques constantes de piratas e corsários, **alguns controlados por seus
+próprios nobres**.
 
 ## História
 
 Durante a guerra, Baie de l'Éclair sofreu com pirataria, sabotagens e conflitos marítimos, e
-forneceu à Aliança sua combinação particular de poder naval e conhecimento arcano. Suas forças
-participaram do [cerco de Valynesse](../eventos/queda-de-valynesse.md). No pós-guerra, recuperou
+forneceu à Aliança sua combinação de poder naval e conhecimento arcano. No pós-guerra, recuperou
 suas rotas e fortaleceu a Torre do Trovão.
 
-## Poderes
+## Figuras de poder
 
-Baie de l'Éclair **não tem um único centro de poder**. A cidade depende da interação entre
-quatro poderes, e o material não estabelece que um deles comande os demais.
-
-| Personagem | Poder |
+| Personagem | Papel |
 |---|---|
-| [Duque Jeanesse Lumière](../personagens/jeanesse-lumiere.md) | Aristocracia local |
-| [Arquimago Kaelen Thorne](../personagens/kaelen-thorne.md) | Torre do Trovão |
-| [Comodoro Jean Vigny](../personagens/jean-vigny.md) | Rotas comerciais |
-| [Mestre Bromli Stonehammer](../personagens/bromli-stonehammer.md) | Construtores navais |
-| [Capitão Étienne Rochefort](../personagens/etienne-rochefort.md) | Frota corsária ligada secretamente a Corbeau |
+| [Arquimago Elian Lumière](../personagens/elian-lumiere.md) | Líder recluso da Torre do Trovão, obcecado pelas tempestades |
+| [Duque Jeanesse Lumière](../personagens/jeanesse-lumiere.md) | Representante da aristocracia local |
+| [Comodoro Jean Vigny](../personagens/jean-vigny.md) | Dono da maior frota mercante; governa pelo medo |
+| [Mestre Louis de Montclair](../personagens/louis-de-montclair.md) | Líder da guilda dos construtores navais |
+| [Capitão Étienne Rochefort](../personagens/etienne-rochefort.md) | Nobre arruinado por Vigny, hoje corsário ligado secretamente a Scyras |
 
-## Pontos de tensão
+## Pontos de interesse
+
+| Local | Descrição |
+|---|---|
+| **A Torre do Trovão** | Torre de obsidiana e coral no centro da cidade, muitas vezes coroada por um arco de eletricidade. Sede da Magocracia e uma das maiores bibliotecas de conhecimento arcano do reino |
+| **A Taverna Âncora Quebrada** | Construída dentro do casco de um navio colossal que naufragou na baía há um século. O coração da vida mundana: perigosa e barulhenta, ideal para recrutar tripulações, ouvir rumores de terras distantes ou começar uma briga |
+| **O Mercado das Marés** | Mercado a céu aberto nas docas que vende de tudo, de peixes exóticos e especiarias raras a componentes arcanos das profundezas, como pérolas com eco mágico e corais imbuídos de energia elemental |
+
+## Tensões
 
 - aristocracia Lumière versus autonomia da Torre;
-- controle mercantil de Vigny versus independência da guilda naval;
-- necessidade de rotas seguras versus pirataria e sabotagem;
-- uso estratégico da magia versus os interesses particulares de Kaelen;
-- acordo de Rochefort com Scyras versus os ganhos próprios do corsário.
-
-## Conexões
-
-- [Dodixie](dodixie.md) — rotas comerciais e operações navais;
-- [Valynesse](valynesse.md) — comércio e política;
-- Rochefort / [Corbeau](../faccoes/casa-corbeau.md) — operações clandestinas;
-- [Torre do Trovão](../faccoes/torre-do-trovao.md) — poder arcano;
-- [Ilhas do Relâmpago](../geografia/ilhas-do-relampago.md) — espaço marítimo próximo.
+- monopólio de Vigny versus a guilda naval de Louis de Montclair;
+- vingança de Rochefort contra Vigny;
+- pirataria (de Rochefort e da frota financiada por Lucien de Saint-Pierre);
+- conflito econômico com Nouvelle-Montagne e disputas internas entre os nobres.
 
 ## Relações com outras cidades
 
-| Cidade | Estado | Motivo positivo | Motivo negativo |
+| Cidade | Estado | Como esta cidade a vê | Como ela vê esta cidade |
 |---|---|---|---|
-| [Dodixie](dodixie.md) | 🟠 Tenso | As duas marinhas da Aliança: rotas comerciais e operações navais conjuntas. | Disputam as mesmas rotas e portos. Baie sofreu pirataria durante a guerra, e o corsário Rochefort, que ataca essas rotas, age em segredo para a Casa Corbeau. Se Baie descobrir, a aliança naval racha. |
-| [Nouvelle-Montagne](nouvelle-montagne.md) | ⚪ Neutro | Baie compra grão e mármore; Nouvelle-Montagne precisa das rotas do oeste para vender. | O controle de Vigny sobre as rotas encarece o frete; a frota pirata ligada a Lucien de Saint-Pierre ataca justamente as rotas de Baie. |
-| [Saint-Armand](saint-armand.md) | 🟠 Tenso | A Torre do Trovão poderia dar à fronteira magia de guerra que nenhum exército tem. | Kaelen Thorne se recusa a pôr a Torre a serviço do exército; Armand quer tempestades como arma. A fé tradicional de Saint-Armand desconfia de uma cidade governada por magos. |
-| [Valynesse](valynesse.md) | 🔵 Cordial | Comércio e política: Baie vende, Valynesse financia. | Os financistas de Valynesse querem taxar as rotas de Vigny; a Casa Lumière teme ser reduzida a província do Doge. |
+| [Valynesse](valynesse.md) | 🔵 Cordial | Relação comercial importante, mas instável, pelo controle das tarifas de importação e exportação. | Relação comercial saudável, mas com conflitos pelo controle das taxas marítimas. |
+| [Dodixie](dodixie.md) | 🟠 Tenso | Cooperação comercial mútua, mas descontentamento com o aumento da pirataria e com a tentativa de Dodixie de roubar parte das rotas comerciais. | Comércio forte, mas tensão com os piratas e corsários que perturbam as rotas. Dodixie se sente ameaçada pelo poderio naval de Baie, que pode atrapalhar sua expansão comercial marítima. |
+| [Nouvelle-Montagne](nouvelle-montagne.md) | 🟠 Tenso | Relação tensa, marcada pela extorsão nos preços de transporte de grãos e animais. | Relação conflituosa: Baie de l'Éclair impõe altas taxas de transporte e tenta controlar a economia da região. |
+| [Saint-Armand](saint-armand.md) | 🔵 Cordial | Cooperam militarmente, mas existe tensão entre os almirantes de Baie e os generais de Saint-Armand sobre qual força deveria ser mais proeminente no reino. | Cooperação militar, com uma disputa latente sobre a primazia naval do reino. |
 
-Estados e motivos negativos são `POSSIBILIDADE`. Detalhes em
-[Relações entre cidades](../mundo/relacoes-entre-cidades.md).
+Notas e segredos de cada par em [Relações entre cidades](../mundo/relacoes-entre-cidades.md).
 
 !!! question "Em aberto"
     - Estrutura e regras da Torre.
     - Composição da frota local.
     - Autoridade formal de Vigny.
     - Estatuto da guilda.
-    - Relação familiar de Rochefort com qualquer casa (nenhuma foi estabelecida).
     - Administração das Ilhas do Relâmpago.

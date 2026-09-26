@@ -21,7 +21,7 @@ tags:
 
 ## Formação
 
-Depois do [Mês de Sangue](../eventos/mes-de-sangue.md), cinco grandes famílias decidiram que não
+Durante o [Ano de Sangue](../eventos/ano-de-sangue.md), as cinco maiores famílias das cidades do oeste decidiram que não
 aceitariam a nova ordem e formaram secretamente a Fraternidade:
 
 1. [Magnetér](casa-magneter.md), ligada a [Valynesse](../cidades/valynesse.md);
@@ -30,13 +30,18 @@ aceitariam a nova ordem e formaram secretamente a Fraternidade:
 4. [Saint-Laurent](casa-saint-laurent.md), ligada a [Saint-Armand](../cidades/saint-armand.md);
 5. [Roche](casa-roche.md), ligada a [Nouvelle-Montagne](../cidades/nouvelle-montagne.md).
 
+A resistência nasceu do desespero e da fúria: nobres do oeste que dependiam do comércio com
+outras nações, mercadores arruinados e cidadãos — humanos e não-humanos — horrorizados com a
+barbárie.
+
 A união não era simples. Cada família possuía interesses próprios, tradições diferentes e uma
 visão particular do futuro do reino. Ainda assim, todas se opunham ao Édito e ao poder que
 Severin Marceau exercia sobre a Coroa.
 
 ## Na guerra
 
-A Fraternidade coordenou a resistência durante a guerra civil — da
+Com forte apoio popular nas regiões mais diversas do oeste e do centro, a Fraternidade coordenou
+a resistência durante os pouco mais de três anos de guerra civil — da
 [Queda das Velas Negras](../eventos/queda-das-velas-negras.md) à
 [Queda de Valynesse](../eventos/queda-de-valynesse.md). Após a execução da família real,
 transformou-se na [Aliança dos Lordes](alianca-dos-lordes.md).

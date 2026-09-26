@@ -21,7 +21,7 @@ docs/
 ├── mundo/          Conflitos, teia política, relações entre cidades, intrigas da nobreza,
 │                   religião, economia, operações clandestinas, glossário
 └── mestre/         Referência rápida, lacunas, manutenção do cânone, inconsistências, fontes
-fontes/             Dossiê original usado como fonte
+fontes/             Documentos-fonte: PDF do autor (prevalece) e dossiê
 ```
 
 ## Rodando localmente

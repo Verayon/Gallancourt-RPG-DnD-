@@ -18,6 +18,9 @@ tags:
 
 </div>
 
+A Cicatriz foi a região onde houve o **maior número de combates e eventos no último ano da
+guerra** — uma ferida que nunca fechou na mente dos que participaram da carnificina.
+
 Depois da campanha de Nouvelle-Montagne, novos combates aconteceram nas planícies próximas a
 Saint-Armand. Ali ocorreu uma das batalhas mais devastadoras de toda a guerra.
 

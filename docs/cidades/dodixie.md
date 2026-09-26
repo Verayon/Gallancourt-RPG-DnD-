@@ -7,78 +7,99 @@ tags:
 
 # Dodixie
 
-*Cidade das pontes, canais e docas.*
+*O Leviatã Econômico — a cidade mais rica do reino.*
 
 <div class="ficha" markdown>
 
 | | |
 |---|---|
-| **Estado** | [Aliança dos Lordes](../faccoes/alianca-dos-lordes.md) |
-| **Localização** | Norte da península, junto ao mar |
+| **Estado** | Gallancourt ([Aliança dos Lordes](../faccoes/alianca-dos-lordes.md)) |
+| **Localização** | Costa norte, dentro de uma grande baía |
 | **Casa principal** | [Corbeau](../faccoes/casa-corbeau.md) |
+| **Governante de fato** | [Marquesa Scyras de la Maison Corbeau](../personagens/scyras-corbeau.md) |
 | **Segunda grande casa** | [Duvant](../faccoes/casa-duvant.md) |
 | **Poder informal** | [La Voile Noire](../faccoes/la-voile-noire.md) |
 | **Cor no mapa** | Vermelho |
 
 </div>
 
-## Características
+## Geografia e recursos
 
-Cidade marítima do norte, construída sobre estacas, pontes e canais. Centro comercial, naval e
-multicultural, marcada pelo comércio marítimo e pela convivência de diferentes povos. Sua
-posição favorece o comércio, a navegação, a defesa naval e a comunicação com outras regiões
-costeiras.
+Dodixie é uma maravilha da engenharia: partes da cidade foram construídas **sobre o mar**,
+apoiadas em estacas gigantescas e interligadas por pontes e canais, impulsionadas pela
+necessidade de expandir os domínios da cidade (inspiração: Veneza). A cidade é protegida por
+**recifes naturais**, o que a torna um dos lugares mais difíceis de se invadir por mar.
+
+É o principal centro de comércio de **madeira**, que sustenta a produção de frotas navais, e
+explora vastas florestas, **minas de carvão** e outros recursos da cordilheira, além de produzir
+**vinho** e navios.
+
+## A cidade e sua gente
+
+Dodixie é a cidade mais rica do reino e não tem vergonha de ostentar. É um centro vibrante de
+comércio e indústria, onde o ar cheira a serragem, sal marinho e vinho derramado. A cidade é
+multicultural, marcada pela convivência de diferentes povos.
+
+A **ambição** é a força vital da cidade: todos, do mais rico nobre ao mais humilde estivador,
+acreditam que **Dodixie merece ser a capital**. A moralidade aqui é flexível, e o poder econômico
+é a única lei que realmente importa.
+
+A cidade sofre com tentativas de ataques piratas na região, compostos principalmente por
+**Fishmen**, humanoides-peixe.
 
 ## História
 
-Dodixie foi atingida pela repressão do [Mês de Sangue](../eventos/mes-de-sangue.md). A execução
-do pai de Scyras e a perda da família de Alfonse Enry deram à resistência uma dimensão pessoal,
-além da disputa política. Durante a guerra, tornou-se um dos grandes bastiões logísticos da
-Aliança.
+Durante a guerra civil, Dodixie foi um dos grandes bastiões logísticos da resistência. Na
+**[Queda das Velas Negras](../eventos/queda-das-velas-negras.md)**, mais de duzentas embarcações
+lealistas foram destruídas nos recifes. No pós-guerra, reforçou sua marinha.
 
-A cidade converteu a própria geografia — canais, recifes, pontes e acesso marítimo — em
-vantagem defensiva. Na **[Queda das Velas Negras](../eventos/queda-das-velas-negras.md)**, mais de
-duzentas embarcações lealistas foram destruídas nos recifes próximos, que se tornaram parte da
-memória militar da cidade. No pós-guerra, Dodixie reforçou sua marinha.
+Recentemente, a mansão de um ramo da família Enry, fora da cidade, foi atacada e queimada. Ver
+[Massacre da família Enry](../eventos/massacre-dos-enry.md).
 
-## Poderes e interesses
+## Figuras de poder
 
-Dodixie reúne poderes formais e informais: uma casa aristocrática e naval (Corbeau), uma
-segunda família com influência própria (Duvant), comerciantes e marinheiros que sustentam a
-economia do porto, e uma estrutura clandestina que convive com a vida pública (La Voile Noire).
+| Personagem | Papel |
+|---|---|
+| [Marquesa Scyras de la Maison Corbeau](../personagens/scyras-corbeau.md) | Governante de fato; jovem, implacável; busca vingança contra os aristocratas da capital |
+| [Condessa Camille Brissac](../personagens/camille-brissac.md) | Face pública da campanha para tornar Dodixie a nova capital |
+| [Lorde Alfonse Enry](../personagens/alfonse-enry.md) | Nobre recluso de uma família de assassinos e manipuladores; mentor de Thalin |
+| [Thalin](../personagens/thalin.md) | Rapaz em busca de vingança |
+| [Marquês Alaric Duvant](../personagens/alaric-duvant.md) | Líder da segunda grande família; coopera e compete com Corbeau |
+| [Zepharion](../personagens/zepharion.md) | Tiefling; líder atribuído de La Voile Noire |
 
-| Ator | Recurso / interesse | Relação conhecida |
-|---|---|---|
-| [Scyras Corbeau](../personagens/scyras-corbeau.md) | Casa, frota, resistência e influência portuária | Acordo secreto com Rochefort; cooperação e competição com Duvant |
-| [Alaric Duvant](../personagens/alaric-duvant.md) | Influência da segunda grande família | Coopera e compete com Corbeau |
-| [Alfonse Enry](../personagens/alfonse-enry.md) | Artes ladinas e psiônicas; rede de resistência | Treinou Thalin |
-| [Thalin](../personagens/thalin.md) | Busca por vingança | Foi treinado por Enry |
-| [Zepharion](../personagens/zepharion.md) / [La Voile Noire](../faccoes/la-voile-noire.md) | Rede criminosa clandestina | Relações formais com as casas não definidas |
-| [Camille Brissac](../personagens/camille-brissac.md) | Comércio e influência política | Posição exata na teia local não definida |
+## Pontos de interesse
 
-## Conexões
+| Local | Descrição |
+|---|---|
+| **Fortaleza Corbeau** | Castelo sombrio que se projeta sobre o porto; sede de Scyras |
+| **Os Estaleiros do Leviatã** | O segundo maior complexo de construção naval de Gallancourt, onde navios de guerra e principalmente mercantes são construídos em escala monumental |
+| **A Adega Flutuante** | Taverna construída sobre as docas, famosa pelos vinhos mais raros; ponto de encontro de capitães, mercadores e espiões |
+| **Os Recifes do Naufrágio** | O labirinto de recifes que protege a cidade, repleto de destroços de invasores e comerciantes descuidados; rumores falam de tesouros e segredos nos cascos submersos |
+| **Jack Encalhado** | Bar das docas construído dentro de um galeão que atracou durante a guerra para repor suprimentos; durante o carregamento, o porão explodiu e abriu um buraco no casco. O capitão desolado decidiu mudar de negócio e fazer de Dodixie sua casa |
+| **O Leilão Real** | Casa de leilões de Dodixie, rival do Leilão de Cristal de [Valynesse](valynesse.md) |
 
-- [Baie de l'Éclair](baie-de-l-eclair.md) — comércio e poder naval;
-- [Nouvelle-Montagne](nouvelle-montagne.md) — alimentos e abastecimento;
-- [Saint-Armand](saint-armand.md) — proteção terrestre;
-- [Valynesse](valynesse.md) — política e espionagem.
+## Tensões
+
+- rivalidade aberta com Valynesse pelo controle do governo;
+- rivalidade marítima com Baie de l'Éclair;
+- Corbeau coopera e compete com Duvant; outros nobres cobiçam o domínio de Corbeau;
+- La Voile Noire opera nas sombras das docas;
+- pirataria de Fishmen.
 
 ## Relações com outras cidades
 
-| Cidade | Estado | Motivo positivo | Motivo negativo |
+| Cidade | Estado | Como esta cidade a vê | Como ela vê esta cidade |
 |---|---|---|---|
-| [Baie de l'Éclair](baie-de-l-eclair.md) | 🟠 Tenso | As duas marinhas da Aliança: rotas comerciais e operações navais conjuntas. | Disputam as mesmas rotas e portos. Baie sofreu pirataria durante a guerra, e o corsário Rochefort, que ataca essas rotas, age em segredo para a Casa Corbeau. Se Baie descobrir, a aliança naval racha. |
-| [Nouvelle-Montagne](nouvelle-montagne.md) | 🔵 Cordial | Dodixie compra grão e escoa a produção de Nouvelle-Montagne pelo mar. | Dodixie depende de comida que não produz, e Élodie Vaucluse defende usar o grão como alavanca política. A frota pirata financiada por Lucien de Saint-Pierre ataca navios, possivelmente os de Rochefort. |
-| [Saint-Armand](saint-armand.md) | ⚪ Neutro | Saint-Armand garante a proteção terrestre que uma cidade naval não tem. | Corbeau vê um exército cada vez maior como ameaça à própria autonomia; Saint-Armand se ressente de que a marinha fique com a glória e o dinheiro. As redes de espionagem de Corbeau podem saber dos planos de golpe de Armand. |
-| [Valynesse](valynesse.md) | 🟠 Tenso | Política e espionagem: Valynesse coordena, Dodixie informa e financia. | Duas redes de espionagem (Corbeau e Beaumont) vigiam uma à outra. Scyras desconfia de que o Doge governa como um rei sem coroa. |
+| [Valynesse](valynesse.md) | 🔴 Rivalidade aberta | Rivalidade aberta pelo controle do governo: Dodixie acredita que deveria ser a nova capital devido ao seu poder econômico, e seus aristocratas apoiam em segredo iniciativas para enfraquecer a capital. | Rivalidade política e econômica. Dodixie, a cidade mais rica, deseja influenciar o governo central, e Valynesse resiste a essa interferência. |
+| [Baie de l'Éclair](baie-de-l-eclair.md) | 🟠 Tenso | Comércio forte, mas tensão com os piratas e corsários que perturbam as rotas. Dodixie se sente ameaçada pelo poderio naval de Baie, que pode atrapalhar sua expansão comercial marítima. | Cooperação comercial mútua, mas descontentamento com o aumento da pirataria e com a tentativa de Dodixie de roubar parte das rotas comerciais. |
+| [Nouvelle-Montagne](nouvelle-montagne.md) | ⚪ Neutro | Relações comerciais neutras; os fazendeiros de Nouvelle-Montagne preferem negociar diretamente com Dodixie para evitar as taxas da capital. | Relação comercial relativamente pacífica. |
+| [Saint-Armand](saint-armand.md) | ⚪ Neutro | Respeita a cidade militarizada, mas a considera uma possível ameaça caso decida intervir nas disputas políticas do reino. | Respeito mútuo, mas os comerciantes de Dodixie temem que os militares interfiram na economia. |
 
-Estados e motivos negativos são `POSSIBILIDADE`. Detalhes em
-[Relações entre cidades](../mundo/relacoes-entre-cidades.md).
+Notas e segredos de cada par em [Relações entre cidades](../mundo/relacoes-entre-cidades.md).
 
 !!! question "Em aberto"
     - Estrutura do governo municipal.
     - Relação legal entre Corbeau e Duvant.
     - Quem controla alfândega, docas e tribunais.
     - Tamanho e organização de La Voile Noire.
-    - Extensão dos poderes de Enry.
     - Identidade dos comandantes navais da Queda das Velas Negras.

@@ -5,7 +5,8 @@ tags:
 
 # I. Antes da ruptura
 
-Houve um tempo em que Gallancourt respirava como um reino consolidado.
+Houve um tempo em que Gallancourt respirava como um reino consolidado. Outrora unificado, o reino
+prosperou por séculos.
 
 A península era uma terra de senhorios feudais, cidades comerciais e portos que haviam
 aprendido, ao longo das gerações, a depender uns dos outros. O mar não era apenas uma
@@ -23,10 +24,23 @@ funcionava como uma fronteira natural e política. Ela separava povos, dificulta
 e, posteriormente, serviria como uma das marcas da divisão entre os territórios da antiga
 Gallancourt e o domínio que surgiria no leste.
 
+## Uma fratura cultural
+
+A nação, contudo, sempre carregou uma sutil fratura cultural. A **região oeste**, banhada pelo
+oceano e lar dos maiores portos — Baie de l'Éclair, Dodixie — e de Nouvelle-Montagne, era um
+caldeirão de culturas. O comércio intenso trouxe imigrantes de todo o continente de
+**[Nirador](../geografia/index.md#o-mundo-alem-de-gallancourt)** pelas rotas marítimas,
+principalmente dos outros reinos com acesso ao mar — **Mannellaín, Coltaria, Sagreiras e
+Castomar** —, resultando em uma população diversa onde humanos conviviam com elfos, anões,
+halflings e outras raças.
+
+Em contraste, as **terras do leste** eram mais isoladas, agrárias e tradicionalistas, com uma
+população predominantemente humana que via a crescente diversidade do oeste com desconfiança.
+
 ## A fé
 
-A religião predominante era o culto de **[Amaunator](../mundo/religiao.md)**, a chamada **Luz
-Eterna**. Durante gerações, o templo havia ocupado uma posição importante na vida pública, mas
+A religião predominante era o culto de **[Amaunator](../mundo/religiao.md)**, o deus do sol e da
+lei, em uma interpretação local conhecida como **A Luz Eterna**. Durante gerações, o templo havia ocupado uma posição importante na vida pública, mas
 a fé ainda funcionava como uma instituição ligada à monarquia e à sociedade do reino.
 
 ## A Coroa
@@ -44,9 +58,12 @@ A estabilidade, entretanto, era mais aparente do que real.
 
 ## A doutrina da pureza
 
-Nas regiões orientais, setores do clero começavam a defender uma interpretação cada vez mais
-radical da fé. A doutrina passou a falar não apenas da luz de Amaunator, mas da necessidade de
-uma suposta **pureza** daqueles que deveriam receber essa luz.
+Com o tempo, essa fé foi se corrompendo nas altas esferas da Igreja e da Monarquia. Nas regiões
+orientais, setores do clero começavam a defender uma interpretação cada vez mais radical da fé:
+os dogmas de lei e ordem foram pervertidos para justificar uma teologia de pureza e **supremacia
+humana**. A doutrina passou a falar não apenas da luz de Amaunator, mas da necessidade de
+uma suposta **pureza** daqueles que deveriam receber essa luz. A luz do sol de Amaunator não era
+mais para todos; era uma chama para "purificar as sombras" representadas pelas raças não-humanas.
 
 Foi nesse momento que surgiu a figura que mudaria para sempre a história do reino:
 **[Severin Marceau](../personagens/severin-marceau.md)**, Primat da Igreja.
@@ -61,4 +78,4 @@ E o rei, devoto, acabou convencido.
 
 ---
 
-**Próximo capítulo:** [O Édito e o Mês de Sangue](o-edito-e-o-mes-de-sangue.md)
+**Próximo capítulo:** [O Édito e o Ano de Sangue](o-edito-e-o-ano-de-sangue.md)

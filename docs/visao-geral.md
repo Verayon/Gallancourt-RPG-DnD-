@@ -34,43 +34,46 @@ graph TB
 
 | Cidade | Família | Líder | O que a cidade dá à Aliança |
 |---|---|---|---|
-| [Valynesse](cidades/valynesse.md) | [Magnetér](faccoes/casa-magneter.md) | [Doge Lorenzo Magnetér](personagens/lorenzo-magneter.md) | Dinheiro, administração, espiões |
-| [Dodixie](cidades/dodixie.md) | [Corbeau](faccoes/casa-corbeau.md) | [Duquesa Scyras Corbeau](personagens/scyras-corbeau.md) | Frota do norte, comércio |
-| [Baie de l'Éclair](cidades/baie-de-l-eclair.md) | [Lumière](faccoes/casa-lumiere.md) | [Duque Jeanesse Lumière](personagens/jeanesse-lumiere.md) | Frota do oeste, estaleiros, magia |
+| [Valynesse](cidades/valynesse.md) | [Magnetér](faccoes/casa-magneter.md) | [Doge Lorenzo Magnetér](personagens/lorenzo-magneter.md) | Capital; minas de gemas, luxo, espiões |
+| [Dodixie](cidades/dodixie.md) | [Corbeau](faccoes/casa-corbeau.md) | [Marquesa Scyras Corbeau](personagens/scyras-corbeau.md) | Riqueza, madeira, frota do norte |
+| [Baie de l'Éclair](cidades/baie-de-l-eclair.md) | [Lumière](faccoes/casa-lumiere.md) | [Duque Jeanesse Lumière](personagens/jeanesse-lumiere.md); [Arquimago Elian Lumière](personagens/elian-lumiere.md) na Torre do Trovão | Maior porto, melhores navios, magia |
 | [Saint-Armand](cidades/saint-armand.md) | [Saint-Laurent](faccoes/casa-saint-laurent.md) | [Lorde Comandante Armand Saint-Laurent](personagens/armand-saint-laurent.md) | Exército e defesa da fronteira |
 | [Nouvelle-Montagne](cidades/nouvelle-montagne.md) | [Roche](faccoes/casa-roche.md) | [Helga Roche](personagens/helga-roche.md) | Comida para todos |
+
+As cidades governam juntas pelo **Conseil des Seigneurs** (Conselho dos Lordes).
 
 **Nenhuma cidade se sustenta sozinha.** Se uma falhar, as outras quatro sofrem. Por isso elas
 precisam umas das outras e, ao mesmo tempo, temem umas às outras.
 
 ## 3. Por que as cidades se aproximam e se afastam
 
-Cada par de cidades tem um motivo positivo e um negativo para manter contato. Resumo:
-
 | Par | Estado | Aproxima | Afasta |
 |---|---|---|---|
-| Nouvelle-Montagne × Saint-Armand | 🟢 Aliado | Alimento por proteção | Dependência vira ressentimento |
-| Baie × Valynesse | 🔵 Cordial | Comércio e crédito | Taxas do Doge |
-| Dodixie × Nouvelle-Montagne | 🔵 Cordial | Grão pelo mar | Grão como alavanca; piratas |
-| Dodixie × Baie | 🟠 Tenso | As duas marinhas | Mesmas rotas; o segredo de Rochefort |
-| Dodixie × Valynesse | 🟠 Tenso | Política e espionagem | Duas redes de espiões |
-| Saint-Armand × Valynesse | 🔴 Hostil velado | O exército e quem paga por ele | O golpe de Armand |
+| Nouvelle-Montagne × Saint-Armand | 🟢 Aliado | Alimento pela proteção | Saint-Armand depende da comida |
+| Valynesse × Baie | 🔵 Cordial | Comércio saudável | Taxas marítimas e tarifas |
+| Baie × Saint-Armand | 🔵 Cordial | Cooperação militar | Almirantes contra generais |
+| Dodixie × Nouvelle-Montagne | ⚪ Neutro | Comércio direto, sem as taxas da capital | Pouco laço além do comércio |
+| Dodixie × Saint-Armand | ⚪ Neutro | Respeito mútuo | Medo de que os militares interfiram |
+| Dodixie × Baie | 🟠 Tenso | Comércio forte | Piratas, rotas roubadas, poder naval rival |
+| Valynesse × Nouvelle-Montagne | 🟠 Tenso | A comida da capital | Tributos abusivos |
+| Baie × Nouvelle-Montagne | 🟠 Tenso | Transporte da produção | Extorsão nos fretes |
+| Valynesse × Saint-Armand | 🟣 Hostil velado | O exército do reino | A capital teme um golpe |
+| Valynesse × Dodixie | 🔴 Rivalidade aberta | Política e comércio | Dodixie quer ser a capital |
 
-Tabela completa e matriz em **[Relações entre cidades](mundo/relacoes-entre-cidades.md)**.
+Tabela completa, com a visão de cada lado, em **[Relações entre cidades](mundo/relacoes-entre-cidades.md)**.
 
 ## 4. A nobreza: alianças, rivalidades e facas
 
 Os nobres não se dividem só por cidade. Há acordos secretos, rivalidades comerciais, espiões
 infiltrados e **conspirações de assassinato**. Alguns exemplos:
 
-- 🕯️ [Scyras Corbeau](personagens/scyras-corbeau.md) financia em segredo o corsário
-  [Rochefort](personagens/etienne-rochefort.md), que ataca rotas de aliados. `CANON`
-- 🗡️ [Jean Vigny](personagens/jean-vigny.md) contratou assassinos contra Rochefort, sem saber para
-  quem ele trabalha. `POSSIBILIDADE`
-- 🔥 [Armand Saint-Laurent](personagens/armand-saint-laurent.md) considerou um golpe contra o
-  governo de Valynesse. `CANON`
-- 👁️ [Philippe Beaumont](personagens/philippe-beaumont.md) sabe do golpe e guarda o segredo como
-  moeda. `POSSIBILIDADE`
+- 🕯️ [Scyras Corbeau](personagens/scyras-corbeau.md) paga o corsário
+  [Rochefort](personagens/etienne-rochefort.md) para atacar os navios de Jean Vigny. `CANON`
+- 🔥 [Armand Saint-Laurent](personagens/armand-saint-laurent.md) sonda oficiais para um golpe, e
+  [Juliette Clermont](personagens/juliette-clermont.md) tenta frustrá-lo. `CANON`
+- 🐍 [Thibault de la Rivière](personagens/thibault-de-la-riviere.md), comandante da Patrulha da
+  Fronteira, trabalha para L'Ordre e entregou a família Enry. `CANON`
+- 🗡️ [Jean Vigny](personagens/jean-vigny.md) contratou assassinos contra Rochefort. `POSSIBILIDADE`
 
 Mapa completo em **[Intrigas da nobreza](mundo/intrigas-da-nobreza.md)**.
 

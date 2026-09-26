@@ -17,8 +17,15 @@ silenciosa. Estas são as redes de poder que operam nas sombras.
   [Casa Magnetér](../faccoes/casa-magneter.md) tem interesse direto nela.
 - A **queda de Valynesse** dependeu de uma rede de informações construída durante anos por um
   nobre infiltrado.
-- **[Alfonse Enry](../personagens/alfonse-enry.md)** atuou na rede de resistência de Dodixie, e
-  a [Casa Corbeau](../faccoes/casa-corbeau.md) tem a espionagem entre suas especialidades.
+- **[Philippe Beaumont](../personagens/philippe-beaumont.md)** sabe de quase todos os segredos,
+  traições e conspirações do reino e os usa para garantir a primazia de Valynesse.
+- **[Scyras Corbeau](../personagens/scyras-corbeau.md)** trava uma guerra nas sombras com sua
+  própria rede de espiões.
+- **[Thibault de la Rivière](../personagens/thibault-de-la-riviere.md)**, comandante da Patrulha da
+  Fronteira, vaza informações a L'Ordre `SEGREDO`.
+- **[Élodie Vaucluse](../personagens/elodie-vaucluse.md)** e **[Camille Brissac](../personagens/camille-brissac.md)**
+  trocam correspondência secreta `SEGREDO`.
+- O **Mercado do Grão de Ouro**, em Nouvelle-Montagne, é um ninho de espiões de todas as cidades.
 
 A espionagem não é apenas uma atividade pós-guerra: foi um fator decisivo para a queda da
 monarquia e permanece parte da Guerra Fria.
@@ -28,10 +35,18 @@ monarquia e permanece parte da Guerra Fria.
 
 ## Corsários e pirataria
 
-Há **três frotas distintas**, que não devem ser fundidas: a frota corsária lealista destruída
-na Queda das Velas Negras, a frota de [Étienne Rochefort](../personagens/etienne-rochefort.md) e
-a frota pirata rival associada a [Lucien de Saint-Pierre](../personagens/lucien-de-saint-pierre.md).
+Há **quatro grupos distintos**, que não devem ser fundidos: a frota corsária lealista destruída
+na Queda das Velas Negras, a frota de [Étienne Rochefort](../personagens/etienne-rochefort.md)
+(contra Jean Vigny), a frota pirata financiada por
+[Lucien de Saint-Pierre](../personagens/lucien-de-saint-pierre.md) (contra Baie de l'Éclair) e os
+piratas Fishmen perto de Dodixie.
 Ver [Frotas corsárias e piratas](../faccoes/frotas-corsarias-e-piratas.md).
+
+## Assassinos: a família Enry
+
+A família Enry, de Dodixie, é treinada há gerações nas artes ladina e psiônica e atua como
+assassina e manipuladora secreta dos nobres. Recentemente, L'Ordre massacrou um ramo da família
+com a ajuda de de la Rivière `SEGREDO`. Ver [Massacre da família Enry](../eventos/massacre-dos-enry.md).
 
 ## Crime organizado
 
@@ -48,8 +63,12 @@ fazem parte da disputa fria entre Aliança e L'Ordre.
 
 ## Financiamento político e golpes
 
-- [Henri du Valois](../personagens/henri-du-valois.md) financia movimentos políticos
-  secretamente.
-- [Armand Saint-Laurent](../personagens/armand-saint-laurent.md) considerou um golpe.
-- [Thibault de la Rivière](../personagens/thibault-de-la-riviere.md) vendeu informações a L'Ordre.
+- [Henri du Valois](../personagens/henri-du-valois.md) finge ser um playboy corrupto e financia, em
+  segredo, movimentos rebeldes contra a opressão da elite.
+- [Armand Saint-Laurent](../personagens/armand-saint-laurent.md) sonda seus oficiais mais leais
+  para um golpe; [Juliette Clermont](../personagens/juliette-clermont.md) tenta frustrá-lo.
+- [Thibault de la Rivière](../personagens/thibault-de-la-riviere.md) sabota patrulhas e fomenta a
+  desconfiança entre as cidades.
+- [Lucien de Saint-Pierre](../personagens/lucien-de-saint-pierre.md) financia piratas com sua
+  fortuna, a partir das Grutas Sussurrantes.
 - Assassinatos políticos e tentativas de golpe fazem parte da Guerra Fria.

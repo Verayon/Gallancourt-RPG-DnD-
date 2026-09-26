@@ -12,18 +12,22 @@ tags:
 | | |
 |---|---|
 | **Título** | Senhora do Pico; Matriarca do Clã Roche |
-| **Casa** | [Roche](../faccoes/casa-roche.md) (figura central) |
+| **Casa** | [Roche](../faccoes/casa-roche.md) — o clã mais antigo e poderoso da região |
 | **Cidade** | [Nouvelle-Montagne](../cidades/nouvelle-montagne.md) |
 | **Facção** | [Aliança dos Lordes](../faccoes/alianca-dos-lordes.md) |
 
 </div>
 
-Figura principal de Nouvelle-Montagne, em uma região onde o poder é distribuído entre clãs e
-conselhos de chefes. A família Roche é uma das cinco casas fundadoras da [Fraternidade](../faccoes/fraternidade-dos-cinco-sangues.md).
+Uma mulher de poucas palavras, mas de vontade de ferro, que conhece cada palmo de suas terras.
+Joga o complexo jogo político da Aliança com um único objetivo: **garantir que seu povo nunca
+mais seja explorado**.
+
+A família Roche é uma das cinco casas fundadoras da
+[Fraternidade](../faccoes/fraternidade-dos-cinco-sangues.md).
 
 ## Tensões
 
-- autoridade matriarcal versus interesses dos clãs;
+- autoridade matriarcal versus as facções do conselho de clãs;
 - dependência da proteção militar de Saint-Armand.
 
 ## Intrigas
@@ -31,7 +35,7 @@ conselhos de chefes. A família Roche é uma das cinco casas fundadoras da [Frat
 | Com | Tipo | Marca | Descrição |
 |---|---|---|---|
 | ↔ [Armand Saint-Laurent](armand-saint-laurent.md) | 🔗 Dependência | `CANON` | Alimento em troca de proteção, desde o Massacre da Aurora Velada. |
-| ↔ [Juliette Clermont](juliette-clermont.md) | 🤝 Aliança | `CANON` | Juliette é a ponte logística e uma voz de equilíbrio entre Saint-Armand e Nouvelle-Montagne. |
+| ↔ [Juliette Clermont](juliette-clermont.md) | 🤝 Aliança | `CANON` | Juliette mantém a relação vital entre Saint-Armand e Nouvelle-Montagne. |
 
 → este personagem age sobre o outro; ← o outro age sobre este personagem.
 

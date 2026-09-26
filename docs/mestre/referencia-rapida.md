@@ -14,21 +14,25 @@ tags:
 | [Roche](../faccoes/casa-roche.md) | [Nouvelle-Montagne](../cidades/nouvelle-montagne.md) | Agricultura, alimentos, recursos | Abastecimento |
 | [Duvant](../faccoes/casa-duvant.md) | [Dodixie](../cidades/dodixie.md) | Comércio e influência local | Rivalidade/cooperação com Corbeau |
 | [La Voile Noire](../faccoes/la-voile-noire.md) | [Dodixie](../cidades/dodixie.md) | Crime e redes clandestinas | Poder informal |
-| [Torre do Trovão](../faccoes/torre-do-trovao.md) | [Baie de l'Éclair](../cidades/baie-de-l-eclair.md) | Magia das tempestades | Poder arcano autônomo |
+| [Torre do Trovão](../faccoes/torre-do-trovao.md) | [Baie de l'Éclair](../cidades/baie-de-l-eclair.md) | Magia das tempestades | Poder arcano autônomo (Elian Lumière) |
 | [L'Ordre de Célestien](../faccoes/l-ordre-de-celestien.md) | Leste | Religião e governo teocrático | Rival da Aliança |
 | [Severin Marceau](../personagens/severin-marceau.md) | [Montclair de Lune](../cidades/montclair-de-lune.md) | Autoridade religiosa e política | Líder de L'Ordre |
 
-## Segredos e tensões prontos para uso
+## Segredos em jogo no início da campanha
 
-| Segredo / tensão | Quem sabe? | Onde |
+| Segredo | Quem sabe | Onde |
 |---|---|---|
-| Acordo secreto entre Scyras Corbeau e o corsário Rochefort | Não definido | [Dodixie](../cidades/dodixie.md) / mar |
-| Armand Saint-Laurent considerou um golpe | Não definido | [Saint-Armand](../cidades/saint-armand.md) |
-| Henri du Valois financia movimentos políticos secretamente | Não definido | [Valynesse](../cidades/valynesse.md) |
-| Lucien de Saint-Pierre financia uma frota pirata rival | Não definido | [Nouvelle-Montagne](../cidades/nouvelle-montagne.md) |
-| Zepharion leva vida pública enquanto lidera La Voile Noire | Não definido | [Dodixie](../cidades/dodixie.md) |
-| Identidade do nobre infiltrado que abriu Valynesse | Desconhecido | [Valynesse](../cidades/valynesse.md) |
+| Scyras paga Rochefort para atacar os navios de Vigny (e, às vezes, os de Dodixie) | Scyras e Rochefort | [Dodixie](../cidades/dodixie.md) / [Baie de l'Éclair](../cidades/baie-de-l-eclair.md) |
+| Armand sonda oficiais leais para um golpe | Armand, oficiais sondados; Juliette sabe | [Saint-Armand](../cidades/saint-armand.md) |
+| Juliette trabalha para frustrar o golpe | Juliette | [Saint-Armand](../cidades/saint-armand.md) |
+| De la Rivière, comandante da Patrulha da Fronteira, trabalha para L'Ordre | De la Rivière e L'Ordre | [Saint-Armand](../cidades/saint-armand.md) |
+| L'Ordre massacrou a família Enry com a localização dada por de la Rivière | L'Ordre e de la Rivière | [Dodixie](../cidades/dodixie.md) |
+| Henri du Valois é um idealista que financia rebeldes | Henri e seus contatos | [Valynesse](../cidades/valynesse.md) |
+| Lucien financia piratas contra Baie a partir das Grutas Sussurrantes | Lucien e seus agentes | [Nouvelle-Montagne](../cidades/nouvelle-montagne.md) |
+| Élodie Vaucluse e Camille Brissac trocam cartas secretas | As duas | Nouvelle-Montagne / Dodixie |
+| Louis de Montclair busca outro patrono para se livrar de Vigny | Louis | [Baie de l'Éclair](../cidades/baie-de-l-eclair.md) |
+| Identidade do nobre infiltrado que abriu Valynesse na guerra | Desconhecido | [Valynesse](../cidades/valynesse.md) |
 
 !!! question "Em aberto"
-    Quem, dentro do mundo, conhece cada segredo ainda precisa ser definido. Marque cada um com
-    `SEGREDO` ao desenvolvê-lo (ver [Manutenção do cânone](manutencao-do-canone.md)).
+    Quem mais, dentro do mundo, conhece cada segredo ainda precisa ser definido. Beaumont, o
+    Mestre dos Sussurros, sabe de "quase todos" — quais exatamente fica a critério do autor.

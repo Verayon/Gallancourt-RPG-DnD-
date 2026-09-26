@@ -15,6 +15,10 @@ A solução não foi a criação de uma nova monarquia, mas a transformação da
 aristocracia política: nasceu a **[Aliança dos Lordes](../faccoes/alianca-dos-lordes.md)**. As
 cinco casas passaram a exercer poder territorial e político sobre a antiga Gallancourt.
 
+O poder passou a ser exercido pelo **Conseil des Seigneurs** (Conselho dos Lordes), onde os
+duques das cinco grandes cidades tomam as decisões mais importantes. O Conselho foi criado para
+dividir o poder entre as cidades e impedir uma nova guerra civil.
+
 O poder deixou de estar concentrado em um rei. Mas isso não significou o fim das disputas. Cada
 casa possuía interesses próprios; cada cidade, suas próprias ambições.
 
@@ -22,8 +26,9 @@ A guerra civil havia acabado. A guerra política apenas começava.
 
 ## A fuga de Severin Marceau
 
-Enquanto Valynesse caía, [Severin Marceau](../personagens/severin-marceau.md) escapava para o
-leste. O Primat não abandonou sua doutrina: levou consigo clérigos, nobres e seguidores da
+Enquanto Valynesse caía, a Monarquia e a Igreja executaram um êxodo estratégico, recuando para as
+terras do leste, onde a população humana e tradicionalista lhes era mais simpática.
+[Severin Marceau](../personagens/severin-marceau.md) escapava com eles. O Primat não abandonou sua doutrina: levou consigo clérigos, nobres e seguidores da
 ideologia de pureza e, no leste, reorganizou suas forças.
 
 Nasceu então **[L'Ordre de Célestien](../faccoes/l-ordre-de-celestien.md)**, uma teocracia com
@@ -54,7 +59,9 @@ havia esquecido como ela começou.
 - [Valynesse](../cidades/valynesse.md) recuperou parte de seu esplendor.
 - L'Ordre consolidou suas instituições religiosas e militares.
 
-O resultado foi uma espécie de **[Guerra Fria](../eventos/guerra-fria.md)**. Embargos,
+O resultado foi uma espécie de **[Guerra Fria](../eventos/guerra-fria.md)**, com L'Ordre de um
+lado e, do outro, uma aristocracia em que cada cidade busca expandir sua influência por meio de
+intrigas, manipulações e acordos secretos. Embargos,
 espionagem, assassinatos políticos, sabotagens e tentativas de golpe substituíram as grandes
 batalhas. A paz existia apenas porque ambos os lados sabiam o preço de uma nova guerra.
 
@@ -65,6 +72,20 @@ De um lado estão as cidades que derrubaram a monarquia; do outro, o Estado que 
 doutrina que provocou a guerra. A Cicatriz permanece como lembrança física do conflito, as
 montanhas funcionam como barreira, e as estradas e passagens, como pontos de tensão. As cidades
 de ambos os lados permanecem ligadas por famílias, comércio, religião, espionagem e memórias.
+
+## O frágil equilíbrio
+
+Às vésperas da campanha:
+
+- **Valynesse** luta para manter sua posição como capital e teme uma revolta de Saint-Armand;
+- **Dodixie** conspira para se tornar a nova capital e se aliar a Nouvelle-Montagne;
+- **Baie de l'Éclair** busca controlar o comércio marítimo e enfrenta traições internas;
+- **Nouvelle-Montagne** quer se libertar da opressão econômica de Baie de l'Éclair e de Valynesse;
+- **Saint-Armand** está dividida entre defender o reino e tomar o poder à força.
+
+Enquanto os nobres lutam pelo poder, piratas assolam as rotas marítimas, mercadores exploram os
+pobres e exércitos se preparam para um conflito que muitos consideram inevitável. Recentemente,
+o [massacre da família Enry](../eventos/massacre-dos-enry.md) abalou Dodixie.
 
 ## O estado atual de Gallancourt
 

@@ -13,27 +13,31 @@ tags:
 |---|---|
 | **Título** | Emissário; nobre menor |
 | **Cidade** | [Nouvelle-Montagne](../cidades/nouvelle-montagne.md) |
-| **Associação** | Financiamento de uma [frota pirata rival](../faccoes/frotas-corsarias-e-piratas.md) |
+| **Base secreta** | As Grutas Sussurrantes |
+| **Frota** | Frota pirata rival à de Rochefort — ver [Frotas corsárias e piratas](../faccoes/frotas-corsarias-e-piratas.md) |
 
 </div>
 
-Nobre menor e emissário associado ao financiamento de uma frota pirata rival.
+Nobre menor, diplomata astuto e mestre da ação secreta. Cansado da inércia do conselho de clãs,
+age por conta própria.
 
-!!! warning "Não confundir"
-    Essa frota não deve ser fundida com a de [Étienne Rochefort](etienne-rochefort.md) nem com a
-    frota lealista da [Queda das Velas Negras](../eventos/queda-das-velas-negras.md).
+!!! warning "SEGREDO"
+    Lucien usa **sua própria fortuna** para financiar uma frota pirata rival à de
+    [Étienne Rochefort](etienne-rochefort.md), oferecendo suprimentos em troca de ataques
+    controlados contra os navios de [Baie de l'Éclair](../cidades/baie-de-l-eclair.md). O
+    objetivo é criar uma crise que force a cidade portuária a negociar com Nouvelle-Montagne.
+    Seus agentes usam as **Grutas Sussurrantes** para contrabandear suprimentos aos piratas e
+    mover mensageiros sem passar pelas estradas taxadas.
 
 ## Intrigas
 
 | Com | Tipo | Marca | Descrição |
 |---|---|---|---|
-| ← [Élodie Vaucluse](elodie-vaucluse.md) | 🕯️ Clandestina | `POSSIBILIDADE` `SEGREDO` | Élodie é a patrona oculta de Lucien: a frota pirata rival é o braço naval de sua política de usar o grão como arma. |
-| ↔ [Étienne Rochefort](etienne-rochefort.md) | 🔥 Hostilidade | `POSSIBILIDADE` | A frota "rival" é rival de Rochefort: as duas disputam as mesmas presas. |
+| ↔ [Étienne Rochefort](etienne-rochefort.md) | ⚔️ Rivalidade | `CANON` | A frota pirata que Lucien financia é rival à de Rochefort. |
 
 → este personagem age sobre o outro; ← o outro age sobre este personagem.
 
 Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
 
 !!! question "Em aberto"
-    - Quem comanda a frota pirata rival?
-    - Lucien age por conta própria ou por uma casa maior?
+    Quem comanda a frota pirata rival?

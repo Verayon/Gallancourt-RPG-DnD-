@@ -11,11 +11,11 @@ tags:
 
 | | |
 |---|---|
-| **Tipo** | Decreto real e religioso |
+| **Tipo** | Decreto real, sob forte influência da Igreja |
 | **Proclamado em** | [Valynesse](../cidades/valynesse.md), diante da corte e das grandes famílias |
 | **Promulgado por** | [Thibault d'Aubren](../personagens/thibault-d-aubren.md) |
 | **Inspirado por** | [Severin Marceau](../personagens/severin-marceau.md), Primat da Igreja |
-| **Consequência** | [Mês de Sangue](mes-de-sangue.md) e guerra civil |
+| **Consequência** | [Ano de Sangue](ano-de-sangue.md) e guerra civil |
 
 </div>
 
@@ -24,11 +24,23 @@ influência de Severin Marceau. Foi o primeiro grande ponto de ruptura da histó
 
 ## Disposições
 
-- proibiu as uniões inter-raciais;
-- legalizou a escravidão de não-humanos;
+O que começou como uma lei de segregação rapidamente escalou para uma brutalidade sancionada pelo
+Estado. O Édito:
+
+- expropriou todas as terras e bens pertencentes a não-humanos;
+- proibiu de forma absoluta os casamentos e uniões inter-raciais;
+- legalizou a escravidão de não-humanos, que podiam ser capturados e vendidos como propriedade;
 - retirou a proteção legal dessas populações;
-- descriminalizou atos de violência cometidos contra elas;
+- descriminalizou qualquer ato de violência contra um não-humano: assassinato, tortura e abuso
+  deixaram de ser crimes se a vítima não fosse humana;
 - baniu toda devoção que não fosse dedicada a [Amaunator](../mundo/religiao.md).
+
+## Origem
+
+A fé de Amaunator, deus do sol e da lei, foi se corrompendo nas altas esferas da Igreja e da
+Monarquia: os dogmas de lei e ordem foram pervertidos para justificar uma teologia de pureza e
+**supremacia humana**. A luz de Amaunator deixou de ser para todos e virou uma chama para
+"purificar as sombras" representadas pelas raças não-humanas. Ver [Religião](../mundo/religiao.md).
 
 ## Proclamação
 
@@ -38,8 +50,11 @@ publicamente, outros desapareceram.
 
 ## Consequências
 
+O impacto foi além das fronteiras: alguns reinos de Nirador foram favoráveis à perseguição, outros
+repudiaram a monarquia.
+
 O Édito produziu exatamente aquilo que seus defensores pretendiam impedir: **resistência
-organizada**. Levou diretamente ao [Mês de Sangue](mes-de-sangue.md) e à formação da
+organizada**. Levou diretamente ao [Ano de Sangue](ano-de-sangue.md) e à formação da
 [Fraternidade dos Cinco Sangues](../faccoes/fraternidade-dos-cinco-sangues.md). No pós-guerra,
 sua doutrina tornou-se a base da teocracia de [L'Ordre de Célestien](../faccoes/l-ordre-de-celestien.md).
 

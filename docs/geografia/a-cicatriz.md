@@ -17,8 +17,9 @@ tags:
 
 </div>
 
-**A Cicatriz** é a região das planícies próximas a Saint-Armand marcada por uma das batalhas
-mais devastadoras da guerra civil.
+**A Cicatriz** é a região das planícies próximas a Saint-Armand onde houve o maior número de
+combates e eventos no último ano da guerra civil — uma ferida que nunca fechou na mente dos que
+participaram da carnificina. Saint-Armand, sobre seu platô, tem vista dominante sobre ela.
 
 Tornou-se não apenas uma marca física na paisagem, mas também uma fronteira simbólica. Depois
 da guerra, passou a servir como uma das principais referências da separação territorial entre

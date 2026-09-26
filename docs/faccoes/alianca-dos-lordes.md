@@ -12,6 +12,7 @@ tags:
 | | |
 |---|---|
 | **Tipo** | Aristocracia política compartilhada |
+| **Órgão de governo** | Conseil des Seigneurs (Conselho dos Lordes) |
 | **Governa** | Gallancourt (o Estado ocidental) |
 | **Origem** | [Fraternidade dos Cinco Sangues](fraternidade-dos-cinco-sangues.md) |
 | **Território** | Antiga Gallancourt ocidental |
@@ -33,6 +34,17 @@ um rei — mas isso não significou o fim das disputas.
 
 A Aliança não é apresentada como uma sociedade sem conflitos ou injustiças; ela é o bloco que
 derrubou a monarquia e adotou uma aristocracia compartilhada.
+
+## O Conseil des Seigneurs
+
+Após a trégua da guerra civil, a aristocracia substituiu a antiga monarquia. O governo é exercido
+pelo **Conseil des Seigneurs** (Conselho dos Lordes), onde os duques das cinco grandes cidades
+tomam as decisões mais importantes. Foi criado para dividir o poder entre as cidades e impedir uma
+nova guerra civil.
+
+Embora essa estrutura tenha interrompido as guerras internas, o equilíbrio de poder continua
+instável: cada cidade busca expandir sua influência, muitas vezes por meio de intrigas,
+manipulações e acordos secretos. A luta pelo domínio continua nos bastidores.
 
 ## Os cinco pilares
 
@@ -70,8 +82,11 @@ A Aliança precisa das cinco casas, mas teme a concentração de poder em qualqu
     confirmado.
 
 !!! question "Em aberto"
-    - Como vota a Aliança? Cada casa possui um voto, peso proporcional ou prerrogativas próprias?
-    - Qual é a sede oficial do conselho?
+    - Como vota o Conseil des Seigneurs? Cada cidade possui um voto, peso proporcional ou
+      prerrogativas próprias?
+    - Quem é o "duque" de cada cidade no Conselho, já que os líderes usam títulos diferentes
+      (Doge, Marquesa, Duque, Lorde Comandante, Senhora do Pico)?
+    - Qual é a sede oficial do Conselho?
     - Quem controla os impostos e a justiça?
     - O Doge Magnetér é primeiro entre iguais, chefe executivo ou título regional?
     - Como são resolvidas disputas entre casas?

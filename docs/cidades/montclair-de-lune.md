@@ -25,6 +25,17 @@ Capital de L'Ordre de Célestien e centro do poder religioso, político e admini
 A cidade simboliza a transformação da doutrina de pureza em governo: Marceau não é apenas um
 líder religioso exilado — ele reorganizou seus seguidores e fundou um Estado.
 
+## Descrição
+
+Localizada no **topo de uma montanha sagrada**, Montclair de Lune é conhecida por seus
+**astrólogos e sacerdotes lunares**. À noite, a cidade brilha com luz prateada, como se refletisse
+o céu. *Inspiração do nome: "Montclair" (monte claro) + "de Lune" (da lua).*
+
+!!! info "Nota de criação"
+    Esta descrição vem das notas iniciais do autor. Ver
+    [Inconsistências](../mestre/inconsistencias.md) sobre sacerdotes lunares numa teocracia de
+    Amaunator, deus do sol.
+
 ## Funções
 
 Montclair de Lune concentra:

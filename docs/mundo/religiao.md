@@ -6,7 +6,8 @@ tags:
 
 # Religião — Amaunator
 
-**Amaunator**, a **Luz Eterna**, é a fé predominante na história de Gallancourt. Durante
+**Amaunator**, o deus do sol e da lei, é a fé predominante na história de Gallancourt, em uma
+interpretação local conhecida como **A Luz Eterna**. Durante
 gerações, o templo ocupou posição importante na vida pública, funcionando como instituição
 ligada à monarquia e à sociedade do reino.
 
@@ -23,6 +24,11 @@ radical monopolizou a devoção a Amaunator e proibiu outros cultos.
 
 ## A doutrina da pureza
 
+Com o tempo, a fé foi se corrompendo nas altas esferas da Igreja e da Monarquia. Os dogmas de lei
+e ordem foram pervertidos para justificar uma teologia de pureza e **supremacia humana**: a luz do
+sol de Amaunator não era mais para todos, mas uma chama para "purificar as sombras" representadas
+pelas raças não-humanas.
+
 Nas regiões orientais, setores do clero passaram a defender uma interpretação cada vez mais
 radical da fé, que falava não apenas da luz de Amaunator, mas da necessidade de uma suposta
 **pureza** daqueles que deveriam receber essa luz. Sob [Severin Marceau](../personagens/severin-marceau.md),
@@ -33,6 +39,16 @@ Em L'Ordre, templos e instituições de ensino — especialmente em
 [Valmire-sur-Rose](../cidades/valmire-sur-rose.md) — propagam a doutrina, e
 [Chantépierre](../cidades/chantepierre.md) atua como centro de apoio religioso e controle das
 fronteiras culturais.
+
+## A velha fé hoje
+
+Em Valynesse, o **Santuário do Sol Velado**, um antigo templo de Amaunator quase abandonado, abriga
+alguns poucos sacerdotes que ainda praticam a velha fé, não a versão corrompida. Podem ser fonte
+de conhecimento ou ajuda contra L'Ordre. Ver [Valynesse](../cidades/valynesse.md#pontos-de-interesse).
+
+Em L'Ordre, as notas de criação descrevem **astrólogos e sacerdotes lunares** em
+[Montclair de Lune](../cidades/montclair-de-lune.md). Como isso convive com o culto ao deus do sol
+ainda está em aberto.
 
 ## Títulos
 

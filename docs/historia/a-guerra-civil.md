@@ -24,7 +24,8 @@ A união não era simples. Cada família possuía interesses próprios, tradiç�
 visão particular do futuro do reino. Ainda assim, havia uma coisa que as unia: a oposição ao
 Édito da Pureza e ao poder que Severin Marceau exercia sobre a Coroa.
 
-A guerra civil começou.
+A guerra civil começou. Duraria **pouco mais de três anos**, e a aliança rebelde teria forte
+apoio popular nas regiões mais diversas do oeste e do centro.
 
 ## Dodixie e o nascimento da resistência naval
 
@@ -33,20 +34,20 @@ estacas, pontes e canais. Era uma cidade profundamente diversa, marcada pelo com
 e pela convivência de diferentes povos. Sua posição fazia dela um dos principais centros navais
 da região.
 
-A Casa Corbeau, liderada pela **[Duquesa Scyras da Maison Corbeau](../personagens/scyras-corbeau.md)**,
+A Casa Corbeau, liderada por **[Scyras de la Maison Corbeau](../personagens/scyras-corbeau.md)**,
 tornou-se uma das principais forças da resistência. Scyras carregava também uma motivação
-pessoal: a execução de seu pai durante a repressão. Ela transformou a dor da família em
-política, e Dodixie passou a funcionar como um dos grandes bastiões logísticos da Aliança.
+pessoal: a traição de aristocratas da capital, que levou à prisão e à execução de seu pai. Ela
+transformou a dor da família em política, e Dodixie passou a funcionar como um dos grandes
+bastiões logísticos da Aliança.
 
 Mas a cidade também possuía seus próprios conflitos. A segunda grande família de Dodixie era a
 **[Casa Duvant](../faccoes/casa-duvant.md)**, liderada pelo
 **[Marquês Alaric Duvant](../personagens/alaric-duvant.md)**. A relação entre Duvant e Corbeau
 era marcada tanto por cooperação quanto por competição.
 
-Outro nome importante era o **[Visconde Alfonse Enry](../personagens/alfonse-enry.md)**, ligado
-às artes ladinas e psiônicas. Depois de perder sua família durante os massacres, Enry passou a
-atuar dentro da rede de resistência e treinou **[Thalin](../personagens/thalin.md)**, um jovem
-movido pela vingança.
+Outro nome importante era o de **[Alfonse Enry](../personagens/alfonse-enry.md)**, de uma família
+nobre treinada nas artes ladinas e psiônicas, próxima da Maison Corbeau, que atuou dentro da rede
+de resistência.
 
 Nas sombras das docas existia ainda uma terceira força: **[La Voile Noire](../faccoes/la-voile-noire.md)**,
 cuja liderança era atribuída a **[Zepharion](../personagens/zepharion.md)**, um tiefling que
@@ -76,14 +77,14 @@ conhecida pelas tempestades e pelo poder da
 ligada ao mar, sua importância não vinha apenas da frota: a Torre do Trovão era um centro de
 poder arcano associado ao domínio das tempestades.
 
-- Seu líder era o **[Arquimago Kaelen Thorne](../personagens/kaelen-thorne.md)**, meio-elfo
-  recluso, mestre dos elementos e obcecado pela magia das tempestades.
+- Seu líder era o **[Arquimago Elian Lumière](../personagens/elian-lumiere.md)**, recluso,
+  mestre dos elementos e obcecado pela magia das tempestades.
 - A aristocracia local era representada pelo **[Duque Jeanesse Lumière](../personagens/jeanesse-lumiere.md)**.
 - O comércio era dominado pelo **[Comodoro Jean Vigny](../personagens/jean-vigny.md)**, magnata
   mercante impiedoso que controlava rotas comerciais.
-- O setor naval tinha **[Mestre Bromli Stonehammer](../personagens/bromli-stonehammer.md)**,
-  anão e líder da [guilda dos construtores navais](../faccoes/guilda-dos-construtores-navais.md),
-  cuja relação com Vigny era ambivalente.
+- O setor naval tinha **[Mestre Louis de Montclair](../personagens/louis-de-montclair.md)**, líder
+  da [guilda dos construtores navais](../faccoes/guilda-dos-construtores-navais.md), cuja relação
+  com Vigny era ambivalente.
 
 Durante a guerra, Baie de l'Éclair sofreu com pirataria, sabotagens e conflitos marítimos, e
 forneceu à Aliança sua combinação particular de poder naval e conhecimento arcano.
@@ -91,9 +92,10 @@ forneceu à Aliança sua combinação particular de poder naval e conhecimento a
 ## O capitão corsário
 
 Entre os homens do mar surgiu o **[Capitão Étienne Rochefort](../personagens/etienne-rochefort.md)**,
-corsário cuja frota mantinha um acordo secreto com Scyras Corbeau. Seus ataques não eram simples
-atos de pirataria: eram calculados para manter o caos nas rotas marítimas, atingir os interesses
-dos inimigos e, ao mesmo tempo, permitir que Rochefort obtivesse seus próprios ganhos.
+nobre de uma linhagem que perdera tudo para Jean Vigny e que se tornou corsário. Sua frota mantém
+um acordo secreto com Scyras Corbeau. Seus ataques não são simples atos de pirataria: são
+calculados para manter o caos nas rotas marítimas, atingir os interesses de Vigny e, ao mesmo
+tempo, permitir que Rochefort obtenha seus próprios ganhos.
 
 Sua existência demonstrava uma das características fundamentais da guerra: nem todos os que
 lutavam contra a Coroa lutavam pelos mesmos motivos.
@@ -126,18 +128,17 @@ tornou-se um dos principais centros militares da Aliança. Seu vínculo com Amau
 mas defendia uma interpretação tradicional da fé, diferente da doutrina radical.
 
 - **[Lorde Comandante Armand Saint-Laurent](../personagens/armand-saint-laurent.md)**, veterano
-  respeitado, tinha ambições políticas maiores do que sua posição militar e passou a considerar
-  a possibilidade de um golpe.
+  respeitado, viu em primeira mão como a corrupção da monarquia quase destruiu o reino; suas
+  ambições políticas eram maiores do que sua posição militar.
 - **[Intendente-Geral Juliette Clermont](../personagens/juliette-clermont.md)** cuidava da
   logística e era uma das vozes de equilíbrio entre Saint-Armand e Nouvelle-Montagne.
-- **[Capitão-General Thibault de la Rivière](../personagens/thibault-de-la-riviere.md)** passou
-  informações estratégicas ao inimigo e acabou se oferecendo a L'Ordre.
 
 A guerra deixaria claro que a fronteira não separava apenas dois exércitos. Ela atravessava
 famílias, instituições e amizades.
 
 ## A Batalha da Cicatriz
 
+A Cicatriz foi a região com o maior número de combates e eventos no último ano da guerra.
 Depois da campanha de Nouvelle-Montagne, novos combates aconteceram nas planícies próximas a
 Saint-Armand. Ali ocorreu uma das batalhas mais devastadoras de toda a guerra, e o terreno ficou
 marcado pelo conflito. A região passou a ser conhecida como **[A Cicatriz](../geografia/a-cicatriz.md)**
@@ -157,10 +158,12 @@ ligado à resistência, que permanecera na capital durante anos construindo uma 
 informações, comprometeu as defesas e abriu as portas.
 
 Valynesse caiu. O rei Thibault d'Aubren, a rainha Isabeau e seus filhos foram capturados e
-executados publicamente. Com isso, terminou a monarquia de Gallancourt. Ver
+executados publicamente — e [Lorenzo Magnetér](../personagens/lorenzo-magneter.md) foi um dos
+responsáveis diretos pela morte do monarca. Com isso, terminou a monarquia de Gallancourt.
+Encurraladas, as forças lealistas e a Igreja recuaram para o leste. Ver
 [Queda de Valynesse](../eventos/queda-de-valynesse.md).
 
 ---
 
-**Anterior:** [O Édito e o Mês de Sangue](o-edito-e-o-mes-de-sangue.md) ·
+**Anterior:** [O Édito e o Ano de Sangue](o-edito-e-o-ano-de-sangue.md) ·
 **Próximo:** [O pós-guerra](o-pos-guerra.md)

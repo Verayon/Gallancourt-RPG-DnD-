@@ -67,20 +67,21 @@ nav:
   - História:
       - historia/index.md
       - Antes da ruptura: historia/antes-da-ruptura.md
-      - O Édito e o Mês de Sangue: historia/o-edito-e-o-mes-de-sangue.md
+      - O Édito e o Ano de Sangue: historia/o-edito-e-o-ano-de-sangue.md
       - A guerra civil: historia/a-guerra-civil.md
       - O pós-guerra: historia/o-pos-guerra.md
       - Cronologia: historia/cronologia.md
   - Eventos:
       - eventos/index.md
       - Édito da Pureza: eventos/edito-da-pureza.md
-      - Mês de Sangue: eventos/mes-de-sangue.md
+      - Ano de Sangue: eventos/ano-de-sangue.md
       - Queda das Velas Negras: eventos/queda-das-velas-negras.md
       - Cerco de Nouvelle-Montagne: eventos/cerco-de-nouvelle-montagne.md
       - Batalha da Cicatriz: eventos/batalha-da-cicatriz.md
       - Queda de Valynesse: eventos/queda-de-valynesse.md
       - Fuga de Severin Marceau: eventos/fuga-de-severin-marceau.md
       - Guerra Fria: eventos/guerra-fria.md
+      - Massacre da família Enry: eventos/massacre-dos-enry.md
   - Geografia:
       - geografia/index.md
       - A grande cordilheira: geografia/grande-cordilheira.md
@@ -134,9 +135,9 @@ nav:
           - Camille Brissac: personagens/camille-brissac.md
       - Baie de l'Éclair:
           - Jeanesse Lumière: personagens/jeanesse-lumiere.md
-          - Kaelen Thorne: personagens/kaelen-thorne.md
+          - Elian Lumière: personagens/elian-lumiere.md
           - Jean Vigny: personagens/jean-vigny.md
-          - Bromli Stonehammer: personagens/bromli-stonehammer.md
+          - Louis de Montclair: personagens/louis-de-montclair.md
           - Étienne Rochefort: personagens/etienne-rochefort.md
       - Nouvelle-Montagne:
           - Helga Roche: personagens/helga-roche.md

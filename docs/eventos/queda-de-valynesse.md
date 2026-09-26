@@ -42,6 +42,9 @@ Valynesse caiu. O rei [Thibault d'Aubren](../personagens/thibault-d-aubren.md), 
 e seus filhos — Louis, Clarisse e Marcel — foram capturados e executados publicamente. Com
 isso, terminou a monarquia de Gallancourt e a [Casa D'Aubren](../faccoes/casa-d-aubren.md).
 
+O Doge [Lorenzo Magnetér](../personagens/lorenzo-magneter.md) foi um dos responsáveis diretos
+pela morte do antigo monarca.
+
 ## Consequências
 
 - vácuo de poder e ruptura definitiva com a Coroa;

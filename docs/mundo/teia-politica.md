@@ -65,12 +65,18 @@ Corbeau, mas possui interesses próprios dentro de Dodixie.
 [Capitão Étienne Rochefort](../personagens/etienne-rochefort.md), permitindo operações navais que
 oficialmente não pertencem à política da Casa Corbeau.
 
-### Vigny × Stonehammer
+### Vigny × Montclair
 
-**Tensão econômica.** [Jean Vigny](../personagens/jean-vigny.md) controla grandes rotas
-comerciais; [Bromli Stonehammer](../personagens/bromli-stonehammer.md) representa os construtores
-navais. A guilda depende do comércio, mas não deseja tornar-se instrumento de um único
-comerciante.
+**Simbiose e desprezo.** [Jean Vigny](../personagens/jean-vigny.md) controla grandes rotas
+comerciais; [Louis de Montclair](../personagens/louis-de-montclair.md) lidera os construtores
+navais e despreza sua brutalidade, mas a imprudência de Vigny e a ameaça pirata garantem a demanda
+por seus navios. Louis busca em segredo outro patrono.
+
+### Rochefort × Vigny
+
+**Vingança.** Vigny construiu sua frota sobre a ruína da linhagem de
+[Étienne Rochefort](../personagens/etienne-rochefort.md). Hoje, Rochefort ataca os navios de Vigny
+para derrubá-lo e tomar seu lugar.
 
 ### Roche × Saint-Laurent
 
@@ -78,6 +84,17 @@ comerciante.
 fornece alimentos; Saint-Armand fornece proteção. A relação nasceu durante o
 [cerco de Nouvelle-Montagne](../eventos/cerco-de-nouvelle-montagne.md) e é mantida, entre outros,
 por [Juliette Clermont](../personagens/juliette-clermont.md).
+
+### Armand × Juliette
+
+**Conspiração e contraconspiração.** [Armand Saint-Laurent](../personagens/armand-saint-laurent.md)
+sonda oficiais para um golpe; sua própria Intendente-Geral,
+[Juliette Clermont](../personagens/juliette-clermont.md), trabalha em silêncio para frustrá-lo.
+
+### Vaucluse × Brissac
+
+**Correspondência secreta** entre a líder radical de Nouvelle-Montagne e a face pública da
+campanha de Dodixie pela capital — um eixo possível entre as duas cidades.
 
 ### Magnetér × Beaumont
 
@@ -94,12 +111,5 @@ Ver [Conflitos centrais](conflitos-centrais.md).
 
 ## Conexões entre cidades
 
-| De | Para | Natureza |
-|---|---|---|
-| Dodixie | Baie de l'Éclair | Comércio, rotas e operações navais |
-| Dodixie | Nouvelle-Montagne | Alimentos, abastecimento e comércio |
-| Dodixie | Saint-Armand | Proteção terrestre |
-| Dodixie | Valynesse | Política e espionagem |
-| Baie de l'Éclair | Valynesse | Comércio e política |
-| Nouvelle-Montagne | Saint-Armand | Alimento em troca de proteção |
-| Nouvelle-Montagne | Valynesse | Fornecimento de alimentos |
+A relação entre cada par de cidades, com a visão de cada lado, está em
+[Relações entre cidades](relacoes-entre-cidades.md).

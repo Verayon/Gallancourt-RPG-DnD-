@@ -13,28 +13,27 @@ tags:
 |---|---|
 | **Título** | Intendente-Geral |
 | **Cidade** | [Saint-Armand](../cidades/saint-armand.md) |
-| **Função** | Logística |
+| **Função** | Logística do exército; voz da razão no conselho de guerra |
 
 </div>
 
-Responsável pela logística de Saint-Armand e pela manutenção da ligação com
-[Nouvelle-Montagne](../cidades/nouvelle-montagne.md). É uma das vozes de equilíbrio entre as duas
-regiões, cuja relação se baseia no pacto de alimento em troca de proteção.
+A mente brilhante por trás da logística do exército. Enquanto Armand foca na estratégia,
+Juliette garante que os soldados estejam alimentados, armados e pagos. Mantém a relação vital
+com [Nouvelle-Montagne](../cidades/nouvelle-montagne.md) e atua como a voz da razão no conselho
+de guerra.
 
-## Relações
-
-| Com | Natureza |
-|---|---|
-| [Armand Saint-Laurent](armand-saint-laurent.md) | Serve ao seu lado |
-| [Casa Roche](../faccoes/casa-roche.md) | Ponte logística e política |
+!!! warning "SEGREDO"
+    Ciente das ambições perigosas de [Armand](armand-saint-laurent.md), Juliette trabalha
+    sutilmente para frustrar seus planos, temendo que um golpe mergulhe Gallancourt em uma nova
+    guerra civil que o reino não pode vencer.
 
 ## Intrigas
 
 | Com | Tipo | Marca | Descrição |
 |---|---|---|---|
-| ↔ [Helga Roche](helga-roche.md) | 🤝 Aliança | `CANON` | Juliette é a ponte logística e uma voz de equilíbrio entre Saint-Armand e Nouvelle-Montagne. |
-| ↔ [Élodie Vaucluse](elodie-vaucluse.md) | ⚔️ Rivalidade | `POSSIBILIDADE` | As duas negociam todo ano o preço do grão para a fronteira. Respeito profissional, desconfiança pessoal. |
-| ← [Thibault de la Rivière](thibault-de-la-riviere.md) | 🐍 Traição | `POSSIBILIDADE` `SEGREDO` | De la Rivière deixou informantes em Saint-Armand. Juliette suspeita, mas não sabe quem são. |
+| → [Armand Saint-Laurent](armand-saint-laurent.md) | 👁️ Vigilância | `CANON` `SEGREDO` | Ciente das ambições de Armand, Juliette trabalha sutilmente para frustrar o golpe, temendo uma nova guerra civil. |
+| ↔ [Helga Roche](helga-roche.md) | 🤝 Aliança | `CANON` | Juliette mantém a relação vital entre Saint-Armand e Nouvelle-Montagne. |
+| ↔ [Élodie Vaucluse](elodie-vaucluse.md) | ⚔️ Rivalidade | `POSSIBILIDADE` | Élodie ameaça com embargos de grãos; Juliette depende desse grão para alimentar o exército. |
 
 → este personagem age sobre o outro; ← o outro age sobre este personagem.
 

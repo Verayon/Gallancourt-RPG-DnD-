@@ -7,78 +7,99 @@ tags:
 
 # Valynesse
 
-*Antiga capital e centro de influência.*
+*A Gaiola Dourada — capital de Gallancourt.*
 
 <div class="ficha" markdown>
 
 | | |
 |---|---|
-| **Estado** | [Aliança dos Lordes](../faccoes/alianca-dos-lordes.md) (antes: capital do reino) |
-| **Localização** | Interior / centro do mapa regional |
-| **Casa principal atual** | [Magnetér](../faccoes/casa-magneter.md) |
+| **Estado** | Gallancourt ([Aliança dos Lordes](../faccoes/alianca-dos-lordes.md)); antes, capital do reino unificado |
+| **Localização** | Vale fértil no coração do reino, ao pé da grande cordilheira, a leste |
+| **Casa principal** | [Magnetér](../faccoes/casa-magneter.md) |
+| **Governo** | Oligarquia mercantil sob um Doge eleito |
 | **Governante** | [Doge Lorenzo Magnetér](../personagens/lorenzo-magneter.md) |
 | **Cor no mapa** | Laranja |
 
 </div>
 
-## Características
+## Geografia e recursos
 
-Antiga capital do reino. Centro de aristocracia, corte, luxo, mineração, comércio, finanças,
-espionagem e poder político. Sua posição no interior favorece o controle político das rotas
-terrestres.
+Valynesse é cercada por colinas e planícies ricas, e sua construção começa nas paredes da
+[grande cordilheira](../geografia/grande-cordilheira.md), a leste. Essa proximidade com as
+montanhas garante seu recurso mais valioso: o **acesso exclusivo a minas de metais e pedras
+preciosas**. Os rios que cortam o vale irrigam terras férteis, conhecidas pela produção de frutas
+nobres, especiarias e jardins ornamentais, e as planícies produzem a carne que mantém a dieta
+extravagante da nobreza.
+
+A cidade é famosa por sua joalheria refinada, tecidos de alta qualidade e outros artigos de luxo
+que abastecem a aristocracia local e reinos vizinhos, com grande concentração de artesãos. É
+também o centro do comércio terrestre.
+
+## Arquitetura
+
+O traçado da cidade lembra uma figura geométrica de **seis lados**. Aproveitando a elevação do
+terreno ao pé da montanha, Valynesse é um **grande terraço escalonado**: a parte mais baixa fica
+junto dos muros externos, e a mais alta, atrás da última cadeia de muralhas, abriga a alta
+nobreza e o **castelo da antiga monarquia**.
+
+## A cidade e sua gente
+
+Valynesse é o epicentro da alta cultura, da política e da corrupção em Gallancourt. Suas ruas de
+mármore são repletas de boutiques de luxo, galerias de arte e salões onde acordos são selados com
+vinho e veneno. A cidade vive uma fachada de beleza e ordem, governada por uma oligarquia mercantil
+onde o poder real se esconde atrás do título de **Doge**. A vida aqui é um baile de máscaras
+constante: um sorriso pode esconder uma adaga, e a ruína de uma Casa nobre é o entretenimento do
+dia.
 
 ## História
 
 Valynesse foi o coração do reino da [Casa D'Aubren](../faccoes/casa-d-aubren.md) e o local da
-proclamação do [Édito da Pureza](../eventos/edito-da-pureza.md). Permaneceu nas mãos da Coroa
-durante a guerra, embora a Casa Magnetér e redes de resistência tivessem papel político na
-cidade.
+proclamação do [Édito da Pureza](../eventos/edito-da-pureza.md). Na
+**[Queda de Valynesse](../eventos/queda-de-valynesse.md)**, após três dias de cerco e a sabotagem de
+um nobre infiltrado, as portas foram abertas e a família real foi executada. Após a guerra, a
+cidade recuperou parte de seu esplendor e passou a servir como centro político e econômico da
+Aliança.
 
-Na **[Queda de Valynesse](../eventos/queda-de-valynesse.md)**, após três dias de cerco e a
-sabotagem de um nobre infiltrado, as portas foram abertas. A família real foi capturada e
-executada publicamente, encerrando a monarquia e abrindo caminho para a Aliança dos Lordes.
-
-Após a guerra, a cidade recuperou parte de seu esplendor e passou a servir como centro político
-e econômico da Aliança.
-
-## Personagens
+## Figuras de poder
 
 | Personagem | Papel |
 |---|---|
-| [Doge Lorenzo Magnetér](../personagens/lorenzo-magneter.md) | Oligarca; figura central do novo governo |
-| [Baronesa Amélie Montpensier](../personagens/amelie-montpensier.md) | Ligada às minas e à influência econômica |
-| [Conde Philippe Beaumont](../personagens/philippe-beaumont.md) | O Mestre dos Sussurros; rede de espionagem |
-| [Visconde Henri du Valois](../personagens/henri-du-valois.md) | Corrupto com aparência de idealista; financiador secreto |
+| [Doge Lorenzo Magnetér](../personagens/lorenzo-magneter.md) | Líder eleito; manipula das sombras; um dos responsáveis pela morte do antigo rei |
+| [Baronesa Amélie Montpensier](../personagens/amelie-montpensier.md) | A "Dama de Ferro" do cartel de mineração |
+| [Conde Philippe Beaumont](../personagens/philippe-beaumont.md) | O Mestre dos Sussurros; espionagem em todo o reino |
+| [Visconde Henri du Valois](../personagens/henri-du-valois.md) | Playboy corrupto em público; idealista que financia rebeldes em segredo |
 
-## Funções
+## Pontos de interesse
 
-Valynesse funciona como centro de finanças, comércio, espionagem, política, distribuição de
-bens de luxo e influência da Casa Magnetér. É, portanto, tanto o centro administrativo da
-Aliança quanto um dos maiores centros de espionagem.
+| Local | Descrição |
+|---|---|
+| **O Leilão de Cristal** | Opulenta casa de leilões onde fortunas são feitas e perdidas. Além de arte e joias, segredos, contratos e até vidas são negociados em salas privadas. Tem uma rixa especial com o Leilão Real, de [Dodixie](dodixie.md) |
+| **A Taverna da Máscara Sorridente** | Estabelecimento de luxo nos terraços superiores, frequentado pela elite. O melhor lugar para ouvir rumores, mas cada palavra deve ser cuidadosamente pesada |
+| **Santuário do Sol Velado** | Antigo templo de Amaunator, quase abandonado. Alguns sacerdotes ainda praticam a velha fé, não a versão corrompida, e podem ser fonte de conhecimento ou ajuda contra L'Ordre |
+| **O Coliseu do Herói** | Sem descrição registrada |
 
 ## Tensões
 
-- autoridade compartilhada das cinco casas versus centralidade política de Valynesse;
-- influência econômica das minas;
-- redes de informação de Beaumont e seu interesse para Magnetér;
-- financiamento clandestino de Henri du Valois;
+- rivalidade com Dodixie, que quer ser a nova capital;
+- medo do poderio militar de Saint-Armand;
+- alta corrupção entre os aristocratas;
+- taxas cobradas de Nouvelle-Montagne e disputas tarifárias com Baie de l'Éclair;
 - memória da execução pública da família real.
 
 ## Relações com outras cidades
 
-| Cidade | Estado | Motivo positivo | Motivo negativo |
+| Cidade | Estado | Como esta cidade a vê | Como ela vê esta cidade |
 |---|---|---|---|
-| [Dodixie](dodixie.md) | 🟠 Tenso | Política e espionagem: Valynesse coordena, Dodixie informa e financia. | Duas redes de espionagem (Corbeau e Beaumont) vigiam uma à outra. Scyras desconfia de que o Doge governa como um rei sem coroa. |
-| [Baie de l'Éclair](baie-de-l-eclair.md) | 🔵 Cordial | Comércio e política: Baie vende, Valynesse financia. | Os financistas de Valynesse querem taxar as rotas de Vigny; a Casa Lumière teme ser reduzida a província do Doge. |
-| [Nouvelle-Montagne](nouvelle-montagne.md) | 🟠 Tenso | Nouvelle-Montagne alimenta a antiga capital. | Choque entre o poder do dinheiro (Magnetér) e o poder da comida (Roche). Valynesse se lembra de que sua fome tem dono. |
-| [Saint-Armand](saint-armand.md) | 🔴 Hostil velado | Saint-Armand é a espada da Aliança; Valynesse paga por ela. | Armand considerou um golpe, e o alvo natural é a centralidade de Valynesse. Beaumont vigia o exército. Saint-Armand lembra que segurou o istmo enquanto os outros entravam na capital. |
+| [Dodixie](dodixie.md) | 🔴 Rivalidade aberta | Rivalidade política e econômica. Dodixie, a cidade mais rica, deseja influenciar o governo central, e Valynesse resiste a essa interferência. | Rivalidade aberta pelo controle do governo: Dodixie acredita que deveria ser a nova capital devido ao seu poder econômico, e seus aristocratas apoiam em segredo iniciativas para enfraquecer a capital. |
+| [Baie de l'Éclair](baie-de-l-eclair.md) | 🔵 Cordial | Relação comercial saudável, mas com conflitos pelo controle das taxas marítimas. | Relação comercial importante, mas instável, pelo controle das tarifas de importação e exportação. |
+| [Saint-Armand](saint-armand.md) | 🟣 Hostil velado | A capital teme o poder militar da cidade-fortaleza e mantém uma postura de vigilância constante. | Relação delicada, pois a capital teme uma possível tomada de poder por Saint-Armand. |
+| [Nouvelle-Montagne](nouvelle-montagne.md) | 🟠 Tenso | Nouvelle-Montagne é uma importante fornecedora de alimentos para a capital. | Fornece alimentos à capital, mas sofre com os tributos abusivos impostos pelos aristocratas de Valynesse. |
 
-Estados e motivos negativos são `POSSIBILIDADE`. Detalhes em
-[Relações entre cidades](../mundo/relacoes-entre-cidades.md).
+Notas e segredos de cada par em [Relações entre cidades](../mundo/relacoes-entre-cidades.md).
 
 !!! question "Em aberto"
-    - Constituição do cargo de Doge.
-    - Distribuição dos assentos ou votos das casas.
+    - Constituição do cargo de Doge e forma de eleição.
     - Relação formal de Beaumont com Magnetér.
     - Quais movimentos Henri financia.
-    - Situação física e institucional do antigo palácio real.
+    - Situação atual do castelo da antiga monarquia.
+    - O que é o Coliseu do Herói.

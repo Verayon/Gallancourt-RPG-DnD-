@@ -6,79 +6,83 @@ tags:
 
 # Nouvelle-Montagne
 
-*O celeiro de Gallancourt.*
+*O Coração Fértil — o celeiro do reino.*
 
 <div class="ficha" markdown>
 
 | | |
 |---|---|
-| **Estado** | [Aliança dos Lordes](../faccoes/alianca-dos-lordes.md) |
-| **Localização** | Sul |
+| **Estado** | Gallancourt ([Aliança dos Lordes](../faccoes/alianca-dos-lordes.md)) |
+| **Localização** | Vales férteis e colinas ondulantes no sul |
 | **Casa principal** | [Roche](../faccoes/casa-roche.md) |
-| **Estrutura social** | Clãs e conselhos de chefes |
-| **Recursos** | Terras férteis, alimentos, mármore |
+| **Governo** | Conselho de chefes de clã |
+| **Recursos** | Grãos, pomares, gado, vinhos, especiarias, mármore, argila |
 | **Cor no mapa** | Verde |
 
 </div>
 
-## Características
+## Geografia e recursos
 
-Região agrícola do sul, conhecida por suas terras férteis, sua produção agrícola e seus
-recursos de mármore. Sua estrutura política é diferente da das grandes cidades portuárias: o
-poder é distribuído entre clãs e conselhos de chefes.
+A região é abençoada com um clima ameno e rios que descem das montanhas próximas, irrigando vastas
+planícies ideais para o cultivo de grãos, pomares e a criação de gado. É a principal produtora de
+alimentos, vinhos e especiarias do reino. As colinas também fornecem **mármore** de alta qualidade
+e **argila**, sustentando uma próspera indústria de artesanato. A fartura de alimentos deu à
+cidade uma **culinária refinada**.
 
-Nouvelle-Montagne é essencial à sobrevivência material da Aliança. Seu poder não depende de uma
-frota ou de uma grande instituição arcana, mas da produção de alimentos e recursos. Essa base
-torna a região **vulnerável a cercos** e, ao mesmo tempo, **politicamente indispensável**.
+## A cidade e sua gente
+
+Uma cidade de prosperidade terrena: o ar cheira a pão fresco, terra arada e flores silvestres. A
+cultura gira em torno da comida, da família — organizada em grandes **clãs** — e de uma profunda
+conexão com a terra. Seus habitantes são pragmáticos e trabalhadores, com um **ressentimento
+crescente em relação às outras cidades**, que consideram parasitas que exploram seu trabalho.
+
+O poder é descentralizado, governado por um **conselho de chefes de clã** que valorizam a
+estabilidade e a autossuficiência. É considerada a cidade **mais neutra** do reino, mas sofre com
+os tributos de Valynesse e com as taxas de transporte de Baie de l'Éclair.
 
 ## História
 
-Enquanto Dodixie fornecia navios e Baie de l'Éclair fornecia poder marítimo e arcano,
-Nouvelle-Montagne alimentava a Aliança — e, por isso, tornou-se alvo prioritário da Coroa. O
-[cerco lealista](../eventos/cerco-de-nouvelle-montagne.md) quase a derrubou, até a intervenção
-noturna de Saint-Armand no **Massacre da Aurora Velada**, que consolidou o pacto de
-abastecimento e proteção. No pós-guerra, reconstruiu suas terras e consolidou seu poder político.
+Nouvelle-Montagne alimentou a Aliança durante a guerra e, por isso, tornou-se alvo prioritário da
+Coroa. O [cerco lealista](../eventos/cerco-de-nouvelle-montagne.md) quase a derrubou, até a
+intervenção noturna de Saint-Armand no **Massacre da Aurora Velada**, que consolidou o pacto de
+abastecimento e proteção.
 
-## Personagens
+## Figuras de poder
 
 | Personagem | Papel |
 |---|---|
-| [Helga Roche](../personagens/helga-roche.md) | Senhora do Pico e Matriarca do Clã Roche |
-| [Chefe Pierre Montaigne](../personagens/pierre-montaigne.md) | Representante da facção pragmática |
-| [Matriarca Élodie Vaucluse](../personagens/elodie-vaucluse.md) | Defensora do uso da produção agrícola como instrumento político |
-| [Emissário Lucien de Saint-Pierre](../personagens/lucien-de-saint-pierre.md) | Nobre menor associado ao financiamento de uma frota pirata rival |
+| [Senhora do Pico Helga Roche](../personagens/helga-roche.md) | Matriarca do clã mais antigo e poderoso; quer que seu povo nunca mais seja explorado |
+| [Chefe Pierre Montaigne](../personagens/pierre-montaigne.md) | Facção pragmática: bloco com Dodixie e Saint-Armand |
+| [Matriarca Élodie Vaucluse](../personagens/elodie-vaucluse.md) | Facção radical: embargos de grãos |
+| [Emissário Lucien de Saint-Pierre](../personagens/lucien-de-saint-pierre.md) | Financia em segredo uma frota pirata contra Baie de l'Éclair |
+
+## Pontos de interesse
+
+| Local | Descrição |
+|---|---|
+| **O Mercado do Grão de Ouro** | O maior mercado a céu aberto de Gallancourt, com os melhores produtos do reino. Também um ninho de informações, onde espiões de todas as cidades vêm sentir o pulso da nação |
+| **A Academia da Colheita Sábia** | A mais renomada escola de culinária do reino. Seus chefs são figuras influentes, e um convite para jantar em seus salões privados é muitas vezes o primeiro passo de uma negociação diplomática |
+| **As Grutas Sussurrantes** | Rede de cavernas nas colinas. Lendas dizem que são assombradas; na verdade, são a base de operações dos agentes de Lucien de Saint-Pierre `SEGREDO` |
 
 ## Tensões
 
-- autoridade matriarcal e interesses dos clãs;
-- facção pragmática de Pierre Montaigne;
-- política de abastecimento defendida por Élodie Vaucluse;
-- financiamento de frota pirata rival associado a Lucien de Saint-Pierre;
-- dependência de proteção militar de Saint-Armand;
-- necessidade de escoar produção para cidades e mercados.
-
-## Conexões
-
-- [Saint-Armand](saint-armand.md) — defesa e abastecimento;
-- [Dodixie](dodixie.md) — comércio;
-- [Valynesse](valynesse.md) — fornecimento de alimentos;
-- outras regiões do sul — produção agrícola e recursos.
+- facção pragmática (Montaigne) versus facção radical (Vaucluse) no conselho de clãs;
+- tributos abusivos de Valynesse e taxas de frete de Baie de l'Éclair;
+- financiamento secreto de pirataria por Lucien de Saint-Pierre;
+- dependência de proteção militar de Saint-Armand.
 
 ## Relações com outras cidades
 
-| Cidade | Estado | Motivo positivo | Motivo negativo |
+| Cidade | Estado | Como esta cidade a vê | Como ela vê esta cidade |
 |---|---|---|---|
-| [Dodixie](dodixie.md) | 🔵 Cordial | Dodixie compra grão e escoa a produção de Nouvelle-Montagne pelo mar. | Dodixie depende de comida que não produz, e Élodie Vaucluse defende usar o grão como alavanca política. A frota pirata financiada por Lucien de Saint-Pierre ataca navios, possivelmente os de Rochefort. |
-| [Baie de l'Éclair](baie-de-l-eclair.md) | ⚪ Neutro | Baie compra grão e mármore; Nouvelle-Montagne precisa das rotas do oeste para vender. | O controle de Vigny sobre as rotas encarece o frete; a frota pirata ligada a Lucien de Saint-Pierre ataca justamente as rotas de Baie. |
-| [Saint-Armand](saint-armand.md) | 🟢 Aliado | Alimento em troca de proteção: o pacto nascido no Massacre da Aurora Velada, mantido por Juliette Clermont. | Dependência gera ressentimento: os clãs discutem se o preço da proteção é justo, e Élodie quer renegociá-lo. Um golpe de Armand só funcionaria com o grão de Helga, que tem a chave nas mãos. |
-| [Valynesse](valynesse.md) | 🟠 Tenso | Nouvelle-Montagne alimenta a antiga capital. | Choque entre o poder do dinheiro (Magnetér) e o poder da comida (Roche). Valynesse se lembra de que sua fome tem dono. |
+| [Valynesse](valynesse.md) | 🟠 Tenso | Fornece alimentos à capital, mas sofre com os tributos abusivos impostos pelos aristocratas de Valynesse. | Nouvelle-Montagne é uma importante fornecedora de alimentos para a capital. |
+| [Dodixie](dodixie.md) | ⚪ Neutro | Relação comercial relativamente pacífica. | Relações comerciais neutras; os fazendeiros de Nouvelle-Montagne preferem negociar diretamente com Dodixie para evitar as taxas da capital. |
+| [Baie de l'Éclair](baie-de-l-eclair.md) | 🟠 Tenso | Relação conflituosa: Baie de l'Éclair impõe altas taxas de transporte e tenta controlar a economia da região. | Relação tensa, marcada pela extorsão nos preços de transporte de grãos e animais. |
+| [Saint-Armand](saint-armand.md) | 🟢 Aliado | Relação positiva: fornece mantimentos aos soldados da cidade-fortaleza. | Relação amigável: Saint-Armand depende dos suprimentos produzidos na região. |
 
-Estados e motivos negativos são `POSSIBILIDADE`. Detalhes em
-[Relações entre cidades](../mundo/relacoes-entre-cidades.md).
+Notas e segredos de cada par em [Relações entre cidades](../mundo/relacoes-entre-cidades.md).
 
 !!! question "Em aberto"
     - Composição do conselho de chefes.
     - Relação genealógica entre as famílias e clãs.
-    - Quais mercados recebem a produção.
-    - Identidade da frota rival.
-    - Se Lucien age por conta própria ou por uma casa maior.
+    - Quem comanda a frota pirata financiada por Lucien.

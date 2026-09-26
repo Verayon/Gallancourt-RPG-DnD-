@@ -14,7 +14,7 @@ tags:
 | **Casa** | [D'Aubren](../faccoes/casa-d-aubren.md) |
 | **Sede** | [Valynesse](../cidades/valynesse.md) |
 | **Família** | Rainha Isabeau; filhos Louis (herdeiro), Clarisse e Marcel |
-| **Situação** | Executado publicamente na [Queda de Valynesse](../eventos/queda-de-valynesse.md) |
+| **Situação** | Morto na [Queda de Valynesse](../eventos/queda-de-valynesse.md) |
 
 </div>
 
@@ -24,13 +24,13 @@ Isabeau e de seus três filhos.
 ## Na história
 
 Devoto, Thibault acabou convencido pela nova interpretação religiosa de
-[Severin Marceau](severin-marceau.md). Sua transformação foi o primeiro grande ponto de
-ruptura do reino: sob a influência do Primat, a Coroa proclamou o
+[Severin Marceau](severin-marceau.md). Sob a influência da Igreja, a Coroa decretou o
 [Édito da Pureza](../eventos/edito-da-pureza.md), que desencadeou o
-[Mês de Sangue](../eventos/mes-de-sangue.md) e a guerra civil.
+[Ano de Sangue](../eventos/ano-de-sangue.md) e a guerra civil.
 
 Quando Valynesse caiu, Thibault, Isabeau e os filhos foram capturados e executados
-publicamente, encerrando a monarquia.
+publicamente, encerrando a monarquia. O Doge [Lorenzo Magnetér](lorenzo-magneter.md) foi um dos
+responsáveis diretos por sua morte.
 
 !!! tip "Não confundir"
     Com o [Capitão-General Thibault de la Rivière](thibault-de-la-riviere.md), traidor de

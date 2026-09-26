@@ -42,11 +42,21 @@ A Fraternidade foi formada por oposição ao Édito, mas cada casa conservou seu
 
 | Cidade | Conflito interno |
 |---|---|
-| [Dodixie](../cidades/dodixie.md) | Corbeau coopera e compete com Duvant; La Voile Noire opera nas sombras |
-| [Baie de l'Éclair](../cidades/baie-de-l-eclair.md) | Aristocracia Lumière, Torre do Trovão, mercadores e construtores navais não são uma única instituição |
-| [Nouvelle-Montagne](../cidades/nouvelle-montagne.md) | Clãs e facções disputam a forma de empregar a riqueza agrícola |
-| [Saint-Armand](../cidades/saint-armand.md) | O poder militar é indispensável, mas Armand Saint-Laurent considerou um golpe; houve traição |
-| [Valynesse](../cidades/valynesse.md) | Finanças, aristocracia e espionagem se entrelaçam; financiamento político secreto |
+| [Valynesse](../cidades/valynesse.md) | Finanças, aristocracia e espionagem se entrelaçam; corrupção alarmante; um visconde "corrupto" financia rebeldes em segredo |
+| [Dodixie](../cidades/dodixie.md) | Corbeau coopera e compete com Duvant; outros nobres cobiçam o domínio de Corbeau; La Voile Noire opera nas sombras |
+| [Baie de l'Éclair](../cidades/baie-de-l-eclair.md) | Torre do Trovão, aristocracia Lumière, o monopólio de Vigny, a guilda de Montclair e a vingança de Rochefort; piratas controlados por nobres da própria cidade |
+| [Nouvelle-Montagne](../cidades/nouvelle-montagne.md) | Facção pragmática (Montaigne) contra facção radical (Vaucluse); Lucien age sozinho financiando piratas |
+| [Saint-Armand](../cidades/saint-armand.md) | Armand sonda oficiais para um golpe; Juliette tenta impedi-lo; um traidor comanda a Patrulha da Fronteira |
+
+## Disputas entre as cidades
+
+- **Valynesse** luta para manter sua posição como capital e teme uma revolta de Saint-Armand.
+- **Dodixie** conspira para se tornar a nova capital e se aliar a Nouvelle-Montagne.
+- **Baie de l'Éclair** busca controlar o comércio marítimo e enfrenta traições internas.
+- **Nouvelle-Montagne** quer se libertar da opressão econômica de Baie de l'Éclair e de Valynesse.
+- **Saint-Armand** está dividida entre defender o reino e tomar o poder à força.
+
+Ver [Relações entre cidades](relacoes-entre-cidades.md).
 
 !!! question "Em aberto"
     L'Ordre possui centralização religiosa, mas sua estabilidade e suas relações internas ainda

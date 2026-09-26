@@ -23,8 +23,10 @@ tags:
 
 ## Origem
 
-Enquanto Valynesse caía, Severin Marceau escapou para o leste levando clérigos, nobres e
-seguidores da ideologia de pureza. No leste, reorganizou suas forças e fundou uma teocracia. A
+Encurraladas no fim da guerra, a Monarquia e a Igreja executaram um êxodo estratégico para o
+leste, onde a população, humana e tradicionalista, lhes era mais simpática. Severin Marceau
+escapou levando clérigos, nobres e seguidores da ideologia de pureza. No leste, reorganizou suas forças e fundou uma teocracia, onde os clérigos de Amaunator
+finalmente tomaram o poder absoluto. A
 doutrina que havia sido imposta à antiga monarquia transformou-se em sistema de governo. Ver
 [Fuga de Severin Marceau](../eventos/fuga-de-severin-marceau.md).
 
@@ -46,8 +48,12 @@ pureza da Luz. L'Ordre é a teocracia que preservou a doutrina de pureza sob o c
 
 ## Traidores e aliados
 
-O [Capitão-General Thibault de la Rivière](../personagens/thibault-de-la-riviere.md), de
-Saint-Armand, passou informações estratégicas a L'Ordre e acabou se oferecendo a ele.
+O [Capitão-General Thibault de la Rivière](../personagens/thibault-de-la-riviere.md), comandante
+da Patrulha da Fronteira de Saint-Armand, foi capturado e convertido por L'Ordre, que lhe
+prometeu poder e riqueza num "novo Gallancourt" purificado. Ele vaza informações, sabota
+patrulhas e fomenta desconfiança entre as cidades. Como prova de lealdade, entregou a localização
+da mansão da família Enry, que L'Ordre atacou `SEGREDO`. Ver
+[Massacre da família Enry](../eventos/massacre-dos-enry.md).
 
 !!! question "Em aberto"
     - Quais são os cargos e tribunais de L'Ordre?
