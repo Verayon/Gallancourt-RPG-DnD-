@@ -31,6 +31,10 @@ Fraternité des Cinq Sangues, La
 :   Aliança secreta das casas Magnetér, Corbeau, Lumière, Saint-Laurent e Roche.
     [→](../faccoes/fraternidade-dos-cinco-sangues.md)
 
+Gallancourt
+:   O antigo reino unificado da península e, depois da guerra, o nome do Estado ocidental
+    governado pela Aliança dos Lordes. [→](../visao-geral.md)
+
 Guerra Fria
 :   Período atual de conflito indireto entre Aliança e L'Ordre. [→](../eventos/guerra-fria.md)
 

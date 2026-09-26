@@ -11,6 +11,10 @@ Os temas que atravessam cidades, casas e personagens.
   e os conflitos internos de cada bloco.
 - **[Teia política](teia-politica.md)** — a rede de dependências entre as casas e as relações
   bilaterais.
+- **[Relações entre cidades](relacoes-entre-cidades.md)** — motivos positivos e negativos de
+  cada par de cidades.
+- **[Intrigas da nobreza](intrigas-da-nobreza.md)** — alianças, rivalidades e conspirações de
+  assassinato entre os nobres.
 - **[Religião — Amaunator](religiao.md)** — a Luz Eterna, a doutrina da pureza e a fé tradicional.
 - **[Economia política](economia.md)** — a especialização econômica de cada região.
 - **[Operações clandestinas](operacoes-clandestinas.md)** — espionagem, corsários, crime e

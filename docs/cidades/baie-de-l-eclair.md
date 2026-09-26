@@ -65,6 +65,18 @@ quatro poderes, e o material não estabelece que um deles comande os demais.
 - [Torre do Trovão](../faccoes/torre-do-trovao.md) — poder arcano;
 - [Ilhas do Relâmpago](../geografia/ilhas-do-relampago.md) — espaço marítimo próximo.
 
+## Relações com outras cidades
+
+| Cidade | Estado | Motivo positivo | Motivo negativo |
+|---|---|---|---|
+| [Dodixie](dodixie.md) | 🟠 Tenso | As duas marinhas da Aliança: rotas comerciais e operações navais conjuntas. | Disputam as mesmas rotas e portos. Baie sofreu pirataria durante a guerra, e o corsário Rochefort, que ataca essas rotas, age em segredo para a Casa Corbeau. Se Baie descobrir, a aliança naval racha. |
+| [Nouvelle-Montagne](nouvelle-montagne.md) | ⚪ Neutro | Baie compra grão e mármore; Nouvelle-Montagne precisa das rotas do oeste para vender. | O controle de Vigny sobre as rotas encarece o frete; a frota pirata ligada a Lucien de Saint-Pierre ataca justamente as rotas de Baie. |
+| [Saint-Armand](saint-armand.md) | 🟠 Tenso | A Torre do Trovão poderia dar à fronteira magia de guerra que nenhum exército tem. | Kaelen Thorne se recusa a pôr a Torre a serviço do exército; Armand quer tempestades como arma. A fé tradicional de Saint-Armand desconfia de uma cidade governada por magos. |
+| [Valynesse](valynesse.md) | 🔵 Cordial | Comércio e política: Baie vende, Valynesse financia. | Os financistas de Valynesse querem taxar as rotas de Vigny; a Casa Lumière teme ser reduzida a província do Doge. |
+
+Estados e ganchos são `POSSIBILIDADE`. Detalhes em
+[Relações entre cidades](../mundo/relacoes-entre-cidades.md).
+
 !!! question "Em aberto"
     - Estrutura e regras da Torre.
     - Composição da frota local.

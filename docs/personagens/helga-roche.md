@@ -25,3 +25,14 @@ conselhos de chefes. A família Roche é uma das cinco casas fundadoras da [Frat
 
 - autoridade matriarcal versus interesses dos clãs;
 - dependência da proteção militar de Saint-Armand.
+
+## Intrigas
+
+| Com | Tipo | Marca | Descrição |
+|---|---|---|---|
+| ↔ [Armand Saint-Laurent](armand-saint-laurent.md) | 🔗 Dependência | `CANON` | Alimento em troca de proteção, desde o Massacre da Aurora Velada. |
+| ↔ [Juliette Clermont](juliette-clermont.md) | 🤝 Aliança | `CANON` | Juliette é a ponte logística e uma voz de equilíbrio entre Saint-Armand e Nouvelle-Montagne. |
+
+→ este personagem age sobre o outro; ← o outro age sobre este personagem.
+
+Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).

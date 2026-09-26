@@ -64,6 +64,18 @@ abastecimento e proteção. No pós-guerra, reconstruiu suas terras e consolidou
 - [Valynesse](valynesse.md) — fornecimento de alimentos;
 - outras regiões do sul — produção agrícola e recursos.
 
+## Relações com outras cidades
+
+| Cidade | Estado | Motivo positivo | Motivo negativo |
+|---|---|---|---|
+| [Dodixie](dodixie.md) | 🔵 Cordial | Dodixie compra grão e escoa a produção de Nouvelle-Montagne pelo mar. | Dodixie depende de comida que não produz, e Élodie Vaucluse defende usar o grão como alavanca política. A frota pirata financiada por Lucien de Saint-Pierre ataca navios, possivelmente os de Rochefort. |
+| [Baie de l'Éclair](baie-de-l-eclair.md) | ⚪ Neutro | Baie compra grão e mármore; Nouvelle-Montagne precisa das rotas do oeste para vender. | O controle de Vigny sobre as rotas encarece o frete; a frota pirata ligada a Lucien de Saint-Pierre ataca justamente as rotas de Baie. |
+| [Saint-Armand](saint-armand.md) | 🟢 Aliado | Alimento em troca de proteção: o pacto nascido no Massacre da Aurora Velada, mantido por Juliette Clermont. | Dependência gera ressentimento: os clãs discutem se o preço da proteção é justo, e Élodie quer renegociá-lo. Um golpe de Armand só funcionaria com o grão de Helga, que tem a chave nas mãos. |
+| [Valynesse](valynesse.md) | 🟠 Tenso | Nouvelle-Montagne alimenta a antiga capital. | Choque entre o poder do dinheiro (Magnetér) e o poder da comida (Roche). Valynesse se lembra de que sua fome tem dono. |
+
+Estados e ganchos são `POSSIBILIDADE`. Detalhes em
+[Relações entre cidades](../mundo/relacoes-entre-cidades.md).
+
 !!! question "Em aberto"
     - Composição do conselho de chefes.
     - Relação genealógica entre as famílias e clãs.

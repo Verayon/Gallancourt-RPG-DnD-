@@ -40,5 +40,17 @@ reorganizou suas forças e fundou L'Ordre de Célestien, uma teocracia. Ver
 O homem que iniciou a transformação continua vivo no centro do território que nasceu da guerra.
 L'Ordre depende de uma liderança centralizada nele.
 
+## Intrigas
+
+| Com | Tipo | Marca | Descrição |
+|---|---|---|---|
+| ← [Thibault de la Rivière](thibault-de-la-riviere.md) | 🐍 Traição | `CANON` | Passou informações estratégicas da Aliança a L'Ordre e se ofereceu a ele. |
+| → [Scyras Corbeau](scyras-corbeau.md) | 🗡️ Conspiração de assassinato | `POSSIBILIDADE` `SEGREDO` | Para L'Ordre, a frota de Dodixie é o maior obstáculo a uma nova guerra. Matar a duquesa antes da invasão deixaria a marinha do norte sem cabeça. |
+| ← [Thalin](thalin.md) | 🗡️ Conspiração de assassinato | `POSSIBILIDADE` `SEGREDO` | A vingança de Thalin tem um alvo: o homem cuja doutrina matou sua gente. Um assassinato fracassado do Primat poderia servir de pretexto para a guerra. |
+
+→ este personagem age sobre o outro; ← o outro age sobre este personagem.
+
+Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
+
 !!! question "Em aberto"
     Sucessão de L'Ordre; hierarquia clerical abaixo do Primat.

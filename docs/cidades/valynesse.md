@@ -64,6 +64,18 @@ Aliança quanto um dos maiores centros de espionagem.
 - financiamento clandestino de Henri du Valois;
 - memória da execução pública da família real.
 
+## Relações com outras cidades
+
+| Cidade | Estado | Motivo positivo | Motivo negativo |
+|---|---|---|---|
+| [Dodixie](dodixie.md) | 🟠 Tenso | Política e espionagem: Valynesse coordena, Dodixie informa e financia. | Duas redes de espionagem (Corbeau e Beaumont) vigiam uma à outra. Scyras desconfia de que o Doge governa como um rei sem coroa. |
+| [Baie de l'Éclair](baie-de-l-eclair.md) | 🔵 Cordial | Comércio e política: Baie vende, Valynesse financia. | Os financistas de Valynesse querem taxar as rotas de Vigny; a Casa Lumière teme ser reduzida a província do Doge. |
+| [Nouvelle-Montagne](nouvelle-montagne.md) | 🟠 Tenso | Nouvelle-Montagne alimenta a antiga capital. | Choque entre o poder do dinheiro (Magnetér) e o poder da comida (Roche). Valynesse se lembra de que sua fome tem dono. |
+| [Saint-Armand](saint-armand.md) | 🔴 Hostil velado | Saint-Armand é a espada da Aliança; Valynesse paga por ela. | Armand considerou um golpe, e o alvo natural é a centralidade de Valynesse. Beaumont vigia o exército. Saint-Armand lembra que segurou o istmo enquanto os outros entravam na capital. |
+
+Estados e ganchos são `POSSIBILIDADE`. Detalhes em
+[Relações entre cidades](../mundo/relacoes-entre-cidades.md).
+
 !!! question "Em aberto"
     - Constituição do cargo de Doge.
     - Distribuição dos assentos ou votos das casas.

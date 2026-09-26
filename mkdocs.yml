@@ -53,12 +53,17 @@ markdown_extensions:
   - toc:
       permalink: true
   - pymdownx.details
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.tasklist:
       custom_checkbox: true
 
 nav:
   - Início: index.md
+  - Visão geral: visao-geral.md
   - História:
       - historia/index.md
       - Antes da ruptura: historia/antes-da-ruptura.md
@@ -151,10 +156,20 @@ nav:
       - mundo/index.md
       - Conflitos centrais: mundo/conflitos-centrais.md
       - Teia política: mundo/teia-politica.md
+      - Relações entre cidades: mundo/relacoes-entre-cidades.md
+      - Intrigas da nobreza: mundo/intrigas-da-nobreza.md
       - Religião — Amaunator: mundo/religiao.md
       - Economia política: mundo/economia.md
       - Operações clandestinas: mundo/operacoes-clandestinas.md
       - Glossário: mundo/glossario.md
+  - Campanha:
+      - campanha/index.md
+      - O estopim: campanha/estopim.md
+      - Forças e frentes: campanha/forcas-e-frentes.md
+      - As casas na guerra: campanha/casas-na-guerra.md
+      - Estrutura em atos: campanha/atos.md
+      - NPCs de L'Ordre: campanha/npcs-de-lordre.md
+      - Finais possíveis: campanha/finais.md
   - Referência do Mestre:
       - mestre/index.md
       - Referência rápida: mestre/referencia-rapida.md

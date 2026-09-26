@@ -27,6 +27,17 @@ famílias, instituições e amizades.
 !!! tip "Não confundir"
     Com o rei [Thibault d'Aubren](thibault-d-aubren.md).
 
+## Intrigas
+
+| Com | Tipo | Marca | Descrição |
+|---|---|---|---|
+| → [Severin Marceau](severin-marceau.md) | 🐍 Traição | `CANON` | Passou informações estratégicas da Aliança a L'Ordre e se ofereceu a ele. |
+| → [Juliette Clermont](juliette-clermont.md) | 🐍 Traição | `POSSIBILIDADE` `SEGREDO` | De la Rivière deixou informantes em Saint-Armand. Juliette suspeita, mas não sabe quem são. |
+
+→ este personagem age sobre o outro; ← o outro age sobre este personagem.
+
+Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
+
 !!! question "Em aberto"
     - Qual é a motivação de Thibault de la Rivière?
     - Qual é o estado atual do desertor?

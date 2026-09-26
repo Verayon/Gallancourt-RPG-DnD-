@@ -12,12 +12,17 @@ tags:
 | | |
 |---|---|
 | **Tipo** | Aristocracia política compartilhada |
+| **Governa** | Gallancourt (o Estado ocidental) |
 | **Origem** | [Fraternidade dos Cinco Sangues](fraternidade-dos-cinco-sangues.md) |
 | **Território** | Antiga Gallancourt ocidental |
 | **Centros** | [Dodixie](../cidades/dodixie.md), [Valynesse](../cidades/valynesse.md), [Baie de l'Éclair](../cidades/baie-de-l-eclair.md), [Nouvelle-Montagne](../cidades/nouvelle-montagne.md), [Saint-Armand](../cidades/saint-armand.md) |
 | **Rival** | [L'Ordre de Célestien](l-ordre-de-celestien.md) |
 
 </div>
+
+A Aliança dos Lordes é o governo de **Gallancourt**, nome que o Estado ocidental conservou
+depois da guerra. Ver [Relações entre cidades](../mundo/relacoes-entre-cidades.md) e
+[Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
 
 ## Origem
 

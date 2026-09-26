@@ -35,5 +35,17 @@ lutavam contra a Coroa lutavam pelos mesmos motivos.
 |---|---|
 | [Scyras Corbeau](scyras-corbeau.md) / [Casa Corbeau](../faccoes/casa-corbeau.md) | Clandestina: operações navais que oficialmente não pertencem à política da casa |
 
+## Intrigas
+
+| Com | Tipo | Marca | Descrição |
+|---|---|---|---|
+| ↔ [Scyras Corbeau](scyras-corbeau.md) | 🕯️ Clandestina | `CANON` `SEGREDO` | Acordo secreto: o corsário ataca inimigos da casa e obtém seus próprios ganhos. |
+| ← [Jean Vigny](jean-vigny.md) | 🗡️ Conspiração de assassinato | `POSSIBILIDADE` `SEGREDO` | Os ataques de Rochefort afundam as cargas de Vigny. O comodoro contratou La Voile Noire para matá-lo, sem saber que o corsário trabalha para Scyras. |
+| ↔ [Lucien de Saint-Pierre](lucien-de-saint-pierre.md) | 🔥 Hostilidade | `POSSIBILIDADE` | A frota "rival" é rival de Rochefort: as duas disputam as mesmas presas. |
+
+→ este personagem age sobre o outro; ← o outro age sobre este personagem.
+
+Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
+
 !!! question "Em aberto"
     Relação familiar de Rochefort com qualquer casa — nenhuma foi estabelecida.

@@ -11,13 +11,16 @@ arquivos Markdown, com busca, tags, modo escuro e navegação por categorias.
 ```
 docs/
 ├── index.md        Página inicial e princípio central da ambientação
+├── visao-geral.md  O cenário resumido em uma página, com diagramas
 ├── historia/       A crônica em capítulos + cronologia
 ├── eventos/        Batalhas, decretos e períodos (uma página por evento)
 ├── geografia/      Península, cordilheira, Cicatriz, ilhas, divisão territorial, mapas
 ├── cidades/        As 5 cidades da Aliança e as 3 de L'Ordre
 ├── faccoes/        Estados, as cinco casas, outras casas e organizações
 ├── personagens/    Uma página por NPC
-├── mundo/          Conflitos, teia política, religião, economia, operações clandestinas, glossário
+├── mundo/          Conflitos, teia política, relações entre cidades, intrigas da nobreza,
+│                   religião, economia, operações clandestinas, glossário
+├── campanha/       A Segunda Guerra de Gallancourt (proposta de próximo arco)
 └── mestre/         Referência rápida, lacunas, manutenção do cânone, inconsistências, fontes
 fontes/             Dossiê original usado como fonte
 ```

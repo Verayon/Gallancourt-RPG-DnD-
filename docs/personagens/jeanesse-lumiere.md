@@ -28,3 +28,14 @@ com controle absoluto de Baie de l'Éclair.
 ## Tensões
 
 - aristocracia Lumière versus autonomia da Torre do Trovão.
+
+## Intrigas
+
+| Com | Tipo | Marca | Descrição |
+|---|---|---|---|
+| ↔ [Kaelen Thorne](kaelen-thorne.md) | ⚔️ Rivalidade | `CANON` | A aristocracia Lumière contra a autonomia da Torre do Trovão. |
+| ↔ [Lorenzo Magnetér](lorenzo-magneter.md) | ⚔️ Rivalidade | `POSSIBILIDADE` | Lumière teme ser reduzida a província do Doge e resiste a cada nova taxa de Valynesse. |
+
+→ este personagem age sobre o outro; ← o outro age sobre este personagem.
+
+Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).

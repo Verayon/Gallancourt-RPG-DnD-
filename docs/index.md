@@ -10,12 +10,15 @@ hide:
 Bem-vindo à wiki de lore de **Gallancourt**, uma península de senhorios feudais, cidades
 comerciais e portos que foi, um dia, um reino unificado sob a Casa D'Aubren. Uma doutrina de
 **pureza** transformou a fé em instrumento de poder, provocou uma guerra civil e partiu o
-reino em dois: a **Aliança dos Lordes**, a oeste, e a teocracia de **L'Ordre de Célestien**, a
-leste.
+reino em dois: **Gallancourt**, a oeste, governada pela **Aliança dos Lordes**, e a teocracia de
+**L'Ordre de Célestien**, a leste.
 
 A guerra acabou. A guerra política apenas começou.
 
 ## Por onde começar
+
+!!! tip "Primeira vez aqui?"
+    Leia **[Gallancourt em uma página](visao-geral.md)**: o cenário resumido, com diagramas.
 
 <div class="grid cards" markdown>
 
@@ -46,6 +49,10 @@ A guerra acabou. A guerra política apenas começou.
 -   **[Mundo](mundo/index.md)**
 
     Religião, economia, teia política e operações clandestinas.
+
+-   **[Campanha](campanha/index.md)**
+
+    A Segunda Guerra de Gallancourt: estopim, frentes, atos e finais possíveis.
 
 -   **[Referência do Mestre](mestre/index.md)**
 

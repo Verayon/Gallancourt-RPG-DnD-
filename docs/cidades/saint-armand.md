@@ -62,6 +62,18 @@ vigilância do leste.
 - Amaunator tradicional — identidade religiosa;
 - [Aliança dos Lordes](../faccoes/alianca-dos-lordes.md) — estrutura militar.
 
+## Relações com outras cidades
+
+| Cidade | Estado | Motivo positivo | Motivo negativo |
+|---|---|---|---|
+| [Dodixie](dodixie.md) | ⚪ Neutro | Saint-Armand garante a proteção terrestre que uma cidade naval não tem. | Corbeau vê um exército cada vez maior como ameaça à própria autonomia; Saint-Armand se ressente de que a marinha fique com a glória e o dinheiro. As redes de espionagem de Corbeau podem saber dos planos de golpe de Armand. |
+| [Baie de l'Éclair](baie-de-l-eclair.md) | 🟠 Tenso | A Torre do Trovão poderia dar à fronteira magia de guerra que nenhum exército tem. | Kaelen Thorne se recusa a pôr a Torre a serviço do exército; Armand quer tempestades como arma. A fé tradicional de Saint-Armand desconfia de uma cidade governada por magos. |
+| [Nouvelle-Montagne](nouvelle-montagne.md) | 🟢 Aliado | Alimento em troca de proteção: o pacto nascido no Massacre da Aurora Velada, mantido por Juliette Clermont. | Dependência gera ressentimento: os clãs discutem se o preço da proteção é justo, e Élodie quer renegociá-lo. Um golpe de Armand só funcionaria com o grão de Helga, que tem a chave nas mãos. |
+| [Valynesse](valynesse.md) | 🔴 Hostil velado | Saint-Armand é a espada da Aliança; Valynesse paga por ela. | Armand considerou um golpe, e o alvo natural é a centralidade de Valynesse. Beaumont vigia o exército. Saint-Armand lembra que segurou o istmo enquanto os outros entravam na capital. |
+
+Estados e ganchos são `POSSIBILIDADE`. Detalhes em
+[Relações entre cidades](../mundo/relacoes-entre-cidades.md).
+
 !!! question "Em aberto"
     - Cadeia de comando militar e efetivo da guarnição.
     - Relação de Armand com as demais casas.

@@ -63,6 +63,18 @@ economia do porto, e uma estrutura clandestina que convive com a vida pública (
 - [Saint-Armand](saint-armand.md) — proteção terrestre;
 - [Valynesse](valynesse.md) — política e espionagem.
 
+## Relações com outras cidades
+
+| Cidade | Estado | Motivo positivo | Motivo negativo |
+|---|---|---|---|
+| [Baie de l'Éclair](baie-de-l-eclair.md) | 🟠 Tenso | As duas marinhas da Aliança: rotas comerciais e operações navais conjuntas. | Disputam as mesmas rotas e portos. Baie sofreu pirataria durante a guerra, e o corsário Rochefort, que ataca essas rotas, age em segredo para a Casa Corbeau. Se Baie descobrir, a aliança naval racha. |
+| [Nouvelle-Montagne](nouvelle-montagne.md) | 🔵 Cordial | Dodixie compra grão e escoa a produção de Nouvelle-Montagne pelo mar. | Dodixie depende de comida que não produz, e Élodie Vaucluse defende usar o grão como alavanca política. A frota pirata financiada por Lucien de Saint-Pierre ataca navios, possivelmente os de Rochefort. |
+| [Saint-Armand](saint-armand.md) | ⚪ Neutro | Saint-Armand garante a proteção terrestre que uma cidade naval não tem. | Corbeau vê um exército cada vez maior como ameaça à própria autonomia; Saint-Armand se ressente de que a marinha fique com a glória e o dinheiro. As redes de espionagem de Corbeau podem saber dos planos de golpe de Armand. |
+| [Valynesse](valynesse.md) | 🟠 Tenso | Política e espionagem: Valynesse coordena, Dodixie informa e financia. | Duas redes de espionagem (Corbeau e Beaumont) vigiam uma à outra. Scyras desconfia de que o Doge governa como um rei sem coroa. |
+
+Estados e ganchos são `POSSIBILIDADE`. Detalhes em
+[Relações entre cidades](../mundo/relacoes-entre-cidades.md).
+
 !!! question "Em aberto"
     - Estrutura do governo municipal.
     - Relação legal entre Corbeau e Duvant.
