@@ -31,6 +31,7 @@ importante, e governa com uma indiferença que muitos confundem com fraqueza —
   [Duque Jeanesse Lumière](jeanesse-lumiere.md);
 - uso estratégico da magia pela Aliança versus os interesses particulares de Elian.
 
+<!-- inicio:gerado -->
 ## Intrigas
 
 | Com | Tipo | Marca | Descrição |
@@ -41,6 +42,7 @@ importante, e governa com uma indiferença que muitos confundem com fraqueza —
 → este personagem age sobre o outro; ← o outro age sobre este personagem.
 
 Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
+<!-- fim:gerado -->
 
 !!! question "Em aberto"
     Qual é o parentesco entre Elian e o Duque Jeanesse Lumière?

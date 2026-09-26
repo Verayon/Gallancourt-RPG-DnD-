@@ -24,6 +24,7 @@ salões, formando alianças e angariando apoio para a causa.
 Mantém uma **correspondência secreta** com [Élodie Vaucluse](elodie-vaucluse.md), de
 Nouvelle-Montagne.
 
+<!-- inicio:gerado -->
 ## Intrigas
 
 | Com | Tipo | Marca | Descrição |
@@ -33,3 +34,4 @@ Nouvelle-Montagne.
 → este personagem age sobre o outro; ← o outro age sobre este personagem.
 
 Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
+<!-- fim:gerado -->

@@ -29,6 +29,7 @@ age por conta própria.
     Seus agentes usam as **Grutas Sussurrantes** para contrabandear suprimentos aos piratas e
     mover mensageiros sem passar pelas estradas taxadas.
 
+<!-- inicio:gerado -->
 ## Intrigas
 
 | Com | Tipo | Marca | Descrição |
@@ -38,6 +39,7 @@ age por conta própria.
 → este personagem age sobre o outro; ← o outro age sobre este personagem.
 
 Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
+<!-- fim:gerado -->
 
 !!! question "Em aberto"
     Quem comanda a frota pirata rival?

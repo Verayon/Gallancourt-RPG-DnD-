@@ -26,6 +26,7 @@ o [Arquimago Elian Lumière](elian-lumiere.md), leva o mesmo nome de família.
 A autonomia dos atores econômicos e arcanos da cidade impede que sua influência seja confundida
 com controle absoluto de Baie de l'Éclair.
 
+<!-- inicio:gerado -->
 ## Intrigas
 
 | Com | Tipo | Marca | Descrição |
@@ -36,6 +37,7 @@ com controle absoluto de Baie de l'Éclair.
 → este personagem age sobre o outro; ← o outro age sobre este personagem.
 
 Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
+<!-- fim:gerado -->
 
 !!! question "Em aberto"
     Qual é o parentesco entre Jeanesse e Elian Lumière?

@@ -74,6 +74,7 @@ corruptas**. O povo é vigilante, orgulhoso e vê a corrupção das outras cidad
 - dependência de alimentos de Nouvelle-Montagne;
 - identidade religiosa tradicional versus a teocracia oriental.
 
+<!-- inicio:gerado -->
 ## Relações com outras cidades
 
 | Cidade | Estado | Como esta cidade a vê | Como ela vê esta cidade |
@@ -84,6 +85,7 @@ corruptas**. O povo é vigilante, orgulhoso e vê a corrupção das outras cidad
 | [Nouvelle-Montagne](nouvelle-montagne.md) | 🟢 Aliado | Relação amigável: Saint-Armand depende dos suprimentos produzidos na região. | Relação positiva: fornece mantimentos aos soldados da cidade-fortaleza. |
 
 Notas e segredos de cada par em [Relações entre cidades](../mundo/relacoes-entre-cidades.md).
+<!-- fim:gerado -->
 
 !!! question "Em aberto"
     - Cadeia de comando militar e efetivo da guarnição.

@@ -29,6 +29,7 @@ Vigny e a ameaça pirata garantem uma demanda constante por seus caros navios.
     Com Louis d'Aubren, o príncipe herdeiro executado, nem com a cidade de
     [Montclair de Lune](../cidades/montclair-de-lune.md).
 
+<!-- inicio:gerado -->
 ## Intrigas
 
 | Com | Tipo | Marca | Descrição |
@@ -38,3 +39,4 @@ Vigny e a ameaça pirata garantem uma demanda constante por seus caros navios.
 → este personagem age sobre o outro; ← o outro age sobre este personagem.
 
 Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
+<!-- fim:gerado -->

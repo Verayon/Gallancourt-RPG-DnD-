@@ -21,6 +21,7 @@ neutralidade é uma forma de submissão** e defende ativamente a formação de u
 com Dodixie e Saint-Armand** para confrontar a exploração econômica de Valynesse e de Baie de
 l'Éclair — e livrar a cidade das taxas abusivas de Jean Vigny.
 
+<!-- inicio:gerado -->
 ## Intrigas
 
 | Com | Tipo | Marca | Descrição |
@@ -30,3 +31,4 @@ l'Éclair — e livrar a cidade das taxas abusivas de Jean Vigny.
 → este personagem age sobre o outro; ← o outro age sobre este personagem.
 
 Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
+<!-- fim:gerado -->

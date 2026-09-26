@@ -31,6 +31,7 @@ Comandante da Patrulha da Fronteira e, em segredo, um traidor da mais alta ordem
 !!! tip "Não confundir"
     Com o rei [Thibault d'Aubren](thibault-d-aubren.md).
 
+<!-- inicio:gerado -->
 ## Intrigas
 
 | Com | Tipo | Marca | Descrição |
@@ -41,6 +42,7 @@ Comandante da Patrulha da Fronteira e, em segredo, um traidor da mais alta ordem
 → este personagem age sobre o outro; ← o outro age sobre este personagem.
 
 Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
+<!-- fim:gerado -->
 
 !!! question "Em aberto"
     Quando foi capturado e convertido, e o que mais já entregou a L'Ordre?

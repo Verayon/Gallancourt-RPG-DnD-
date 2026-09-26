@@ -25,6 +25,7 @@ adquirido. Tornou-se figura central do novo governo após a queda da monarquia.
 Foi **um dos responsáveis diretos pela morte do antigo monarca**,
 [Thibault d'Aubren](thibault-d-aubren.md).
 
+<!-- inicio:gerado -->
 ## Intrigas
 
 | Com | Tipo | Marca | Descrição |
@@ -38,6 +39,7 @@ Foi **um dos responsáveis diretos pela morte do antigo monarca**,
 → este personagem age sobre o outro; ← o outro age sobre este personagem.
 
 Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
+<!-- fim:gerado -->
 
 !!! question "Em aberto"
     - Constituição do cargo de Doge e como é feita a eleição.

@@ -25,6 +25,7 @@ Impiedoso e ganancioso, explora suas tripulações e usa táticas predatórias p
 monopólio. Não comanda lealdade, apenas medo, e sabe que seu império ruirá ao primeiro sinal de
 fraqueza.
 
+<!-- inicio:gerado -->
 ## Intrigas
 
 | Com | Tipo | Marca | Descrição |
@@ -36,6 +37,7 @@ fraqueza.
 → este personagem age sobre o outro; ← o outro age sobre este personagem.
 
 Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
+<!-- fim:gerado -->
 
 !!! question "Em aberto"
     Autoridade formal de Vigny no governo da cidade.

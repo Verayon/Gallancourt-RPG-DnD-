@@ -26,6 +26,7 @@ ambições próprias; reconhece a liderança de Corbeau sem se reduzir a uma ext
 |---|---|
 | [Scyras Corbeau](scyras-corbeau.md) | Cooperação e competição |
 
+<!-- inicio:gerado -->
 ## Intrigas
 
 | Com | Tipo | Marca | Descrição |
@@ -36,3 +37,4 @@ ambições próprias; reconhece a liderança de Corbeau sem se reduzir a uma ext
 → este personagem age sobre o outro; ← o outro age sobre este personagem.
 
 Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
+<!-- fim:gerado -->

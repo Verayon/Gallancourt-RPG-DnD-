@@ -24,6 +24,7 @@ com uma crueldade lendária: sabotando concorrentes, comprando juízes e garanti
 extraída das montanhas passe por suas mãos. Amélie vê os negócios como uma guerra e não tem
 escrúpulos em destruir vidas para vencer.
 
+<!-- inicio:gerado -->
 ## Intrigas
 
 | Com | Tipo | Marca | Descrição |
@@ -33,3 +34,4 @@ escrúpulos em destruir vidas para vencer.
 → este personagem age sobre o outro; ← o outro age sobre este personagem.
 
 Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
+<!-- fim:gerado -->

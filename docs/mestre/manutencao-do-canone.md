@@ -68,3 +68,12 @@ mundo ajam de modo coerente sem determinar antecipadamente todas as consequênci
 3. Adicione a página ao `nav` em `mkdocs.yml`.
 4. Crie links a partir das páginas relacionadas (cidade, casa, eventos).
 5. Rode `mkdocs build --strict` para verificar links quebrados.
+
+## Relações e intrigas
+
+As páginas [Relações entre cidades](../mundo/relacoes-entre-cidades.md) e
+[Intrigas da nobreza](../mundo/intrigas-da-nobreza.md), e as tabelas de relações nas páginas de
+cidades e personagens, são geradas pelo script `scripts/gerar_relacoes.py`. Para mudar uma
+relação, edite as listas `PARES` (cidades) ou `INTRIGAS` (nobres) no script e rode
+`python3 scripts/gerar_relacoes.py`. Não edite à mão o conteúdo entre os marcadores
+`<!-- inicio:gerado -->` e `<!-- fim:gerado -->`: ele é sobrescrito a cada execução.

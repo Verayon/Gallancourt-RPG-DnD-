@@ -86,6 +86,7 @@ Aliança.
 - taxas cobradas de Nouvelle-Montagne e disputas tarifárias com Baie de l'Éclair;
 - memória da execução pública da família real.
 
+<!-- inicio:gerado -->
 ## Relações com outras cidades
 
 | Cidade | Estado | Como esta cidade a vê | Como ela vê esta cidade |
@@ -96,6 +97,7 @@ Aliança.
 | [Nouvelle-Montagne](nouvelle-montagne.md) | 🟠 Tenso | Nouvelle-Montagne é uma importante fornecedora de alimentos para a capital. | Fornece alimentos à capital, mas sofre com os tributos abusivos impostos pelos aristocratas de Valynesse. |
 
 Notas e segredos de cada par em [Relações entre cidades](../mundo/relacoes-entre-cidades.md).
+<!-- fim:gerado -->
 
 !!! question "Em aberto"
     - Constituição do cargo de Doge e forma de eleição.

@@ -71,6 +71,7 @@ abastecimento e proteção.
 - financiamento secreto de pirataria por Lucien de Saint-Pierre;
 - dependência de proteção militar de Saint-Armand.
 
+<!-- inicio:gerado -->
 ## Relações com outras cidades
 
 | Cidade | Estado | Como esta cidade a vê | Como ela vê esta cidade |
@@ -81,6 +82,7 @@ abastecimento e proteção.
 | [Saint-Armand](saint-armand.md) | 🟢 Aliado | Relação positiva: fornece mantimentos aos soldados da cidade-fortaleza. | Relação amigável: Saint-Armand depende dos suprimentos produzidos na região. |
 
 Notas e segredos de cada par em [Relações entre cidades](../mundo/relacoes-entre-cidades.md).
+<!-- fim:gerado -->
 
 !!! question "Em aberto"
     - Composição do conselho de chefes.

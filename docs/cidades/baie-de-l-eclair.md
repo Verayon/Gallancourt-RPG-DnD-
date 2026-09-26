@@ -84,6 +84,7 @@ suas rotas e fortaleceu a Torre do Trovão.
 - pirataria (de Rochefort e da frota financiada por Lucien de Saint-Pierre);
 - conflito econômico com Nouvelle-Montagne e disputas internas entre os nobres.
 
+<!-- inicio:gerado -->
 ## Relações com outras cidades
 
 | Cidade | Estado | Como esta cidade a vê | Como ela vê esta cidade |
@@ -94,6 +95,7 @@ suas rotas e fortaleceu a Torre do Trovão.
 | [Saint-Armand](saint-armand.md) | 🔵 Cordial | Cooperam militarmente, mas existe tensão entre os almirantes de Baie e os generais de Saint-Armand sobre qual força deveria ser mais proeminente no reino. | Cooperação militar, com uma disputa latente sobre a primazia naval do reino. |
 
 Notas e segredos de cada par em [Relações entre cidades](../mundo/relacoes-entre-cidades.md).
+<!-- fim:gerado -->
 
 !!! question "Em aberto"
     - Estrutura e regras da Torre.

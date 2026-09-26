@@ -86,6 +86,7 @@ Recentemente, a mansão de um ramo da família Enry, fora da cidade, foi atacada
 - La Voile Noire opera nas sombras das docas;
 - pirataria de Fishmen.
 
+<!-- inicio:gerado -->
 ## Relações com outras cidades
 
 | Cidade | Estado | Como esta cidade a vê | Como ela vê esta cidade |
@@ -96,6 +97,7 @@ Recentemente, a mansão de um ramo da família Enry, fora da cidade, foi atacada
 | [Saint-Armand](saint-armand.md) | ⚪ Neutro | Respeita a cidade militarizada, mas a considera uma possível ameaça caso decida intervir nas disputas políticas do reino. | Respeito mútuo, mas os comerciantes de Dodixie temem que os militares interfiram na economia. |
 
 Notas e segredos de cada par em [Relações entre cidades](../mundo/relacoes-entre-cidades.md).
+<!-- fim:gerado -->
 
 !!! question "Em aberto"
     - Estrutura do governo municipal.

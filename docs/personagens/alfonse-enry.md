@@ -37,6 +37,7 @@ desvendar a conspiração por trás do massacre.
 
 Na guerra civil, atuou dentro da rede de resistência.
 
+<!-- inicio:gerado -->
 ## Intrigas
 
 | Com | Tipo | Marca | Descrição |
@@ -49,6 +50,7 @@ Na guerra civil, atuou dentro da rede de resistência.
 → este personagem age sobre o outro; ← o outro age sobre este personagem.
 
 Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
+<!-- fim:gerado -->
 
 !!! question "Em aberto"
     - Extensão dos poderes de Alfonse.

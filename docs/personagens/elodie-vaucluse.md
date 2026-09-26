@@ -24,6 +24,7 @@ coração econômico do reino e usa essa influência para pressionar o Conseil d
 !!! warning "SEGREDO"
     Mantém uma correspondência secreta com [Camille Brissac](camille-brissac.md), de Dodixie.
 
+<!-- inicio:gerado -->
 ## Intrigas
 
 | Com | Tipo | Marca | Descrição |
@@ -35,3 +36,4 @@ coração econômico do reino e usa essa influência para pressionar o Conseil d
 → este personagem age sobre o outro; ← o outro age sobre este personagem.
 
 Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
+<!-- fim:gerado -->

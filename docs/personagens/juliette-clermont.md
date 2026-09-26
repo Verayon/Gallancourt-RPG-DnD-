@@ -27,6 +27,7 @@ de guerra.
     sutilmente para frustrar seus planos, temendo que um golpe mergulhe Gallancourt em uma nova
     guerra civil que o reino não pode vencer.
 
+<!-- inicio:gerado -->
 ## Intrigas
 
 | Com | Tipo | Marca | Descrição |
@@ -38,3 +39,4 @@ de guerra.
 → este personagem age sobre o outro; ← o outro age sobre este personagem.
 
 Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
+<!-- fim:gerado -->

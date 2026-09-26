@@ -27,6 +27,7 @@ nação.
     Armand está secretamente **sondando seus oficiais mais leais para um golpe de Estado**, que
     ele vê como seu dever patriótico.
 
+<!-- inicio:gerado -->
 ## Intrigas
 
 | Com | Tipo | Marca | Descrição |
@@ -41,6 +42,7 @@ nação.
 → este personagem age sobre o outro; ← o outro age sobre este personagem.
 
 Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
+<!-- fim:gerado -->
 
 !!! question "Em aberto"
     - Quantos oficiais já aderiram, e qual é a extensão dos planos de golpe?

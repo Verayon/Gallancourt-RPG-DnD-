@@ -30,6 +30,7 @@ A família Roche é uma das cinco casas fundadoras da
 - autoridade matriarcal versus as facções do conselho de clãs;
 - dependência da proteção militar de Saint-Armand.
 
+<!-- inicio:gerado -->
 ## Intrigas
 
 | Com | Tipo | Marca | Descrição |
@@ -40,3 +41,4 @@ A família Roche é uma das cinco casas fundadoras da
 → este personagem age sobre o outro; ← o outro age sobre este personagem.
 
 Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
+<!-- fim:gerado -->

@@ -25,6 +25,7 @@ tags:
     rebeldes e canalizar informações para aqueles que lutam contra a opressão da elite, enojado
     com a podridão moral de sua própria classe.
 
+<!-- inicio:gerado -->
 ## Intrigas
 
 | Com | Tipo | Marca | Descrição |
@@ -34,6 +35,7 @@ tags:
 → este personagem age sobre o outro; ← o outro age sobre este personagem.
 
 Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
+<!-- fim:gerado -->
 
 !!! question "Em aberto"
     Quais movimentos rebeldes Henri financia, e quem recebe suas informações?

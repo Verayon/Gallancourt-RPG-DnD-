@@ -26,6 +26,7 @@ reconstruiu com **informações**. Sua rede de espiões se estende por todo o re
 quase todos os segredos, traições e conspirações, usando-os para manipular a política da Aliança
 e garantir a **primazia de Valynesse**. Ver [Operações clandestinas](../mundo/operacoes-clandestinas.md).
 
+<!-- inicio:gerado -->
 ## Intrigas
 
 | Com | Tipo | Marca | Descrição |
@@ -37,6 +38,7 @@ e garantir a **primazia de Valynesse**. Ver [Operações clandestinas](../mundo/
 → este personagem age sobre o outro; ← o outro age sobre este personagem.
 
 Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
+<!-- fim:gerado -->
 
 !!! question "Em aberto"
     Relação formal de Beaumont com a Casa Magnetér.

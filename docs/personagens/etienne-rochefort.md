@@ -31,6 +31,7 @@ sedento por vingança, tornou-se um corsário temido.
 Sua existência demonstra que nem todos os que lutam contra os poderosos lutam pelos mesmos
 motivos.
 
+<!-- inicio:gerado -->
 ## Intrigas
 
 | Com | Tipo | Marca | Descrição |
@@ -43,3 +44,4 @@ motivos.
 → este personagem age sobre o outro; ← o outro age sobre este personagem.
 
 Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
+<!-- fim:gerado -->

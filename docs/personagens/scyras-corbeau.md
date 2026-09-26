@@ -44,6 +44,7 @@ outros nobres que almejam o domínio da família na região.
 Transformou a dor da família em política: fez de Dodixie um grande bastião logístico e naval da
 resistência, vitorioso na [Queda das Velas Negras](../eventos/queda-das-velas-negras.md).
 
+<!-- inicio:gerado -->
 ## Intrigas
 
 | Com | Tipo | Marca | Descrição |
@@ -57,6 +58,7 @@ resistência, vitorioso na [Queda das Velas Negras](../eventos/queda-das-velas-n
 → este personagem age sobre o outro; ← o outro age sobre este personagem.
 
 Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
+<!-- fim:gerado -->
 
 !!! question "Em aberto"
     - Quem são, exatamente, os "aristocratas da capital" que traíram seu pai? Alguns deles ainda
