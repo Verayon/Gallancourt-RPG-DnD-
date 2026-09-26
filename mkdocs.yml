@@ -1,0 +1,165 @@
+site_name: Crônicas de Gallancourt
+site_description: Wiki de lore da campanha de RPG (D&D) ambientada em Gallancourt.
+docs_dir: docs
+use_directory_urls: true
+
+validation:
+  links:
+    anchors: warn
+
+theme:
+  name: material
+  language: pt-BR
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.indexes
+    - navigation.top
+    - navigation.footer
+    - search.suggest
+    - search.highlight
+    - content.tooltips
+    - toc.follow
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: deep purple
+      accent: amber
+      toggle:
+        icon: material/weather-night
+        name: Modo escuro
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep purple
+      accent: amber
+      toggle:
+        icon: material/weather-sunny
+        name: Modo claro
+
+extra_css:
+  - stylesheets/extra.css
+
+plugins:
+  - search:
+      lang: pt
+  - tags
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+nav:
+  - Início: index.md
+  - História:
+      - historia/index.md
+      - Antes da ruptura: historia/antes-da-ruptura.md
+      - O Édito e o Mês de Sangue: historia/o-edito-e-o-mes-de-sangue.md
+      - A guerra civil: historia/a-guerra-civil.md
+      - O pós-guerra: historia/o-pos-guerra.md
+      - Cronologia: historia/cronologia.md
+  - Eventos:
+      - eventos/index.md
+      - Édito da Pureza: eventos/edito-da-pureza.md
+      - Mês de Sangue: eventos/mes-de-sangue.md
+      - Queda das Velas Negras: eventos/queda-das-velas-negras.md
+      - Cerco de Nouvelle-Montagne: eventos/cerco-de-nouvelle-montagne.md
+      - Batalha da Cicatriz: eventos/batalha-da-cicatriz.md
+      - Queda de Valynesse: eventos/queda-de-valynesse.md
+      - Fuga de Severin Marceau: eventos/fuga-de-severin-marceau.md
+      - Guerra Fria: eventos/guerra-fria.md
+  - Geografia:
+      - geografia/index.md
+      - A grande cordilheira: geografia/grande-cordilheira.md
+      - A Cicatriz: geografia/a-cicatriz.md
+      - Ilhas do Relâmpago: geografia/ilhas-do-relampago.md
+      - Divisão territorial: geografia/divisao-territorial.md
+      - Mapas: geografia/mapas.md
+  - Cidades:
+      - cidades/index.md
+      - Aliança dos Lordes:
+          - Dodixie: cidades/dodixie.md
+          - Baie de l'Éclair: cidades/baie-de-l-eclair.md
+          - Nouvelle-Montagne: cidades/nouvelle-montagne.md
+          - Saint-Armand: cidades/saint-armand.md
+          - Valynesse: cidades/valynesse.md
+      - L'Ordre de Célestien:
+          - Montclair de Lune: cidades/montclair-de-lune.md
+          - Chantépierre: cidades/chantepierre.md
+          - Valmire-sur-Rose: cidades/valmire-sur-rose.md
+  - Facções:
+      - faccoes/index.md
+      - Estados e alianças:
+          - Aliança dos Lordes: faccoes/alianca-dos-lordes.md
+          - L'Ordre de Célestien: faccoes/l-ordre-de-celestien.md
+          - Fraternidade dos Cinco Sangues: faccoes/fraternidade-dos-cinco-sangues.md
+      - As cinco casas:
+          - Casa Magnetér: faccoes/casa-magneter.md
+          - Casa Corbeau: faccoes/casa-corbeau.md
+          - Casa Lumière: faccoes/casa-lumiere.md
+          - Casa Saint-Laurent: faccoes/casa-saint-laurent.md
+          - Casa Roche: faccoes/casa-roche.md
+      - Outras casas:
+          - Casa D'Aubren: faccoes/casa-d-aubren.md
+          - Casa Duvant: faccoes/casa-duvant.md
+      - Organizações:
+          - Torre do Trovão: faccoes/torre-do-trovao.md
+          - Guilda dos Construtores Navais: faccoes/guilda-dos-construtores-navais.md
+          - La Voile Noire: faccoes/la-voile-noire.md
+          - Frotas corsárias e piratas: faccoes/frotas-corsarias-e-piratas.md
+  - Personagens:
+      - personagens/index.md
+      - Coroa e L'Ordre:
+          - Thibault d'Aubren: personagens/thibault-d-aubren.md
+          - Severin Marceau: personagens/severin-marceau.md
+      - Dodixie:
+          - Scyras Corbeau: personagens/scyras-corbeau.md
+          - Alaric Duvant: personagens/alaric-duvant.md
+          - Alfonse Enry: personagens/alfonse-enry.md
+          - Thalin: personagens/thalin.md
+          - Zepharion: personagens/zepharion.md
+          - Camille Brissac: personagens/camille-brissac.md
+      - Baie de l'Éclair:
+          - Jeanesse Lumière: personagens/jeanesse-lumiere.md
+          - Kaelen Thorne: personagens/kaelen-thorne.md
+          - Jean Vigny: personagens/jean-vigny.md
+          - Bromli Stonehammer: personagens/bromli-stonehammer.md
+          - Étienne Rochefort: personagens/etienne-rochefort.md
+      - Nouvelle-Montagne:
+          - Helga Roche: personagens/helga-roche.md
+          - Pierre Montaigne: personagens/pierre-montaigne.md
+          - Élodie Vaucluse: personagens/elodie-vaucluse.md
+          - Lucien de Saint-Pierre: personagens/lucien-de-saint-pierre.md
+      - Saint-Armand:
+          - Armand Saint-Laurent: personagens/armand-saint-laurent.md
+          - Juliette Clermont: personagens/juliette-clermont.md
+          - Thibault de la Rivière: personagens/thibault-de-la-riviere.md
+      - Valynesse:
+          - Lorenzo Magnetér: personagens/lorenzo-magneter.md
+          - Amélie Montpensier: personagens/amelie-montpensier.md
+          - Philippe Beaumont: personagens/philippe-beaumont.md
+          - Henri du Valois: personagens/henri-du-valois.md
+  - Mundo:
+      - mundo/index.md
+      - Conflitos centrais: mundo/conflitos-centrais.md
+      - Teia política: mundo/teia-politica.md
+      - Religião — Amaunator: mundo/religiao.md
+      - Economia política: mundo/economia.md
+      - Operações clandestinas: mundo/operacoes-clandestinas.md
+      - Glossário: mundo/glossario.md
+  - Referência do Mestre:
+      - mestre/index.md
+      - Referência rápida: mestre/referencia-rapida.md
+      - Lacunas em aberto: mestre/lacunas.md
+      - Manutenção do cânone: mestre/manutencao-do-canone.md
+      - Inconsistências a revisar: mestre/inconsistencias.md
+      - Fontes e método: mestre/fontes.md
+      - Índice de tags: mestre/tags.md

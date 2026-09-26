@@ -1,0 +1,9 @@
+/* Ficha lateral (infobox) de personagens, cidades e facções */
+.md-typeset table.ficha,
+.md-typeset .ficha table {
+  font-size: 0.75rem;
+}
+.md-typeset .ficha th:empty,
+.md-typeset .ficha thead:has(th:empty) {
+  display: none;
+}
