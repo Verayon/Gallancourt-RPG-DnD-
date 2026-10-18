@@ -1,0 +1,583 @@
+/* ==========================================================================
+   Crônicas de Gallancourt — pele "High Fantasy"
+   Duas variantes: "Grimório" (escura, padrão) e "Pergaminho" (clara).
+   Fontes: Cinzel (títulos) + EB Garamond (corpo de texto).
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=Cinzel+Decorative:wght@700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap');
+
+/* --------------------------------------------------------------------------
+   1. Paleta — variáveis de cor por esquema
+   -------------------------------------------------------------------------- */
+
+[data-md-color-scheme="slate"] {
+  /* Grimório: pergaminho à luz de vela sobre um fundo quase negro, arroxeado */
+  --gc-bg: #14101d;
+  --gc-bg-alt: #1c1728;
+  --gc-panel: #211b30;
+  --gc-panel-border: #3a2f4d;
+  --gc-ink: #e9dfc6;
+  --gc-ink-dim: #b9ac93;
+  --gc-gold: #d4af37;
+  --gc-gold-soft: #e9cd7c;
+  --gc-purple: #6a3fa0;
+  --gc-purple-deep: #2c1740;
+  --gc-red: #8a2f3c;
+
+  --md-default-bg-color: var(--gc-bg);
+  --md-default-fg-color: var(--gc-ink);
+  --md-default-fg-color--light: #cfc3a6;
+  --md-default-fg-color--lighter: #8d8098;
+  --md-default-fg-color--lightest: #3a2f4d;
+
+  --md-primary-fg-color: #1a1425;
+  --md-primary-fg-color--light: #241b33;
+  --md-primary-fg-color--dark: #0f0b17;
+  --md-primary-bg-color: var(--gc-gold-soft);
+  --md-primary-bg-color--light: var(--gc-gold-soft);
+
+  --md-accent-fg-color: var(--gc-gold);
+  --md-accent-fg-color--transparent: rgba(212, 175, 55, .12);
+  --md-accent-bg-color: #1a1425;
+  --md-accent-bg-color--light: #1a1425;
+
+  --md-typeset-color: var(--gc-ink);
+  --md-typeset-a-color: var(--gc-gold-soft);
+
+  --md-code-fg-color: #e9dfc6;
+  --md-code-bg-color: #0f0b17;
+
+  --md-footer-bg-color: #0f0b17;
+  --md-footer-bg-color--dark: #0a0710;
+  --md-footer-fg-color: var(--gc-ink-dim);
+  --md-footer-fg-color--light: var(--gc-ink-dim);
+}
+
+[data-md-color-scheme="default"] {
+  /* Pergaminho: papel envelhecido, tinta sépia, ouro mais escuro para contraste */
+  --gc-bg: #f2e8d0;
+  --gc-bg-alt: #ece0c3;
+  --gc-panel: #f8f1de;
+  --gc-panel-border: #cdbb8e;
+  --gc-ink: #2e2013;
+  --gc-ink-dim: #5b4a33;
+  --gc-gold: #8a6414;
+  --gc-gold-soft: #6e4e16;
+  --gc-purple: #4a2159;
+  --gc-purple-deep: #2f1440;
+  --gc-red: #7a2230;
+
+  --md-default-bg-color: var(--gc-bg);
+  --md-default-fg-color: var(--gc-ink);
+  --md-default-fg-color--light: #4a3a26;
+  --md-default-fg-color--lighter: #8a7452;
+  --md-default-fg-color--lightest: #cdbb8e;
+
+  --md-primary-fg-color: #2f1440;
+  --md-primary-fg-color--light: #402057;
+  --md-primary-fg-color--dark: #200d2c;
+  --md-primary-bg-color: #f2e8d0;
+  --md-primary-bg-color--light: #f2e8d0;
+
+  --md-accent-fg-color: var(--gc-gold);
+  --md-accent-fg-color--transparent: rgba(138, 100, 20, .12);
+  --md-accent-bg-color: #2f1440;
+  --md-accent-bg-color--light: #2f1440;
+
+  --md-typeset-color: var(--gc-ink);
+  --md-typeset-a-color: var(--gc-gold-soft);
+
+  --md-code-fg-color: #2e2013;
+  --md-code-bg-color: #e7d9b3;
+
+  --md-footer-bg-color: #2f1440;
+  --md-footer-bg-color--dark: #200d2c;
+  --md-footer-fg-color: #e9dfc6;
+  --md-footer-fg-color--light: #cdbfa0;
+}
+
+/* Textura sutil de pergaminho/grão sobre o fundo, nos dois esquemas */
+.md-container {
+  background-image:
+    radial-gradient(ellipse at top, rgba(212, 175, 55, 0.05), transparent 60%),
+    repeating-radial-gradient(circle at 50% 50%, rgba(120, 100, 60, 0.035) 0, rgba(120, 100, 60, 0.035) 1px, transparent 1px, transparent 3px);
+  background-color: var(--md-default-bg-color);
+}
+
+/* --------------------------------------------------------------------------
+   2. Tipografia
+   -------------------------------------------------------------------------- */
+
+body,
+input,
+.md-typeset {
+  font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
+  font-size: .95rem;
+}
+
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4,
+.md-typeset h5,
+.md-typeset h6,
+.md-header__topic,
+.md-nav__title,
+.md-tabs__link,
+.md-footer__title {
+  font-family: 'Cinzel', Georgia, serif;
+  letter-spacing: .02em;
+  font-weight: 600;
+}
+
+.md-typeset h1 {
+  font-weight: 700;
+  color: var(--gc-gold-soft);
+  border-bottom: 1px solid var(--gc-panel-border);
+  padding-bottom: .5rem;
+  margin-bottom: 1.4rem;
+}
+
+.md-typeset h2 {
+  font-weight: 600;
+  margin-top: 2.2rem;
+  padding-bottom: .3rem;
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+}
+
+.md-typeset h3 {
+  color: var(--gc-purple, inherit);
+  font-weight: 600;
+}
+[data-md-color-scheme="slate"] .md-typeset h3 { color: #b79bd6; }
+[data-md-color-scheme="default"] .md-typeset h3 { color: #5a2c6b; }
+
+.md-typeset code,
+.md-typeset pre,
+.md-typeset kbd {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+.md-typeset a {
+  text-decoration-color: var(--md-accent-fg-color);
+  text-underline-offset: .18em;
+}
+.md-typeset a:hover {
+  color: var(--gc-gold-soft);
+}
+
+/* Citações — epígrafes de crônica */
+.md-typeset blockquote {
+  border-left: 3px solid var(--gc-gold);
+  background: var(--gc-panel);
+  font-style: italic;
+  font-size: 1.05em;
+  padding: .8rem 1.2rem;
+  border-radius: 0 4px 4px 0;
+}
+
+.md-typeset hr {
+  border-bottom: 1px solid var(--gc-panel-border);
+}
+
+/* --------------------------------------------------------------------------
+   3. Cabeçalho e logo
+   -------------------------------------------------------------------------- */
+
+.md-header {
+  background: linear-gradient(180deg, var(--md-primary-fg-color) 0%, var(--md-primary-fg-color--dark) 100%);
+  border-bottom: 1px solid var(--gc-gold);
+  box-shadow: 0 1px 0 rgba(212, 175, 55, .25);
+}
+
+.md-header__title {
+  font-family: 'Cinzel Decorative', 'Cinzel', serif;
+  font-weight: 700;
+  letter-spacing: .03em;
+}
+
+.md-header__button.md-logo svg,
+.md-header__button.md-logo img {
+  filter: drop-shadow(0 0 3px rgba(212, 175, 55, .6));
+  color: var(--gc-gold-soft);
+}
+
+.md-search__input {
+  font-family: 'EB Garamond', serif;
+}
+
+/* --------------------------------------------------------------------------
+   4. Navegação lateral (a "barra à esquerda")
+   -------------------------------------------------------------------------- */
+
+.md-sidebar--primary .md-sidebar__scrollwrap {
+  border-right: 1px solid var(--gc-panel-border);
+}
+
+.md-nav {
+  font-family: 'Cinzel', serif;
+  font-size: .68rem;
+  letter-spacing: .03em;
+}
+
+.md-nav__title {
+  color: var(--gc-gold-soft);
+  font-size: .74rem;
+}
+
+.md-nav__title .md-nav__icon {
+  filter: none;
+}
+
+.md-nav__item .md-nav__link {
+  transition: color .15s ease, padding-left .15s ease;
+}
+
+.md-nav__link:hover,
+.md-nav__link:focus {
+  color: var(--gc-gold-soft);
+}
+
+.md-nav__link--active,
+.md-nav__link[aria-expanded="true"] {
+  color: var(--gc-gold-soft) !important;
+  font-weight: 600;
+}
+
+/* Os três grandes portais: Início / Lore / Wiki, em destaque */
+.md-nav--primary > .md-nav__list > .md-nav__item > .md-nav__link {
+  font-size: .82rem;
+  padding: .5rem .6rem;
+  border-radius: 3px;
+  border-left: 2px solid transparent;
+}
+
+.md-nav--primary > .md-nav__list > .md-nav__item > .md-nav__link:hover {
+  border-left-color: var(--gc-gold);
+  background: var(--md-accent-fg-color--transparent);
+}
+
+.md-nav--primary > .md-nav__list > .md-nav__item > .md-nav__link--active {
+  border-left-color: var(--gc-gold);
+  background: var(--md-accent-fg-color--transparent);
+}
+
+/* Pequeno losango como marcador de item, no lugar do ponto padrão */
+.md-nav__item .md-nav__link::before {
+  content: none;
+}
+
+/* --------------------------------------------------------------------------
+   5. Sumário da página (margem do manuscrito)
+   -------------------------------------------------------------------------- */
+
+.md-sidebar--secondary .md-nav__title {
+  color: var(--gc-ink-dim);
+  font-style: italic;
+  font-family: 'EB Garamond', serif;
+  font-size: .8rem;
+}
+
+.md-nav--secondary .md-nav__link {
+  font-family: 'EB Garamond', serif;
+  font-size: .82rem;
+  letter-spacing: normal;
+  border-left: 1px dotted var(--gc-panel-border);
+  padding-left: .6rem;
+}
+
+.md-nav--secondary .md-nav__link--active {
+  color: var(--gc-gold-soft) !important;
+  border-left: 1px solid var(--gc-gold);
+}
+
+/* --------------------------------------------------------------------------
+   6. Admonições — como anotações de um cronista à margem
+   -------------------------------------------------------------------------- */
+
+.md-typeset .admonition,
+.md-typeset details {
+  font-family: 'EB Garamond', serif;
+  background: var(--gc-panel);
+  border: 1px solid var(--gc-panel-border);
+  border-left: 4px solid var(--gc-gold);
+  border-radius: 3px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
+}
+
+.md-typeset .admonition-title,
+.md-typeset summary {
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  font-size: .82rem;
+  letter-spacing: .02em;
+  background: var(--md-accent-fg-color--transparent);
+}
+
+.md-typeset .admonition-title::before,
+.md-typeset summary::before {
+  background-color: var(--gc-gold) !important;
+}
+
+.md-typeset .warning,
+.md-typeset .danger { border-left-color: var(--gc-red); }
+.md-typeset .warning > .admonition-title::before,
+.md-typeset .danger > .admonition-title::before { background-color: var(--gc-red) !important; }
+
+.md-typeset .failure > .admonition-title::before { background-color: var(--gc-red) !important; }
+.md-typeset .failure { border-left-color: var(--gc-red); }
+
+/* --------------------------------------------------------------------------
+   7. Tabelas — como registros de arquivo
+   -------------------------------------------------------------------------- */
+
+.md-typeset table:not([class]) {
+  border: 1px solid var(--gc-panel-border);
+  font-size: .82rem;
+}
+
+.md-typeset table:not([class]) th {
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  font-size: .74rem;
+  letter-spacing: .02em;
+  background: var(--gc-panel);
+  color: var(--gc-gold-soft);
+}
+
+.md-typeset table:not([class]) tr:nth-child(even) {
+  background-color: var(--md-accent-fg-color--transparent);
+}
+
+/* Fichas laterais de personagens, cidades e facções */
+.md-typeset .ficha table {
+  border: 1px solid var(--gc-gold);
+  background: var(--gc-panel);
+}
+
+/* --------------------------------------------------------------------------
+   8. Botões e cartões
+   -------------------------------------------------------------------------- */
+
+.md-typeset .md-button {
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  letter-spacing: .03em;
+  border-radius: 2px;
+  border: 1px solid var(--gc-gold);
+  color: var(--gc-gold-soft);
+}
+
+.md-typeset .md-button:hover {
+  background-color: var(--gc-gold);
+  color: var(--md-primary-fg-color--dark);
+}
+
+.md-typeset .md-button--primary {
+  background-color: var(--gc-gold);
+  color: var(--md-primary-fg-color--dark);
+}
+
+.md-typeset .md-button--primary:hover {
+  background-color: var(--gc-gold-soft);
+  border-color: var(--gc-gold-soft);
+}
+
+.md-typeset .grid.cards > ul > li,
+.md-typeset .grid.cards > ol > li {
+  border: 1px solid var(--gc-panel-border);
+  background: var(--gc-panel);
+  border-radius: 4px;
+  padding: 0 .9rem .9rem;
+  overflow: hidden;
+  transition: border-color .15s ease, transform .15s ease, box-shadow .15s ease;
+}
+
+.md-typeset .grid.cards > ul > li:hover,
+.md-typeset .grid.cards > ol > li:hover {
+  border-color: var(--gc-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .35);
+}
+
+.md-typeset .grid.cards > ul > li > p:first-of-type,
+.md-typeset .grid.cards > ol > li > p:first-of-type {
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+}
+
+/* Retrato clicável no topo do cartão: [![](img){ .card-portrait }](destino.md) —
+   sangra até a borda do cartão, mesmo com o padding do <li>. */
+.md-typeset .grid.cards > ul > li > p:first-child:has(> a > img),
+.md-typeset .grid.cards > ol > li > p:first-child:has(> a > img) {
+  margin: 0 -.9rem .8rem;
+  line-height: 0;
+}
+
+.md-typeset .card-portrait {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-bottom: 2px solid var(--gc-gold);
+  transition: filter .15s ease;
+}
+
+.md-typeset .grid.cards > ul > li:hover .card-portrait,
+.md-typeset .grid.cards > ol > li:hover .card-portrait {
+  filter: brightness(1.12) saturate(1.15);
+}
+
+/* --------------------------------------------------------------------------
+   9. Rodapé
+   -------------------------------------------------------------------------- */
+
+.md-footer-meta {
+  border-top: 1px solid var(--gc-gold);
+}
+
+/* --------------------------------------------------------------------------
+   10. Rolagem — um toque dourado
+   -------------------------------------------------------------------------- */
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--gc-panel-border);
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--gc-gold); }
+
+/* --------------------------------------------------------------------------
+   11. Hero da página inicial
+   -------------------------------------------------------------------------- */
+
+.hero {
+  position: relative;
+  margin: -1.2rem -1.2rem 2.4rem;
+  padding: 5rem 2rem 3.6rem;
+  min-height: 46vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #f4ecd6;
+  background-image:
+    linear-gradient(180deg, rgba(10, 6, 16, .35) 0%, rgba(10, 6, 16, .15) 40%, var(--md-default-bg-color) 97%),
+    url('../assets/hero-bg.svg');
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  border-bottom: 1px solid var(--gc-gold);
+  box-shadow: inset 0 0 80px rgba(0, 0, 0, .5);
+}
+
+.hero::before,
+.hero::after {
+  content: "❧";
+  color: var(--gc-gold-soft);
+  font-size: 1.3rem;
+  opacity: .85;
+}
+
+.hero .hero__eyebrow {
+  font-family: 'Cinzel', serif;
+  text-transform: uppercase;
+  letter-spacing: .35em;
+  font-size: .72rem;
+  color: var(--gc-gold-soft);
+  margin: .4rem 0 .8rem;
+}
+
+.hero h1 {
+  font-family: 'Cinzel Decorative', 'Cinzel', serif;
+  font-size: 2.6rem;
+  color: #f7ecc9;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, .8), 0 0 40px rgba(212, 175, 55, .25);
+  border-bottom: none;
+  margin: 0 0 .6rem;
+  padding-bottom: 0;
+}
+
+.hero p {
+  max-width: 42rem;
+  font-size: 1.15rem;
+  font-style: italic;
+  color: #e7dcc0;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, .7);
+}
+
+.hero .hero__actions {
+  margin-top: 1.6rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.hero .hero__actions .md-button {
+  font-size: .85rem;
+  padding: .6em 1.6em;
+}
+
+@media screen and (max-width: 76.1875em) {
+  .hero { margin: -0.8rem -0.8rem 2rem; padding: 3.6rem 1.2rem 2.4rem; min-height: 38vh; }
+  .hero h1 { font-size: 1.9rem; }
+  .hero p { font-size: 1rem; }
+}
+
+/* --------------------------------------------------------------------------
+   12. Página de Lore — leitura contínua, como um manuscrito
+   -------------------------------------------------------------------------- */
+
+.lore-scroll {
+  max-width: 46rem;
+  margin: 0 auto;
+  line-height: 1.75;
+}
+
+.lore-scroll h2 {
+  margin-top: 3rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--gc-panel-border);
+  border-bottom: none;
+  text-align: center;
+}
+
+.lore-scroll h2::after {
+  content: "❧";
+  display: block;
+  color: var(--gc-gold);
+  font-size: 1.1rem;
+  margin-top: .3rem;
+}
+
+.lore-scroll h3 {
+  margin-left: .6rem;
+  padding-left: .8rem;
+  border-left: 2px solid var(--gc-gold);
+}
+
+.lore-scroll > p:first-of-type::first-letter {
+  font-family: 'Cinzel Decorative', 'Cinzel', serif;
+  font-size: 3.6rem;
+  line-height: .8;
+  float: left;
+  padding: .1rem .12rem 0 0;
+  color: var(--gc-gold-soft);
+}
+
+.lore-scroll sup {
+  color: var(--gc-gold-soft);
+  font-style: italic;
+  font-size: .72em;
+}
+
+/* --------------------------------------------------------------------------
+   13. Página da Wiki — grade de portais
+   -------------------------------------------------------------------------- */
+
+.wiki-portal .grid.cards {
+  margin-top: 1rem;
+}

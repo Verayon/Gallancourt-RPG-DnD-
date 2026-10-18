@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <defs>
+    <linearGradient id="bgPersonagem" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#402057"/>
+      <stop offset="100%" stop-color="#181022"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#bgPersonagem)"/>
+  <rect x="14" y="14" width="372" height="272" rx="6" fill="none" stroke="#d4af37" stroke-width="2"/>
+  <g stroke="#d4af37" stroke-width="2" fill="none">
+    <path d="M4 20 V4 H20"/>
+    <path d="M380 4 H396 V20"/>
+    <path d="M396 280 V296 H380"/>
+    <path d="M20 296 H4 V280"/>
+  </g>
+  <g fill="none" stroke="#e9d9a8" stroke-width="6" stroke-linejoin="round" stroke-linecap="round">
+    <circle cx="200" cy="112" r="34"/>
+    <path d="M128,238 C128,168 160,146 200,146 C240,146 272,168 272,238"/>
+    <path d="M168,150 C178,168 222,168 232,150"/>
+  </g>
+</svg>
