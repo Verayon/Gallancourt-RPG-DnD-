@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice">
   <defs>
     <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%"  stop-color="#150a24"/>
-      <stop offset="40%" stop-color="#341b4a"/>
-      <stop offset="72%" stop-color="#6b3b63"/>
-      <stop offset="100%" stop-color="#c99a55"/>
+      <stop offset="0%"  stop-color="#1a1512"/>
+      <stop offset="40%" stop-color="#3a2f38"/>
+      <stop offset="72%" stop-color="#6b5258"/>
+      <stop offset="100%" stop-color="#b7914f"/>
     </linearGradient>
     <radialGradient id="moonGlow" cx="50%" cy="50%" r="50%">
       <stop offset="0%"  stop-color="#f7e6b4" stop-opacity="0.9"/>
@@ -37,41 +37,41 @@
   <!-- moon with glow -->
   <circle cx="1180" cy="210" r="170" fill="url(#moonGlow)"/>
   <circle cx="1180" cy="210" r="62" fill="#f7ecc9"/>
-  <circle cx="1160" cy="190" r="62" fill="#150a24" opacity="0.06"/>
+  <circle cx="1160" cy="190" r="62" fill="#1a1512" opacity="0.06"/>
 
   <!-- distant birds -->
-  <g stroke="#1c1029" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.55">
+  <g stroke="#1a1512" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.55">
     <path d="M 330 190 q 12 -14 24 0 q 12 -14 24 0"/>
     <path d="M 390 210 q 10 -12 20 0 q 10 -12 20 0"/>
     <path d="M 900 260 q 11 -13 22 0 q 11 -13 22 0"/>
   </g>
 
   <!-- far mountain ridge -->
-  <polygon fill="#4b2f63" opacity="0.85" points="
+  <polygon fill="#4a3a3c" opacity="0.85" points="
     0,640 110,560 210,610 330,470 440,560 560,500 680,600
     800,520 930,590 1060,510 1190,580 1320,520 1440,590
     1600,540 1600,900 0,900"/>
 
   <!-- mid mountain ridge -->
-  <polygon fill="#33204a" points="
+  <polygon fill="#2e2428" points="
     0,720 140,610 260,670 400,520 500,600 618,558 700,610
     840,500 980,600 1120,540 1260,640 1400,580 1600,650
     1600,900 0,900"/>
 
   <!-- watchtower on the mid peak -->
-  <g fill="#241533">
+  <g fill="#211c1e">
     <rect x="606" y="480" width="18" height="80"/>
     <polygon points="600,480 630,480 615,448"/>
     <rect x="600" y="492" width="30" height="7"/>
   </g>
 
   <!-- near hills / treeline -->
-  <polygon fill="#150c22" points="
+  <polygon fill="#16120f" points="
     0,800 180,760 360,800 560,750 760,790 980,745
     1200,795 1400,755 1600,780 1600,900 0,900"/>
 
   <!-- pine silhouettes along the treeline -->
-  <g fill="#0f0a1a">
+  <g fill="#110d0a">
     <g transform="translate(90,740)">
       <polygon points="0,60 -22,60 -11,30"/>
       <polygon points="0,38 -18,38 0,10 18,38"/>

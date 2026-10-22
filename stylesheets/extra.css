@@ -35,96 +35,97 @@
    -------------------------------------------------------------------------- */
 
 [data-md-color-scheme="slate"] {
-  /* Grimório: pergaminho à luz de vela sobre um fundo quase negro, arroxeado */
-  --gc-bg: #14101d;
-  --gc-bg-alt: #1c1728;
-  --gc-panel: #211b30;
-  --gc-panel-border: #3a2f4d;
-  --gc-ink: #e9dfc6;
-  --gc-ink-dim: #b9ac93;
-  --gc-gold: #d4af37;
-  --gc-gold-soft: #e9cd7c;
-  --gc-purple: #6a3fa0;
-  --gc-purple-deep: #2c1740;
-  --gc-red: #8a2f3c;
+  /* Grimório: pedra e couro envelhecido à luz de vela — tons foscos, não
+     saturados. Sem roxo vivo nem dourado brilhante; metal baço, pergaminho. */
+  --gc-bg: #1d1a16;
+  --gc-bg-alt: #221e19;
+  --gc-panel: #28241e;
+  --gc-panel-border: #453f34;
+  --gc-ink: #e2d9c4;
+  --gc-ink-dim: #a99b82;
+  --gc-gold: #b7914f;
+  --gc-gold-soft: #cdb176;
+  --gc-purple: #7d6179;
+  --gc-purple-deep: #342a34;
+  --gc-red: #9c5347;
 
   --md-default-bg-color: var(--gc-bg);
   --md-default-fg-color: var(--gc-ink);
-  --md-default-fg-color--light: #cfc3a6;
-  --md-default-fg-color--lighter: #8d8098;
-  --md-default-fg-color--lightest: #3a2f4d;
+  --md-default-fg-color--light: #cabda0;
+  --md-default-fg-color--lighter: #8d8172;
+  --md-default-fg-color--lightest: #453f34;
 
-  --md-primary-fg-color: #1a1425;
-  --md-primary-fg-color--light: #241b33;
-  --md-primary-fg-color--dark: #0f0b17;
+  --md-primary-fg-color: #181511;
+  --md-primary-fg-color--light: #221e18;
+  --md-primary-fg-color--dark: #110f0c;
   --md-primary-bg-color: var(--gc-gold-soft);
   --md-primary-bg-color--light: var(--gc-gold-soft);
 
   --md-accent-fg-color: var(--gc-gold);
-  --md-accent-fg-color--transparent: rgba(212, 175, 55, .12);
-  --md-accent-bg-color: #1a1425;
-  --md-accent-bg-color--light: #1a1425;
+  --md-accent-fg-color--transparent: rgba(183, 145, 79, .12);
+  --md-accent-bg-color: #181511;
+  --md-accent-bg-color--light: #181511;
 
   --md-typeset-color: var(--gc-ink);
   --md-typeset-a-color: var(--gc-gold-soft);
 
-  --md-code-fg-color: #e9dfc6;
-  --md-code-bg-color: #0f0b17;
+  --md-code-fg-color: #e2d9c4;
+  --md-code-bg-color: #110f0c;
 
-  --md-footer-bg-color: #0f0b17;
-  --md-footer-bg-color--dark: #0a0710;
+  --md-footer-bg-color: #110f0c;
+  --md-footer-bg-color--dark: #0c0a08;
   --md-footer-fg-color: var(--gc-ink-dim);
   --md-footer-fg-color--light: var(--gc-ink-dim);
 }
 
 [data-md-color-scheme="default"] {
-  /* Pergaminho: papel envelhecido, tinta sépia, ouro mais escuro para contraste */
-  --gc-bg: #f2e8d0;
-  --gc-bg-alt: #ece0c3;
-  --gc-panel: #f8f1de;
-  --gc-panel-border: #cdbb8e;
-  --gc-ink: #2e2013;
-  --gc-ink-dim: #5b4a33;
-  --gc-gold: #8a6414;
-  --gc-gold-soft: #6e4e16;
-  --gc-purple: #4a2159;
-  --gc-purple-deep: #2f1440;
-  --gc-red: #7a2230;
+  /* Pergaminho: papel envelhecido, tinta sépia, bronze fosco em vez de ouro. */
+  --gc-bg: #e9e0cb;
+  --gc-bg-alt: #e3d9c0;
+  --gc-panel: #f1e9d8;
+  --gc-panel-border: #c2b28a;
+  --gc-ink: #362b1e;
+  --gc-ink-dim: #6b5a42;
+  --gc-gold: #8c6f3a;
+  --gc-gold-soft: #6f5826;
+  --gc-purple: #6b5367;
+  --gc-purple-deep: #342a38;
+  --gc-red: #8a5347;
 
   --md-default-bg-color: var(--gc-bg);
   --md-default-fg-color: var(--gc-ink);
-  --md-default-fg-color--light: #4a3a26;
-  --md-default-fg-color--lighter: #8a7452;
-  --md-default-fg-color--lightest: #cdbb8e;
+  --md-default-fg-color--light: #4d4030;
+  --md-default-fg-color--lighter: #8a7a5e;
+  --md-default-fg-color--lightest: #c2b28a;
 
-  --md-primary-fg-color: #2f1440;
-  --md-primary-fg-color--light: #402057;
-  --md-primary-fg-color--dark: #200d2c;
-  --md-primary-bg-color: #f2e8d0;
-  --md-primary-bg-color--light: #f2e8d0;
+  --md-primary-fg-color: #342c24;
+  --md-primary-fg-color--light: #433829;
+  --md-primary-fg-color--dark: #241e18;
+  --md-primary-bg-color: #e9e0cb;
+  --md-primary-bg-color--light: #e9e0cb;
 
   --md-accent-fg-color: var(--gc-gold);
-  --md-accent-fg-color--transparent: rgba(138, 100, 20, .12);
-  --md-accent-bg-color: #2f1440;
-  --md-accent-bg-color--light: #2f1440;
+  --md-accent-fg-color--transparent: rgba(140, 111, 58, .12);
+  --md-accent-bg-color: #342c24;
+  --md-accent-bg-color--light: #342c24;
 
   --md-typeset-color: var(--gc-ink);
   --md-typeset-a-color: var(--gc-gold-soft);
 
-  --md-code-fg-color: #2e2013;
-  --md-code-bg-color: #e7d9b3;
+  --md-code-fg-color: #362b1e;
+  --md-code-bg-color: #e3d4ad;
 
-  --md-footer-bg-color: #2f1440;
-  --md-footer-bg-color--dark: #200d2c;
-  --md-footer-fg-color: #e9dfc6;
-  --md-footer-fg-color--light: #cdbfa0;
+  --md-footer-bg-color: #342c24;
+  --md-footer-bg-color--dark: #241e18;
+  --md-footer-fg-color: #e9e0cb;
+  --md-footer-fg-color--light: #c7b89a;
 }
 
-/* Textura sutil de pergaminho/grão sobre o fundo, nos dois esquemas */
+/* Textura de fundo bem discreta — antes competia com o conteúdo */
 .md-container {
   background-image:
-    radial-gradient(ellipse at top, rgba(212, 175, 55, 0.05), transparent 60%),
-    repeating-radial-gradient(circle at 50% 50%, rgba(120, 100, 60, 0.035) 0, rgba(120, 100, 60, 0.035) 1px, transparent 1px, transparent 3px);
+    radial-gradient(ellipse at top, rgba(183, 145, 79, 0.035), transparent 60%),
+    repeating-radial-gradient(circle at 50% 50%, rgba(120, 100, 60, 0.018) 0, rgba(120, 100, 60, 0.018) 1px, transparent 1px, transparent 3px);
   background-color: var(--md-default-bg-color);
 }
 
@@ -149,19 +150,24 @@ input,
   max-width: 46rem;
 }
 
+/* Cinzel fica só para os dois níveis que funcionam como "título de
+   capítulo" — usado em tudo (nav, tabelas, botões) ficava pesado de ler. */
 .md-typeset h1,
-.md-typeset h2,
+.md-typeset h2 {
+  font-family: 'Cinzel', Georgia, serif;
+  letter-spacing: .02em;
+  font-weight: 600;
+}
+
 .md-typeset h3,
 .md-typeset h4,
 .md-typeset h5,
 .md-typeset h6,
 .md-header__topic,
-.md-nav__title,
-.md-tabs__link,
 .md-footer__title {
-  font-family: 'Cinzel', Georgia, serif;
-  letter-spacing: .02em;
-  font-weight: 600;
+  font-family: 'EB Garamond', Georgia, serif;
+  font-weight: 700;
+  letter-spacing: .01em;
 }
 
 .md-typeset h1 {
@@ -174,17 +180,18 @@ input,
 
 .md-typeset h2 {
   font-weight: 600;
-  margin-top: 2.2rem;
+  margin-top: 2.6rem;
   padding-bottom: .3rem;
   border-bottom: 1px solid var(--md-default-fg-color--lightest);
 }
 
 .md-typeset h3 {
   color: var(--gc-purple, inherit);
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 1.15em;
 }
-[data-md-color-scheme="slate"] .md-typeset h3 { color: #b79bd6; }
-[data-md-color-scheme="default"] .md-typeset h3 { color: #5a2c6b; }
+[data-md-color-scheme="slate"] .md-typeset h3 { color: #ab8fa7; }
+[data-md-color-scheme="default"] .md-typeset h3 { color: #5c4759; }
 
 .md-typeset code,
 .md-typeset pre,
@@ -249,14 +256,17 @@ input,
 }
 
 .md-nav {
-  font-family: 'Cinzel', serif;
-  font-size: .68rem;
-  letter-spacing: .03em;
+  font-family: 'EB Garamond', serif;
+  font-size: .8rem;
+  letter-spacing: normal;
 }
 
 .md-nav__title {
+  font-family: 'EB Garamond', serif;
+  font-weight: 700;
   color: var(--gc-gold-soft);
-  font-size: .74rem;
+  font-size: .8rem;
+  letter-spacing: .01em;
 }
 
 .md-nav__title .md-nav__icon {
@@ -341,10 +351,10 @@ input,
 
 .md-typeset .admonition-title,
 .md-typeset summary {
-  font-family: 'Cinzel', serif;
-  font-weight: 600;
-  font-size: .82rem;
-  letter-spacing: .02em;
+  font-family: 'EB Garamond', serif;
+  font-weight: 700;
+  font-size: .9rem;
+  letter-spacing: .01em;
   background: var(--md-accent-fg-color--transparent);
 }
 
@@ -374,10 +384,10 @@ input,
 }
 
 .md-typeset table:not([class]) th {
-  font-family: 'Cinzel', serif;
-  font-weight: 600;
-  font-size: .74rem;
-  letter-spacing: .02em;
+  font-family: 'EB Garamond', serif;
+  font-weight: 700;
+  font-size: .82rem;
+  letter-spacing: .01em;
   background: var(--gc-panel);
   color: var(--gc-gold-soft);
 }
@@ -386,10 +396,38 @@ input,
   background-color: var(--md-accent-fg-color--transparent);
 }
 
-/* Fichas laterais de personagens, cidades e facções */
+/* Fichas de personagens, cidades e facções — cartão de dados, não uma
+   tabela comum: faixa de destaque no topo e coluna de rótulos discreta,
+   em vez da moldura dourada inteira que parecia um preço de loja. */
 .md-typeset .ficha table {
-  border: 1px solid var(--gc-gold);
+  border: 1px solid var(--gc-panel-border);
+  border-top: 3px solid var(--gc-gold);
   background: var(--gc-panel);
+  border-radius: 8px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, .16);
+}
+
+.md-typeset .ficha table tr:nth-child(even) {
+  background-color: transparent;
+}
+
+.md-typeset .ficha table td {
+  border-top: 1px solid var(--gc-panel-border);
+}
+
+.md-typeset .ficha table tr:first-child td {
+  border-top: none;
+}
+
+.md-typeset .ficha table td:first-child {
+  width: 36%;
+  color: var(--gc-ink-dim);
+  font-weight: 700;
+  font-size: .78rem;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  vertical-align: top;
+  border-right: 1px solid var(--gc-panel-border);
 }
 
 /* --------------------------------------------------------------------------
@@ -397,10 +435,10 @@ input,
    -------------------------------------------------------------------------- */
 
 .md-typeset .md-button {
-  font-family: 'Cinzel', serif;
-  font-weight: 600;
-  letter-spacing: .03em;
-  border-radius: 2px;
+  font-family: 'EB Garamond', serif;
+  font-weight: 700;
+  letter-spacing: .02em;
+  border-radius: 4px;
   border: 1px solid var(--gc-gold);
   color: var(--gc-gold-soft);
 }
@@ -418,6 +456,16 @@ input,
 .md-typeset .md-button--primary:hover {
   background-color: var(--gc-gold-soft);
   border-color: var(--gc-gold-soft);
+}
+
+/* Etiquetas de tema no topo da página — contorno discreto em vez de blob sólido */
+.md-typeset .md-tag {
+  background: var(--gc-panel);
+  border: 1px solid var(--gc-panel-border);
+  color: var(--gc-ink-dim);
+  font-family: 'EB Garamond', serif;
+  font-weight: 700;
+  letter-spacing: .02em;
 }
 
 .md-typeset .grid {
@@ -447,8 +495,9 @@ input,
 
 .md-typeset .grid.cards > ul > li > p:first-of-type,
 .md-typeset .grid.cards > ol > li > p:first-of-type {
-  font-family: 'Cinzel', serif;
-  font-weight: 600;
+  font-family: 'EB Garamond', serif;
+  font-weight: 700;
+  font-size: 1.05em;
 }
 
 /* Retrato clicável no topo do cartão: [![](img){ .card-portrait }](destino.md) —
@@ -507,9 +556,9 @@ input,
   justify-content: center;
   align-items: center;
   text-align: center;
-  color: #f4ecd6;
+  color: #ece2cc;
   background-image:
-    linear-gradient(180deg, rgba(10, 6, 16, .35) 0%, rgba(10, 6, 16, .15) 40%, var(--md-default-bg-color) 97%),
+    linear-gradient(180deg, rgba(14, 11, 8, .35) 0%, rgba(14, 11, 8, .15) 40%, var(--md-default-bg-color) 97%),
     url('../assets/hero-bg.svg');
   background-size: cover;
   background-position: center bottom;
@@ -529,7 +578,7 @@ input,
 .hero .hero__eyebrow {
   font-family: 'Cinzel', serif;
   text-transform: uppercase;
-  letter-spacing: .35em;
+  letter-spacing: .26em;
   font-size: .72rem;
   color: var(--gc-gold-soft);
   margin: .4rem 0 .8rem;
@@ -538,8 +587,8 @@ input,
 .hero h1 {
   font-family: 'Cinzel Decorative', 'Cinzel', serif;
   font-size: 2.6rem;
-  color: #f7ecc9;
-  text-shadow: 0 2px 18px rgba(0, 0, 0, .8), 0 0 40px rgba(212, 175, 55, .25);
+  color: #ede3cb;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, .8), 0 0 40px rgba(183, 145, 79, .25);
   border-bottom: none;
   margin: 0 0 .6rem;
   padding-bottom: 0;
@@ -549,7 +598,7 @@ input,
   max-width: 42rem;
   font-size: 1.15rem;
   font-style: italic;
-  color: #e7dcc0;
+  color: #d9cdb0;
   text-shadow: 0 1px 8px rgba(0, 0, 0, .7);
 }
 
