@@ -2,19 +2,19 @@
   <defs>
     <linearGradient id="bgGeo" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="#341b4a"/>
-      <stop offset="100%" stop-color="#181022"/>
+      <stop offset="100%" stop-color="#171510"/>
     </linearGradient>
   </defs>
   <rect width="400" height="300" fill="url(#bgGeo)"/>
-  <rect x="14" y="14" width="372" height="272" rx="6" fill="none" stroke="#d4af37" stroke-width="2"/>
-  <g stroke="#d4af37" stroke-width="2" fill="none">
+  <rect x="14" y="14" width="372" height="272" rx="6" fill="none" stroke="#b7914f" stroke-width="2"/>
+  <g stroke="#b7914f" stroke-width="2" fill="none">
     <path d="M4 20 V4 H20"/>
     <path d="M380 4 H396 V20"/>
     <path d="M396 280 V296 H380"/>
     <path d="M20 296 H4 V280"/>
   </g>
-  <circle cx="290" cy="86" r="20" fill="none" stroke="#e9d9a8" stroke-width="4"/>
-  <g fill="none" stroke="#e9d9a8" stroke-width="6" stroke-linejoin="round" stroke-linecap="round">
+  <circle cx="290" cy="86" r="20" fill="none" stroke="#e2d9c4" stroke-width="4"/>
+  <g fill="none" stroke="#e2d9c4" stroke-width="6" stroke-linejoin="round" stroke-linecap="round">
     <path d="M104,222 L156,142 L192,182 L234,116 L286,222 Z"/>
   </g>
 </svg>
