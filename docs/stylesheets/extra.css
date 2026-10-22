@@ -7,6 +7,30 @@
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=Cinzel+Decorative:wght@700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap');
 
 /* --------------------------------------------------------------------------
+   0. Layout — largura e respiro
+   O tema vem travado em max-width:61rem (header, conteúdo e rodapé usam a
+   mesma classe .md-grid). As barras laterais têm largura própria fixa
+   (12.1rem cada), então alargar só o grid dá mais espaço ao conteúdo sem
+   mudar o header nem o painel de navegação.
+   -------------------------------------------------------------------------- */
+
+/* Só alarga a partir do ponto em que as barras laterais aparecem (mesmo
+   corte que o Material já usa) — no celular não havia espaço "sobrando"
+   para aproveitar, e encolher o grid lá só atrapalharia o cabeçalho. */
+@media screen and (min-width: 76.25em) {
+  .md-grid {
+    max-width: min(92%, 74rem);
+  }
+}
+
+@media screen and (min-width: 100em) {
+  .md-content__inner {
+    margin-left: 2rem;
+    margin-right: 2rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
    1. Paleta — variáveis de cor por esquema
    -------------------------------------------------------------------------- */
 
@@ -113,6 +137,16 @@ input,
 .md-typeset {
   font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
   font-size: .95rem;
+}
+
+/* Com o conteúdo mais largo, texto corrido sem controle ficaria linhas
+   demais para o olho seguir. Cards, tabelas e admonições (que não são
+   filhos diretos de .md-typeset) continuam usando a largura inteira. */
+.md-typeset > p,
+.md-typeset > ul:not(.grid),
+.md-typeset > ol:not(.grid),
+.md-typeset > blockquote {
+  max-width: 46rem;
 }
 
 .md-typeset h1,
@@ -301,8 +335,8 @@ input,
   background: var(--gc-panel);
   border: 1px solid var(--gc-panel-border);
   border-left: 4px solid var(--gc-gold);
-  border-radius: 3px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .14);
 }
 
 .md-typeset .admonition-title,
@@ -334,6 +368,9 @@ input,
 .md-typeset table:not([class]) {
   border: 1px solid var(--gc-panel-border);
   font-size: .82rem;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .1);
 }
 
 .md-typeset table:not([class]) th {
@@ -383,21 +420,29 @@ input,
   border-color: var(--gc-gold-soft);
 }
 
+.md-typeset .grid {
+  gap: .9rem;
+  /* O padrão do tema (minmax(16rem,1fr)) só cabe 2 colunas na nova largura
+     de conteúdo; 13rem deixa a grade usar 3–4 colunas em telas largas. */
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+}
+
 .md-typeset .grid.cards > ul > li,
 .md-typeset .grid.cards > ol > li {
   border: 1px solid var(--gc-panel-border);
   background: var(--gc-panel);
-  border-radius: 4px;
+  border-radius: 6px;
   padding: 0 .9rem .9rem;
   overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .18);
   transition: border-color .15s ease, transform .15s ease, box-shadow .15s ease;
 }
 
 .md-typeset .grid.cards > ul > li:hover,
 .md-typeset .grid.cards > ol > li:hover {
   border-color: var(--gc-gold);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, .35);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, .4);
 }
 
 .md-typeset .grid.cards > ul > li > p:first-of-type,
@@ -580,4 +625,19 @@ input,
 
 .wiki-portal .grid.cards {
   margin-top: 1rem;
+}
+
+/* --------------------------------------------------------------------------
+   14. Transição de entrada — cada página assenta em vez de aparecer de supetão
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .md-content__inner {
+    animation: gc-fade-in .3s ease-out;
+  }
+
+  @keyframes gc-fade-in {
+    from { opacity: 0; transform: translateY(.4rem); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
 }
