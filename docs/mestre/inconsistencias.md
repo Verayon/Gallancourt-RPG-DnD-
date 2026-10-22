@@ -13,11 +13,22 @@ conteúdo da wiki além do indicado; cabe ao autor decidir.
 | 1 | O diagrama pré-guerra escreve **"GALANCOUT"** | Divisão territorial antes da guerra | Corrigido para "GALLANCOURT" |
 | 2 | O diagrama pré-guerra agrupa **Saint-Armand sob "OESTE"**, junto de Baie de l'Éclair, enquanto a leitura do mapa a coloca na faixa montanhosa/fronteira | [Divisão territorial](../geografia/divisao-territorial.md) × [Geografia](../geografia/index.md) | Mantido; a wiki usa "fronteira" nas fichas |
 | 3 | A lista de "territórios da resistência" inclui **Valynesse (Magnetér)**, mas a cidade ficou sob a Coroa até o cerco final | [Divisão territorial](../geografia/divisao-territorial.md) | Mantido com nota explicativa |
-| 4 | Saint-Armand é chamada de **fortaleza** no cerco de Nouvelle-Montagne e de **cidade** depois; não está claro se a cidade já existia antes da guerra | [Saint-Armand](../cidades/saint-armand.md) | Mantido: "cresceu em torno da fortaleza" |
+| 4 | Saint-Armand é chamada de **fortaleza** no cerco de Nouvelle-Montagne e de **cidade** depois; não estava claro se a cidade já existia antes da guerra | [Saint-Armand](../cidades/saint-armand.md) | **Resolvido (2026-10-18):** nasceu como fortaleza; cresceu até se tornar cidade com o tempo e a importância, bem antes do Édito |
 | 5 | **Dois personagens chamados Thibault** (o rei e o Capitão-General de la Rivière) | Personagens | Mantido, com avisos de desambiguação |
 | 6 | Casa **Roche** e **Clã Roche** são usados como sinônimos | [Casa Roche](../faccoes/casa-roche.md) | Tratados como a mesma entidade |
 | 7 | O dossiê numera duas seções como **XXX** | Estrutura do documento | Irrelevante para a wiki |
 | 8 | O mapa conceitual pós-guerra desenha L'Ordre **abaixo** da fronteira com seta "LESTE" para baixo, o que mistura orientação vertical com leste | [Geografia](../geografia/index.md) | Mantido; nota de que o diagrama é conceitual |
+
+!!! note "Versão 1 das Crônicas"
+    As divergências trazidas pela Versão 1 que ainda aguardam decisão estão em
+    [Pendências para o autor](../compendio/pendencias.md). As já resolvidas estão na tabela abaixo.
+
+## Divergências da Versão 1 resolvidas pelo autor
+
+| Ponto | V1 dizia | Resolvido em 2026-10-18 |
+|---|---|---|
+| Liderança da Aliança pós-guerra | Depois da queda da capital, "a aristocracia de Dodixie, reconhecida como Aliança dos Lordes, tomou a dianteira" | O poder foi partilhado entre as cinco casas desde o início, pelo Conseil des Seigneurs; a frase da V1 foi descartada. A ambição de Dodixie de ser capital (Alaric Duvant) é uma aspiração política atual, não um fato do pós-guerra imediato |
+| Nome do arquipélago | Pirataria nas "Ilhas do Trovão" interrompeu rotas | Mesmo arquipélago citado no dossiê e nos mapas; nome adotado: **Ilhas do Relâmpago** |
 
 ## Divergências entre o PDF e o dossiê
 
@@ -47,7 +58,7 @@ abaixo foram resolvidas a favor do PDF.
 | 1 | O PDF diz que "a Monarquia e a Igreja executaram um êxodo estratégico" para o leste; o dossiê diz que a família real foi capturada e executada em Valynesse | Conciliado: o rei e a família morreram em Valynesse (o PDF confirma que Lorenzo Magnetér foi responsável pela morte do monarca); os restos da estrutura lealista e a Igreja recuaram para o leste |
 | 2 | O PDF chama a fronteira de "A Cicatriz" e diz que ali houve a maior parte dos combates do último ano; o dossiê fala de uma batalha específica perto de Saint-Armand | Mantidos os dois: a Batalha da Cicatriz faz parte desse último ano de combates |
 | 3 | O Conseil des Seigneurs reúne "os duques das cinco grandes cidades", mas os líderes usam outros títulos (Doge, Marquesa, Lorde Comandante, Senhora do Pico) | Registrado em Lacunas |
-| 4 | Montclair de Lune tem "astrólogos e sacerdotes lunares", numa teocracia de Amaunator, deus do sol | Descrição mantida como nota de criação; conciliação em aberto |
+| 4 | Montclair de Lune tem "astrólogos e sacerdotes lunares", numa teocracia de Amaunator, deus do sol | **Resolvido (2026-10-18):** existem de fato, como tradição local que convive com a doutrina solar oficial |
 | 5 | Chantépierre é descrita como centro de arte arcana e música de bardos, e Valmire-sur-Rose como vale de jardins encantados e poções mágicas; o dossiê as descreve como centros de vigilância e de doutrinação | Mantidas as duas descrições: aparência (PDF) e função política (dossiê) |
 | 6 | O PDF inclui Nouvelle-Montagne entre as cidades "do oeste, banhadas pelo oceano", mas a situa no sul, entre vales e colinas | Mantido "sul" |
 | 7 | "Louis de Montclair" repete o nome do príncipe Louis d'Aubren e lembra a cidade de Montclair de Lune | Aviso de desambiguação na página do personagem |

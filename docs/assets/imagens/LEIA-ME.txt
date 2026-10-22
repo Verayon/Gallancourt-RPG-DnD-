@@ -1,0 +1,43 @@
+# Repositório de imagens do site
+
+Esta pasta é o lugar para as **ilustrações da campanha**: retratos de personagens, vistas das
+cidades, brasões das casas, cenas de eventos, mapas e paisagens. Diferente de `fontes/imagens/`
+(que guarda os originais que você me manda, sem tratamento), tudo aqui **é servido pelo site**.
+
+Isso não é publicado por padrão — o site continua rodando só na sua máquina até você decidir
+publicá-lo.
+
+## Pastas
+
+```
+imagens/
+├── cidades/       Uma imagem por cidade (vista, brasão, mapa da cidade…)
+├── personagens/   Um retrato por NPC
+├── faccoes/       Brasões de casas e emblemas de organizações
+├── eventos/       Cenas de batalhas, decretos, cercos…
+├── geografia/      Paisagens: a cordilheira, a Cicatriz, as ilhas…
+├── mapas/         Os mapas do mundo (também citado em docs/geografia/mapas.md)
+└── mundo/         Imagens de temas gerais (religião, economia…), se precisar
+```
+
+## Convenção de nomes
+
+Use o **mesmo nome de arquivo da página** que a imagem ilustra, em minúsculas e sem acentos —
+igual ao nome usado em `docs/`. Por exemplo:
+
+| Página | Imagem esperada |
+|---|---|
+| `docs/cidades/dodixie.md` | `imagens/cidades/dodixie.jpg` |
+| `docs/personagens/scyras-corbeau.md` | `imagens/personagens/scyras-corbeau.jpg` |
+| `docs/faccoes/casa-corbeau.md` | `imagens/faccoes/casa-corbeau.jpg` |
+| `docs/eventos/queda-das-velas-negras.md` | `imagens/eventos/queda-das-velas-negras.jpg` |
+
+Formatos aceitos: `.jpg`, `.png`, `.webp`. Pode usar qualquer proporção — os cartões da wiki
+cortam a imagem para um quadro 4:3, então prefira fotos/artes com o assunto central.
+
+## Como usar
+
+Por enquanto, os cartões da Wiki mostram uma **moldura provisória** (os SVGs em
+`docs/assets/placeholders/`), uma por categoria. Quando você adicionar uma imagem aqui, me avise
+qual página ela ilustra (ou apenas coloque o arquivo com o nome certo) e eu troco a moldura pela
+imagem de verdade no cartão e, se fizer sentido, também na página de detalhe.

@@ -5,12 +5,25 @@ tags:
 
 # Fontes e método
 
-A wiki usa duas fontes:
+A wiki usa três fontes, guardadas em `fontes/textos/` (o guia do acervo está em
+`fontes/README.md`):
 
 | # | Fonte | Arquivo | Prioridade |
 |---|---|---|---|
-| 1 | *Crônicas de Gallancourt: Um Reino Dividido (Versão Revisada)* — documento do autor | `fontes/Historia_Gallancourt.pdf` | **Prevalece** em caso de divergência |
-| 2 | *Dossiê Geral Expandido de Gallancourt* | `fontes/Gallancourt_Dossie_Geral_Expandido.md` | Completa o que o PDF não cobre |
+| 1 | *Crônicas de Gallancourt: Um Reino Dividido (Versão Revisada)* — documento do autor, também chamado **Versão 2** | `fontes/textos/Historia_Gallancourt.pdf`; transcrição em `fontes/textos/cronicas-de-gallancourt-v2.md` | **Prevalece** em caso de divergência |
+| 2 | *Crônicas de Gallancourt*, **Versão 1** — documento anterior do autor | `fontes/textos/cronicas-de-gallancourt-v1.md` (transcrição) | Completa o que a Versão 2 não cobre |
+| 3 | *Dossiê Geral Expandido de Gallancourt* | `fontes/textos/Gallancourt_Dossie_Geral_Expandido.md` | Completa o que a Versão 2 não cobre |
+
+A leitura consolidada das três está no [Compêndio](../compendio/index.md). O que a Versão 1 trouxe
+de divergente ou de proposto está em [Pendências para o autor](../compendio/pendencias.md).
+
+## A Versão 1
+
+Nove páginas: a crônica em tom narrativo, uma linha do tempo, **a reação de cada cidade ao Édito
+antes, durante e depois da guerra**, os personagens de cada cidade (com raças, histórias
+desenvolvidas de Alaric Duvant e Jeanesse Lumière e **onze NPCs propostos**) e a teia de conexões
+entre as famílias, incluindo casamentos entre casas. É anterior à Versão 2 e parece ser a origem do
+dossiê: as duas usam "Mês de Sangue", Kaelen Thorne e Bromli Stonehammer.
 
 As divergências entre as duas fontes, e como foram resolvidas, estão em
 [Inconsistências a revisar](inconsistencias.md#divergencias-entre-o-pdf-e-o-dossie).
@@ -57,4 +70,4 @@ cidades, famílias e divisão territorial*) reúne:
 | 10 (lacunas) | [Lacunas em aberto](lacunas.md) |
 | 11 (método do cânone) | [Manutenção do cânone](manutencao-do-canone.md) |
 
-O dossiê original está preservado no repositório em `fontes/Gallancourt_Dossie_Geral_Expandido.md`.
+O dossiê original está preservado no repositório em `fontes/textos/Gallancourt_Dossie_Geral_Expandido.md`.

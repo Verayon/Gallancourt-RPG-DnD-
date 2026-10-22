@@ -25,6 +25,9 @@ As ilhas estão associadas ao espaço marítimo próximo a Gallancourt. Dentro d
 relacionam-se especialmente com a importância naval de Baie de l'Éclair e com as rotas
 marítimas da região.
 
+Fontes mais antigas chamavam este arquipélago de "Ilhas do Trovão"; é o mesmo lugar, e o nome
+adotado é **Ilhas do Relâmpago**.
+
 A presença de ilhas, canais e áreas costeiras ajuda a explicar por que o poder naval foi tão
 importante durante a guerra civil.
 

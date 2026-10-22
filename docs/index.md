@@ -1,60 +1,29 @@
 ---
 hide:
-  - navigation
+  - toc
 ---
+
+<div class="hero" markdown>
+
+<p class="hero__eyebrow">Uma crônica de fé, guerra e fronteira</p>
 
 # Crônicas de Gallancourt
 
-> *Não com paz. Mas com uma fronteira.*
+*Não com paz. Mas com uma fronteira.*
 
-Bem-vindo à wiki de lore de **Gallancourt**, uma península de senhorios feudais, cidades
-comerciais e portos que foi, um dia, um reino unificado sob a Casa D'Aubren. Uma doutrina de
-**pureza** transformou a fé em instrumento de poder, provocou uma guerra civil e partiu o
-reino em dois: **Gallancourt**, a oeste, governada pela **Aliança dos Lordes**, e a teocracia de
-**L'Ordre de Célestien**, a leste.
-
-A guerra acabou. A guerra política apenas começou.
-
-## Por onde começar
-
-!!! tip "Primeira vez aqui?"
-    Leia **[Gallancourt em uma página](visao-geral.md)**: o cenário resumido, com diagramas.
-
-<div class="grid cards" markdown>
-
--   **[História](historia/index.md)**
-
-    A crônica completa: do reino de D'Aubren ao Édito da Pureza, à guerra civil e à Guerra Fria atual.
-
--   **[Eventos](eventos/index.md)**
-
-    Batalhas, decretos e viradas que moldaram o presente.
-
--   **[Geografia](geografia/index.md)**
-
-    A península, a grande cordilheira, a Cicatriz e as Ilhas do Relâmpago.
-
--   **[Cidades](cidades/index.md)**
-
-    As cinco cidades da Aliança e as três cidades de L'Ordre.
-
--   **[Facções](faccoes/index.md)**
-
-    Estados, as cinco casas da Fraternidade, guildas, magocracias e redes criminosas.
-
--   **[Personagens](personagens/index.md)**
-
-    Aristocratas, magos, corsários, espiões e traidores.
-
--   **[Mundo](mundo/index.md)**
-
-    Religião, economia, teia política e operações clandestinas.
-
--   **[Referência do Mestre](mestre/index.md)**
-
-    Tabelas rápidas, lacunas em aberto e regras de manutenção do cânone.
+<div class="hero__actions" markdown>
+[Ler a Lore](lore.md){ .md-button .md-button--primary }
+[Abrir a Wiki](wiki.md){ .md-button }
+</div>
 
 </div>
+
+Bem-vindo a **Gallancourt**, uma península de senhorios feudais, cidades comerciais e portos que
+foi, um dia, um reino unificado sob a Casa D'Aubren. Uma doutrina de **pureza** transformou a fé
+em instrumento de poder, provocou uma guerra civil e partiu o reino em dois: **Gallancourt**, a
+oeste, governada pela **Aliança dos Lordes**, e a teocracia de **L'Ordre de Célestien**, a leste.
+
+A guerra acabou. A guerra política apenas começou.
 
 ## O mundo em um parágrafo
 
@@ -85,20 +54,7 @@ guerra mesmo depois que as armas foram silenciadas.
 **Gallancourt não é apenas um reino que sofreu uma guerra civil.** É um reino cuja guerra
 civil criou o mundo político que existe atualmente.
 
-## Como ler esta wiki
+---
 
-Cada informação pertence a uma de quatro categorias, sinalizadas por caixas coloridas:
-
-- **Cânone registrado** — texto corrido, sem marcação: fato presente nas crônicas.
-
-!!! info "Leitura cartográfica"
-    Descrição visual ou interpretação prudente dos mapas.
-
-!!! abstract "Inferência funcional"
-    Conclusão logística ou política razoável, ainda não confirmada como fato diegético.
-
-!!! question "Em aberto"
-    Informação que precisa ser definida pelo autor ou pode ser descoberta na campanha.
-
-Veja [Manutenção do cânone](mestre/manutencao-do-canone.md) para as marcas usadas em novas
-adições.
+Pronto para explorar? Leia a **[Lore](lore.md)** de cima a baixo, ou entre direto na
+**[Wiki](wiki.md)** para procurar uma cidade, um personagem ou um lugar.

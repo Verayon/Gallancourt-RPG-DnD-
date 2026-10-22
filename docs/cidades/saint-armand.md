@@ -45,6 +45,10 @@ corruptas**. O povo é vigilante, orgulhoso e vê a corrupção das outras cidad
 
 ## História
 
+Saint-Armand nasceu como uma grande fortaleza erguida em torno de um templo a Amaunator; com o
+tempo, por sua importância religiosa e estratégica, uma cidade cresceu à sua volta — bem antes do
+Édito da Pureza.
+
 - **[Massacre da Aurora Velada](../eventos/cerco-de-nouvelle-montagne.md)** — o ataque noturno das
   forças da fortaleza salvou Nouvelle-Montagne e selou o pacto de alimento em troca de proteção.
 - **[Batalha da Cicatriz](../eventos/batalha-da-cicatriz.md)** — travada nas planícies próximas.

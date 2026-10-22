@@ -77,6 +77,12 @@ ocorridos.** Ao responder uma delas, atualize a página correspondente e remova 
 
 ## Cronologia
 
+!!! info "Calendário da campanha"
+    Datas absolutas agora têm um sistema para se pendurar: o
+    [Calendário de Gallancourt](../mundo/calendario.md) (Era da Aliança). A primeira sessão do
+    [Diário](../diario/index.md) vai fixar, na prática, "quantos anos se passaram até o presente
+    da campanha".
+
 - [ ] Em que ano ocorreu o Édito?
 - [x] ~~Quanto durou o período de perseguições?~~ Um ano: o **Ano de Sangue**.
 - [x] ~~Quanto tempo durou a guerra civil?~~ Pouco mais de três anos.

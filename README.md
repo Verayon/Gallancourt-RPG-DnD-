@@ -6,24 +6,30 @@ Aliança dos Lordes e a teocracia de L'Ordre de Célestien.
 O site é gerado com [MkDocs Material](https://squidfunk.github.io/mkdocs-material/) a partir de
 arquivos Markdown, com busca, tags, modo escuro e navegação por categorias.
 
+Este arquivo é a instalação inicial. Para o dia a dia — ligar/desligar os servidores, comandos de
+git, solução de problemas — veja **[MANUTENCAO.md](MANUTENCAO.md)**.
+
 ## Estrutura do conteúdo
 
 ```
 docs/
-├── index.md        Página inicial e princípio central da ambientação
-├── visao-geral.md  O cenário resumido em uma página, com diagramas
+├── index.md, wiki.md, lore.md   As três portas de entrada do site: Início, Wiki e Lore
 ├── historia/       A crônica em capítulos + cronologia
 ├── eventos/        Batalhas, decretos e períodos (uma página por evento)
 ├── geografia/      Península, cordilheira, Cicatriz, ilhas, divisão territorial, mapas
 ├── cidades/        As 5 cidades da Aliança e as 3 de L'Ordre
 ├── faccoes/        Estados, as cinco casas, outras casas e organizações
 ├── personagens/    Uma página por NPC
-├── mundo/          Conflitos, teia política, relações entre cidades, intrigas da nobreza,
-│                   religião, economia, operações clandestinas, glossário
-└── mestre/         Referência rápida, lacunas, manutenção do cânone, inconsistências, fontes
-fontes/             Documentos-fonte: PDF do autor (prevalece) e dossiê
+├── mundo/          Conflitos, teia política, relações, intrigas, religião, economia, calendário
+├── diario/         O Diário de Sessões — uma página por sessão jogada
+├── compendio/      Leitura consolidada e anotada: história completa, cidades, política
+├── mestre/         Referência rápida, lacunas, Painel do Mestre, manutenção do cânone
+└── assets/         Imagens do site e o repositório de arte da campanha (assets/imagens/)
+admin/              Painel do Mestre (app Flask local) — ver docs/mestre/painel.md
+fontes/             Acervo do autor (textos/, imagens/, videos/) — ver fontes/README.md
 scripts/            gerar_relacoes.py — gera as páginas de relações e intrigas
 CLAUDE.md           Regras e decisões do projeto, lidas pelo Claude Code em cada sessão
+MANUTENCAO.md       Guia técnico: comandos, rotina do dia a dia, solução de problemas
 ```
 
 ## Trabalhando no computador com o Claude Code
@@ -66,6 +72,15 @@ pip install -r requirements.txt
 mkdocs serve          # http://127.0.0.1:8000, com recarga automática a cada edição
 mkdocs build --strict # gera ./site e falha se houver links ou âncoras quebrados
 ```
+
+Para registrar uma sessão jogada ou editar uma página sem mexer em arquivo nenhum, abra também o
+**Painel do Mestre** (com o `mkdocs serve` acima já rodando):
+
+```bash
+.venv\Scripts\python admin\app.py   # http://127.0.0.1:5001
+```
+
+Ou dê duplo clique em `admin/iniciar-painel.bat`. Guia completo em `docs/mestre/painel.md`.
 
 ### 5. Abrir o Claude Code no projeto
 

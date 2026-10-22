@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block titulo %}Editar página{% endblock %}
+{% block conteudo %}
+<h1>Editar uma página</h1>
+<p class="ajuda">Escolha a página pelo título, edite o texto e clique em Salvar. É a mesma
+  sintaxe Markdown usada no resto da wiki.</p>
+
+<form method="get" action="/editar" class="form-escolher">
+  <label>Página
+    <select name="pagina" onchange="this.form.submit()">
+      <option value="">— escolha uma página —</option>
+      {% for p in paginas %}
+      <option value="{{ p.rel_docs }}" {{ "selected" if p.rel_docs == pagina_escolhida else "" }}>
+        {{ p.titulo }} ({{ p.rel_docs }})
+      </option>
+      {% endfor %}
+    </select>
+  </label>
+  <noscript><button type="submit">Abrir</button></noscript>
+</form>
+
+{% if pagina_escolhida %}
+{% if salvo %}
+<p class="aviso aviso--ok">✅ Salvo em <code>docs/{{ pagina_escolhida }}</code>. Confira no
+  <a href="http://127.0.0.1:8000" target="_blank" rel="noopener">site</a>.</p>
+{% endif %}
+<form method="post" action="/editar" class="form-editor">
+  <input type="hidden" name="pagina" value="{{ pagina_escolhida }}">
+  <textarea name="conteudo" rows="28" spellcheck="false">{{ conteudo }}</textarea>
+  <button type="submit" class="botao-principal">Salvar</button>
+</form>
+{% endif %}
+{% endblock %}

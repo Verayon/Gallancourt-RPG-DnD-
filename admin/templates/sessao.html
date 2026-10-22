@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block titulo %}Registrar sessão{% endblock %}
+{% block conteudo %}
+<h1>Registrar a Sessão {{ proxima }}</h1>
+<p class="ajuda">
+  Marque quem e o que participou, escreva o que aconteceu e clique em <strong>Aplicar</strong>.
+  O painel cria a página da sessão, atualiza o Diário e cola um registro no rodapé de cada NPC e
+  lugar marcado.
+</p>
+
+<form method="post" action="/sessao" class="form-sessao">
+
+  <fieldset>
+    <legend>A sessão</legend>
+    <label>Título curto
+      <input type="text" name="titulo" placeholder="Ex.: A traição nos estaleiros" required>
+    </label>
+    <div class="duas-colunas">
+      <label>Data real
+        <input type="date" name="data_real" value="{{ hoje }}" required>
+      </label>
+      <label>Data na campanha
+        <input type="text" name="data_campanha" placeholder="Ex.: 24 de outubro de 1453" required>
+      </label>
+    </div>
+    <label>O que aconteceu
+      <textarea name="resumo" rows="8" placeholder="Resumo em texto corrido da sessão…" required></textarea>
+    </label>
+  </fieldset>
+
+  <fieldset>
+    <legend>NPCs em cena</legend>
+    <p class="ajuda">Marque quem participou. A nota é opcional — se ficar em branco, entra um
+      texto genérico no histórico do personagem.</p>
+    <div class="lista-entidades">
+      {% for npc in npcs %}
+      <div class="linha-entidade">
+        <label class="check"><input type="checkbox" name="npc" value="{{ npc.slug }}"> {{ npc.titulo }}</label>
+        <input type="text" name="nota_npc_{{ npc.slug }}" placeholder="O que aconteceu com {{ npc.titulo }}? (opcional)">
+      </div>
+      {% else %}
+      <p class="ajuda">Nenhum NPC encontrado em docs/personagens.</p>
+      {% endfor %}
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Cidades e lugares</legend>
+    <div class="lista-entidades">
+      {% for cidade in cidades %}
+      <div class="linha-entidade">
+        <label class="check"><input type="checkbox" name="local" value="{{ cidade.slug }}"> {{ cidade.titulo }}</label>
+        <input type="text" name="nota_local_{{ cidade.slug }}" placeholder="O que aconteceu em {{ cidade.titulo }}? (opcional)">
+      </div>
+      {% else %}
+      <p class="ajuda">Nenhuma cidade encontrada em docs/cidades.</p>
+      {% endfor %}
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Facções e organizações <span class="opcional">(opcional)</span></legend>
+    <div class="lista-entidades">
+      {% for faccao in faccoes %}
+      <div class="linha-entidade">
+        <label class="check"><input type="checkbox" name="faccao" value="{{ faccao.slug }}"> {{ faccao.titulo }}</label>
+        <input type="text" name="nota_faccao_{{ faccao.slug }}" placeholder="O que aconteceu com {{ faccao.titulo }}? (opcional)">
+      </div>
+      {% else %}
+      <p class="ajuda">Nenhuma facção encontrada em docs/faccoes.</p>
+      {% endfor %}
+    </div>
+  </fieldset>
+
+  <button type="submit" class="botao-principal">Aplicar</button>
+</form>
+{% endblock %}

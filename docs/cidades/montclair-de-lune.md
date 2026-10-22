@@ -31,10 +31,10 @@ Localizada no **topo de uma montanha sagrada**, Montclair de Lune é conhecida p
 **astrólogos e sacerdotes lunares**. À noite, a cidade brilha com luz prateada, como se refletisse
 o céu. *Inspiração do nome: "Montclair" (monte claro) + "de Lune" (da lua).*
 
-!!! info "Nota de criação"
-    Esta descrição vem das notas iniciais do autor. Ver
-    [Inconsistências](../mestre/inconsistencias.md) sobre sacerdotes lunares numa teocracia de
-    Amaunator, deus do sol.
+!!! note "Resolvido pelo autor"
+    Os sacerdotes lunares e astrólogos existem de fato, como tradição local que convive com a
+    doutrina solar oficial de Amaunator. Como essa convivência funciona na prática ainda está em
+    aberto — ver [Inconsistências](../mestre/inconsistencias.md).
 
 ## Funções
 

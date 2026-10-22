@@ -59,6 +59,13 @@ mundo ajam de modo coerente sem determinar antecipadamente todas as consequênci
 | **Gatilhos de mudança** | O que faria este NPC mudar de lado ou de plano |
 ```
 
+Essa é a ficha de **planejamento** do Mestre (o que o NPC quer e esconde). Para aparência física,
+personalidade e proficiências — o retrato do personagem, não seus planos —, use a seção **Ficha de
+personagem** (e, para cidades, **Ficha da cidade**), preenchida pela aba **Ficha** do
+[Painel do Mestre](painel.md). Não edite essas duas seções à mão sem necessidade: elas usam
+marcadores invisíveis (`<!-- campo:... -->`) que o painel espera encontrar para reler os valores
+depois.
+
 ## Como adicionar uma página
 
 1. Crie o arquivo `.md` na pasta da categoria (`docs/personagens/`, `docs/cidades/` …),

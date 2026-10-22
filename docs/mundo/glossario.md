@@ -30,14 +30,7 @@ Conseil des Seigneurs
 :   O Conselho dos Lordes, onde os duques das cinco grandes cidades tomam as decisões mais
     importantes de Gallancourt. [→](../faccoes/alianca-dos-lordes.md#o-conseil-des-seigneurs)
 
-Édito da Nirador
-:   O continente onde fica Gallancourt. Reinos marítimos vizinhos: Mannellaín, Coltaria,
-    Sagreiras e Castomar. [→](../geografia/index.md#o-mundo-alem-de-gallancourt)
-
-Patrulha da Fronteira
-:   Força de Saint-Armand que vigia a fronteira com L'Ordre, comandada por Thibault de la Rivière.
-
-Pureza
+Édito da Pureza
 :   Decreto que institucionalizou a discriminação contra não-humanos e o monopólio religioso.
     [→](../eventos/edito-da-pureza.md)
 

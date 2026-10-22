@@ -85,11 +85,42 @@ produtos internacionais.
 
 ## Marcos geográficos
 
-- **[A grande cordilheira](grande-cordilheira.md)** — barreira física, fronteira política e
-  elemento estratégico.
-- **[A Cicatriz](a-cicatriz.md)** — terreno marcado pela batalha nas planícies perto de
-  Saint-Armand; referência da fronteira.
-- **[Ilhas do Relâmpago](ilhas-do-relampago.md)** — região insular no espaço marítimo próximo.
+<div class="grid cards" markdown>
+
+-   [![](../assets/placeholders/geografia.svg){ .card-portrait }](grande-cordilheira.md)
+
+    **[A grande cordilheira](grande-cordilheira.md)**
+
+    Barreira física, fronteira política e elemento estratégico.
+
+-   [![](../assets/placeholders/geografia.svg){ .card-portrait }](a-cicatriz.md)
+
+    **[A Cicatriz](a-cicatriz.md)**
+
+    Terreno marcado pela batalha nas planícies perto de Saint-Armand; referência da fronteira.
+
+-   [![](../assets/placeholders/geografia.svg){ .card-portrait }](ilhas-do-relampago.md)
+
+    **[Ilhas do Relâmpago](ilhas-do-relampago.md)**
+
+    Região insular no espaço marítimo próximo.
+
+-   [![](../assets/placeholders/geografia.svg){ .card-portrait }](divisao-territorial.md)
+
+    **[Divisão territorial](divisao-territorial.md)**
+
+    Como o mapa político mudou antes, durante e depois da guerra civil.
+
+-   [![](../assets/placeholders/geografia.svg){ .card-portrait }](mapas.md)
+
+    **[Mapas](mapas.md)**
+
+    As duas imagens cartográficas de referência, com a leitura de cada uma.
+
+</div>
+
+Outros marcos, sem página própria:
+
 - **Recifes de Dodixie** — cemitério de navios desde a
   [Queda das Velas Negras](../eventos/queda-das-velas-negras.md).
 - **O istmo** — defendido por Saint-Armand durante o

@@ -10,10 +10,14 @@ validation:
 theme:
   name: material
   language: pt-BR
+  font: false
+  icon:
+    logo: material/sword-cross
+  favicon: assets/favicon.svg
   features:
-    - navigation.tabs
     - navigation.sections
     - navigation.indexes
+    - navigation.path
     - navigation.top
     - navigation.footer
     - search.suggest
@@ -21,20 +25,20 @@ theme:
     - content.tooltips
     - toc.follow
   palette:
-    - media: "(prefers-color-scheme: light)"
-      scheme: default
-      primary: deep purple
-      accent: amber
-      toggle:
-        icon: material/weather-night
-        name: Modo escuro
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
       primary: deep purple
       accent: amber
       toggle:
         icon: material/weather-sunny
-        name: Modo claro
+        name: Modo claro (Pergaminho)
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: deep purple
+      accent: amber
+      toggle:
+        icon: material/weather-night
+        name: Modo escuro (Grimório)
 
 extra_css:
   - stylesheets/extra.css
@@ -43,6 +47,11 @@ plugins:
   - search:
       lang: pt
   - tags
+  - git-revision-date-localized:
+      type: date
+      locale: pt
+      enable_creation_date: false
+      fallback_to_build_date: true
 
 markdown_extensions:
   - admonition
@@ -53,6 +62,8 @@ markdown_extensions:
   - toc:
       permalink: true
   - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
@@ -60,114 +71,143 @@ markdown_extensions:
           format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.tasklist:
       custom_checkbox: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
 nav:
   - Início: index.md
-  - Visão geral: visao-geral.md
-  - História:
-      - historia/index.md
-      - Antes da ruptura: historia/antes-da-ruptura.md
-      - O Édito e o Ano de Sangue: historia/o-edito-e-o-ano-de-sangue.md
-      - A guerra civil: historia/a-guerra-civil.md
-      - O pós-guerra: historia/o-pos-guerra.md
-      - Cronologia: historia/cronologia.md
-  - Eventos:
-      - eventos/index.md
-      - Édito da Pureza: eventos/edito-da-pureza.md
-      - Ano de Sangue: eventos/ano-de-sangue.md
-      - Queda das Velas Negras: eventos/queda-das-velas-negras.md
-      - Cerco de Nouvelle-Montagne: eventos/cerco-de-nouvelle-montagne.md
-      - Batalha da Cicatriz: eventos/batalha-da-cicatriz.md
-      - Queda de Valynesse: eventos/queda-de-valynesse.md
-      - Fuga de Severin Marceau: eventos/fuga-de-severin-marceau.md
-      - Guerra Fria: eventos/guerra-fria.md
-      - Massacre da família Enry: eventos/massacre-dos-enry.md
-  - Geografia:
-      - geografia/index.md
-      - A grande cordilheira: geografia/grande-cordilheira.md
-      - A Cicatriz: geografia/a-cicatriz.md
-      - Ilhas do Relâmpago: geografia/ilhas-do-relampago.md
-      - Divisão territorial: geografia/divisao-territorial.md
-      - Mapas: geografia/mapas.md
-  - Cidades:
-      - cidades/index.md
-      - Aliança dos Lordes:
-          - Dodixie: cidades/dodixie.md
-          - Baie de l'Éclair: cidades/baie-de-l-eclair.md
-          - Nouvelle-Montagne: cidades/nouvelle-montagne.md
-          - Saint-Armand: cidades/saint-armand.md
-          - Valynesse: cidades/valynesse.md
-      - L'Ordre de Célestien:
-          - Montclair de Lune: cidades/montclair-de-lune.md
-          - Chantépierre: cidades/chantepierre.md
-          - Valmire-sur-Rose: cidades/valmire-sur-rose.md
-  - Facções:
-      - faccoes/index.md
-      - Estados e alianças:
-          - Aliança dos Lordes: faccoes/alianca-dos-lordes.md
-          - L'Ordre de Célestien: faccoes/l-ordre-de-celestien.md
-          - Fraternidade dos Cinco Sangues: faccoes/fraternidade-dos-cinco-sangues.md
-      - As cinco casas:
-          - Casa Magnetér: faccoes/casa-magneter.md
-          - Casa Corbeau: faccoes/casa-corbeau.md
-          - Casa Lumière: faccoes/casa-lumiere.md
-          - Casa Saint-Laurent: faccoes/casa-saint-laurent.md
-          - Casa Roche: faccoes/casa-roche.md
-      - Outras casas:
-          - Casa D'Aubren: faccoes/casa-d-aubren.md
-          - Casa Duvant: faccoes/casa-duvant.md
-      - Organizações:
-          - Torre do Trovão: faccoes/torre-do-trovao.md
-          - Guilda dos Construtores Navais: faccoes/guilda-dos-construtores-navais.md
-          - La Voile Noire: faccoes/la-voile-noire.md
-          - Frotas corsárias e piratas: faccoes/frotas-corsarias-e-piratas.md
-  - Personagens:
-      - personagens/index.md
-      - Coroa e L'Ordre:
-          - Thibault d'Aubren: personagens/thibault-d-aubren.md
-          - Severin Marceau: personagens/severin-marceau.md
-      - Dodixie:
-          - Scyras Corbeau: personagens/scyras-corbeau.md
-          - Alaric Duvant: personagens/alaric-duvant.md
-          - Alfonse Enry: personagens/alfonse-enry.md
-          - Thalin: personagens/thalin.md
-          - Zepharion: personagens/zepharion.md
-          - Camille Brissac: personagens/camille-brissac.md
-      - Baie de l'Éclair:
-          - Jeanesse Lumière: personagens/jeanesse-lumiere.md
-          - Elian Lumière: personagens/elian-lumiere.md
-          - Jean Vigny: personagens/jean-vigny.md
-          - Louis de Montclair: personagens/louis-de-montclair.md
-          - Étienne Rochefort: personagens/etienne-rochefort.md
-      - Nouvelle-Montagne:
-          - Helga Roche: personagens/helga-roche.md
-          - Pierre Montaigne: personagens/pierre-montaigne.md
-          - Élodie Vaucluse: personagens/elodie-vaucluse.md
-          - Lucien de Saint-Pierre: personagens/lucien-de-saint-pierre.md
-      - Saint-Armand:
-          - Armand Saint-Laurent: personagens/armand-saint-laurent.md
-          - Juliette Clermont: personagens/juliette-clermont.md
-          - Thibault de la Rivière: personagens/thibault-de-la-riviere.md
-      - Valynesse:
-          - Lorenzo Magnetér: personagens/lorenzo-magneter.md
-          - Amélie Montpensier: personagens/amelie-montpensier.md
-          - Philippe Beaumont: personagens/philippe-beaumont.md
-          - Henri du Valois: personagens/henri-du-valois.md
-  - Mundo:
-      - mundo/index.md
-      - Conflitos centrais: mundo/conflitos-centrais.md
-      - Teia política: mundo/teia-politica.md
-      - Relações entre cidades: mundo/relacoes-entre-cidades.md
-      - Intrigas da nobreza: mundo/intrigas-da-nobreza.md
-      - Religião — Amaunator: mundo/religiao.md
-      - Economia política: mundo/economia.md
-      - Operações clandestinas: mundo/operacoes-clandestinas.md
-      - Glossário: mundo/glossario.md
-  - Referência do Mestre:
-      - mestre/index.md
-      - Referência rápida: mestre/referencia-rapida.md
-      - Lacunas em aberto: mestre/lacunas.md
-      - Manutenção do cânone: mestre/manutencao-do-canone.md
-      - Inconsistências a revisar: mestre/inconsistencias.md
-      - Fontes e método: mestre/fontes.md
-      - Índice de tags: mestre/tags.md
+  - Lore: lore.md
+  - Wiki:
+      - wiki.md
+      - Diário de Sessões:
+          - diario/index.md
+      - visao-geral.md
+      - Crônica em capítulos:
+          - historia/index.md
+          - Antes da ruptura: historia/antes-da-ruptura.md
+          - O Édito e o Ano de Sangue: historia/o-edito-e-o-ano-de-sangue.md
+          - A guerra civil: historia/a-guerra-civil.md
+          - O pós-guerra: historia/o-pos-guerra.md
+          - Cronologia: historia/cronologia.md
+      - Cidades:
+          - cidades/index.md
+          - Aliança dos Lordes:
+              - Dodixie: cidades/dodixie.md
+              - Baie de l'Éclair: cidades/baie-de-l-eclair.md
+              - Nouvelle-Montagne: cidades/nouvelle-montagne.md
+              - Saint-Armand: cidades/saint-armand.md
+              - Valynesse: cidades/valynesse.md
+          - L'Ordre de Célestien:
+              - Montclair de Lune: cidades/montclair-de-lune.md
+              - Chantépierre: cidades/chantepierre.md
+              - Valmire-sur-Rose: cidades/valmire-sur-rose.md
+      - Personagens:
+          - personagens/index.md
+          - Coroa e L'Ordre:
+              - Thibault d'Aubren: personagens/thibault-d-aubren.md
+              - Severin Marceau: personagens/severin-marceau.md
+          - Dodixie:
+              - Scyras Corbeau: personagens/scyras-corbeau.md
+              - Alaric Duvant: personagens/alaric-duvant.md
+              - Alfonse Enry: personagens/alfonse-enry.md
+              - Thalin: personagens/thalin.md
+              - Zepharion: personagens/zepharion.md
+              - Camille Brissac: personagens/camille-brissac.md
+          - Baie de l'Éclair:
+              - Jeanesse Lumière: personagens/jeanesse-lumiere.md
+              - Elian Lumière: personagens/elian-lumiere.md
+              - Jean Vigny: personagens/jean-vigny.md
+              - Louis de Montclair: personagens/louis-de-montclair.md
+              - Étienne Rochefort: personagens/etienne-rochefort.md
+          - Nouvelle-Montagne:
+              - Helga Roche: personagens/helga-roche.md
+              - Pierre Montaigne: personagens/pierre-montaigne.md
+              - Élodie Vaucluse: personagens/elodie-vaucluse.md
+              - Lucien de Saint-Pierre: personagens/lucien-de-saint-pierre.md
+          - Saint-Armand:
+              - Armand Saint-Laurent: personagens/armand-saint-laurent.md
+              - Juliette Clermont: personagens/juliette-clermont.md
+              - Thibault de la Rivière: personagens/thibault-de-la-riviere.md
+          - Valynesse:
+              - Lorenzo Magnetér: personagens/lorenzo-magneter.md
+              - Amélie Montpensier: personagens/amelie-montpensier.md
+              - Philippe Beaumont: personagens/philippe-beaumont.md
+              - Henri du Valois: personagens/henri-du-valois.md
+      - Facções:
+          - faccoes/index.md
+          - Estados e alianças:
+              - Aliança dos Lordes: faccoes/alianca-dos-lordes.md
+              - L'Ordre de Célestien: faccoes/l-ordre-de-celestien.md
+              - Fraternidade dos Cinco Sangues: faccoes/fraternidade-dos-cinco-sangues.md
+          - As cinco casas:
+              - Casa Magnetér: faccoes/casa-magneter.md
+              - Casa Corbeau: faccoes/casa-corbeau.md
+              - Casa Lumière: faccoes/casa-lumiere.md
+              - Casa Saint-Laurent: faccoes/casa-saint-laurent.md
+              - Casa Roche: faccoes/casa-roche.md
+          - Outras casas:
+              - Casa D'Aubren: faccoes/casa-d-aubren.md
+              - Casa Duvant: faccoes/casa-duvant.md
+          - Organizações:
+              - Torre do Trovão: faccoes/torre-do-trovao.md
+              - Guilda dos Construtores Navais: faccoes/guilda-dos-construtores-navais.md
+              - La Voile Noire: faccoes/la-voile-noire.md
+              - Frotas corsárias e piratas: faccoes/frotas-corsarias-e-piratas.md
+      - Eventos:
+          - eventos/index.md
+          - Édito da Pureza: eventos/edito-da-pureza.md
+          - Ano de Sangue: eventos/ano-de-sangue.md
+          - Queda das Velas Negras: eventos/queda-das-velas-negras.md
+          - Cerco de Nouvelle-Montagne: eventos/cerco-de-nouvelle-montagne.md
+          - Batalha da Cicatriz: eventos/batalha-da-cicatriz.md
+          - Queda de Valynesse: eventos/queda-de-valynesse.md
+          - Fuga de Severin Marceau: eventos/fuga-de-severin-marceau.md
+          - Guerra Fria: eventos/guerra-fria.md
+          - Massacre da família Enry: eventos/massacre-dos-enry.md
+      - Geografia:
+          - geografia/index.md
+          - A grande cordilheira: geografia/grande-cordilheira.md
+          - A Cicatriz: geografia/a-cicatriz.md
+          - Ilhas do Relâmpago: geografia/ilhas-do-relampago.md
+          - Divisão territorial: geografia/divisao-territorial.md
+          - Mapas: geografia/mapas.md
+      - Mundo:
+          - mundo/index.md
+          - Calendário: mundo/calendario.md
+          - Conflitos centrais: mundo/conflitos-centrais.md
+          - Teia política: mundo/teia-politica.md
+          - Relações entre cidades: mundo/relacoes-entre-cidades.md
+          - Intrigas da nobreza: mundo/intrigas-da-nobreza.md
+          - Religião — Amaunator: mundo/religiao.md
+          - Economia política: mundo/economia.md
+          - Operações clandestinas: mundo/operacoes-clandestinas.md
+          - Glossário: mundo/glossario.md
+      - Compêndio:
+          - compendio/index.md
+          - História de Gallancourt (anotada): compendio/historia-de-gallancourt.md
+          - Cidades:
+              - compendio/cidades/index.md
+              - Valynesse: compendio/cidades/valynesse.md
+              - Dodixie: compendio/cidades/dodixie.md
+              - Baie de l'Éclair: compendio/cidades/baie-de-l-eclair.md
+              - Saint-Armand: compendio/cidades/saint-armand.md
+              - Nouvelle-Montagne: compendio/cidades/nouvelle-montagne.md
+              - Montclair de Lune: compendio/cidades/montclair-de-lune.md
+              - Valmire-sur-Rose: compendio/cidades/valmire-sur-rose.md
+              - Chantépierre: compendio/cidades/chantepierre.md
+          - Personagens: compendio/personagens.md
+          - Política e facções: compendio/politica-e-faccoes.md
+          - Geografia e religião: compendio/geografia-e-religiao.md
+          - Pendências para o autor: compendio/pendencias.md
+      - Referência do Mestre:
+          - mestre/index.md
+          - Sessão 0 — Os Grilhões da Estrada: mestre/sessao-0-os-grilhoes-da-estrada.md
+          - Painel do Mestre: mestre/painel.md
+          - Registro manual de sessão: mestre/registro-manual-de-sessao.md
+          - Referência rápida: mestre/referencia-rapida.md
+          - Lacunas em aberto: mestre/lacunas.md
+          - Manutenção do cânone: mestre/manutencao-do-canone.md
+          - Inconsistências a revisar: mestre/inconsistencias.md
+          - Fontes e método: mestre/fontes.md
+          - Índice de tags: mestre/tags.md
