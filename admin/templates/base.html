@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block titulo %}Painel do Mestre{% endblock %} — Gallancourt</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}">
+</head>
+<body>
+<header class="topo">
+  <div class="topo__marca">⚔️ Painel do Mestre <span>— Crônicas de Gallancourt</span></div>
+  <nav class="topo__nav">
+    <a href="/">Registrar sessão</a>
+    <a href="/ficha">Ficha</a>
+    <a href="/editar">Editar página</a>
+    <a href="http://127.0.0.1:8000" target="_blank" rel="noopener">Abrir o site ↗</a>
+  </nav>
+</header>
+<main class="conteudo">
+  {% block conteudo %}{% endblock %}
+</main>
+</body>
+</html>

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block titulo %}Ficha{% endblock %}
+{% block conteudo %}
+<h1>Ficha de personagem ou cidade</h1>
+<p class="ajuda">Escolha o tipo e o nome, preencha os campos e clique em Salvar. A seção
+  "{{ titulo_secao }}" é criada (ou atualizada) sozinha no rodapé da página.</p>
+
+<div class="abas">
+  <a href="/ficha?tipo=npc" class="{{ 'aba-ativa' if tipo == 'npc' else '' }}">Personagem</a>
+  <a href="/ficha?tipo=cidade" class="{{ 'aba-ativa' if tipo == 'cidade' else '' }}">Cidade</a>
+</div>
+
+<form method="get" action="/ficha" class="form-escolher">
+  <input type="hidden" name="tipo" value="{{ tipo }}">
+  <label>{{ "Personagem" if tipo == "npc" else "Cidade" }}
+    <select name="item" onchange="this.form.submit()">
+      <option value="">— escolha —</option>
+      {% for it in itens %}
+      <option value="{{ it.slug }}" {{ "selected" if it.slug == item_slug else "" }}>{{ it.titulo }}</option>
+      {% endfor %}
+    </select>
+  </label>
+</form>
+
+{% if entidade %}
+{% if salvo %}
+  {% if build_ok %}
+  <p class="aviso aviso--ok">✅ Ficha de {{ entidade.titulo }} salva. Site conferido sem problemas.</p>
+  {% else %}
+  <p class="aviso aviso--erro">⚠️ Ficha salva, mas <code>mkdocs build --strict</code> encontrou um problema.</p>
+  <pre class="saida-build">{{ build_saida }}</pre>
+  {% endif %}
+{% endif %}
+
+<form method="post" action="/ficha" class="form-sessao">
+  <input type="hidden" name="tipo" value="{{ tipo }}">
+  <input type="hidden" name="item" value="{{ item_slug }}">
+  <fieldset>
+    <legend>{{ entidade.titulo }}</legend>
+    {% for chave, rotulo, tipo_campo in campos %}
+    <label>{{ rotulo }}
+      {% if tipo_campo == "textarea" %}
+      <textarea name="campo_{{ chave }}" rows="3">{{ valores.get(chave, "") }}</textarea>
+      {% else %}
+      <input type="text" name="campo_{{ chave }}" value="{{ valores.get(chave, "") }}">
+      {% endif %}
+    </label>
+    {% endfor %}
+  </fieldset>
+  <button type="submit" class="botao-principal">Salvar</button>
+  <a class="botao-secundario" href="http://127.0.0.1:8000/{{ entidade.rel_docs | replace('.md', '/') }}" target="_blank" rel="noopener">Ver a página ↗</a>
+</form>
+{% endif %}
+{% endblock %}
