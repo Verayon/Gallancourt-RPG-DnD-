@@ -4694,6 +4694,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Editar qualquer página">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adicionar-uma-imagem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adicionar uma imagem
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -4984,6 +5001,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Editar qualquer página">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adicionar-uma-imagem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adicionar uma imagem
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -5202,12 +5236,23 @@ conteúdo que não se encaixa nos campos, coloque em outra seção da página.</
 <p>Na aba <strong>Editar</strong>, escolha uma página numa lista (com o título de cada uma, para não precisar saber
 o nome do arquivo), edite o texto Markdown na caixa e clique em <strong>Salvar</strong>. É a mesma sintaxe usada
 em toda a wiki: <code>#</code> para títulos, <code>[texto](link.md)</code> para links, <code>**negrito**</code>, tabelas, e as caixas
-<code>!!! aviso "Título"</code> para os avisos coloridos.</p>
+<code>!!! aviso "Título"</code> para os avisos coloridos. Mudar um título é só editar a linha que começa com
+<code>#</code> dentro do texto.</p>
 <div class="admonition question">
 <p class="admonition-title">Em aberto</p>
 <p>O painel ainda não valida a sintaxe antes de salvar. Depois de editar uma página por aqui, dê
 uma olhada nela no site (<code>http://127.0.0.1:8000</code>) para confirmar que ficou como você queria.</p>
 </div>
+<h3 id="adicionar-uma-imagem">Adicionar uma imagem<a class="headerlink" href="#adicionar-uma-imagem" title="Permanent link">&para;</a></h3>
+<p>Com uma página aberta para edição, clique em <strong>Adicionar uma imagem</strong> para abrir o formulário de
+envio. Escolha o arquivo (PNG, JPG, GIF, WEBP ou SVG) e a pasta de destino dentro de
+<code>docs/assets/imagens/</code> (cidades, personagens, facções, eventos, geografia, mapas ou mundo) e clique
+em <strong>Enviar imagem</strong>.</p>
+<p>O painel salva o arquivo na pasta escolhida — criando um nome novo automaticamente se já existir um
+arquivo com o mesmo nome, para nunca sobrescrever por engano — e insere sozinho o trecho
+<code>![legenda](caminho/da/imagem.png)</code> no fim do texto, já com o caminho relativo certo a partir da
+página que você está editando. Depois é só mover esse trecho para onde quiser dentro do texto e
+salvar.</p>
 
 
 
