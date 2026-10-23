@@ -1,15 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
 
 :root {
-  --bg: #16111d;
-  --panel: #211b30;
-  --border: #3a2f4d;
-  --ink: #e9dfc6;
-  --ink-dim: #b9ac93;
-  --gold: #d4af37;
-  --gold-soft: #e9cd7c;
-  --ok: #4caf6a;
-  --erro: #c0596a;
+  --bg: #1d1a16;
+  --panel: #28241e;
+  --border: #453f34;
+  --ink: #e2d9c4;
+  --ink-dim: #a99b82;
+  --gold: #b7914f;
+  --gold-soft: #cdb176;
+  --ok: #7a9c6a;
+  --erro: #9c5347;
 }
 
 * { box-sizing: border-box; }
@@ -40,7 +40,7 @@ a { color: var(--gold-soft); }
   flex-wrap: wrap;
   gap: .5rem;
   padding: .9rem 1.4rem;
-  background: #0f0b17;
+  background: #110f0c;
   border-bottom: 1px solid var(--gold);
 }
 
@@ -84,7 +84,7 @@ input[type="text"], input[type="date"], textarea, select {
   width: 100%;
   margin-top: .3rem;
   padding: .5rem .6rem;
-  background: #16111d;
+  background: #171510;
   border: 1px solid var(--border);
   border-radius: 4px;
   color: var(--ink);
@@ -144,6 +144,44 @@ textarea { resize: vertical; }
 }
 .linha-entidade input[type="text"] { margin-top: 0; }
 
+.caixa-imagem {
+  margin: 1rem 0;
+  padding: .8rem 1rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.caixa-imagem summary {
+  cursor: pointer;
+  font-family: 'Cinzel', serif;
+  color: var(--gold-soft);
+  font-size: .95rem;
+}
+.caixa-imagem .ajuda { margin-top: .5rem; }
+
+.form-imagem {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-top: .8rem;
+}
+.form-imagem label {
+  margin: 0;
+  flex: 1 1 14rem;
+}
+.form-imagem input[type="file"] {
+  width: 100%;
+  margin-top: .3rem;
+  padding: .4rem;
+  background: #171510;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--ink-dim);
+}
+.form-imagem select { margin-top: .3rem; }
+.form-imagem button { flex: 0 0 auto; }
+
 label.check {
   display: flex;
   align-items: center;
@@ -168,7 +206,7 @@ label.check {
 
 .botao-principal {
   background: var(--gold);
-  color: #16111d;
+  color: #171510;
 }
 .botao-principal:hover { background: var(--gold-soft); }
 
@@ -189,7 +227,7 @@ label.check {
 .aviso--erro { border-left-color: var(--erro); }
 
 .saida-build {
-  background: #0f0b17;
+  background: #110f0c;
   border: 1px solid var(--border);
   border-radius: 4px;
   padding: 1rem;
@@ -200,7 +238,7 @@ label.check {
 
 ul { padding-left: 1.4rem; }
 code {
-  background: #0f0b17;
+  background: #110f0c;
   padding: .1em .35em;
   border-radius: 3px;
   font-size: .9em;

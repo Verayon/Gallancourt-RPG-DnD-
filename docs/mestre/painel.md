@@ -90,8 +90,22 @@ Cidades:
 Na aba **Editar**, escolha uma página numa lista (com o título de cada uma, para não precisar saber
 o nome do arquivo), edite o texto Markdown na caixa e clique em **Salvar**. É a mesma sintaxe usada
 em toda a wiki: `#` para títulos, `[texto](link.md)` para links, `**negrito**`, tabelas, e as caixas
-`!!! aviso "Título"` para os avisos coloridos.
+`!!! aviso "Título"` para os avisos coloridos. Mudar um título é só editar a linha que começa com
+`#` dentro do texto.
 
 !!! question "Em aberto"
     O painel ainda não valida a sintaxe antes de salvar. Depois de editar uma página por aqui, dê
     uma olhada nela no site (`http://127.0.0.1:8000`) para confirmar que ficou como você queria.
+
+### Adicionar uma imagem
+
+Com uma página aberta para edição, clique em **Adicionar uma imagem** para abrir o formulário de
+envio. Escolha o arquivo (PNG, JPG, GIF, WEBP ou SVG) e a pasta de destino dentro de
+`docs/assets/imagens/` (cidades, personagens, facções, eventos, geografia, mapas ou mundo) e clique
+em **Enviar imagem**.
+
+O painel salva o arquivo na pasta escolhida — criando um nome novo automaticamente se já existir um
+arquivo com o mesmo nome, para nunca sobrescrever por engano — e insere sozinho o trecho
+`![legenda](caminho/da/imagem.png)` no fim do texto, já com o caminho relativo certo a partir da
+página que você está editando. Depois é só mover esse trecho para onde quiser dentro do texto e
+salvar.

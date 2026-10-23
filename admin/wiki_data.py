@@ -6,6 +6,7 @@ servidor. Todas as funções que escrevem arquivo recebem `root` (a raiz do proj
 """
 from __future__ import annotations
 
+import os
 import re
 import subprocess
 import sys
@@ -413,3 +414,47 @@ def aplicar_sessao(
         "build_ok": build_ok,
         "build_saida": build_saida,
     }
+
+
+# --------------------------------------------------------------------------
+# Imagens — upload pelo Painel, sem precisar copiar arquivo à mão antes
+# --------------------------------------------------------------------------
+
+PASTAS_IMAGENS = ["cidades", "personagens", "faccoes", "eventos", "geografia", "mapas", "mundo"]
+
+EXTENSOES_IMAGEM_PERMITIDAS = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg"}
+
+
+def salvar_imagem(
+    root: Path, pagina_rel_docs: str, pasta: str, nome_original: str, conteudo: bytes,
+) -> tuple[Path, str]:
+    """Salva uma imagem enviada em docs/assets/imagens/<pasta>/ (criando um nome novo se já
+    existir um arquivo com o mesmo nome) e devolve o caminho no disco e o trecho Markdown,
+    já com o caminho relativo certo para funcionar a partir da página editada."""
+    from werkzeug.utils import secure_filename
+
+    if pasta not in PASTAS_IMAGENS:
+        pasta = "mundo"
+
+    nome = secure_filename(nome_original) or "imagem"
+    sufixo = Path(nome).suffix.lower()
+    if sufixo not in EXTENSOES_IMAGEM_PERMITIDAS:
+        raise ValueError(f"Tipo de arquivo não permitido: {sufixo or '(sem extensão)'}")
+
+    pasta_destino = docs_dir(root) / "assets" / "imagens" / pasta
+    pasta_destino.mkdir(parents=True, exist_ok=True)
+
+    base = Path(nome).stem
+    destino = pasta_destino / nome
+    contador = 1
+    while destino.exists():
+        destino = pasta_destino / f"{base}-{contador}{sufixo}"
+        contador += 1
+
+    destino.write_bytes(conteudo)
+
+    pagina_path = docs_dir(root) / pagina_rel_docs
+    rel_para_pagina = Path(os.path.relpath(destino, start=pagina_path.parent)).as_posix()
+    legenda = base.replace("-", " ").replace("_", " ")
+    snippet = f"\n![{legenda}]({rel_para_pagina})\n"
+    return destino, snippet

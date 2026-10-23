@@ -21,6 +21,12 @@ import wiki_data as wd
 ROOT = Path(os.environ.get("GALLANCOURT_ADMIN_ROOT", wd.DEFAULT_ROOT)).resolve()
 
 app = Flask(__name__)
+app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024  # 10 MB por envio
+
+
+@app.context_processor
+def _globais_template():
+    return {"pastas_imagens": wd.PASTAS_IMAGENS}
 
 
 def _entidade_por_slug(lista: list[wd.Entidade], slug: str) -> wd.Entidade | None:
@@ -181,6 +187,41 @@ def salvar_pagina():
     return render_template(
         "editar.html", paginas=paginas, pagina_escolhida=pagina_escolhida, conteudo=conteudo,
         salvo=True,
+    )
+
+
+@app.post("/editar/imagem")
+def enviar_imagem():
+    pagina_escolhida = request.form.get("pagina", "")
+    caminho = _resolver_pagina(pagina_escolhida)
+    if caminho is None:
+        abort(404)
+
+    arquivo = request.files.get("imagem")
+    paginas = wd.listar_todas_paginas(ROOT)
+    conteudo_atual = caminho.read_text(encoding="utf-8")
+
+    if arquivo is None or not arquivo.filename:
+        return render_template(
+            "editar.html", paginas=paginas, pagina_escolhida=pagina_escolhida,
+            conteudo=conteudo_atual, salvo=False, erro_imagem="Escolha um arquivo de imagem primeiro.",
+        )
+
+    pasta = request.form.get("pasta", "mundo")
+    try:
+        destino, snippet = wd.salvar_imagem(ROOT, pagina_escolhida, pasta, arquivo.filename, arquivo.read())
+    except ValueError as exc:
+        return render_template(
+            "editar.html", paginas=paginas, pagina_escolhida=pagina_escolhida,
+            conteudo=conteudo_atual, salvo=False, erro_imagem=str(exc),
+        )
+
+    conteudo_novo = conteudo_atual.rstrip("\n") + "\n" + snippet
+    caminho.write_text(conteudo_novo, encoding="utf-8")
+
+    return render_template(
+        "editar.html", paginas=paginas, pagina_escolhida=pagina_escolhida, conteudo=conteudo_novo,
+        salvo=True, imagem_salva=str(destino.relative_to(wd.docs_dir(ROOT))),
     )
 
 

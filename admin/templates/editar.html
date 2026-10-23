@@ -24,6 +24,34 @@
 <p class="aviso aviso--ok">✅ Salvo em <code>docs/{{ pagina_escolhida }}</code>. Confira no
   <a href="http://127.0.0.1:8000" target="_blank" rel="noopener">site</a>.</p>
 {% endif %}
+{% if imagem_salva %}
+<p class="aviso aviso--ok">🖼️ Imagem salva em <code>docs/{{ imagem_salva }}</code> e o trecho
+  Markdown foi inserido no final do texto — mova para onde quiser antes de salvar de novo.</p>
+{% endif %}
+{% if erro_imagem %}
+<p class="aviso aviso--erro">⚠️ {{ erro_imagem }}</p>
+{% endif %}
+
+<details class="caixa-imagem">
+  <summary>Adicionar uma imagem</summary>
+  <form method="post" action="/editar/imagem" enctype="multipart/form-data" class="form-imagem">
+    <input type="hidden" name="pagina" value="{{ pagina_escolhida }}">
+    <label>Arquivo
+      <input type="file" name="imagem" accept=".png,.jpg,.jpeg,.gif,.webp,.svg" required>
+    </label>
+    <label>Pasta em <code>assets/imagens/</code>
+      <select name="pasta">
+        {% for p in pastas_imagens %}
+        <option value="{{ p }}">{{ p }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <button type="submit" class="botao-secundario">Enviar imagem</button>
+  </form>
+  <p class="ajuda">O arquivo é salvo em <code>docs/assets/imagens/&lt;pasta&gt;/</code> e o
+    <code>![...](...)</code> correspondente entra sozinho no fim do texto abaixo.</p>
+</details>
+
 <form method="post" action="/editar" class="form-editor">
   <input type="hidden" name="pagina" value="{{ pagina_escolhida }}">
   <textarea name="conteudo" rows="28" spellcheck="false">{{ conteudo }}</textarea>
