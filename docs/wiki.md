@@ -80,7 +80,13 @@ mundo de Gallancourt, organizado para consulta rápida durante a mesa.
 
     **[Referência do Mestre](mestre/index.md)**
 
-    Tabelas rápidas, lacunas em aberto e regras de manutenção do cânone.
+    Roteiros de sessão e tabelas rápidas para usar durante o preparo ou à mesa.
+
+-   [![](assets/placeholders/tema.svg){ .card-portrait }](mestre/manutencao-do-projeto.md)
+
+    **[Manutenção do Projeto](mestre/manutencao-do-projeto.md)**
+
+    Painel do Mestre, convenções de cânone e o controle do que ainda falta decidir.
 
 </div>
 

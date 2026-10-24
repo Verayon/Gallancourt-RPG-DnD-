@@ -203,11 +203,13 @@ nav:
       - Referência do Mestre:
           - mestre/index.md
           - Sessão 0 — Os Grilhões da Estrada: mestre/sessao-0-os-grilhoes-da-estrada.md
+          - Referência rápida: mestre/referencia-rapida.md
+      - Manutenção do Projeto:
+          - mestre/manutencao-do-projeto.md
           - Painel do Mestre: mestre/painel.md
           - Registro manual de sessão: mestre/registro-manual-de-sessao.md
-          - Referência rápida: mestre/referencia-rapida.md
-          - Lacunas em aberto: mestre/lacunas.md
           - Manutenção do cânone: mestre/manutencao-do-canone.md
+          - Lacunas em aberto: mestre/lacunas.md
           - Inconsistências a revisar: mestre/inconsistencias.md
           - Fontes e método: mestre/fontes.md
           - Índice de tags: mestre/tags.md
