@@ -684,7 +684,54 @@ input,
 }
 
 /* --------------------------------------------------------------------------
-   14. Transição de entrada — cada página assenta em vez de aparecer de supetão
+   14. Barras horizontais — alternativa compacta aos cards, para hubs com
+   muitas opções de texto (ex.: Referência do Mestre, Manutenção do Projeto).
+   Mesmo padrão de autoria dos cards (parágrafo em negrito + descrição
+   dentro do <li>), só sem a imagem e organizado em lista vertical cheia.
+   -------------------------------------------------------------------------- */
+
+.bar-list > ul,
+.bar-list > ol {
+  list-style: none;
+  margin: 1.2rem 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+.bar-list li {
+  padding: .65rem 1rem;
+  background: var(--gc-panel);
+  border: 1px solid var(--gc-panel-border);
+  border-left: 3px solid var(--gc-gold);
+  border-radius: 6px;
+  transition: border-color .15s ease, background-color .15s ease;
+}
+
+.bar-list li:hover {
+  border-color: var(--gc-gold);
+  background: var(--md-accent-fg-color--transparent);
+}
+
+.bar-list li > p {
+  margin: 0;
+}
+
+.bar-list li > p:first-child {
+  font-family: 'EB Garamond', serif;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.bar-list li > p + p {
+  color: var(--gc-ink-dim);
+  font-size: .86rem;
+  margin-top: .15rem;
+}
+
+/* --------------------------------------------------------------------------
+   15. Transição de entrada — cada página assenta em vez de aparecer de supetão
    -------------------------------------------------------------------------- */
 
 @media (prefers-reduced-motion: no-preference) {
