@@ -75,8 +75,8 @@ tags:
 
     ## Índice desta aba
 
-    [Aliados](#aliados) · [Inimigos](#inimigos) · [Figurantes](#figurantes) ·
-    [O vilão oculto](#o-vilao-oculto)
+    [Aliados](#aliados) · [Inimigos](#inimigos) · [Fichas de combate](#fichas-de-combate) ·
+    [Figurantes](#figurantes) · [O vilão oculto](#o-vilao-oculto)
 
     Identidade e ficha de combate juntas — tudo que você precisa pra rodar cada um está na mesma
     linha.
@@ -85,11 +85,11 @@ tags:
 
     | Nome | Papel | Ficha | Quando age |
     |---|---|---|---|
-    | **"Olim"** (nome real: Milo Favreau) | Espião infiltrado a serviço de Alaric Duvant | Bandido — CA 12, 11 PV, cimitarra +3 (1d6+2) | Rodada 1, sozinho contra o acampamento |
-    | **Capitã Odette Brune** | Batedora da patrulha de Duvant | CA 13, 16 PV, arco longo +4 (1d8+2), 2 ataques | Onda 1 (~rodada 2–3) |
-    | 2 Milicianos costeiros | Soldados sem nome próprio | CA 16, 11 PV, lança +3 (1d6+1) | Onda 1, junto com Odette |
-    | **Marquês Alaric Duvant** | Nobre de Dodixie, patrono da missão | CA 15, 9 PV, rapieira +3 (1d8+1) | Onda 2 (~rodada 4) |
-    | 2 Milicianos costeiros | Soldados sem nome próprio | CA 16, 11 PV, lança +3 (1d6+1) | Onda 2, junto com Alaric |
+    | **"Olim"** (nome real: Milo Favreau) | Espião infiltrado a serviço de Alaric Duvant | Usa a ficha de [Bandido comum ↓](#bandido-comum) | Rodada 1, sozinho contra o acampamento |
+    | **Capitã Odette Brune** | Batedora da patrulha de Duvant | CA 13, 16 PV — [ficha completa ↓](#capita-odette-brune) | Onda 1 (~rodada 2–3) |
+    | 2 Milicianos costeiros | Soldados sem nome próprio | CA 16, 11 PV — [ficha completa ↓](#miliciano-costeiro) | Onda 1, junto com Odette |
+    | **Marquês Alaric Duvant** | Nobre de Dodixie, patrono da missão | CA 15, 9 PV — [ficha completa ↓](#marques-alaric-duvant) | Onda 2 (~rodada 4) |
+    | 2 Milicianos costeiros | Soldados sem nome próprio | CA 16, 11 PV — [ficha completa ↓](#miliciano-costeiro) | Onda 2, junto com Alaric |
 
     !!! tip "Olim só é chamado assim até a Cena 4"
         Durante toda a fuga e o combate, bandidos e narração usam **"Olim"** — é o codinome que
@@ -107,9 +107,9 @@ tags:
 
     | Quantidade | Nome | Papel | Ficha |
     |---|---|---|---|
-    | 8 | Bandidos comuns | Guardam o acampamento | CA 12, 11 PV, cimitarra +3 (1d6+2) ou besta leve +3 (1d8+2) |
-    | 1 | **Sargento Grum** | Comanda o acampamento na ausência de Harker; dá o alarme sobre Olim | CA 13, 32 PV, 2 ataques de machado +4 (1d8+2 cada) |
-    | 1 | **Capitão Jonas Harker** | Líder do bando | CA 15, 65 PV, 2 ataques de cimitarra +5 (1d6+3 cada); reação *Parar* (+2 CA contra um ataque corpo a corpo) |
+    | 8 | Bandidos comuns | Guardam o acampamento | CA 12, 11 PV — [ficha completa ↓](#bandido-comum) |
+    | 1 | **Sargento Grum** | Comanda o acampamento na ausência de Harker; dá o alarme sobre Olim | CA 13, 32 PV — [ficha completa ↓](#sargento-grum) |
+    | 1 | **Capitão Jonas Harker** | Líder do bando | CA 15, 65 PV — [ficha completa ↓](#capitao-jonas-harker) |
 
     !!! tip "O Capitão tenta fugir"
         Quando perceber que está perdendo (cerca de metade dos seus bandidos caídos, ou ele mesmo
@@ -117,6 +117,234 @@ tags:
         uma bolsa de couro com um livro-caixa cifrado (ver aba **Loot & Pistas**). Deixe os
         jogadores (ou os aliados) decidirem se tentam impedi-lo — capturado ou não, ele é a ponte
         entre esta cena e o resto da investigação.
+
+    ## Fichas de combate
+
+    Ficha completa de cada NPC de combate — atributos, perícias, equipamento e ações. Gerada pela
+    aba **Ficha de combate** do [Painel do Mestre](painel.md); edite por ali se quiser ajustar
+    algo, não direto no texto.
+
+    **Aliados**
+
+    <!-- inicio:statblock:capita-odette-brune -->
+    <!-- dados:statblock {"nome": "Capitã Odette Brune", "subtitulo": "Humanoide médio, leal e boa — batedora da patrulha de Duvant", "ca": "13", "pv": "16 (3d8+3)", "deslocamento": "9 m", "for": "11", "des": "15", "con": "12", "int": "10", "sab": "13", "car": "11", "pericias": "Percepção +3, Sobrevivência +3", "sentidos": "Percepção passiva 13", "idiomas": "Comum", "equipamento": "Armadura de couro batido, arco longo, 20 flechas, apito de sinalização", "tracos": "", "acoes": "Ação Múltipla: Odette faz dois ataques com o arco longo.\nArco longo: Ataque à distância: +4 para acertar, alcance 45/180 m, um alvo. Acerto: 6 (1d8+2) de dano perfurante.", "reacoes": "", "magias": ""} -->
+    <div class="stat-block" markdown>
+
+    ### Capitã Odette Brune {: #capita-odette-brune }
+    *Humanoide médio, leal e boa — batedora da patrulha de Duvant*
+
+    ---
+
+    | | |
+    |---|---|
+    | **CA** | 13 |
+    | **PV** | 16 (3d8+3) |
+    | **Deslocamento** | 9 m |
+
+    | FOR | DES | CON | INT | SAB | CAR |
+    |---|---|---|---|---|---|
+    | 11 (+0) | 15 (+2) | 12 (+1) | 10 (+0) | 13 (+1) | 11 (+0) |
+
+    **Perícias** Percepção +3, Sobrevivência +3
+    **Sentidos** Percepção passiva 13
+    **Idiomas** Comum
+    **Equipamento** Armadura de couro batido, arco longo, 20 flechas, apito de sinalização
+
+    ---
+
+    **Ações**
+
+    ***Ação Múltipla.*** Odette faz dois ataques com o arco longo.
+
+    ***Arco longo.*** Ataque à distância: +4 para acertar, alcance 45/180 m, um alvo. Acerto: 6 (1d8+2) de dano perfurante.
+
+    </div>
+    <!-- fim:statblock:capita-odette-brune -->
+
+    <!-- inicio:statblock:miliciano-costeiro -->
+    <!-- dados:statblock {"nome": "Miliciano costeiro", "subtitulo": "Humanoide médio, leal e boa — soldado de Dodixie", "ca": "16", "pv": "11 (2d8+2)", "deslocamento": "9 m", "for": "13", "des": "11", "con": "12", "int": "10", "sab": "10", "car": "10", "pericias": "", "sentidos": "Percepção passiva 10", "idiomas": "Comum", "equipamento": "Cota de malha, escudo, lança", "tracos": "", "acoes": "Lança: Ataque corpo a corpo ou à distância: +3 para acertar, alcance 1,5 m ou alcance 9/36 m, um alvo. Acerto: 4 (1d6+1) de dano perfurante.", "reacoes": "", "magias": ""} -->
+    <div class="stat-block" markdown>
+
+    ### Miliciano costeiro {: #miliciano-costeiro }
+    *Humanoide médio, leal e boa — soldado de Dodixie*
+
+    ---
+
+    | | |
+    |---|---|
+    | **CA** | 16 |
+    | **PV** | 11 (2d8+2) |
+    | **Deslocamento** | 9 m |
+
+    | FOR | DES | CON | INT | SAB | CAR |
+    |---|---|---|---|---|---|
+    | 13 (+1) | 11 (+0) | 12 (+1) | 10 (+0) | 10 (+0) | 10 (+0) |
+
+    **Sentidos** Percepção passiva 10
+    **Idiomas** Comum
+    **Equipamento** Cota de malha, escudo, lança
+
+    ---
+
+    **Ações**
+
+    ***Lança.*** Ataque corpo a corpo ou à distância: +3 para acertar, alcance 1,5 m ou alcance 9/36 m, um alvo. Acerto: 4 (1d6+1) de dano perfurante.
+
+    </div>
+    <!-- fim:statblock:miliciano-costeiro -->
+
+    <!-- inicio:statblock:marques-alaric-duvant -->
+    <!-- dados:statblock {"nome": "Marquês Alaric Duvant", "subtitulo": "Humanoide médio, leal e bom — nobre de Dodixie, patrono da missão", "ca": "15", "pv": "9 (2d8)", "deslocamento": "9 m (12 m montado)", "for": "11", "des": "14", "con": "10", "int": "13", "sab": "12", "car": "16", "pericias": "Persuasão +5, Intuição +3, História +3", "sentidos": "Percepção passiva 11", "idiomas": "Comum, Alto-Celestiano", "equipamento": "Rapieira, armadura de couro batido com o brasão da Casa Duvant, cavalo, bolsa de moedas", "tracos": "Nobre patrono: Alaric prefere negociar e liderar pelo exemplo, não pela força bruta — chega à cena já na Onda 2, depois de Odette abrir caminho.", "acoes": "Rapieira: Ataque corpo a corpo: +3 para acertar, alcance 1,5 m, um alvo. Acerto: 5 (1d8+1) de dano perfurante.", "reacoes": "", "magias": ""} -->
+    <div class="stat-block" markdown>
+
+    ### Marquês Alaric Duvant {: #marques-alaric-duvant }
+    *Humanoide médio, leal e bom — nobre de Dodixie, patrono da missão*
+
+    ---
+
+    | | |
+    |---|---|
+    | **CA** | 15 |
+    | **PV** | 9 (2d8) |
+    | **Deslocamento** | 9 m (12 m montado) |
+
+    | FOR | DES | CON | INT | SAB | CAR |
+    |---|---|---|---|---|---|
+    | 11 (+0) | 14 (+2) | 10 (+0) | 13 (+1) | 12 (+1) | 16 (+3) |
+
+    **Perícias** Persuasão +5, Intuição +3, História +3
+    **Sentidos** Percepção passiva 11
+    **Idiomas** Comum, Alto-Celestiano
+    **Equipamento** Rapieira, armadura de couro batido com o brasão da Casa Duvant, cavalo, bolsa de moedas
+
+    ---
+
+    ***Nobre patrono.*** Alaric prefere negociar e liderar pelo exemplo, não pela força bruta — chega à cena já na Onda 2, depois de Odette abrir caminho.
+
+    **Ações**
+
+    ***Rapieira.*** Ataque corpo a corpo: +3 para acertar, alcance 1,5 m, um alvo. Acerto: 5 (1d8+1) de dano perfurante.
+
+    </div>
+    <!-- fim:statblock:marques-alaric-duvant -->
+
+    **Inimigos**
+
+    !!! tip "Olim usa a mesma ficha de Bandido comum"
+        Enquanto infiltrado, Olim não tem ficha própria — ele é mecanicamente um bandido comum.
+
+    <!-- inicio:statblock:bandido-comum -->
+    <!-- dados:statblock {"nome": "Bandido comum", "subtitulo": "Humanoide médio, qualquer alinhamento", "ca": "12", "pv": "11 (2d8+2)", "deslocamento": "9 m", "for": "11", "des": "12", "con": "12", "int": "10", "sab": "10", "car": "10", "pericias": "Furtividade +3", "sentidos": "Percepção passiva 10", "idiomas": "Comum", "equipamento": "Cimitarra, besta leve com 20 virotes, roupas de couro", "tracos": "", "acoes": "Cimitarra: Ataque corpo a corpo: +3 para acertar, alcance 1,5 m, um alvo. Acerto: 5 (1d6+2) de dano cortante.\nBesta leve: Ataque à distância: +3 para acertar, alcance 24/96 m, um alvo. Acerto: 6 (1d8+2) de dano perfurante.", "reacoes": "", "magias": ""} -->
+    <div class="stat-block" markdown>
+
+    ### Bandido comum {: #bandido-comum }
+    *Humanoide médio, qualquer alinhamento*
+
+    ---
+
+    | | |
+    |---|---|
+    | **CA** | 12 |
+    | **PV** | 11 (2d8+2) |
+    | **Deslocamento** | 9 m |
+
+    | FOR | DES | CON | INT | SAB | CAR |
+    |---|---|---|---|---|---|
+    | 11 (+0) | 12 (+1) | 12 (+1) | 10 (+0) | 10 (+0) | 10 (+0) |
+
+    **Perícias** Furtividade +3
+    **Sentidos** Percepção passiva 10
+    **Idiomas** Comum
+    **Equipamento** Cimitarra, besta leve com 20 virotes, roupas de couro
+
+    ---
+
+    **Ações**
+
+    ***Cimitarra.*** Ataque corpo a corpo: +3 para acertar, alcance 1,5 m, um alvo. Acerto: 5 (1d6+2) de dano cortante.
+
+    ***Besta leve.*** Ataque à distância: +3 para acertar, alcance 24/96 m, um alvo. Acerto: 6 (1d8+2) de dano perfurante.
+
+    </div>
+    <!-- fim:statblock:bandido-comum -->
+
+    <!-- inicio:statblock:sargento-grum -->
+    <!-- dados:statblock {"nome": "Sargento Grum", "subtitulo": "Humanoide médio, qualquer alinhamento — comanda o acampamento", "ca": "13", "pv": "32 (5d8+10)", "deslocamento": "9 m", "for": "14", "des": "12", "con": "14", "int": "10", "sab": "11", "car": "10", "pericias": "Intimidação +2, Percepção +2", "sentidos": "Percepção passiva 12", "idiomas": "Comum", "equipamento": "Armadura de couro batido, escudo pequeno, dois machados de batalha", "tracos": "Vigilante: Grum é o primeiro a notar qualquer fuga ou traição no acampamento — é ele quem dá o alarme contra Olim na Cena 2.", "acoes": "Ação Múltipla: Grum faz dois ataques corpo a corpo.\nMachado de batalha: Ataque corpo a corpo: +4 para acertar, alcance 1,5 m, um alvo. Acerto: 6 (1d8+2) de dano cortante.", "reacoes": "", "magias": ""} -->
+    <div class="stat-block" markdown>
+
+    ### Sargento Grum {: #sargento-grum }
+    *Humanoide médio, qualquer alinhamento — comanda o acampamento*
+
+    ---
+
+    | | |
+    |---|---|
+    | **CA** | 13 |
+    | **PV** | 32 (5d8+10) |
+    | **Deslocamento** | 9 m |
+
+    | FOR | DES | CON | INT | SAB | CAR |
+    |---|---|---|---|---|---|
+    | 14 (+2) | 12 (+1) | 14 (+2) | 10 (+0) | 11 (+0) | 10 (+0) |
+
+    **Perícias** Intimidação +2, Percepção +2
+    **Sentidos** Percepção passiva 12
+    **Idiomas** Comum
+    **Equipamento** Armadura de couro batido, escudo pequeno, dois machados de batalha
+
+    ---
+
+    ***Vigilante.*** Grum é o primeiro a notar qualquer fuga ou traição no acampamento — é ele quem dá o alarme contra Olim na Cena 2.
+
+    **Ações**
+
+    ***Ação Múltipla.*** Grum faz dois ataques corpo a corpo.
+
+    ***Machado de batalha.*** Ataque corpo a corpo: +4 para acertar, alcance 1,5 m, um alvo. Acerto: 6 (1d8+2) de dano cortante.
+
+    </div>
+    <!-- fim:statblock:sargento-grum -->
+
+    <!-- inicio:statblock:capitao-jonas-harker -->
+    <!-- dados:statblock {"nome": "Capitão Jonas Harker", "subtitulo": "Humanoide médio, qualquer alinhamento — líder do bando", "ca": "15", "pv": "65 (10d8+20)", "deslocamento": "9 m (12 m montado)", "for": "16", "des": "14", "con": "14", "int": "11", "sab": "12", "car": "14", "pericias": "Intimidação +4, Enganação +4, Percepção +3", "sentidos": "Percepção passiva 13", "idiomas": "Comum, mais um idioma regional", "equipamento": "Armadura de couro batido reforçada, duas cimitarras, cavalo, bolsa de couro com um livro-caixa cifrado", "tracos": "Fuga calculada: quando perde cerca de metade dos seus bandidos, ou fica com menos da metade do PV, Harker monta a cavalo e tenta fugir pela estrada com o livro-caixa.", "acoes": "Ação Múltipla: Harker faz dois ataques com cimitarra.\nCimitarra: Ataque corpo a corpo: +5 para acertar, alcance 1,5 m, um alvo. Acerto: 6 (1d6+3) de dano cortante.", "reacoes": "Parar: quando atingido por um ataque corpo a corpo, Harker pode usar a reação para ganhar +2 na CA contra aquele ataque — podendo fazê-lo errar.", "magias": ""} -->
+    <div class="stat-block" markdown>
+
+    ### Capitão Jonas Harker {: #capitao-jonas-harker }
+    *Humanoide médio, qualquer alinhamento — líder do bando*
+
+    ---
+
+    | | |
+    |---|---|
+    | **CA** | 15 |
+    | **PV** | 65 (10d8+20) |
+    | **Deslocamento** | 9 m (12 m montado) |
+
+    | FOR | DES | CON | INT | SAB | CAR |
+    |---|---|---|---|---|---|
+    | 16 (+3) | 14 (+2) | 14 (+2) | 11 (+0) | 12 (+1) | 14 (+2) |
+
+    **Perícias** Intimidação +4, Enganação +4, Percepção +3
+    **Sentidos** Percepção passiva 13
+    **Idiomas** Comum, mais um idioma regional
+    **Equipamento** Armadura de couro batido reforçada, duas cimitarras, cavalo, bolsa de couro com um livro-caixa cifrado
+
+    ---
+
+    ***Fuga calculada.*** Quando perde cerca de metade dos seus bandidos, ou fica com menos da metade do PV, Harker monta a cavalo e tenta fugir pela estrada com o livro-caixa.
+
+    **Ações**
+
+    ***Ação Múltipla.*** Harker faz dois ataques com cimitarra.
+
+    ***Cimitarra.*** Ataque corpo a corpo: +5 para acertar, alcance 1,5 m, um alvo. Acerto: 6 (1d6+3) de dano cortante.
+
+    **Reações**
+
+    ***Parar.*** Quando atingido por um ataque corpo a corpo, Harker pode usar a reação para ganhar +2 na CA contra aquele ataque — podendo fazê-lo errar.
+
+    </div>
+    <!-- fim:statblock:capitao-jonas-harker -->
 
     ## Figurantes
 

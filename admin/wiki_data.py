@@ -6,11 +6,13 @@ servidor. Todas as funções que escrevem arquivo recebem `root` (a raiz do proj
 """
 from __future__ import annotations
 
+import json
 import os
 import re
 import subprocess
 import sys
 import tempfile
+import unicodedata
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -458,3 +460,225 @@ def salvar_imagem(
     legenda = base.replace("-", " ").replace("_", " ")
     snippet = f"\n![{legenda}]({rel_para_pagina})\n"
     return destino, snippet
+
+
+# --------------------------------------------------------------------------
+# Ficha de combate (stat block) — cartão de NPC com atributos, perícias,
+# equipamento, ações e magias, parecido com uma ficha oficial. Os valores
+# ficam guardados em JSON dentro de um comentário HTML invisível, junto do
+# cartão renderizado, para que o Painel consiga reler e editar depois.
+# --------------------------------------------------------------------------
+
+# (chave, rótulo, obrigatório)
+CAMPOS_STATBLOCK_TEXTO = [
+    ("nome", "Nome", True),
+    ("subtitulo", "Tipo / papel (ex.: Humanoide médio, qualquer alinhamento)", False),
+    ("ca", "Classe de Armadura", True),
+    ("pv", "Pontos de Vida (ex.: 11 (2d8+2))", True),
+    ("deslocamento", "Deslocamento (ex.: 9 m)", True),
+    ("pericias", "Perícias (ex.: Furtividade +3, Intimidação +1)", False),
+    ("sentidos", "Sentidos (ex.: Percepção passiva 10)", False),
+    ("idiomas", "Idiomas", False),
+    ("equipamento", "Equipamento", False),
+]
+
+CAMPOS_STATBLOCK_ATRIBUTOS = ["for", "des", "con", "int", "sab", "car"]
+ROTULOS_ATRIBUTOS = {
+    "for": "FOR", "des": "DES", "con": "CON", "int": "INT", "sab": "SAB", "car": "CAR",
+}
+
+# (chave, rótulo) — textarea de múltiplas linhas
+CAMPOS_STATBLOCK_LISTAS = [
+    ("tracos", "Traços (um por linha: Nome: descrição)"),
+    ("acoes", "Ações (um por linha: Nome: descrição)"),
+    ("reacoes", "Reações (um por linha: Nome: descrição)"),
+    ("magias", "Magias (texto livre)"),
+]
+
+_MARCADOR_INICIO = "<!-- inicio:statblock:{slug} -->"
+_MARCADOR_FIM = "<!-- fim:statblock:{slug} -->"
+_MARCADOR_DADOS = re.compile(
+    r"<!-- inicio:statblock:([a-z0-9-]+) -->\s*<!-- dados:statblock (.*?) -->", re.DOTALL,
+)
+
+
+def slug_statblock(nome: str) -> str:
+    base = unicodedata.normalize("NFKD", nome or "").encode("ascii", "ignore").decode("ascii")
+    base = re.sub(r"[^a-zA-Z0-9]+", "-", base).strip("-").lower()
+    return base or "npc"
+
+
+def _modificador(valor: str) -> str:
+    try:
+        numero = int(str(valor).strip())
+    except (TypeError, ValueError):
+        return "+0"
+    mod = (numero - 10) // 2
+    return f"+{mod}" if mod >= 0 else str(mod)
+
+
+def _linhas_para_trechos(texto: str) -> list[tuple[str, str]]:
+    trechos = []
+    for linha in (texto or "").splitlines():
+        linha = linha.strip()
+        if not linha:
+            continue
+        if ":" in linha:
+            nome, resto = linha.split(":", 1)
+            trechos.append((nome.strip(), resto.strip()))
+        else:
+            trechos.append(("", linha))
+    return trechos
+
+
+def _renderizar_trechos(texto: str) -> str:
+    partes = []
+    for nome, resto in _linhas_para_trechos(texto):
+        partes.append(f"***{nome}.*** {resto}" if nome else resto)
+    return "\n\n".join(partes)
+
+
+def renderizar_statblock(slug: str, v: dict) -> str:
+    """Gera o markdown do cartão (com os dados embutidos) a partir dos valores da ficha."""
+    rotulos_linha = " | ".join(ROTULOS_ATRIBUTOS[a] for a in CAMPOS_STATBLOCK_ATRIBUTOS)
+    separador_linha = "|".join("---" for _ in CAMPOS_STATBLOCK_ATRIBUTOS)
+    valores_linha = " | ".join(
+        f"{(v.get(a) or '').strip() or '—'} ({_modificador(v.get(a, ''))})"
+        for a in CAMPOS_STATBLOCK_ATRIBUTOS
+    )
+
+    linhas_extra = []
+    for chave, rotulo in (
+        ("pericias", "Perícias"), ("sentidos", "Sentidos"),
+        ("idiomas", "Idiomas"), ("equipamento", "Equipamento"),
+    ):
+        valor = (v.get(chave) or "").strip()
+        if valor:
+            linhas_extra.append(f"**{rotulo}** {valor}")
+
+    blocos_texto = []
+    for chave, rotulo in (("tracos", None), ("acoes", "Ações"), ("reacoes", "Reações"), ("magias", "Magias")):
+        valor = (v.get(chave) or "").strip()
+        if not valor:
+            continue
+        corpo = valor if chave == "magias" else _renderizar_trechos(valor)
+        blocos_texto.append(f"**{rotulo}**\n\n{corpo}" if rotulo else corpo)
+
+    dados_json = json.dumps(v, ensure_ascii=False)
+    if "-->" in dados_json:
+        raise ValueError("Um dos campos contém a sequência '-->', que não pode ser salva. Reescreva sem ela.")
+
+    subtitulo = (v.get("subtitulo") or "").strip()
+
+    partes = [
+        _MARCADOR_INICIO.format(slug=slug),
+        f"<!-- dados:statblock {dados_json} -->",
+        '<div class="stat-block" markdown>',
+        "",
+        f"### {(v.get('nome') or '').strip() or 'NPC sem nome'} {{: #{slug} }}",
+    ]
+    if subtitulo:
+        partes.append(f"*{subtitulo}*")
+    partes += [
+        "",
+        "---",
+        "",
+        "| | |",
+        "|---|---|",
+        f"| **CA** | {(v.get('ca') or '').strip() or '—'} |",
+        f"| **PV** | {(v.get('pv') or '').strip() or '—'} |",
+        f"| **Deslocamento** | {(v.get('deslocamento') or '').strip() or '—'} |",
+        "",
+        f"| {rotulos_linha} |",
+        f"|{separador_linha}|",
+        f"| {valores_linha} |",
+        "",
+    ]
+    if linhas_extra:
+        partes += linhas_extra + [""]
+    if blocos_texto:
+        partes += ["---", "", "\n\n".join(blocos_texto), ""]
+    partes += ["</div>", _MARCADOR_FIM.format(slug=slug)]
+    return "\n".join(partes)
+
+
+def ler_statblocks_da_pagina(path: Path) -> dict[str, dict]:
+    """Lê todas as fichas de combate de uma página, pelo JSON embutido em cada uma."""
+    texto = _ler(path)
+    resultado: dict[str, dict] = {}
+    for m in _MARCADOR_DADOS.finditer(texto):
+        slug, dados_raw = m.group(1), m.group(2)
+        try:
+            resultado[slug] = json.loads(dados_raw)
+        except json.JSONDecodeError:
+            continue
+    return resultado
+
+
+def listar_statblocks(root: Path) -> list[dict]:
+    """Toda ficha de combate do site, em qualquer página — para o seletor do Painel."""
+    base = docs_dir(root)
+    resultado = []
+    for p in sorted(base.rglob("*.md")):
+        blocos = ler_statblocks_da_pagina(p)
+        if not blocos:
+            continue
+        rel = p.relative_to(base).as_posix()
+        titulo_pagina = _titulo_do_arquivo(p)
+        for slug, dados in blocos.items():
+            resultado.append({
+                "slug": slug,
+                "nome": dados.get("nome") or slug,
+                "pagina_rel_docs": rel,
+                "pagina_titulo": titulo_pagina,
+            })
+    resultado.sort(key=lambda d: (d["pagina_rel_docs"], d["nome"]))
+    return resultado
+
+
+def salvar_statblock(
+    root: Path, pagina_rel_docs: str, slug_antigo: str, valores: dict, ancora: str = "",
+) -> str:
+    """Cria ou atualiza uma ficha de combate na página indicada.
+
+    Com `slug_antigo` preenchido, substitui aquele cartão (mesmo que o nome, e portanto o
+    slug novo, tenha mudado). Sem `slug_antigo`, cria um cartão novo — inserido depois do
+    primeiro trecho da página igual a `ancora`, ou no final do arquivo se `ancora` estiver
+    vazia ou não for encontrada. Retorna o slug final do cartão salvo.
+    """
+    caminho = docs_dir(root) / pagina_rel_docs
+    texto = _ler(caminho)
+    nome = (valores.get("nome") or "").strip() or "npc"
+    slug_base = slug_statblock(nome)
+
+    if slug_antigo:
+        novo_slug = slug_base
+        bloco = renderizar_statblock(novo_slug, valores)
+        padrao = re.search(
+            rf"<!-- inicio:statblock:{re.escape(slug_antigo)} -->.*?<!-- fim:statblock:{re.escape(slug_antigo)} -->",
+            texto, re.DOTALL,
+        )
+        if padrao:
+            texto = texto[:padrao.start()] + bloco + texto[padrao.end():]
+        else:
+            texto = texto.rstrip("\n") + "\n\n" + bloco + "\n"
+    else:
+        novo_slug = slug_base
+        contador = 2
+        while re.search(rf"<!-- inicio:statblock:{re.escape(novo_slug)} -->", texto):
+            novo_slug = f"{slug_base}-{contador}"
+            contador += 1
+        bloco = renderizar_statblock(novo_slug, valores)
+        if ancora and ancora in texto:
+            idx = texto.index(ancora) + len(ancora)
+            resto = texto[idx:]
+            m = re.search(r"\n#{1,6}\s", resto)
+            insere_em = idx + (m.start() if m else len(resto))
+            antes = texto[:insere_em].rstrip("\n")
+            depois = texto[insere_em:]
+            texto = antes + "\n\n" + bloco + "\n\n" + depois
+        else:
+            texto = texto.rstrip("\n") + "\n\n" + bloco + "\n"
+
+    _escrever(caminho, texto)
+    return novo_slug

@@ -80,7 +80,7 @@ label {
   font-size: .92rem;
 }
 
-input[type="text"], input[type="date"], textarea, select {
+input[type="text"], input[type="date"], input[type="number"], textarea, select {
   width: 100%;
   margin-top: .3rem;
   padding: .5rem .6rem;
@@ -234,6 +234,23 @@ label.check {
   overflow-x: auto;
   font-size: .82rem;
   white-space: pre-wrap;
+}
+
+.grid-atributos {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: .6rem;
+  margin-top: .4rem;
+}
+.grid-atributos label {
+  margin: 0;
+  text-align: center;
+}
+.grid-atributos input {
+  text-align: center;
+}
+@media (max-width: 40rem) {
+  .grid-atributos { grid-template-columns: repeat(3, 1fr); }
 }
 
 ul { padding-left: 1.4rem; }

@@ -225,6 +225,74 @@ def enviar_imagem():
     )
 
 
+@app.get("/ficha-combate")
+def escolher_ficha_combate():
+    paginas = wd.listar_todas_paginas(ROOT)
+    fichas = wd.listar_statblocks(ROOT)
+    pagina_escolhida = request.args.get("pagina", "")
+    slug_escolhido = request.args.get("ficha", "")
+
+    valores: dict = {}
+    if pagina_escolhida and slug_escolhido:
+        caminho = _resolver_pagina(pagina_escolhida)
+        if caminho is None:
+            abort(404)
+        valores = wd.ler_statblocks_da_pagina(caminho).get(slug_escolhido, {})
+
+    return render_template(
+        "ficha_combate.html",
+        paginas=paginas,
+        fichas=fichas,
+        pagina_escolhida=pagina_escolhida,
+        slug_escolhido=slug_escolhido,
+        valores=valores,
+        campos_texto=wd.CAMPOS_STATBLOCK_TEXTO,
+        campos_atributos=wd.CAMPOS_STATBLOCK_ATRIBUTOS,
+        rotulos_atributos=wd.ROTULOS_ATRIBUTOS,
+        campos_listas=wd.CAMPOS_STATBLOCK_LISTAS,
+        salvo=False,
+    )
+
+
+@app.post("/ficha-combate")
+def salvar_ficha_combate():
+    paginas = wd.listar_todas_paginas(ROOT)
+    pagina_escolhida = request.form.get("pagina", "")
+    slug_antigo = request.form.get("slug_antigo", "")
+    ancora = request.form.get("ancora", "").strip()
+
+    caminho = _resolver_pagina(pagina_escolhida)
+    if caminho is None:
+        abort(400)
+
+    valores = {chave: request.form.get(f"campo_{chave}", "").strip() for chave, _, _ in wd.CAMPOS_STATBLOCK_TEXTO}
+    for a in wd.CAMPOS_STATBLOCK_ATRIBUTOS:
+        valores[a] = request.form.get(f"campo_{a}", "").strip()
+    for chave, _ in wd.CAMPOS_STATBLOCK_LISTAS:
+        valores[chave] = request.form.get(f"campo_{chave}", "")
+
+    contexto = dict(
+        paginas=paginas, pagina_escolhida=pagina_escolhida, slug_escolhido=slug_antigo,
+        valores=valores, campos_texto=wd.CAMPOS_STATBLOCK_TEXTO,
+        campos_atributos=wd.CAMPOS_STATBLOCK_ATRIBUTOS, rotulos_atributos=wd.ROTULOS_ATRIBUTOS,
+        campos_listas=wd.CAMPOS_STATBLOCK_LISTAS,
+    )
+
+    try:
+        novo_slug = wd.salvar_statblock(ROOT, pagina_escolhida, slug_antigo, valores, ancora)
+    except ValueError as exc:
+        fichas = wd.listar_statblocks(ROOT)
+        return render_template("ficha_combate.html", fichas=fichas, salvo=False, erro=str(exc), **contexto)
+
+    build_ok, build_saida = wd.validar_build(ROOT)
+    fichas = wd.listar_statblocks(ROOT)
+    contexto["slug_escolhido"] = novo_slug
+    return render_template(
+        "ficha_combate.html", fichas=fichas, salvo=True, build_ok=build_ok, build_saida=build_saida,
+        **contexto,
+    )
+
+
 def _resolver_pagina(rel: str) -> Path | None:
     """Resolve um caminho relativo a docs/ com segurança (sem sair de docs/)."""
     base = wd.docs_dir(ROOT).resolve()

@@ -85,6 +85,34 @@ Cidades:
     fora desses campos, aquele texto some na próxima vez que salvar a ficha por aqui — para
     conteúdo que não se encaixa nos campos, coloque em outra seção da página.
 
+## Criar ou editar uma ficha de combate
+
+Na aba **Ficha de combate**, escolha a página onde o NPC deve aparecer (qualquer página da wiki,
+não precisa ser uma de personagem — a Sessão 0, por exemplo, guarda as dela na própria página do
+roteiro) e, se já existir uma ficha ali, escolha-a no segundo menu para editar; deixe em "— nova
+ficha —" para criar uma.
+
+Preencha:
+
+| Grupo | Campos |
+|---|---|
+| Identidade | Nome, tipo/papel, CA, PV, deslocamento, perícias, sentidos, idiomas, equipamento |
+| Atributos | FOR, DES, CON, INT, SAB, CAR — só o valor; o modificador é calculado sozinho |
+| Traços, ações e magias | Uma caixa de texto para cada, um traço/ação por linha no formato `Nome: descrição` |
+
+Ao salvar, o painel insere (ou atualiza) o cartão visual na página, com os atributos já com
+modificador, e roda `mkdocs build --strict` para confirmar que nada quebrou. Se você mudar o nome
+de uma ficha existente, o cartão é atualizado no lugar — não duplica.
+
+!!! warning "Salvar substitui o cartão inteiro"
+    Assim como a ficha de personagem, cada vez que você salva pelo painel, o cartão inteiro é
+    reescrito a partir dos campos do formulário. Não edite o texto do cartão à mão pelo editor
+    genérico — na próxima vez que salvar por aqui, qualquer ajuste manual se perde.
+
+Para uma ficha **nova**, um campo opcional "Inserir depois deste trecho" deixa escolher onde ela
+entra na página (por exemplo, `## Aliados`, copiando o texto exato de um cabeçalho já existente).
+Deixe em branco para simplesmente adicionar no final do texto e mover depois pelo editor genérico.
+
 ## Editar qualquer página
 
 Na aba **Editar**, escolha uma página numa lista (com o título de cada uma, para não precisar saber

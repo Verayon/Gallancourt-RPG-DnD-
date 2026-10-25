@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block titulo %}Ficha de combate{% endblock %}
+{% block conteudo %}
+<h1>Ficha de combate (NPC)</h1>
+<p class="ajuda">Crie ou edite uma ficha de combate completa — atributos, perícias, equipamento,
+  ações e magias — parecida com uma ficha oficial, com só o que importa para rodar o NPC à mesa.
+  Ela entra na página escolhida como um cartão visual.</p>
+
+<form method="get" action="/ficha-combate" class="form-escolher">
+  <label>Página
+    <select name="pagina" onchange="this.form.submit()">
+      <option value="">— escolha uma página —</option>
+      {% for p in paginas %}
+      <option value="{{ p.rel_docs }}" {{ "selected" if p.rel_docs == pagina_escolhida else "" }}>
+        {{ p.titulo }} ({{ p.rel_docs }})
+      </option>
+      {% endfor %}
+    </select>
+  </label>
+  {% if pagina_escolhida %}
+  <input type="hidden" name="pagina" value="{{ pagina_escolhida }}">
+  <label>Ficha nesta página
+    <select name="ficha" onchange="this.form.submit()">
+      <option value="">— nova ficha —</option>
+      {% for f in fichas if f.pagina_rel_docs == pagina_escolhida %}
+      <option value="{{ f.slug }}" {{ "selected" if f.slug == slug_escolhido else "" }}>{{ f.nome }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  {% endif %}
+</form>
+
+{% if pagina_escolhida %}
+{% if salvo %}
+  {% if build_ok %}
+  <p class="aviso aviso--ok">✅ Ficha salva. Site conferido sem problemas.</p>
+  {% else %}
+  <p class="aviso aviso--erro">⚠️ Ficha salva, mas <code>mkdocs build --strict</code> encontrou um problema.</p>
+  <pre class="saida-build">{{ build_saida }}</pre>
+  {% endif %}
+{% endif %}
+{% if erro %}
+<p class="aviso aviso--erro">⚠️ {{ erro }}</p>
+{% endif %}
+
+<form method="post" action="/ficha-combate" class="form-sessao form-statblock">
+  <input type="hidden" name="pagina" value="{{ pagina_escolhida }}">
+  <input type="hidden" name="slug_antigo" value="{{ slug_escolhido }}">
+
+  <fieldset>
+    <legend>Identidade</legend>
+    {% for chave, rotulo, obrigatorio in campos_texto %}
+    <label>{{ rotulo }}
+      <input type="text" name="campo_{{ chave }}" value="{{ valores.get(chave, '') }}" {{ "required" if obrigatorio else "" }}>
+    </label>
+    {% endfor %}
+  </fieldset>
+
+  <fieldset>
+    <legend>Atributos</legend>
+    <div class="grid-atributos">
+      {% for a in campos_atributos %}
+      <label>{{ rotulos_atributos[a] }}
+        <input type="number" name="campo_{{ a }}" value="{{ valores.get(a, '') }}" placeholder="10">
+      </label>
+      {% endfor %}
+    </div>
+    <p class="ajuda">O modificador entre parênteses é calculado sozinho a partir do valor do atributo.</p>
+  </fieldset>
+
+  <fieldset>
+    <legend>Traços, ações e magias</legend>
+    {% for chave, rotulo in campos_listas %}
+    <label>{{ rotulo }}
+      <textarea name="campo_{{ chave }}" rows="4">{{ valores.get(chave, '') }}</textarea>
+    </label>
+    {% endfor %}
+  </fieldset>
+
+  {% if not slug_escolhido %}
+  <label>Inserir depois deste trecho da página (opcional)
+    <input type="text" name="ancora" placeholder="ex.: ## Aliados">
+  </label>
+  <p class="ajuda">Se deixar em branco, ou se o trecho não existir na página, a ficha entra no
+    final do texto — é só mover depois pelo editor genérico, se quiser.</p>
+  {% endif %}
+
+  <button type="submit" class="botao-principal">Salvar ficha</button>
+  <a class="botao-secundario" href="http://127.0.0.1:8000/{{ pagina_escolhida | replace('.md', '/') }}" target="_blank" rel="noopener">Ver a página ↗</a>
+</form>
+{% endif %}
+{% endblock %}

@@ -62,9 +62,20 @@ mundo ajam de modo coerente sem determinar antecipadamente todas as consequênci
 Essa é a ficha de **planejamento** do Mestre (o que o NPC quer e esconde). Para aparência física,
 personalidade e proficiências — o retrato do personagem, não seus planos —, use a seção **Ficha de
 personagem** (e, para cidades, **Ficha da cidade**), preenchida pela aba **Ficha** do
-[Painel do Mestre](painel.md). Não edite essas duas seções à mão sem necessidade: elas usam
-marcadores invisíveis (`<!-- campo:... -->`) que o painel espera encontrar para reler os valores
-depois.
+[Painel do Mestre](painel.md). Para combate — atributos, CA, PV, perícias, equipamento, ações e
+magias —, use a **Ficha de combate** (ver abaixo). Não edite essas três seções à mão sem
+necessidade: elas usam marcadores invisíveis (`<!-- campo:... -->` ou `<!-- dados:statblock ... -->`)
+que o painel espera encontrar para reler os valores depois.
+
+## Ficha de combate
+
+Um cartão visual de NPC para rodar à mesa, no estilo de uma ficha oficial: nome, CA, PV,
+deslocamento, os seis atributos com modificador calculado sozinho, perícias, sentidos, idiomas,
+equipamento, traços, ações, reações e magias. Preenchida pela aba **Ficha de combate** do
+[Painel do Mestre](painel.md), que insere o cartão na página escolhida (qualquer uma — não precisa
+ser uma página de personagem) e guarda os valores num comentário invisível (`<!-- dados:statblock
+... -->`) para poder reabrir e editar depois. Veja exemplos em
+[Sessão 0 — Fichas de combate](sessao-0-os-grilhoes-da-estrada.md#fichas-de-combate).
 
 ## Como adicionar uma página
 

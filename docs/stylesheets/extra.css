@@ -731,7 +731,122 @@ input,
 }
 
 /* --------------------------------------------------------------------------
-   15. Transição de entrada — cada página assenta em vez de aparecer de supetão
+   16. Fichas de combate (stat blocks) — cartão no estilo das fichas oficiais:
+   nome, CA/PV/deslocamento, atributos com modificador, perícias e a lista de
+   ações. Gerado (e editável) pela aba "Ficha de combate" do Painel do
+   Mestre; ver docs/mestre/manutencao-do-canone.md.
+   -------------------------------------------------------------------------- */
+
+.md-typeset .stat-block {
+  background: var(--gc-panel);
+  border: 1px solid var(--gc-panel-border);
+  border-top: 3px solid var(--gc-red);
+  border-radius: 8px;
+  padding: 1rem 1.3rem 1.2rem;
+  margin: 1.3rem 0;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, .16);
+}
+
+.md-typeset .stat-block h3 {
+  margin: 0;
+  color: var(--gc-gold-soft);
+  font-size: 1.2em;
+}
+
+.md-typeset .stat-block > p:first-of-type {
+  margin: 0 0 .6rem;
+  color: var(--gc-ink-dim);
+  font-style: italic;
+  font-size: .85rem;
+}
+
+.md-typeset .stat-block hr {
+  border: none;
+  border-top: 2px solid var(--gc-red);
+  opacity: .55;
+  margin: .7rem 0;
+}
+
+.md-typeset .stat-block table {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  font-size: .85rem;
+  margin: .5rem 0;
+  width: 100%;
+}
+
+.md-typeset .stat-block table th,
+.md-typeset .stat-block table td {
+  text-align: center;
+  padding: .3rem .5rem;
+  border: none;
+  border-bottom: 1px solid var(--gc-panel-border);
+  background: transparent !important;
+}
+
+.md-typeset .stat-block table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Primeira tabela: CA / PV / Deslocamento — rótulo e valor alinhados à esquerda */
+.md-typeset .stat-block table:first-of-type td:first-child {
+  text-align: left;
+  width: 45%;
+  color: var(--gc-ink-dim);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: .72rem;
+  letter-spacing: .03em;
+}
+
+.md-typeset .stat-block table:first-of-type td:last-child {
+  text-align: left;
+  font-weight: 600;
+}
+
+/* Segunda tabela: a grade de atributos (FOR/DES/CON/INT/SAB/CAR) */
+.md-typeset .stat-block table:nth-of-type(2) th {
+  color: var(--gc-gold-soft);
+  font-weight: 700;
+  font-size: .78rem;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.md-typeset .stat-block table:nth-of-type(2) td {
+  font-weight: 600;
+}
+
+/* Traços e ações usam "***Nome.*** descrição" — o nome vira um rótulo
+   dourado em vez de itálico. */
+.md-typeset .stat-block strong em,
+.md-typeset .stat-block em strong {
+  color: var(--gc-gold-soft);
+  font-style: normal;
+}
+
+/* "**Ações**", "**Reações**", "**Magias**" como cabeçalhos de subseção
+   dentro do cartão, quando aparecem sós num parágrafo. */
+.md-typeset .stat-block p > strong:only-child {
+  display: block;
+  margin-top: .5rem;
+  color: var(--gc-gold-soft);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  font-size: .78rem;
+}
+
+@media screen and (max-width: 30em) {
+  .md-typeset .stat-block table:nth-of-type(2) th,
+  .md-typeset .stat-block table:nth-of-type(2) td {
+    padding: .25rem .2rem;
+    font-size: .75rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   17. Transição de entrada — cada página assenta em vez de aparecer de supetão
    -------------------------------------------------------------------------- */
 
 @media (prefers-reduced-motion: no-preference) {
