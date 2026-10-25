@@ -16,6 +16,7 @@ from pathlib import Path
 
 from flask import Flask, abort, redirect, render_template, request, url_for
 
+import sessao_viva as sv
 import wiki_data as wd
 
 ROOT = Path(os.environ.get("GALLANCOURT_ADMIN_ROOT", wd.DEFAULT_ROOT)).resolve()
@@ -50,6 +51,7 @@ def formulario_sessao():
         faccoes=faccoes,
         proxima=proxima,
         hoje=hoje,
+        resumo_inicial=request.args.get("resumo", ""),
     )
 
 
@@ -291,6 +293,113 @@ def salvar_ficha_combate():
         "ficha_combate.html", fichas=fichas, salvo=True, build_ok=build_ok, build_saida=build_saida,
         **contexto,
     )
+
+
+def _int_ou_none(valor: str) -> int | None:
+    valor = (valor or "").strip()
+    if not valor:
+        return None
+    try:
+        return int(valor)
+    except ValueError:
+        return None
+
+
+@app.get("/sessao-ao-vivo")
+def ver_sessao_ao_vivo():
+    estado = sv.carregar(ROOT)
+    return render_template(
+        "sessao_ao_vivo.html",
+        estado=estado,
+        combatentes=sv.combatentes_ordenados(estado),
+        resumo_combate=sv.resumo_combate(estado),
+        tipos_combatente=sv.TIPOS_COMBATENTE,
+        tipos_acao=sv.TIPOS_ACAO,
+    )
+
+
+@app.post("/sessao-ao-vivo/nota")
+def adicionar_nota_ao_vivo():
+    sv.adicionar_nota(ROOT, request.form.get("texto", ""))
+    return redirect(url_for("ver_sessao_ao_vivo") + "#notas")
+
+
+@app.post("/sessao-ao-vivo/nota/<int:indice>/remover")
+def remover_nota_ao_vivo(indice: int):
+    sv.remover_nota(ROOT, indice)
+    return redirect(url_for("ver_sessao_ao_vivo") + "#notas")
+
+
+@app.post("/sessao-ao-vivo/resumo")
+def salvar_resumo_ao_vivo():
+    sv.salvar_resumo(ROOT, request.form.get("resumo", ""))
+    return redirect(url_for("ver_sessao_ao_vivo") + "#notas")
+
+
+@app.post("/sessao-ao-vivo/combatente")
+def adicionar_combatente_ao_vivo():
+    nome = request.form.get("nome", "").strip()
+    tipo = request.form.get("tipo", "npc")
+    iniciativa = _int_ou_none(request.form.get("iniciativa", "")) or 0
+    pv_atual = _int_ou_none(request.form.get("pv_atual", ""))
+    pv_maximo = _int_ou_none(request.form.get("pv_maximo", ""))
+    if nome:
+        sv.adicionar_combatente(ROOT, nome, tipo, iniciativa, pv_atual, pv_maximo)
+    return redirect(url_for("ver_sessao_ao_vivo") + "#iniciativa")
+
+
+@app.post("/sessao-ao-vivo/combatente/<int:cid>/remover")
+def remover_combatente_ao_vivo(cid: int):
+    sv.remover_combatente(ROOT, cid)
+    return redirect(url_for("ver_sessao_ao_vivo") + "#iniciativa")
+
+
+@app.post("/sessao-ao-vivo/combatente/<int:cid>/pv")
+def ajustar_pv_ao_vivo(cid: int):
+    delta = _int_ou_none(request.form.get("delta", "")) or 0
+    sv.ajustar_pv(ROOT, cid, delta)
+    return redirect(url_for("ver_sessao_ao_vivo") + "#iniciativa")
+
+
+@app.post("/sessao-ao-vivo/combatente/<int:cid>/status")
+def atualizar_status_ao_vivo(cid: int):
+    sv.atualizar_status(ROOT, cid, request.form.get("status", ""))
+    return redirect(url_for("ver_sessao_ao_vivo") + "#iniciativa")
+
+
+@app.post("/sessao-ao-vivo/combatente/<int:cid>/flag/<campo>")
+def alternar_flag_ao_vivo(cid: int, campo: str):
+    sv.alternar_flag(ROOT, cid, campo)
+    return redirect(url_for("ver_sessao_ao_vivo") + "#iniciativa")
+
+
+@app.post("/sessao-ao-vivo/turno/proximo")
+def proximo_turno_ao_vivo():
+    sv.proximo_turno(ROOT)
+    return redirect(url_for("ver_sessao_ao_vivo") + "#iniciativa")
+
+
+@app.post("/sessao-ao-vivo/acao")
+def registrar_acao_ao_vivo():
+    autor_id = _int_ou_none(request.form.get("autor_id", ""))
+    alvo_id = _int_ou_none(request.form.get("alvo_id", ""))
+    valor = _int_ou_none(request.form.get("valor", ""))
+    tipo = request.form.get("tipo", "outro")
+    obs = request.form.get("obs", "")
+    sv.registrar_acao(ROOT, autor_id, tipo, alvo_id, valor, obs)
+    return redirect(url_for("ver_sessao_ao_vivo") + "#acoes")
+
+
+@app.post("/sessao-ao-vivo/acao/<int:acao_id>/remover")
+def remover_acao_ao_vivo(acao_id: int):
+    sv.remover_acao(ROOT, acao_id)
+    return redirect(url_for("ver_sessao_ao_vivo") + "#acoes")
+
+
+@app.post("/sessao-ao-vivo/arquivar")
+def arquivar_sessao_ao_vivo():
+    sv.arquivar_e_limpar(ROOT)
+    return redirect(url_for("ver_sessao_ao_vivo"))
 
 
 def _resolver_pagina(rel: str) -> Path | None:

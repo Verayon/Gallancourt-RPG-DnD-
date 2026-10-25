@@ -253,6 +253,164 @@ label.check {
   .grid-atributos { grid-template-columns: repeat(3, 1fr); }
 }
 
+.abas-ancora {
+  display: flex;
+  gap: 1rem;
+  margin: 1rem 0 1.6rem;
+  padding-bottom: .6rem;
+  border-bottom: 1px dotted var(--border);
+}
+.abas-ancora a {
+  text-decoration: none;
+  font-family: 'Cinzel', serif;
+  font-size: .85rem;
+}
+.abas-ancora a:hover { color: var(--gold); }
+
+section[id] {
+  margin-bottom: 2.4rem;
+  padding-bottom: 1.6rem;
+  border-bottom: 1px solid var(--border);
+}
+section[id]:last-of-type { border-bottom: none; }
+
+.form-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  margin: 0;
+}
+
+.form-nota-rapida, .form-combatente, .form-acao {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: .8rem;
+  margin: .8rem 0 1.2rem;
+}
+.form-nota-rapida label, .form-combatente label, .form-acao label {
+  margin: 0;
+  flex: 1 1 10rem;
+}
+.form-nota-rapida input[type="text"] { flex: 1 1 20rem; }
+.form-nota-rapida { align-items: center; }
+.form-combatente button, .form-acao button, .form-nota-rapida button { flex: 0 0 auto; }
+
+.input-pequeno { width: 4.5rem !important; display: inline-block; margin: 0 !important; }
+.input-medio { width: 11rem !important; display: inline-block; margin: 0 !important; }
+
+.lista-notas {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.2rem;
+  display: grid;
+  gap: .35rem;
+}
+.lista-notas li {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .4rem .6rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: .92rem;
+}
+.lista-notas li form { margin-left: auto; }
+.nota-hora {
+  font-family: 'SFMono-Regular', Consolas, monospace;
+  color: var(--ink-dim);
+  font-size: .82rem;
+}
+
+.turno-atual {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  flex-wrap: wrap;
+  padding: .7rem 1rem;
+  background: var(--panel);
+  border: 1px solid var(--gold);
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+.turno-atual form { margin-left: auto; }
+
+.tabela-combate {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 1rem;
+  font-size: .9rem;
+}
+.tabela-combate th, .tabela-combate td {
+  text-align: left;
+  padding: .45rem .5rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.tabela-combate th {
+  font-family: 'Cinzel', serif;
+  font-size: .78rem;
+  letter-spacing: .02em;
+  color: var(--gold-soft);
+  text-transform: uppercase;
+}
+.tabela-combate tr.linha-atual { background: rgba(212, 175, 55, .1); }
+.tabela-combate tr.linha-caido { opacity: .7; }
+.tabela-combate tr.linha-morto { opacity: .5; }
+.tabela-combate tr.linha-morto td:nth-child(2) { text-decoration: line-through; }
+.col-acoes-combatente { display: flex; gap: .3rem; flex-wrap: wrap; }
+
+.etiqueta {
+  display: inline-block;
+  margin-left: .4rem;
+  padding: .05rem .4rem;
+  border-radius: 3px;
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+}
+.etiqueta--caido { background: rgba(212, 175, 55, .15); color: var(--gold-soft); }
+.etiqueta--morto { background: rgba(156, 83, 71, .2); color: var(--erro); }
+
+.botao-remover {
+  font-family: 'EB Garamond', serif;
+  font-size: .8rem;
+  padding: .25rem .55rem;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--ink-dim);
+  cursor: pointer;
+}
+.botao-remover:hover { border-color: var(--gold); color: var(--gold-soft); }
+
+.grade-resumo {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+@media (max-width: 55rem) { .grade-resumo { grid-template-columns: repeat(2, 1fr); } }
+.grade-resumo h4 {
+  font-family: 'Cinzel', serif;
+  color: var(--gold-soft);
+  font-size: .95rem;
+  margin: 0 0 .4rem;
+}
+.lista-ranking {
+  margin: 0;
+  padding-left: 1.2rem;
+  font-size: .88rem;
+}
+.lista-ranking li { margin-bottom: .2rem; }
+
+.zona-perigo {
+  border: 1px dashed var(--erro);
+  border-radius: 6px;
+  padding: 1rem 1.2rem;
+}
+.zona-perigo h2 { margin-top: 0; color: var(--erro); }
+
 ul { padding-left: 1.4rem; }
 code {
   background: #110f0c;

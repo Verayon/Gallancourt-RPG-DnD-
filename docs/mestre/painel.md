@@ -28,6 +28,53 @@ Ou, no Windows, dê duplo clique em `admin/iniciar-painel.bat`. Depois, abra
 **http://127.0.0.1:5001/** no navegador. Deixe essa janela do terminal aberta enquanto usa o
 painel — fechá-la desliga a ferramenta (o site em si continua no ar, servido pelo `mkdocs serve`).
 
+## Tocar uma sessão ao vivo
+
+Na aba **Sessão ao vivo** (`http://127.0.0.1:5001/sessao-ao-vivo`), um bloco de notas e um
+rastreador de combate pra usar durante a mesa. Diferente do resto do painel, nada aqui mexe em
+`docs/` nem no site — o estado fica só em `admin/dados/` (de fora do git), porque é rascunho de
+sessão, não cânone nem conteúdo da wiki.
+
+### Notas e resumo
+
+Uma caixa de anotação rápida registra uma linha com o horário a cada envio — útil pra marcar
+coisas no calor do momento ("rolou 18 no furtividade", "jogador X perguntou sobre o Correntes").
+O campo **Resumo da sessão**, abaixo, é de texto livre e pensado pra ir sendo escrito aos poucos;
+no fim, o link "registrar a sessão no Diário" leva direto pra aba **Registrar sessão** já com esse
+texto preenchido no campo "O que aconteceu".
+
+### Iniciativa
+
+Adicione cada jogador ou NPC com o nome, o tipo, o valor da rolagem de iniciativa e (opcional) o
+PV. Depois de adicionar todo mundo, a tabela fica ordenada sozinha, da maior iniciativa pra menor.
+Clique em **Próximo turno** para avançar — na primeira vez, já começa por quem tem a iniciativa
+mais alta; ao voltar pro primeiro da lista, a rodada avança sozinha.
+
+Cada linha tem controles rápidos:
+
+- **PV**: um campo pra somar ou subtrair (ex.: `-7` ou `+5`) e aplicar.
+- **Status**: texto livre separado por vírgula (ex.: `Envenenado, Atordoado`).
+- **Caído** / **Morto**: alternam um estado visual (linha apagada, nome riscado) — bons pra
+  decidir rápido quem ainda está de pé numa mesa grande.
+- **Remover**: tira da iniciativa (não apaga do log de ações já registradas).
+
+### Ações — quem bateu em quem
+
+No formulário de ações, escolha quem agiu, o tipo (**Ataque**, **Cura** ou **Outro**), em quem (o
+alvo) e o valor. Ao registrar, o painel já aplica esse valor no PV do alvo lá em cima — não precisa
+fazer as duas contas. Cada ação registrada entra no log, do mais recente pro mais antigo, com um
+botão para remover em caso de engano.
+
+Logo abaixo do log, um **resumo do combate** calculado sozinho a partir desse log: quem mais
+causou dano, quem mais recebeu dano, quem mais curou e quem acertou mais golpes — útil pra
+analisar depois do combate (ou da campanha) quem andou carregando o grupo.
+
+### Encerrar
+
+No fim da sessão, **Arquivar e começar do zero** guarda tudo (notas, combate, ações) num arquivo
+com data e hora em `admin/dados/arquivadas/` e limpa a tela pra próxima sessão. Isso não apaga
+nada — só tira da tela; os arquivos antigos continuam no disco se quiser consultar depois.
+
 ## Registrar uma sessão
 
 Na aba inicial:

@@ -1,0 +1,256 @@
+{% extends "base.html" %}
+{% block titulo %}Sessão ao vivo{% endblock %}
+{% block conteudo %}
+<h1>Sessão ao vivo</h1>
+<p class="ajuda">Bloco de notas e rastreador de combate para usar durante a mesa. Nada aqui entra
+  no site nem no git — é rascunho de sessão, guardado só no seu computador. Quando a sessão
+  terminar, use o resumo abaixo para
+  <a href="/?resumo={{ estado.resumo | urlencode }}">registrar a sessão no Diário</a> e depois
+  arquive para recomeçar do zero.</p>
+
+<nav class="abas-ancora">
+  <a href="#notas">Notas e resumo</a>
+  <a href="#iniciativa">Iniciativa</a>
+  <a href="#acoes">Ações e análise</a>
+</nav>
+
+<section id="notas">
+  <h2>Notas e resumo</h2>
+
+  <form method="post" action="/sessao-ao-vivo/nota" class="form-nota-rapida">
+    <input type="text" name="texto" placeholder="Anotação rápida (fica com a hora marcada)…">
+    <button type="submit" class="botao-secundario">Adicionar</button>
+  </form>
+
+  {% if estado.notas %}
+  <ul class="lista-notas">
+    {% for nota in estado.notas %}
+    <li>
+      <span class="nota-hora">{{ nota.hora }}</span> {{ nota.texto }}
+      <form method="post" action="/sessao-ao-vivo/nota/{{ loop.index0 }}/remover" class="form-inline">
+        <button type="submit" class="botao-remover" title="Remover">×</button>
+      </form>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="ajuda">Nenhuma anotação ainda.</p>
+  {% endif %}
+
+  <form method="post" action="/sessao-ao-vivo/resumo">
+    <label>Resumo da sessão (isso é o que vai virar o resumo ao registrar no Diário)
+      <textarea name="resumo" rows="6" placeholder="Vá escrevendo o resumo conforme a sessão acontece…">{{ estado.resumo }}</textarea>
+    </label>
+    <button type="submit" class="botao-principal">Salvar resumo</button>
+  </form>
+</section>
+
+<section id="iniciativa">
+  <h2>Iniciativa</h2>
+
+  <form method="post" action="/sessao-ao-vivo/combatente" class="form-combatente">
+    <label>Nome
+      <input type="text" name="nome" required>
+    </label>
+    <label>Tipo
+      <select name="tipo">
+        <option value="jogador">Jogador</option>
+        <option value="npc" selected>NPC</option>
+      </select>
+    </label>
+    <label>Iniciativa
+      <input type="number" name="iniciativa" required>
+    </label>
+    <label>PV atual
+      <input type="number" name="pv_atual" min="0">
+    </label>
+    <label>PV máximo
+      <input type="number" name="pv_maximo" min="0">
+    </label>
+    <button type="submit" class="botao-secundario">Adicionar à iniciativa</button>
+  </form>
+
+  {% if combatentes %}
+  <div class="turno-atual">
+    <strong>Rodada {{ estado.rodada }}</strong>
+    {% for c in combatentes %}
+      {% if c.id == estado.turno_atual %}— turno de <strong>{{ c.nome }}</strong>{% endif %}
+    {% endfor %}
+    {% if estado.turno_atual is none %}<span class="ajuda">— combate ainda não começou</span>{% endif %}
+    <form method="post" action="/sessao-ao-vivo/turno/proximo" class="form-inline">
+      <button type="submit" class="botao-principal">Próximo turno →</button>
+    </form>
+  </div>
+
+  <table class="tabela-combate">
+    <thead>
+      <tr>
+        <th>Iniciativa</th><th>Nome</th><th>Tipo</th><th>PV</th><th>Status</th><th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in combatentes %}
+      <tr class="{{ 'linha-atual' if c.id == estado.turno_atual else '' }} {{ 'linha-caido' if c.caido else '' }} {{ 'linha-morto' if c.morto else '' }}">
+        <td>{{ c.iniciativa }}</td>
+        <td>
+          {{ c.nome }}
+          {% if c.morto %}<span class="etiqueta etiqueta--morto">morto</span>
+          {% elif c.caido %}<span class="etiqueta etiqueta--caido">caído</span>{% endif %}
+        </td>
+        <td>{{ "Jogador" if c.tipo == "jogador" else "NPC" }}</td>
+        <td>
+          {% if c.pv_atual is not none %}{{ c.pv_atual }}{% if c.pv_maximo %}/{{ c.pv_maximo }}{% endif %}{% else %}—{% endif %}
+          <form method="post" action="/sessao-ao-vivo/combatente/{{ c.id }}/pv" class="form-inline">
+            <input type="number" name="delta" placeholder="±PV" class="input-pequeno">
+            <button type="submit" class="botao-remover" title="Aplicar ao PV">OK</button>
+          </form>
+        </td>
+        <td>
+          <form method="post" action="/sessao-ao-vivo/combatente/{{ c.id }}/status" class="form-inline">
+            <input type="text" name="status" value="{{ c.status | join(', ') }}" class="input-medio" placeholder="separado, por vírgula">
+            <button type="submit" class="botao-remover" title="Atualizar status">OK</button>
+          </form>
+        </td>
+        <td class="col-acoes-combatente">
+          <form method="post" action="/sessao-ao-vivo/combatente/{{ c.id }}/flag/caido" class="form-inline">
+            <button type="submit" class="botao-remover">{{ "Reerguer" if c.caido else "Caído" }}</button>
+          </form>
+          <form method="post" action="/sessao-ao-vivo/combatente/{{ c.id }}/flag/morto" class="form-inline">
+            <button type="submit" class="botao-remover">{{ "Reviver" if c.morto else "Morto" }}</button>
+          </form>
+          <form method="post" action="/sessao-ao-vivo/combatente/{{ c.id }}/remover" class="form-inline">
+            <button type="submit" class="botao-remover">Remover</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="ajuda">Ninguém na iniciativa ainda — adicione os combatentes acima. Depois de
+    adicionar todo mundo, a lista fica ordenada sozinha pela iniciativa.</p>
+  {% endif %}
+</section>
+
+<section id="acoes">
+  <h2>Ações (ataque, cura…)</h2>
+  <p class="ajuda">Cada ação registrada aqui já aplica o dano ou a cura no PV do alvo, na tabela
+    de iniciativa acima — não precisa lançar nos dois lugares.</p>
+
+  {% if combatentes %}
+  <form method="post" action="/sessao-ao-vivo/acao" class="form-acao">
+    <label>Quem agiu
+      <select name="autor_id">
+        {% for c in combatentes %}
+        <option value="{{ c.id }}" {{ "selected" if c.id == estado.turno_atual else "" }}>{{ c.nome }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Tipo
+      <select name="tipo">
+        <option value="ataque">Ataque</option>
+        <option value="cura">Cura</option>
+        <option value="outro">Outro</option>
+      </select>
+    </label>
+    <label>Em quem
+      <select name="alvo_id">
+        <option value="">—</option>
+        {% for c in combatentes %}
+        <option value="{{ c.id }}">{{ c.nome }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Valor
+      <input type="number" name="valor" min="0">
+    </label>
+    <label>Observação <span class="opcional">(opcional)</span>
+      <input type="text" name="obs" placeholder="ex.: cimitarra, bola de fogo…">
+    </label>
+    <button type="submit" class="botao-secundario">Registrar ação</button>
+  </form>
+  {% else %}
+  <p class="ajuda">Adicione combatentes na iniciativa para poder registrar ações.</p>
+  {% endif %}
+
+  {% if estado.log_acoes %}
+  <table class="tabela-combate">
+    <thead><tr><th>Rodada</th><th>Quem</th><th>Ação</th><th>Em quem</th><th>Valor</th><th>Obs.</th><th></th></tr></thead>
+    <tbody>
+      {% for a in estado.log_acoes | reverse %}
+      <tr>
+        <td>{{ a.rodada }}</td>
+        <td>{{ a.autor_nome }}</td>
+        <td>{{ {"ataque": "Ataque", "cura": "Cura", "outro": "Outro"}[a.tipo] }}</td>
+        <td>{{ a.alvo_nome or "—" }}</td>
+        <td>{{ a.valor if a.valor is not none else "—" }}</td>
+        <td>{{ a.obs }}</td>
+        <td>
+          <form method="post" action="/sessao-ao-vivo/acao/{{ a.id }}/remover" class="form-inline">
+            <button type="submit" class="botao-remover" title="Remover">×</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h3>Resumo do combate</h3>
+  <div class="grade-resumo">
+    <div>
+      <h4>Dano causado</h4>
+      {% if resumo_combate.dano_causado %}
+      <ol class="lista-ranking">
+        {% for nome, total in resumo_combate.dano_causado %}
+        <li>{{ nome }} — <strong>{{ total }}</strong></li>
+        {% endfor %}
+      </ol>
+      {% else %}<p class="ajuda">Sem dados ainda.</p>{% endif %}
+    </div>
+    <div>
+      <h4>Dano recebido</h4>
+      {% if resumo_combate.dano_recebido %}
+      <ol class="lista-ranking">
+        {% for nome, total in resumo_combate.dano_recebido %}
+        <li>{{ nome }} — <strong>{{ total }}</strong></li>
+        {% endfor %}
+      </ol>
+      {% else %}<p class="ajuda">Sem dados ainda.</p>{% endif %}
+    </div>
+    <div>
+      <h4>Cura feita</h4>
+      {% if resumo_combate.cura_feita %}
+      <ol class="lista-ranking">
+        {% for nome, total in resumo_combate.cura_feita %}
+        <li>{{ nome }} — <strong>{{ total }}</strong></li>
+        {% endfor %}
+      </ol>
+      {% else %}<p class="ajuda">Sem dados ainda.</p>{% endif %}
+    </div>
+    <div>
+      <h4>Mais golpes</h4>
+      {% if resumo_combate.golpes %}
+      <ol class="lista-ranking">
+        {% for nome, total in resumo_combate.golpes %}
+        <li>{{ nome }} — <strong>{{ total }}×</strong></li>
+        {% endfor %}
+      </ol>
+      {% else %}<p class="ajuda">Sem dados ainda.</p>{% endif %}
+    </div>
+  </div>
+  {% else %}
+  <p class="ajuda">Nenhuma ação registrada ainda.</p>
+  {% endif %}
+</section>
+
+<section class="zona-perigo">
+  <h2>Encerrar</h2>
+  <p class="ajuda">Guarda tudo (notas, combate, ações) num arquivo com data e hora em
+    <code>admin/dados/arquivadas/</code> e começa do zero — use ao fim da sessão, depois de
+    registrar no Diário.</p>
+  <form method="post" action="/sessao-ao-vivo/arquivar"
+        onsubmit="return confirm('Arquivar e limpar tudo? A tela volta a ficar em branco (mas fica salvo em admin/dados/arquivadas/).');">
+    <button type="submit" class="botao-secundario">Arquivar e começar do zero</button>
+  </form>
+</section>
+{% endblock %}
