@@ -4783,6 +4783,67 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#tocar-uma-sessao-ao-vivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tocar uma sessão ao vivo
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tocar uma sessão ao vivo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#notas-e-resumo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notas e resumo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iniciativa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iniciativa
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#acoes-quem-bateu-em-quem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ações — quem bateu em quem
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#encerrar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Encerrar
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#registrar-uma-sessao" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5073,6 +5134,67 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#tocar-uma-sessao-ao-vivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tocar uma sessão ao vivo
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tocar uma sessão ao vivo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#notas-e-resumo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notas e resumo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iniciativa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iniciativa
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#acoes-quem-bateu-em-quem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ações — quem bateu em quem
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#encerrar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Encerrar
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#registrar-uma-sessao" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5252,6 +5374,42 @@ rede), então isso é seguro enquanto for só você usando, na sua própria máq
 <p>Ou, no Windows, dê duplo clique em <code>admin/iniciar-painel.bat</code>. Depois, abra
 <strong>http://127.0.0.1:5001/</strong> no navegador. Deixe essa janela do terminal aberta enquanto usa o
 painel — fechá-la desliga a ferramenta (o site em si continua no ar, servido pelo <code>mkdocs serve</code>).</p>
+<h2 id="tocar-uma-sessao-ao-vivo">Tocar uma sessão ao vivo<a class="headerlink" href="#tocar-uma-sessao-ao-vivo" title="Permanent link">&para;</a></h2>
+<p>Na aba <strong>Sessão ao vivo</strong> (<code>http://127.0.0.1:5001/sessao-ao-vivo</code>), um bloco de notas e um
+rastreador de combate pra usar durante a mesa. Diferente do resto do painel, nada aqui mexe em
+<code>docs/</code> nem no site — o estado fica só em <code>admin/dados/</code> (de fora do git), porque é rascunho de
+sessão, não cânone nem conteúdo da wiki.</p>
+<h3 id="notas-e-resumo">Notas e resumo<a class="headerlink" href="#notas-e-resumo" title="Permanent link">&para;</a></h3>
+<p>Uma caixa de anotação rápida registra uma linha com o horário a cada envio — útil pra marcar
+coisas no calor do momento ("rolou 18 no furtividade", "jogador X perguntou sobre o Correntes").
+O campo <strong>Resumo da sessão</strong>, abaixo, é de texto livre e pensado pra ir sendo escrito aos poucos;
+no fim, o link "registrar a sessão no Diário" leva direto pra aba <strong>Registrar sessão</strong> já com esse
+texto preenchido no campo "O que aconteceu".</p>
+<h3 id="iniciativa">Iniciativa<a class="headerlink" href="#iniciativa" title="Permanent link">&para;</a></h3>
+<p>Adicione cada jogador ou NPC com o nome, o tipo, o valor da rolagem de iniciativa e (opcional) o
+PV. Depois de adicionar todo mundo, a tabela fica ordenada sozinha, da maior iniciativa pra menor.
+Clique em <strong>Próximo turno</strong> para avançar — na primeira vez, já começa por quem tem a iniciativa
+mais alta; ao voltar pro primeiro da lista, a rodada avança sozinha.</p>
+<p>Cada linha tem controles rápidos:</p>
+<ul>
+<li><strong>PV</strong>: um campo pra somar ou subtrair (ex.: <code>-7</code> ou <code>+5</code>) e aplicar.</li>
+<li><strong>Status</strong>: texto livre separado por vírgula (ex.: <code>Envenenado, Atordoado</code>).</li>
+<li><strong>Caído</strong> / <strong>Morto</strong>: alternam um estado visual (linha apagada, nome riscado) — bons pra
+  decidir rápido quem ainda está de pé numa mesa grande.</li>
+<li><strong>Remover</strong>: tira da iniciativa (não apaga do log de ações já registradas).</li>
+</ul>
+<h3 id="acoes-quem-bateu-em-quem">Ações — quem bateu em quem<a class="headerlink" href="#acoes-quem-bateu-em-quem" title="Permanent link">&para;</a></h3>
+<p>No formulário de ações, escolha quem agiu, o tipo (<strong>Ataque</strong>, <strong>Cura</strong> ou <strong>Outro</strong>), em quem (o
+alvo) e o valor. Ao registrar, o painel já aplica esse valor no PV do alvo lá em cima — não precisa
+fazer as duas contas. Cada ação registrada entra no log, do mais recente pro mais antigo, com um
+botão para remover em caso de engano.</p>
+<p>Logo abaixo do log, um <strong>resumo do combate</strong> calculado sozinho a partir desse log: quem mais
+causou dano, quem mais recebeu dano, quem mais curou e quem acertou mais golpes — útil pra
+analisar depois do combate (ou da campanha) quem andou carregando o grupo.</p>
+<h3 id="encerrar">Encerrar<a class="headerlink" href="#encerrar" title="Permanent link">&para;</a></h3>
+<p>No fim da sessão, <strong>Arquivar e começar do zero</strong> guarda tudo (notas, combate, ações) num arquivo
+com data e hora em <code>admin/dados/arquivadas/</code> e limpa a tela pra próxima sessão. Isso não apaga
+nada — só tira da tela; os arquivos antigos continuam no disco se quiser consultar depois.</p>
 <h2 id="registrar-uma-sessao">Registrar uma sessão<a class="headerlink" href="#registrar-uma-sessao" title="Permanent link">&para;</a></h2>
 <p>Na aba inicial:</p>
 <ol>
@@ -5426,7 +5584,7 @@ salvar.</p>
     <span class="md-icon" title="Última atualização">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="23 de outubro de 2026 17:23:50 UTC">23 de outubro de 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="25 de outubro de 2026 04:54:13 UTC">25 de outubro de 2026</span>
   </span>
 
     
