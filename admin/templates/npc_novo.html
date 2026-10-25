@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "_ficha5e.html" import campos_ficha %}
 {% block titulo %}Adicionar NPC{% endblock %}
 {% block conteudo %}
 <h1>Adicionar NPC</h1>
@@ -33,6 +34,14 @@
       <input type="file" name="imagem" accept="image/*">
     </label>
   </fieldset>
+
+  <details class="bloco-ficha" {{ 'open' if valores.get('com_ficha') else '' }}>
+    <summary><label class="check"><input type="checkbox" name="com_ficha" value="1" {{ 'checked' if valores.get('com_ficha') else '' }}>
+      Criar também a ficha de personagem (D&amp;D 5e)</label></summary>
+    <p class="ajuda">Nível, atributos, perícias, CA, PV, ataques, equipamento, magias e personalidade.
+      Tudo opcional — dá para completar depois em <a href="/ficha5e">Ficha de NPC</a>.</p>
+    {{ campos_ficha(valores, f5e) }}
+  </details>
 
   <button type="submit" class="botao-principal">Criar NPC</button>
   <a class="botao-secundario" href="/npc/retrato">Trocar o retrato de um NPC existente</a>

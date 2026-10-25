@@ -215,6 +215,7 @@ nav:
           - "Sessão 0 — Os Grilhões da Estrada": mestre/sessoes/sessao-0-os-grilhoes-da-estrada.md
       - Diário de Sessões:
           - diario/index.md
+      - Linha do tempo: mestre/linha-do-tempo.md
       - Referência rápida: mestre/referencia-rapida.md
   - Configurações:
       - configuracoes/index.md

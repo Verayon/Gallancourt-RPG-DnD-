@@ -18,6 +18,11 @@ from pathlib import Path
 
 DEFAULT_ROOT = Path(__file__).resolve().parent.parent
 
+# Módulos compartilhados com a geração do site (cálculos da ficha 5e e linha do tempo)
+sys.path.insert(0, str(DEFAULT_ROOT / "hooks"))
+import ficha5e  # noqa: E402
+import linha_tempo  # noqa: E402
+
 
 @dataclass
 class Entidade:
@@ -238,26 +243,21 @@ def atualizar_indice_diario(
     _escrever(caminho, texto)
 
 
-def registrar_historico(entidade: Entidade, root: Path, numero: int, data_campanha: str, nota: str) -> None:
-    caminho = docs_dir(root) / entidade.rel_docs
-    if not caminho.exists():
-        return
-    texto = _ler(caminho)
-    heading = "## Histórico de sessões"
-    bullet = (
-        f"- **[Sessão {numero}](../diario/{_num_para_nome(numero)})** ({data_campanha}) — {nota}"
-    )
-    if heading in texto:
-        idx = texto.index(heading) + len(heading)
-        resto = texto[idx:]
-        m = re.search(r"\n#{1,6}\s", resto)
-        insere_em = idx + (m.start() if m else len(resto))
-        antes = texto[:insere_em].rstrip("\n")
-        depois = texto[insere_em:]
-        texto = antes + "\n" + bullet + "\n" + depois
-    else:
-        texto = texto.rstrip("\n") + "\n\n" + heading + "\n\n" + bullet + "\n"
-    _escrever(caminho, texto)
+def registrar_sessao_na_linha_do_tempo(
+    root: Path, numero: int, titulo: str, data_campanha: str, resumo: str,
+    atualizacoes: list[tuple[Entidade, str]],
+) -> int:
+    """Cria o acontecimento da sessão na linha do tempo, com a nota de cada NPC/lugar marcado.
+
+    Devolve o id do acontecimento (para o Mestre acrescentar mudanças de estado depois).
+    """
+    return salvar_evento(root, {
+        "data": data_campanha,
+        "sessao": numero,
+        "titulo": titulo,
+        "descricao": resumo,
+        "notas": {e.rel_docs: nota for e, nota in atualizacoes},
+    })
 
 
 def adicionar_sessao_ao_nav(root: Path, numero: int) -> bool:
@@ -307,26 +307,15 @@ def validar_build(root: Path) -> tuple[bool, str]:
 # --------------------------------------------------------------------------
 
 # Cada campo: (chave interna, rótulo mostrado, tipo de campo no formulário).
-CAMPOS_FICHA_NPC = [
-    ("aparencia", "Aparência física", "textarea"),
-    ("personalidade", "Personalidade", "textarea"),
-    ("traco", "Traço marcante", "texto"),
-    ("ideal", "Ideal", "texto"),
-    ("vinculo", "Vínculo", "texto"),
-    ("defeito", "Defeito", "texto"),
-    ("proficiencias", "Proficiências e idiomas", "textarea"),
-]
-
 CAMPOS_FICHA_CIDADE = [
     ("populacao", "População", "texto"),
     ("defesas", "Defesas e guarnição", "textarea"),
 ]
 
-TITULO_SECAO_FICHA = "Ficha de personagem"
 TITULO_SECAO_FICHA_CIDADE = "Ficha da cidade"
 
+# NPCs usam a ficha de D&D 5e (rota /ficha5e do Painel); esta ficha simples ficou só para cidades.
 TIPOS_FICHA = {
-    "npc": (listar_npcs, CAMPOS_FICHA_NPC, TITULO_SECAO_FICHA),
     "cidade": (listar_cidades, CAMPOS_FICHA_CIDADE, TITULO_SECAO_FICHA_CIDADE),
 }
 
@@ -403,8 +392,7 @@ def aplicar_sessao(
         atualizacoes,
     )
     atualizar_indice_diario(root, numero, data_real, data_campanha, titulo)
-    for entidade, nota in atualizacoes:
-        registrar_historico(entidade, root, numero, data_campanha, nota)
+    id_evento = registrar_sessao_na_linha_do_tempo(root, numero, titulo, data_campanha, resumo, atualizacoes)
     nav_ok = adicionar_sessao_ao_nav(root, numero)
     build_ok, build_saida = validar_build(root)
 
@@ -412,6 +400,7 @@ def aplicar_sessao(
         "numero": numero,
         "arquivo": str(caminho_sessao.relative_to(root)),
         "paginas_atualizadas": [e.rel_docs for e, _ in atualizacoes],
+        "id_evento": id_evento,
         "nav_ok": nav_ok,
         "build_ok": build_ok,
         "build_saida": build_saida,
@@ -783,7 +772,7 @@ def _retrato_relativo(destino_imagem: Path, root: Path, pagina_rel: str) -> str:
     return Path(os.path.relpath(destino_imagem, start=(docs_dir(root) / pagina_rel).parent)).as_posix()
 
 
-def criar_npc(root: Path, valores: dict, imagem: tuple[str, bytes] | None = None) -> dict:
+def criar_npc(root: Path, valores: dict, imagem: tuple[str, bytes] | None = None, ficha: dict | None = None) -> dict:
     """Cria docs/personagens/<slug>.md no padrão das páginas de NPC e o adiciona ao menu.
 
     `imagem`, se informada, é (nome_original, conteúdo) do retrato.
@@ -803,15 +792,17 @@ def criar_npc(root: Path, valores: dict, imagem: tuple[str, bytes] | None = None
         destino, _ = salvar_imagem(root, rel, "personagens", imagem[0], imagem[1])
         retrato = _retrato_relativo(destino, root, rel)
 
-    ficha = {}
+    if ficha and ficha.get("raca") and not campos["raca"]:
+        campos["raca"] = ficha["raca"]
+    ficha_rapida = {}
     if campos["titulo"]:
-        ficha["Título"] = campos["titulo"]
+        ficha_rapida["Título"] = campos["titulo"]
     if campos["raca"]:
-        ficha["Raça"] = campos["raca"]
+        ficha_rapida["Raça"] = campos["raca"]
     if campos["cidade"]:
-        ficha["Cidade"] = _link_se_existir(root, campos["cidade"], listar_cidades(root), rel)
+        ficha_rapida["Cidade"] = _link_se_existir(root, campos["cidade"], listar_cidades(root), rel)
     if campos["afiliacao"]:
-        ficha["Afiliação"] = _link_se_existir(root, campos["afiliacao"], listar_faccoes(root), rel)
+        ficha_rapida["Afiliação"] = _link_se_existir(root, campos["afiliacao"], listar_faccoes(root), rel)
 
     meta = {
         "tags": ["Personagens"] + ([campos["cidade"]] if campos["cidade"] else []),
@@ -823,9 +814,11 @@ def criar_npc(root: Path, valores: dict, imagem: tuple[str, bytes] | None = None
             "afiliacao": campos["afiliacao"] or "—",
             "resumo": campos["resumo"],
             "retrato": retrato,
-            "ficha": ficha,
+            "ficha": ficha_rapida,
         },
     }
+    if ficha:
+        meta["ficha5e"] = ficha
     descricao = (valores.get("descricao") or "").strip()
     corpo = "\n".join([
         "",
@@ -1000,3 +993,72 @@ def criar_sessao_preparo(root: Path, numero: int, titulo: str, valores: dict) ->
     nav_ok = _inserir_no_nav(root, CABECALHO_NAV_SESSOES, f"- {_titulo_nav(f'Sessão {numero} — {titulo}')}: {rel}")
     build_ok, build_saida = validar_build(root)
     return {"arquivo": f"docs/{rel}", "rel_docs": rel, "nav_ok": nav_ok, "build_ok": build_ok, "build_saida": build_saida}
+
+
+# --------------------------------------------------------------------------
+# Ficha de personagem D&D 5e (bloco `ficha5e:` da página do NPC)
+# --------------------------------------------------------------------------
+
+def ler_ficha5e(root: Path, npc_rel_docs: str) -> dict:
+    meta, _ = _front_matter(_ler(docs_dir(root) / npc_rel_docs))
+    return meta.get("ficha5e") or {}
+
+
+def salvar_ficha5e(root: Path, npc_rel_docs: str, ficha: dict) -> None:
+    """Grava a ficha no front matter. Ficha vazia remove o bloco."""
+    caminho = docs_dir(root) / npc_rel_docs
+    meta, corpo = _front_matter(_ler(caminho))
+    if not isinstance(meta.get("npc"), dict):
+        raise ValueError("Essa página não tem o bloco `npc:` no topo — não é uma página de NPC.")
+    if ficha:
+        meta["ficha5e"] = ficha
+        if ficha.get("raca") and meta["npc"].get("raca") in (None, "", "—"):
+            meta["npc"]["raca"] = ficha["raca"]
+    else:
+        meta.pop("ficha5e", None)
+    _escrever(caminho, _com_front_matter(meta, corpo))
+
+
+# --------------------------------------------------------------------------
+# Linha do tempo (dados/linha-do-tempo.yml)
+# --------------------------------------------------------------------------
+
+def listar_eventos(root: Path) -> list[dict]:
+    return linha_tempo.ordenar(linha_tempo.carregar(root))
+
+
+def paginas_rastreaveis(root: Path) -> list[Entidade]:
+    """NPCs, cidades e facções — o que pode aparecer numa linha do tempo."""
+    return listar_npcs(root) + listar_cidades(root) + listar_faccoes(root)
+
+
+def salvar_evento(root: Path, dados: dict, id_evento: int | None = None) -> int:
+    """Cria (sem id) ou substitui (com id) um acontecimento. Devolve o id."""
+    if not (dados.get("titulo") or "").strip():
+        raise ValueError("O acontecimento precisa de um título.")
+    validas = {e.rel_docs for e in paginas_rastreaveis(root)}
+    paginas = set(dados.get("envolvidos") or []) | {m["pagina"] for m in dados.get("mudancas") or []}
+    paginas |= set((dados.get("notas") or {}).keys())
+    invalidas = sorted(p for p in paginas if p not in validas)
+    if invalidas:
+        raise ValueError("Página desconhecida: " + ", ".join(invalidas))
+
+    eventos = linha_tempo.carregar(root)
+    evento = {"id": id_evento or (max((int(e.get("id") or 0) for e in eventos), default=0) + 1)}
+    for chave in ("data", "sessao", "titulo", "descricao", "envolvidos", "notas", "mudancas"):
+        valor = dados.get(chave)
+        if valor not in (None, "", [], {}):
+            evento[chave] = valor
+    if id_evento:
+        if not any(int(e.get("id") or 0) == id_evento for e in eventos):
+            raise ValueError(f"Acontecimento {id_evento} não encontrado.")
+        eventos = [evento if int(e.get("id") or 0) == id_evento else e for e in eventos]
+    else:
+        eventos.append(evento)
+    linha_tempo.salvar(root, eventos)
+    return evento["id"]
+
+
+def apagar_evento(root: Path, id_evento: int) -> None:
+    eventos = linha_tempo.carregar(root)
+    linha_tempo.salvar(root, [e for e in eventos if int(e.get("id") or 0) != id_evento])

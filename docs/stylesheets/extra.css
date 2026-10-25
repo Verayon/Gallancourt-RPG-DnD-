@@ -1160,3 +1160,189 @@ th[aria-sort="descending"] .npc-ordenar::after { content: " ▼"; opacity: 1; }
     width: 7rem;
   }
 }
+
+/* --------------------------------------------------------------------------
+   Ficha de personagem D&D 5e (aba do NPC) — gerada por hooks/ficha5e.py
+   -------------------------------------------------------------------------- */
+
+.f5e {
+  margin: .8rem 0 1rem;
+}
+
+.f5e-grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr));
+  gap: .5rem;
+  margin-bottom: .5rem;
+}
+
+.f5e-caixa {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: .45rem .55rem;
+  text-align: center;
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 6px;
+  background: var(--gc-bg-alt);
+}
+
+.f5e-larga {
+  grid-column: span 2;
+}
+
+.f5e-destaque {
+  border-color: var(--gc-gold);
+}
+
+.f5e-valor {
+  font-family: 'Cinzel', serif;
+  font-size: .85rem;
+  font-weight: 700;
+  color: var(--gc-gold-soft);
+  line-height: 1.3;
+}
+
+.f5e-rotulo {
+  font-size: .6rem;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--gc-ink-dim);
+}
+
+.md-typeset .f5e-nota {
+  margin: .2rem 0 .6rem;
+  font-size: .68rem;
+  color: var(--gc-ink-dim);
+  font-style: italic;
+}
+
+.f5e-atributos {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: .5rem;
+  margin: .8rem 0;
+}
+
+.f5e-atributo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: .4rem .2rem .5rem;
+  border: 1px solid var(--gc-gold);
+  border-radius: 8px;
+  background: var(--gc-bg-alt);
+}
+
+.f5e-mod {
+  font-family: 'Cinzel', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--gc-gold-soft);
+}
+
+.f5e-pontos {
+  min-width: 2rem;
+  padding: 0 .4rem;
+  font-size: .7rem;
+  text-align: center;
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 999px;
+}
+
+.f5e-colunas {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: 1rem;
+}
+
+.md-typeset .f5e-lista h4 {
+  margin: .4rem 0 .3rem;
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--gc-ink-dim);
+}
+
+.md-typeset .f5e-lista ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  columns: 1;
+  font-size: .74rem;
+}
+
+.md-typeset .f5e-colunas > .f5e-lista:last-child ul {
+  columns: 2;
+  column-gap: 1.2rem;
+}
+
+.md-typeset .f5e-lista li {
+  margin: 0;
+  padding: .1rem 0;
+  break-inside: avoid;
+}
+
+.f5e-marca {
+  display: inline-block;
+  width: 1rem;
+  color: var(--gc-gold);
+}
+
+.f5e-bonus {
+  display: inline-block;
+  min-width: 2rem;
+  font-weight: 700;
+}
+
+.f5e-sigla {
+  font-size: .85em;
+  color: var(--gc-ink-dim);
+}
+
+@media screen and (max-width: 44.9375em) {
+  .f5e-atributos {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .f5e-colunas {
+    grid-template-columns: 1fr;
+  }
+
+  .f5e-larga {
+    grid-column: span 1;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Linha do tempo (NPCs, cidades, facções e Mestre → Linha do tempo)
+   -------------------------------------------------------------------------- */
+
+.md-typeset .linha-tempo > ul {
+  margin-left: .4rem;
+  padding-left: 1rem;
+  list-style: none;
+  border-left: 2px solid var(--gc-gold);
+}
+
+.md-typeset .linha-tempo > ul > li {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.md-typeset .linha-tempo > ul > li::before {
+  content: "";
+  position: absolute;
+  left: -1.42rem;
+  top: .45rem;
+  width: .6rem;
+  height: .6rem;
+  border-radius: 50%;
+  background: var(--gc-gold);
+  border: 2px solid var(--gc-bg);
+}
+
+.md-typeset .linha-tempo > ul > li > p {
+  margin: .2rem 0;
+}

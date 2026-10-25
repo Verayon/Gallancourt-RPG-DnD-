@@ -27,6 +27,8 @@ docs/
 ├── configuracoes/  Entrada de Configurações (Painel, cânone, lacunas, fontes)
 └── assets/         Imagens do site e o repositório de arte da campanha (assets/imagens/)
 admin/              Painel do Mestre (app Flask local) — ver docs/mestre/painel.md
+hooks/              Código que monta partes do site: NPCs, ficha de D&D 5e, linha do tempo
+dados/              linha-do-tempo.yml — acontecimentos da campanha
 fontes/             Acervo do autor (textos/, imagens/, videos/) — ver fontes/README.md
 scripts/            gerar_relacoes.py — gera as páginas de relações e intrigas
 CLAUDE.md           Regras e decisões do projeto, lidas pelo Claude Code em cada sessão

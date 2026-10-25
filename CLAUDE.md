@@ -43,6 +43,9 @@ docs/
 ├── diario/                    Diário de Sessões (menu: Mestre)
 └── javascripts/gallancourt.js Tabela de NPCs (ordenar/filtrar) e abertura de abas por âncora
 hooks/gallancourt.py           Hook do MkDocs: caixa e abas dos NPCs, tabela de NPCs, lista de sessões
+hooks/ficha5e.py               Ficha de D&D 5e: campos, cálculos e exibição (usado pelo hook e pelo Painel)
+hooks/linha_tempo.py           Linha do tempo: leitura/escrita, ordem cronológica, estado atual, exibição
+dados/linha-do-tempo.yml       Fonte única dos acontecimentos da campanha (escrito pelo Painel)
 fontes/                        Acervo do autor (não editar); guia em fontes/README.md
 ├── textos/                    PDFs, documentos e transcrições .md
 ├── imagens/                   Mapas, ilustrações, retratos
@@ -164,10 +167,8 @@ preparação. Duas peças cuidam disso:
   3. adicione uma linha na tabela e um marco na linha do tempo de `diario/index.md`;
   4. registre `diario/sessao-NN.md` no `nav:` do `mkdocs.yml`, dentro de **Mestre → Diário de
      Sessões**;
-  5. se a mudança merece ser lembrada na própria página do personagem/cidade/facção, adicione lá
-     uma seção `## Histórico de sessões` (opcional; só existe onde já houve uma mudança
-     registrada) com uma linha `- **[Sessão N](../diario/sessao-NN.md)** (data na campanha) — o
-     que mudou.
+  5. registre em `dados/linha-do-tempo.yml` o que mudou com cada NPC/cidade/facção (pelo Painel,
+     aba Linha do tempo) — não escreva mais `## Histórico de sessões` nas páginas.
 - **`docs/mundo/calendario.md`** define a data ficcional: formato `DD de <mês> de <ano>`, usando os
   nomes de mês reais e um ano fictício à escolha do autor (ex.: `24 de outubro de 1453`). É uma
   proposta mínima (`POSSIBILIDADE`); ajuste se o autor preferir nomes de mês próprios.
@@ -187,12 +188,12 @@ que o painel depende de encontrar, e que **não podem ser removidas** das págin
   encadear a próxima sessão);
 - a linha `- diario/index.md` no `nav:` do `mkdocs.yml` (é a âncora onde novas sessões são
   inseridas);
-- os marcadores `<!-- campo:<chave> -->`/`<!-- /campo:<chave> -->` dentro de `## Ficha de
-  personagem` (personagens) e `## Ficha da cidade` (cidades) — um par por campo, invisíveis no
-  site (são comentários HTML). A aba **Ficha** do painel lê e regrava a seção inteira a partir
-  desses marcadores; os campos e rótulos estão em `admin/wiki_data.py`
-  (`CAMPOS_FICHA_NPC`/`CAMPOS_FICHA_CIDADE`) — para adicionar um campo novo, acrescente-o nessa
-  lista.
+- os marcadores `<!-- campo:<chave> -->`/`<!-- /campo:<chave> -->` dentro de `## Ficha da cidade`
+  — um par por campo, invisíveis no site. A aba **Ficha de cidade** do painel lê e regrava a seção
+  inteira a partir desses marcadores; os campos estão em `admin/wiki_data.py`
+  (`CAMPOS_FICHA_CIDADE`). NPCs usam a ficha 5e (`ficha5e:`), não esses marcadores;
+- o bloco `npc:` (e `ficha5e:`) no front matter das páginas de NPC;
+- `dados/linha-do-tempo.yml` — edite pelo Painel ou mantendo o formato descrito no cabeçalho dele.
 
 Ao testar mudanças no painel, use uma cópia em `GALLANCOURT_ADMIN_ROOT` — nunca aplique uma sessão
 de teste direto no `docs/diario/` real.
@@ -208,8 +209,30 @@ Cada `docs/personagens/<slug>.md` tem um bloco `npc:` no front matter (`titulo`,
   caixas `!!! question "Em aberto"` numa última aba. Por isso as ferramentas que acrescentam
   seções `##` no fim da página (Painel, `gerar_relacoes.py`) continuam funcionando;
 - gera a tabela de `personagens/index.md` no lugar de `<!-- npcs:tabela -->`, lendo o bloco `npc:`
-  de todas as páginas. `titulo`, `raca`, `cidade` e `afiliacao` são texto simples (viram filtros);
-  links vão só em `ficha`. Valor desconhecido = `—`.
+  de todas as páginas. `titulo`, `raca`, `cidade`, `afiliacao` e `situacao` são texto simples (viram
+  filtros); links vão só em `ficha`. Valor desconhecido = `—`. As colunas Cidade, Afiliação, Título
+  e Situação mostram o **estado atual** (com as mudanças da linha do tempo aplicadas) e a coluna
+  Nível vem de `ficha5e.nivel`.
+
+### Ficha de D&D 5e (`ficha5e:`)
+
+Bloco opcional no front matter do NPC, escrito pela aba **Ficha de NPC** do Painel (`/ficha5e`) ou
+ao criar o NPC. Guarda só valores digitados (atributos, perícias com nível 0/1/2, CA, PV, ataques,
+equipamento, magias por nível, personalidade, detalhes); o hook calcula modificadores, proficiência
+pelo nível, resistências, perícias, percepção passiva, iniciativa, CD e ataque de magia e monta a
+aba **Ficha de personagem**. Campos, rótulos e fórmulas ficam só em `hooks/ficha5e.py` — para
+acrescentar um campo, mude ali (formulário do Painel e exibição usam as mesmas listas). **Nunca
+invente valores de ficha para NPCs do cânone**: só o autor preenche.
+
+### Linha do tempo (`dados/linha-do-tempo.yml`)
+
+Lista de acontecimentos (`id`, `data` na campanha, `sessao`, `titulo`, `descricao`, `envolvidos`,
+`notas` por página, `mudancas` de `situacao`/`cidade`/`afiliacao`/`titulo`). Ordem cronológica pela
+data no formato `DD de <mês> de <ano>`; sem data, pela sessão. O hook mostra a seção/aba
+**Linha do tempo** em cada página envolvida, a caixa "Situação atual" em cidades/facções, as linhas
+"… atual" na caixa do NPC e a página `mestre/linha-do-tempo.md` (`<!-- linha-do-tempo:geral -->`).
+O "Registrar sessão" do Painel cria um acontecimento com a nota de cada NPC/lugar marcado — a antiga
+seção `## Histórico de sessões` nas páginas não é mais usada.
 
 ## Sessões (Mestre → Sessões)
 

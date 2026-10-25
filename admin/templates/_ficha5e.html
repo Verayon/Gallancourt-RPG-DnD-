@@ -1,0 +1,182 @@
+{# Campos da ficha de personagem D&D 5e. Usado em npc_novo.html e ficha5e.html.
+   `v` = valores atuais (nome do campo -> texto); `f5e` = módulo hooks/ficha5e.py. #}
+{% macro campos_ficha(v, f5e) %}
+<div class="f5e-form">
+  <fieldset>
+    <legend>Identidade</legend>
+    <div class="grade-campos">
+      {% for chave, rotulo in f5e.CAMPOS_IDENTIDADE %}
+      <label>{{ rotulo }}
+        <input type="{{ 'number' if chave in ('nivel', 'xp') else 'text' }}" name="f5e_{{ chave }}"
+          value="{{ v.get('f5e_' ~ chave, '') }}" {% if chave == 'nivel' %}min="1" max="20" data-f5e="nivel"{% endif %}>
+      </label>
+      {% endfor %}
+      <label class="check"><input type="checkbox" name="f5e_inspiracao" value="1" {{ 'checked' if v.get('f5e_inspiracao') else '' }}> Inspiração</label>
+    </div>
+    <p class="ajuda">Bônus de proficiência: <strong data-f5e-saida="prof">—</strong> (calculado pelo nível)</p>
+  </fieldset>
+
+  <fieldset>
+    <legend>Atributos e testes de resistência</legend>
+    <div class="grade-atributos">
+      {% for a, nome in f5e.ATRIBUTOS %}
+      <div class="atributo">
+        <label>{{ nome }}
+          <input type="number" name="f5e_atr_{{ a }}" value="{{ v.get('f5e_atr_' ~ a, '') }}" min="1" max="30" data-f5e-atr="{{ a }}">
+        </label>
+        <span class="mod" data-f5e-saida="mod_{{ a }}">—</span>
+        <label class="check"><input type="checkbox" name="f5e_res_{{ a }}" value="1" {{ 'checked' if v.get('f5e_res_' ~ a) else '' }}> Proficiente em resistência</label>
+      </div>
+      {% endfor %}
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Perícias</legend>
+    <div class="grade-pericias">
+      {% for chave, nome, atr in f5e.PERICIAS %}
+      {% set nivel = v.get('f5e_per_' ~ chave, '0') %}
+      <label>{{ nome }} <small>({{ f5e.SIGLAS[atr] }})</small>
+        <select name="f5e_per_{{ chave }}">
+          <option value="0" {{ 'selected' if nivel in ('0', '') else '' }}>Sem proficiência</option>
+          <option value="1" {{ 'selected' if nivel == '1' else '' }}>Proficiente</option>
+          <option value="2" {{ 'selected' if nivel == '2' else '' }}>Especialização</option>
+        </select>
+      </label>
+      {% endfor %}
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Combate</legend>
+    <div class="grade-campos">
+      {% for chave, rotulo in f5e.CAMPOS_COMBATE %}
+      <label>{{ rotulo }}
+        <input type="{{ 'text' if chave in ('ca_detalhe', 'deslocamento', 'dados_de_vida') else 'number' }}"
+          name="f5e_{{ chave }}" value="{{ v.get('f5e_' ~ chave, '') }}"
+          {% if chave in ('morte_sucessos', 'morte_falhas') %}min="0" max="3"{% endif %}>
+      </label>
+      {% endfor %}
+    </div>
+    <label>Ataques — um por linha: <code>Nome | bônus | dano e tipo | notas</code>
+      <textarea name="f5e_ataques" rows="4" placeholder="Rapieira | +6 | 1d8+3 perfurante | acuidade">{{ v.get('f5e_ataques', '') }}</textarea>
+    </label>
+  </fieldset>
+
+  <fieldset>
+    <legend>Proficiências e idiomas</legend>
+    <div class="grade-campos">
+      {% for chave, rotulo in f5e.CAMPOS_PROFICIENCIAS %}
+      <label>{{ rotulo }}
+        <input type="text" name="f5e_prof_{{ chave }}" value="{{ v.get('f5e_prof_' ~ chave, '') }}">
+      </label>
+      {% endfor %}
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Equipamento</legend>
+    <label>Itens — um por linha
+      <textarea name="f5e_equipamento" rows="5" placeholder="Rapieira&#10;Armadura de couro batido&#10;Selo da Casa Corbeau">{{ v.get('f5e_equipamento', '') }}</textarea>
+    </label>
+    <div class="grade-moedas">
+      {% for m, sigla in f5e.MOEDAS %}
+      <label>{{ sigla }}
+        <input type="number" name="f5e_moeda_{{ m }}" value="{{ v.get('f5e_moeda_' ~ m, '') }}" min="0">
+      </label>
+      {% endfor %}
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Magias</legend>
+    <div class="grade-campos">
+      <label>Classe conjuradora
+        <input type="text" name="f5e_magia_classe" value="{{ v.get('f5e_magia_classe', '') }}">
+      </label>
+      <label>Atributo de conjuração
+        <select name="f5e_magia_atributo" data-f5e="magia_atributo">
+          <option value="">—</option>
+          {% for a, nome in f5e.ATRIBUTOS %}
+          <option value="{{ a }}" {{ 'selected' if v.get('f5e_magia_atributo') == a else '' }}>{{ nome }}</option>
+          {% endfor %}
+        </select>
+      </label>
+    </div>
+    <p class="ajuda">CD de resistência: <strong data-f5e-saida="cd">—</strong> · Ataque mágico: <strong data-f5e-saida="ataque">—</strong></p>
+    <label>Truques — um por linha
+      <textarea name="f5e_magia_truques" rows="2">{{ v.get('f5e_magia_truques', '') }}</textarea>
+    </label>
+    <details>
+      <summary>Magias por nível (1º ao 9º)</summary>
+      {% for n in f5e.NIVEIS_MAGIA %}
+      <div class="nivel-magia">
+        <strong>{{ n }}º nível</strong>
+        <label>Espaços <input type="number" name="f5e_magia_espacos_{{ n }}" value="{{ v.get('f5e_magia_espacos_' ~ n, '') }}" min="0"></label>
+        <label>Usados <input type="number" name="f5e_magia_usados_{{ n }}" value="{{ v.get('f5e_magia_usados_' ~ n, '') }}" min="0"></label>
+        <label>Magias — uma por linha
+          <textarea name="f5e_magia_lista_{{ n }}" rows="2">{{ v.get('f5e_magia_lista_' ~ n, '') }}</textarea>
+        </label>
+      </div>
+      {% endfor %}
+    </details>
+  </fieldset>
+
+  <fieldset>
+    <legend>Características, personalidade e detalhes</legend>
+    <div class="grade-campos">
+      {% for chave, rotulo in f5e.CAMPOS_PERSONALIDADE %}
+      <label>{{ rotulo }}
+        <textarea name="f5e_{{ chave }}" rows="2">{{ v.get('f5e_' ~ chave, '') }}</textarea>
+      </label>
+      {% endfor %}
+    </div>
+    <div class="grade-campos">
+      {% for chave, rotulo in f5e.CAMPOS_DETALHES_CURTOS %}
+      <label>{{ rotulo }}
+        <input type="text" name="f5e_{{ chave }}" value="{{ v.get('f5e_' ~ chave, '') }}">
+      </label>
+      {% endfor %}
+    </div>
+    {% for chave, rotulo in f5e.CAMPOS_TEXTOS_LONGOS %}
+    <label>{{ rotulo }}
+      <textarea name="f5e_{{ chave }}" rows="3">{{ v.get('f5e_' ~ chave, '') }}</textarea>
+    </label>
+    {% endfor %}
+  </fieldset>
+</div>
+
+<script>
+/* Mostra modificadores, bônus de proficiência, CD e ataque de magia enquanto você digita.
+   As mesmas fórmulas de hooks/ficha5e.py. */
+(function () {
+  function mod(v) { var n = parseInt(v, 10); return isNaN(n) ? null : Math.floor((n - 10) / 2); }
+  function sinal(n) { return n === null ? "—" : (n >= 0 ? "+" + n : "−" + Math.abs(n)); }
+  function prof() {
+    var n = parseInt((document.querySelector('[data-f5e="nivel"]') || {}).value, 10);
+    n = isNaN(n) ? 1 : Math.min(20, Math.max(1, n));
+    return 2 + Math.floor((n - 1) / 4);
+  }
+  function saida(nome, texto) {
+    var el = document.querySelector('[data-f5e-saida="' + nome + '"]');
+    if (el) el.textContent = texto;
+  }
+  function atualizar() {
+    var p = prof(), mods = {};
+    saida("prof", sinal(p));
+    document.querySelectorAll("[data-f5e-atr]").forEach(function (el) {
+      var a = el.getAttribute("data-f5e-atr");
+      mods[a] = mod(el.value);
+      saida("mod_" + a, sinal(mods[a]));
+    });
+    var atr = (document.querySelector('[data-f5e="magia_atributo"]') || {}).value;
+    var m = atr ? mods[atr] : null;
+    saida("cd", m === null || m === undefined ? "—" : String(8 + p + m));
+    saida("ataque", m === null || m === undefined ? "—" : sinal(p + m));
+  }
+  document.addEventListener("input", atualizar);
+  document.addEventListener("change", atualizar);
+  atualizar();
+})();
+</script>
+{% endmacro %}

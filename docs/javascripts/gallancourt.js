@@ -8,7 +8,7 @@
   "use strict";
 
   // Colunas da tabela que ganham uma lista de filtro no cabeçalho (pelo texto do <th>).
-  var COLUNAS_COM_FILTRO = ["Título", "Raça", "Cidade", "Afiliação"];
+  var COLUNAS_COM_FILTRO = ["Título", "Raça", "Cidade", "Afiliação", "Situação"];
   var COLUNAS_SEM_ORDEM = ["Retrato"];
 
   function normalizar(texto) {
@@ -63,7 +63,7 @@
         // "—" (sem dado) vai sempre para o fim
         if (va === "—" && vb !== "—") return 1;
         if (vb === "—" && va !== "—") return -1;
-        return va.localeCompare(vb, "pt-BR", { sensitivity: "base" }) * ordem.direcao;
+        return va.localeCompare(vb, "pt-BR", { sensitivity: "base", numeric: true }) * ordem.direcao;
       });
       linhas.forEach(function (linha) { corpo.appendChild(linha); });
       cabecalhos.forEach(function (th, i) {
@@ -99,7 +99,7 @@
         lista.setAttribute("aria-label", "Filtrar por " + rotulo);
         lista.appendChild(new Option("Todos", ""));
         Object.keys(valores)
-          .sort(function (a, b) { return a.localeCompare(b, "pt-BR"); })
+          .sort(function (a, b) { return a.localeCompare(b, "pt-BR", { numeric: true }); })
           .forEach(function (valor) { lista.appendChild(new Option(valor, valor)); });
         lista.addEventListener("change", function () {
           filtros[indice] = lista.value;

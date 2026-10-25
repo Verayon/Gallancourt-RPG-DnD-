@@ -10,6 +10,7 @@ npc:
   cidade: Valynesse
   afiliacao: "Casa D'Aubren"
   resumo: Último rei; decretou o Édito; executado.
+  situacao: Morto
   retrato: ''
   ficha:
     Título: Rei de Gallancourt

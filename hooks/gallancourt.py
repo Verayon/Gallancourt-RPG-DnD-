@@ -6,7 +6,11 @@ Registrado em `mkdocs.yml` (chave `hooks:`). Roda durante a geração do site e:
   do front matter;
 - transforma as seções `##` das páginas de NPC em abas;
 - gera a tabela de NPCs em `personagens/index.md` (marcador `<!-- npcs:tabela -->`);
-- gera a lista de sessões em `mestre/sessoes/index.md` (marcador `<!-- sessoes:lista -->`).
+- gera a lista de sessões em `mestre/sessoes/index.md` (marcador `<!-- sessoes:lista -->`);
+- monta a aba "Ficha de personagem" (D&D 5e) a partir do bloco `ficha5e:` (ver `ficha5e.py`);
+- mostra a linha do tempo da campanha (`dados/linha-do-tempo.yml`, ver `linha_tempo.py`) em cada
+  página envolvida e aplica as mudanças de estado (situação, localização…) aos NPCs;
+- gera a página geral da linha do tempo (marcador `<!-- linha-do-tempo:geral -->`).
 
 A tabela e a lista são lidas direto dos arquivos a cada geração: uma página nova de NPC ou de
 sessão aparece sozinha, sem editar nenhuma lista à mão.
@@ -15,16 +19,40 @@ from __future__ import annotations
 
 import html
 import re
+import sys
 from pathlib import Path
 
 import yaml
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import ficha5e  # noqa: E402
+import linha_tempo  # noqa: E402
+
+# Linha do tempo carregada uma vez por geração do site (on_pre_build)
+_EVENTOS: list[dict] = []
 
 RETRATO_PADRAO = "../assets/placeholders/personagem.svg"
 PAINEL_PADRAO = "http://127.0.0.1:5001"
 DICA_PAINEL = "Abre o Painel do Mestre — ele precisa estar rodando no seu computador"
 
 # Colunas da tabela de NPCs: (rótulo, chave no bloco npc:)
-COLUNAS_NPC = [("Título", "titulo"), ("Raça", "raca"), ("Cidade", "cidade"), ("Afiliação", "afiliacao")]
+COLUNAS_NPC = [
+    ("Título", "titulo"), ("Nível", "nivel"), ("Raça", "raca"), ("Cidade", "cidade"),
+    ("Afiliação", "afiliacao"), ("Situação", "situacao"),
+]
+
+
+def _npc_atual(npc: dict, pagina: str) -> dict:
+    """Dados do NPC com as mudanças da linha do tempo aplicadas e o nível da ficha 5e."""
+    atual = dict(npc)
+    for campo, (valor, _) in linha_tempo.estado_atual(_EVENTOS, pagina).items():
+        atual[campo] = valor
+    ficha = npc.get("ficha5e_ref") or {}
+    atual["nivel"] = ficha5e.resumo_nivel(ficha)
+    if atual.get("raca") in (None, "", "—") and ficha.get("raca"):
+        atual["raca"] = ficha["raca"]
+    atual.setdefault("situacao", "—")
+    return atual
 
 
 # --------------------------------------------------------------------------
@@ -67,6 +95,7 @@ def _tabela_npcs(docs: Path, config) -> str:
             continue
         nome = _titulo_h1(corpo, arquivo.stem)
         retrato = npc.get("retrato") or RETRATO_PADRAO
+        npc = _npc_atual({**npc, "ficha5e_ref": meta.get("ficha5e") or {}}, f"personagens/{arquivo.name}")
         linhas.append((nome, arquivo.name, retrato, npc))
     linhas.sort(key=lambda l: l[0].casefold())
 
@@ -148,10 +177,21 @@ def _lista_sessoes(docs: Path, config) -> str:
 # Página de NPC: cabeçalho e abas
 # --------------------------------------------------------------------------
 
-def _cabecalho_npc(npc: dict) -> str:
+def _cabecalho_npc(npc: dict, pagina: str, docs: Path, nivel: str) -> str:
     retrato = npc.get("retrato") or RETRATO_PADRAO
     ficha = npc.get("ficha") or {}
-    linhas = ["| | |", "|---|---|"] + [f"| **{rotulo}** | {_celula(valor)} |" for rotulo, valor in ficha.items()]
+    atuais = []
+    for campo, (valor, evento) in linha_tempo.estado_atual(_EVENTOS, pagina).items():
+        quando = evento.get("data") or ""
+        sessao = linha_tempo.link_sessao(docs, evento.get("sessao"), pagina)
+        origem = ", ".join(x for x in (quando, sessao) if x)
+        rotulo = linha_tempo.ROTULO_MUDANCA.get(campo, campo)
+        atuais.append(f"| **{rotulo} atual** | **{_celula(valor)}**" + (f" *({origem})*" if origem else "") + " |")
+    if nivel != "—":
+        atuais.append(f"| **Nível** | {nivel} |")
+    linhas = ["| | |", "|---|---|"] + atuais + [
+        f"| **{rotulo}** | {_celula(valor)} |" for rotulo, valor in ficha.items()
+    ]
     resumo = npc.get("resumo")
     return "\n".join([
         '<div class="npc-cabecalho" markdown>',
@@ -229,6 +269,9 @@ def _paginar_npc(conteudo: str) -> str:
         abas.append(("Em aberto", "".join(em_aberto)))
     if not abas:
         return cabeca
+    # Ordem: Visão geral, Ficha de personagem, Linha do tempo, demais seções, Em aberto.
+    prioridade = {"Visão geral": 0, "Ficha de personagem": 1, "Linha do tempo": 2, "Em aberto": 99}
+    abas = [a for _, a in sorted(enumerate(abas), key=lambda x: (prioridade.get(x[1][0], 50), x[0]))]
     return cabeca + _abas(abas)
 
 
@@ -236,16 +279,43 @@ def _paginar_npc(conteudo: str) -> str:
 # Eventos do MkDocs
 # --------------------------------------------------------------------------
 
+def on_pre_build(config):
+    global _EVENTOS
+    _EVENTOS = linha_tempo.carregar(Path(config["config_file_path"]).parent)
+
+
+def _depois_do_h1(markdown: str, bloco: str) -> str:
+    return re.sub(r"^(# .+\n)", lambda m: m.group(1) + "\n" + bloco + "\n", markdown, count=1, flags=re.M)
+
+
 def on_page_markdown(markdown: str, page, config, files):
     docs = Path(config["docs_dir"])
     src = page.file.src_uri
+    if "<!-- linha-do-tempo:geral -->" in markdown:
+        markdown = markdown.replace("<!-- linha-do-tempo:geral -->", linha_tempo.pagina_geral(docs, _EVENTOS, src))
     if src == "personagens/index.md" and "<!-- npcs:tabela -->" in markdown:
         markdown = markdown.replace("<!-- npcs:tabela -->", _tabela_npcs(docs, config))
     if src == "mestre/sessoes/index.md" and "<!-- sessoes:lista -->" in markdown:
         markdown = markdown.replace("<!-- sessoes:lista -->", _lista_sessoes(docs, config))
     npc = page.meta.get("npc")
+    secao_tempo = linha_tempo.secao_da_pagina(docs, _EVENTOS, src)
     if isinstance(npc, dict):
-        markdown = re.sub(r"^(# .+\n)", lambda m: m.group(1) + "\n" + _cabecalho_npc(npc), markdown, count=1, flags=re.M)
+        ficha = page.meta.get("ficha5e")
+        nivel = ficha5e.resumo_nivel(ficha)
+        markdown = _depois_do_h1(markdown, _cabecalho_npc(npc, src, docs, nivel))
+        if ficha5e.tem_ficha(ficha):
+            markdown = markdown.rstrip("\n") + "\n\n" + ficha5e.renderizar(ficha)
+        if secao_tempo:
+            markdown = markdown.rstrip("\n") + "\n\n" + secao_tempo
+    elif secao_tempo:
+        estado = linha_tempo.estado_atual(_EVENTOS, src)
+        if "situacao" in estado:
+            valor, evento = estado["situacao"]
+            sessao = linha_tempo.link_sessao(docs, evento.get("sessao"), src)
+            origem = ", ".join(x for x in (evento.get("data") or "", sessao) if x)
+            aviso = ['!!! info "Situação atual"', f"    **{valor}**" + (f" — desde {origem}." if origem else "")]
+            markdown = _depois_do_h1(markdown, "\n".join(aviso) + "\n")
+        markdown = markdown.rstrip("\n") + "\n\n" + secao_tempo
     return markdown
 
 

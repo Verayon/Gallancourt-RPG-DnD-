@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% from "_ficha5e.html" import campos_ficha %}
+{% block titulo %}Ficha de NPC{% endblock %}
+{% block conteudo %}
+<h1>Ficha de personagem (D&amp;D 5e)</h1>
+<p class="ajuda">Escolha o NPC, preencha ou atualize a ficha e clique em Salvar. Só os valores que você
+  digita são guardados; modificadores, testes de resistência, perícias, percepção passiva, CD e ataque
+  de magia são calculados sozinhos e aparecem na aba <strong>Ficha de personagem</strong> da página do NPC.</p>
+
+<form method="get" action="/ficha5e" class="form-escolher">
+  <label>NPC
+    <select name="npc" onchange="this.form.submit()">
+      <option value="">— escolha —</option>
+      {% for n in npcs %}
+      <option value="{{ n.rel_docs }}" {{ "selected" if n.rel_docs == escolhido else "" }}>{{ n.titulo }}</option>
+      {% endfor %}
+    </select>
+  </label>
+</form>
+
+{% if erro %}<p class="aviso aviso--erro">⚠️ {{ erro }}</p>{% endif %}
+{% if salvo %}
+  {% if build_ok %}
+  <p class="aviso aviso--ok">✅ Ficha salva. Site conferido sem problemas.</p>
+  {% else %}
+  <p class="aviso aviso--erro">⚠️ Ficha salva, mas <code>mkdocs build --strict</code> encontrou um problema.</p>
+  <pre class="saida-build">{{ build_saida }}</pre>
+  {% endif %}
+{% endif %}
+
+{% if escolhido %}
+<form method="post" action="/ficha5e" class="form-sessao">
+  <input type="hidden" name="npc" value="{{ escolhido }}">
+  {{ campos_ficha(valores, f5e) }}
+  <button type="submit" class="botao-principal">Salvar ficha</button>
+  <a class="botao-secundario" href="http://127.0.0.1:8000/{{ escolhido | replace('.md', '/') }}" target="_blank" rel="noopener">Ver a página ↗</a>
+</form>
+{% endif %}
+{% endblock %}

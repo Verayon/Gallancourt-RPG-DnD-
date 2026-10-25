@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block titulo %}Linha do tempo{% endblock %}
+{% block conteudo %}
+<h1>Linha do tempo</h1>
+<p class="ajuda">
+  Registre o que acontece na campanha: um NPC que morreu ou mudou de cidade, um evento numa cidade,
+  uma facção que trocou de lado. Cada acontecimento aparece, em ordem cronológica, na página de cada
+  NPC, cidade ou facção envolvida, e as <strong>mudanças de estado</strong> atualizam a caixa do NPC e
+  a tabela de NPCs. A ordem segue a <strong>data na campanha</strong> (formato <code>3 de março de 1453</code>);
+  sem data, vale o número da sessão.
+</p>
+
+{% if erro %}<p class="aviso aviso--erro">⚠️ {{ erro }}</p>{% endif %}
+{% if salvo %}
+  {% if build_ok %}
+  <p class="aviso aviso--ok">✅ Acontecimento {{ salvo }} salvo. Site conferido sem problemas.</p>
+  {% else %}
+  <p class="aviso aviso--erro">⚠️ Salvo, mas <code>mkdocs build --strict</code> encontrou um problema.</p>
+  <pre class="saida-build">{{ build_saida }}</pre>
+  {% endif %}
+{% endif %}
+
+{% set todas = npcs + cidades + faccoes %}
+<form method="post" action="/linha-do-tempo" class="form-sessao">
+  {% if evento.get('id') %}<input type="hidden" name="id" value="{{ evento.id }}">{% endif %}
+  <fieldset>
+    <legend>{{ "Editar acontecimento " ~ evento.id if evento.get('id') else "Novo acontecimento" }}</legend>
+    <div class="duas-colunas">
+      <label>Data na campanha
+        <input type="text" name="data" value="{{ evento.get('data', '') }}" placeholder="3 de março de 1453">
+      </label>
+      <label>Sessão (número, opcional)
+        <input type="number" name="sessao" value="{{ evento.get('sessao', '') if evento.get('sessao') is not none else '' }}" min="0">
+      </label>
+    </div>
+    <label>Título
+      <input type="text" name="titulo" value="{{ evento.get('titulo', '') }}" placeholder="Odette Brune morre na emboscada da estrada" required>
+    </label>
+    <label>Descrição (opcional)
+      <textarea name="descricao" rows="4">{{ evento.get('descricao', '') }}</textarea>
+    </label>
+    {% if evento.get('notas') %}
+    <p class="ajuda">Este acontecimento veio do registro de sessão e guarda uma nota por página
+      ({{ evento.notas | length }}); as notas são mantidas ao salvar.</p>
+    {% endif %}
+  </fieldset>
+
+  <fieldset>
+    <legend>Quem e o que está envolvido</legend>
+    {% set envolvidos = evento.get('envolvidos') or [] %}
+    {% for grupo, itens in [("NPCs", npcs), ("Cidades", cidades), ("Facções", faccoes)] %}
+    <details {{ 'open' if (itens | map(attribute='rel_docs') | select('in', envolvidos) | list) else '' }}>
+      <summary>{{ grupo }}</summary>
+      <div class="lista-marcar">
+        {% for e in itens %}
+        <label class="check"><input type="checkbox" name="envolvido" value="{{ e.rel_docs }}" {{ 'checked' if e.rel_docs in envolvidos else '' }}> {{ e.titulo }}</label>
+        {% endfor %}
+      </div>
+    </details>
+    {% endfor %}
+  </fieldset>
+
+  <fieldset>
+    <legend>Mudanças de estado (opcional)</legend>
+    <p class="ajuda">Ex.: <em>Odette Brune → Situação → Morta</em>; <em>Thalin → Localização → Valynesse</em>;
+      <em>Nouvelle-Montagne → Situação → Sob cerco</em>. Localização, afiliação e título valem para NPCs.</p>
+    {% set mudancas = evento.get('mudancas') or [] %}
+    {% for i in range(linhas_mudanca) %}
+    {% set m = mudancas[i] if i < mudancas | length else {} %}
+    <div class="linha-mudanca">
+      <select name="mudanca_pagina_{{ i }}">
+        <option value="">— quem —</option>
+        {% for e in todas %}
+        <option value="{{ e.rel_docs }}" {{ 'selected' if m.get('pagina') == e.rel_docs else '' }}>{{ e.titulo }}</option>
+        {% endfor %}
+      </select>
+      <select name="mudanca_campo_{{ i }}">
+        {% for chave, rotulo, _ in campos_mudanca %}
+        <option value="{{ chave }}" {{ 'selected' if m.get('campo') == chave else '' }}>{{ rotulo }}</option>
+        {% endfor %}
+      </select>
+      <input type="text" name="mudanca_valor_{{ i }}" value="{{ m.get('valor', '') }}" placeholder="Novo valor (ex.: Morto, Valynesse)">
+    </div>
+    {% endfor %}
+  </fieldset>
+
+  <button type="submit" class="botao-principal">{{ "Salvar alterações" if evento.get('id') else "Registrar acontecimento" }}</button>
+  {% if evento.get('id') %}<a class="botao-secundario" href="/linha-do-tempo">Cancelar edição</a>{% endif %}
+</form>
+
+<h2>Acontecimentos registrados</h2>
+{% if not eventos %}
+<p class="ajuda">Nenhum acontecimento ainda.</p>
+{% else %}
+<table class="tabela-eventos">
+  <thead><tr><th>Data</th><th>Sessão</th><th>Acontecimento</th><th>Mudanças</th><th></th></tr></thead>
+  <tbody>
+  {% for e in eventos %}
+  <tr>
+    <td>{{ e.get('data') or '—' }}</td>
+    <td>{{ e.get('sessao') if e.get('sessao') is not none else '—' }}</td>
+    <td>{{ e.get('titulo') }}</td>
+    <td>{% for m in e.get('mudancas') or [] %}{{ m.pagina.split('/')[-1][:-3] }}: {{ m.valor }}{% if not loop.last %}<br>{% endif %}{% endfor %}</td>
+    <td class="acoes">
+      <a href="/linha-do-tempo?editar={{ e.id }}">Editar</a>
+      <form method="post" action="/linha-do-tempo/apagar" onsubmit="return confirm('Apagar este acontecimento?');">
+        <input type="hidden" name="id" value="{{ e.id }}">
+        <button type="submit" class="botao-link">Apagar</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+{% endblock %}

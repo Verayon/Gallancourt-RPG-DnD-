@@ -73,34 +73,70 @@ O painel então:
 - liga a sessão anterior a essa, no rodapé de cada uma ("Anterior" / "Próxima");
 - adiciona uma linha em [Sessões registradas](../diario/index.md#sessoes-registradas) e um marco na
   linha do tempo;
-- adiciona, no rodapé de cada NPC e cidade marcados, uma linha na seção **Histórico de sessões**
-  (criando a seção se ainda não existir);
+- cria um acontecimento na [Linha do tempo](linha-do-tempo.md) com o resumo da sessão e a nota de
+  cada NPC e lugar marcado — ele aparece na aba **Linha do tempo** de cada um, em ordem cronológica;
 - registra a página nova no menu do site (`mkdocs.yml`);
 - roda `mkdocs build --strict` para conferir que nada quebrou, e mostra o resultado na tela.
+
+Na tela de resultado, o botão **Registrar mudanças desta sessão** abre esse acontecimento na aba
+Linha do tempo, para você marcar quem morreu, quem mudou de cidade etc. (veja abaixo).
 
 Se alguma coisa der errado (por exemplo, o build falhar), o painel mostra o erro em vez de deixar o
 site quebrado em silêncio — nesse caso, nada é revertido automaticamente, então corrija o problema
 apontado (ou peça para o Claude Code corrigir) antes de rodar o `mkdocs build --strict` de novo.
 
-## Preencher a ficha de um personagem ou cidade
+## Ficha de personagem do NPC (D&D 5e)
 
-Na aba **Ficha**, escolha "Personagem" ou "Cidade", escolha o nome numa lista e preencha os
-campos. Ao salvar, o painel cria (ou substitui) a seção **Ficha de personagem** — ou **Ficha da
-cidade** — no rodapé daquela página, com exatamente os campos preenchidos.
+Na aba **Ficha de NPC** (ou marcando **Criar também a ficha de personagem** ao adicionar um NPC),
+preencha a ficha completa no modelo da ficha oficial de D&D 5e:
 
-Personagens:
-
-| Campo | O que colocar |
+| Bloco | Campos |
 |---|---|
-| Aparência física | Altura, porte, marcas, roupas, o que chama atenção à primeira vista |
-| Personalidade | Como a pessoa age, fala, o que a move |
-| Traço marcante | Um hábito ou trejeito reconhecível |
-| Ideal | O que essa pessoa defende |
-| Vínculo | O que ou quem ela protege ou persegue |
-| Defeito | O que pode ser sua ruína |
-| Proficiências e idiomas | Perícias, ferramentas, armas, idiomas que fazem sentido para ela |
+| Identidade | Classe (e subclasse), nível, raça, antecedente, alinhamento, experiência, inspiração |
+| Atributos | Força, Destreza, Constituição, Inteligência, Sabedoria e Carisma, e em quais testes de resistência o NPC é proficiente |
+| Perícias | As 18 perícias, cada uma sem proficiência, proficiente ou com especialização |
+| Combate | CA (e de onde vem), bônus de iniciativa, deslocamento, PV máximos/atuais/temporários, dados de vida, testes contra a morte e ataques (um por linha: nome, bônus, dano e tipo e notas, separados por barras verticais) |
+| Proficiências | Armaduras, armas, ferramentas e idiomas |
+| Equipamento | Itens (um por linha) e moedas (PC, PP, PE, PO, PL) |
+| Magias | Classe conjuradora, atributo de conjuração, truques, espaços e espaços usados por nível e as magias de cada nível |
+| Personagem | Traços de personalidade, ideais, vínculos, defeitos, idade, altura, peso, olhos, pele, cabelo, aparência, história, aliados e organizações, tesouro e anotações do Mestre |
 
-Cidades:
+Só os valores digitados são guardados (no bloco `ficha5e:` do topo da página do NPC). O site
+calcula sozinho os **modificadores**, o **bônus de proficiência** pelo nível (+2 nos níveis 1–4, +3
+nos 5–8, +4 nos 9–12, +5 nos 13–16, +6 nos 17–20), os **testes de resistência**, as **perícias**
+(especialização dobra a proficiência), a **percepção passiva** (10 + Percepção), a **iniciativa**, a
+**CD de magia** (8 + proficiência + modificador) e o **ataque mágico** (proficiência + modificador).
+O formulário mostra esses números enquanto você digita.
+
+A ficha aparece na aba **Ficha de personagem** da página do NPC, e o nível passa a aparecer na
+tabela de NPCs. Para acompanhar o NPC ao longo da campanha — PV atuais, espaços de magia gastos,
+itens ganhos ou perdidos —, é só voltar à aba e salvar de novo.
+
+## Linha do tempo: o que mudou com cada NPC, cidade e facção
+
+Na aba **Linha do tempo**, registre um acontecimento: data na campanha (no formato
+`3 de março de 1453`), número da sessão (opcional), título, descrição, quem está envolvido e,
+opcionalmente, **mudanças de estado**:
+
+| Mudança | Vale para | Efeito no site |
+|---|---|---|
+| Situação (ex.: *Morto*, *Desaparecido*, *Preso*; para cidades, *Sob cerco*) | NPCs, cidades, facções | NPC: linha "Situação atual" na caixa do topo e coluna Situação da tabela. Cidade/facção: caixa "Situação atual" no topo da página |
+| Localização (ex.: *Valynesse*) | NPCs | Linha "Localização atual" na caixa do topo; coluna Cidade da tabela |
+| Afiliação | NPCs | Linha "Afiliação atual"; coluna Afiliação da tabela |
+| Título | NPCs | Linha "Título atual"; coluna Título da tabela |
+
+Cada acontecimento aparece na aba (ou seção) **Linha do tempo** de cada página envolvida e na página
+[Mestre → Linha do tempo](linha-do-tempo.md), sempre em **ordem cronológica pela data na
+campanha** — não pela ordem em que você registrou. Sem data, vale o número da sessão. Quando um
+campo muda mais de uma vez, vale a mudança mais recente na cronologia.
+
+Na lista abaixo do formulário dá para **editar** ou **apagar** qualquer acontecimento. Os dados
+ficam em `dados/linha-do-tempo.yml`.
+
+## Preencher a ficha de uma cidade
+
+Na aba **Ficha de cidade**, escolha a cidade e preencha os campos. Ao salvar, o painel cria (ou
+substitui) a seção **Ficha da cidade** no rodapé da página.
 
 | Campo | O que colocar |
 |---|---|
@@ -108,7 +144,7 @@ Cidades:
 | Defesas e guarnição | Muralhas, guarda, frota, o que protege o lugar |
 
 !!! warning "Salvar substitui a seção inteira"
-    Cada vez que você salva a ficha de uma página, o painel **reescreve a seção inteira** com os
+    Cada vez que você salva a ficha de uma cidade, o painel **reescreve a seção inteira** com os
     valores atuais dos campos. Se você tiver escrito algo à mão nessa seção pelo editor genérico,
     fora desses campos, aquele texto some na próxima vez que salvar a ficha por aqui — para
     conteúdo que não se encaixa nos campos, coloque em outra seção da página.

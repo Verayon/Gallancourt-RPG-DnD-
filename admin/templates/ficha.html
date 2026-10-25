@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% block titulo %}Ficha{% endblock %}
 {% block conteudo %}
-<h1>Ficha de personagem ou cidade</h1>
+<h1>Ficha da cidade</h1>
 <p class="ajuda">Escolha o tipo e o nome, preencha os campos e clique em Salvar. A seção
   "{{ titulo_secao }}" é criada (ou atualizada) sozinha no rodapé da página.</p>
 
 <div class="abas">
-  <a href="/ficha?tipo=npc" class="{{ 'aba-ativa' if tipo == 'npc' else '' }}">Personagem</a>
+  <a href="/ficha5e">Personagem (ficha D&amp;D 5e)</a>
   <a href="/ficha?tipo=cidade" class="{{ 'aba-ativa' if tipo == 'cidade' else '' }}">Cidade</a>
 </div>
 

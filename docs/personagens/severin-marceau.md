@@ -11,6 +11,7 @@ npc:
   cidade: Montclair de Lune
   afiliacao: "L'Ordre de Célestien"
   resumo: "Autor da doutrina da pureza; fundador de L'Ordre."
+  situacao: Vivo
   retrato: ''
   ficha:
     Título: Primat da Igreja

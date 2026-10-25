@@ -22,7 +22,7 @@ dia a dia".
 | Peça | O que é | Onde roda | Precisa de internet? |
 |---|---|---|---|
 | **O site** (`mkdocs serve`) | Gera e serve a wiki a partir dos arquivos `.md` em `docs/` | `http://127.0.0.1:8000` | Não (só as fontes do Google, na primeira vez que o navegador carrega a página) |
-| **O Painel do Mestre** (`admin/app.py`) | App separado que escreve nos arquivos por você (sessões, fichas, edição) | `http://127.0.0.1:5001` | Não |
+| **O Painel do Mestre** (`admin/app.py`) | App separado que escreve nos arquivos por você (sessões, NPCs, fichas de D&D 5e, linha do tempo, edição) | `http://127.0.0.1:5001` | Não |
 | **O git** | Guarda o histórico de tudo e é a "cópia de segurança" | Sua pasta local + (se você configurar) o GitHub | Só para `git push`/`git pull` |
 
 As três são **independentes**: o Painel pode estar fechado enquanto você só lê o site; o site pode
@@ -130,7 +130,10 @@ gallancourt-rpg-dnd-/
 │   │                     e assets/imagens/ — onde você coloca arte de verdade
 │   └── stylesheets/      O CSS do visual "high fantasy"
 ├── hooks/                Código que roda ao gerar o site: caixa e abas dos NPCs, tabela de
-│                         NPCs e lista de sessões (gallancourt.py)
+│                         NPCs, lista de sessões (gallancourt.py), ficha de D&D 5e (ficha5e.py)
+│                         e linha do tempo (linha_tempo.py)
+├── dados/
+│   └── linha-do-tempo.yml   Acontecimentos da campanha (escrito pela aba Linha do tempo do Painel)
 ├── admin/                O Painel do Mestre (app Flask), fora do site publicado
 │   ├── app.py            As rotas (páginas) do painel
 │   ├── wiki_data.py       Toda a lógica de ler/escrever os arquivos da wiki

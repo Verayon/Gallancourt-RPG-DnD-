@@ -59,13 +59,13 @@ mundo ajam de modo coerente sem determinar antecipadamente todas as consequênci
 | **Gatilhos de mudança** | O que faria este NPC mudar de lado ou de plano |
 ```
 
-Essa é a ficha de **planejamento** do Mestre (o que o NPC quer e esconde). Para aparência física,
-personalidade e proficiências — o retrato do personagem, não seus planos —, use a seção **Ficha de
-personagem** (e, para cidades, **Ficha da cidade**), preenchida pela aba **Ficha** do
-[Painel do Mestre](painel.md). Para combate — atributos, CA, PV, perícias, equipamento, ações e
-magias —, use a **Ficha de combate** (ver abaixo). Não edite essas três seções à mão sem
-necessidade: elas usam marcadores invisíveis (`<!-- campo:... -->` ou `<!-- dados:statblock ... -->`)
-que o painel espera encontrar para reler os valores depois.
+Essa é a ficha de **planejamento** do Mestre (o que o NPC quer e esconde). Para a ficha de jogo
+completa de D&D 5e — nível, atributos, perícias, CA, PV, equipamento, magias, personalidade e
+aparência —, use a aba **Ficha de NPC** do [Painel do Mestre](painel.md). Para criaturas e
+figurantes sem página própria (bandidos de uma sessão, por exemplo), use a **Ficha de combate**
+(ver abaixo). Para cidades, a **Ficha da cidade**. Não edite à mão sem necessidade as seções que
+usam marcadores invisíveis (`<!-- campo:... -->` ou `<!-- dados:statblock ... -->`): o painel
+espera encontrá-los para reler os valores depois.
 
 ## Ficha de combate
 
@@ -112,8 +112,17 @@ npc:
 ```
 
 O texto abaixo do título vira a aba **Visão geral**, e cada seção `##` vira uma aba própria
-(Intrigas, Ficha de personagem, Histórico de sessões…). As caixas **Em aberto** são reunidas numa
-última aba. Não é preciso escrever nada de especial para as abas: basta usar `##`.
+(Intrigas, Na história…). As caixas **Em aberto** são reunidas numa última aba. Não é preciso
+escrever nada de especial para as abas: basta usar `##`.
+
+Duas abas são montadas automaticamente:
+
+- **Ficha de personagem** — a ficha de D&D 5e, a partir do bloco `ficha5e:` do topo da página
+  (preenchido pela aba **Ficha de NPC** do [Painel do Mestre](painel.md)). Só aparece se o bloco
+  existir.
+- **Linha do tempo** — os acontecimentos de `dados/linha-do-tempo.yml` que envolvem o NPC, em ordem
+  cronológica. Mudanças de situação, localização, afiliação ou título aparecem também na caixa do
+  topo e na tabela de NPCs. Cidades e facções ganham a mesma seção no fim da página.
 
 ## Relações e intrigas
 
