@@ -14,6 +14,8 @@ dia a dia".
 5. [Git: o essencial](#5-git-o-essencial)
 6. [Solução de problemas comuns](#6-solução-de-problemas-comuns)
 7. [Quando chamar o Claude Code](#7-quando-chamar-o-claude-code)
+8. [Testar o site](#8-testar-o-site)
+9. [Usar o Claude Code gastando menos](#9-usar-o-claude-code-gastando-menos)
 
 ---
 
@@ -93,6 +95,7 @@ Rode todos a partir da pasta `gallancourt-rpg-dnd-`, com o ambiente virtual já 
 | Ligar o site numa porta diferente | `.venv\Scripts\mkdocs serve -a 127.0.0.1:8001` |
 | Ligar o Painel do Mestre | `.venv\Scripts\python admin\app.py` |
 | Conferir se o site está sem erros | `.venv\Scripts\mkdocs build --strict` |
+| Rodar o teste completo do site | `.venv\Scripts\python scripts\testar_site.py` |
 | Gerar o site como arquivos estáticos (pasta `site/`) | `.venv\Scripts\mkdocs build` |
 | Regenerar as tabelas de relações/intrigas | `.venv\Scripts\python scripts\gerar_relacoes.py` |
 | Instalar/atualizar as dependências | `.venv\Scripts\pip install -r requirements.txt` |
@@ -240,3 +243,76 @@ dá para fazer pelo Painel ou direto no `.md`. Vale me chamar quando for:
 - resolver um **erro de build** que a mensagem não deixou óbvio;
 - **consolidar** um documento novo do autor (PDF, notas) na wiki;
 - qualquer coisa que envolva editar `admin/wiki_data.py`, `mkdocs.yml` ou o CSS.
+
+Para essas tarefas, use os **comandos do projeto** (digite no Claude Code):
+
+| Comando | O que faz |
+|---|---|
+| `/testar-site` | Roda o teste fixo e diz o que passou e o que falhou (ver seção 8) |
+| `/incorporar-documento caminho/do/arquivo` | Compara um texto novo seu com a wiki, pergunta sobre os conflitos e incorpora |
+| `/nova-pagina tipo assunto` | Cria uma cidade, evento, facção, NPC ou lugar no padrão do site, com menu e links |
+
+---
+
+## 8. Testar o site
+
+O teste é **fixo**: valida sempre as mesmas 21 coisas, na mesma ordem, numa **cópia temporária**
+do projeto — ele nunca muda os seus arquivos.
+
+| Grupo | O que confere |
+|---|---|
+| 1. Cálculos | Fórmulas da ficha de D&D 5e e ordem da linha do tempo |
+| 2. Menu | As 6 categorias de topo e as subcategorias da Wiki, na ordem combinada; todo NPC no menu |
+| 3. Relações | O gerador de relações não muda nada se rodado de novo |
+| 4. Build | `mkdocs build --strict` sem erros nem links quebrados |
+| 5. Páginas | Tabela de NPCs, caixa e abas de cada NPC, lista de sessões, botões, linha do tempo |
+| 6. Navegador | Busca, ordenação e filtros da tabela, abas do NPC, menu no celular |
+| 7. Painel | Criar NPC com ficha, criar sessão, registrar acontecimento e ver o efeito no site |
+
+Há três formas de rodar, todas com o mesmo resultado:
+
+1. **No terminal:** `.venv\Scripts\python scripts\testar_site.py` (cerca de 30 segundos). Opções:
+   `--sem-navegador`, `--sem-painel`, `--manter` (guarda a cópia para investigar).
+2. **No Claude Code:** digite `/testar-site`. O Claude roda o teste, lê só o resumo e explica o que
+   falhou — mas **não corrige nada sem você pedir**.
+3. **No GitHub, sem o Claude e sem gastar tokens:** aba **Actions** → **Testar o site** →
+   **Run workflow** (funciona pelo app do GitHub no celular). O resultado, com ✅ e ❌, aparece no
+   resumo da execução. Ele só roda quando você manda.
+
+Os testes do grupo 6 abrem um navegador invisível. No seu computador, eles só rodam depois de
+instalar uma vez:
+
+```powershell
+.venv\Scripts\pip install playwright
+.venv\Scripts\python -m playwright install chromium
+```
+
+Sem isso, o grupo 6 aparece como ⏭️ **PULADO** (não é falha). No GitHub ele sempre roda.
+
+Se uma mudança **combinada com você** fizer um teste falhar (por exemplo, um item novo no menu),
+a lista do que é esperado fica no topo de `scripts/testar_site.py` (`MENU_TOPO`, `MENU_WIKI`,
+`COLUNAS_NPC`) — peça ao Claude para atualizá-la.
+
+---
+
+## 9. Usar o Claude Code gastando menos
+
+Cada mensagem reenvia toda a conversa anterior, e cada sessão começa lendo o `CLAUDE.md`. O que
+mais economiza:
+
+| Faça | Em vez de |
+|---|---|
+| **Painel do Mestre** para o rotineiro: NPC, ficha, sessão, morte, viagem | Pedir ao Claude para editar os arquivos |
+| **Uma sessão por assunto**; para um assunto novo, abra uma sessão nova | Uma conversa longa que mistura tudo |
+| **Pedido completo de uma vez**: "Crie o NPC X: título, cidade, afiliação, descrição…" | Várias mensagens curtas com idas e voltas |
+| **Diga onde**: "Na página de Dodixie, seção Pontos de interesse, acrescente…" | "Coloca isso em algum lugar do site" |
+| **Cole o texto pronto** e diga "incorpore como está" | Pedir que o Claude escreva ou reescreva |
+| **Use os comandos** `/nova-pagina`, `/incorporar-documento`, `/testar-site` | Explicar o processo de novo a cada vez |
+| **Modelo mais leve** (Sonnet ou Haiku, em `/model`) para correções pequenas | O modelo mais forte para tudo |
+| `/testar-site` **só quando quiser validar**, ou o botão do GitHub (grátis) | Pedir para "testar tudo" a cada mudança |
+
+O `CLAUDE.md` foi enxugado para o essencial (regras, decisões, onde fica cada coisa). Os detalhes
+de cada área ficam em `.claude/contexto/`, e o Claude só os lê quando a tarefa envolve aquela área.
+Ao tomar uma decisão nova sobre o mundo ou o site, peça para registrá-la no `CLAUDE.md` (se for
+regra geral) ou no arquivo de contexto da área.
+

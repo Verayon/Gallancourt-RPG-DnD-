@@ -1,0 +1,43 @@
+# Teste fixo do site — roda SÓ quando você aciona manualmente.
+# No GitHub: aba Actions → "Testar o site" → Run workflow (funciona também pelo app no celular).
+# O resultado (tabela com ✅/❌) aparece no resumo da execução. Não usa o Claude nem gasta tokens.
+name: Testar o site
+
+on:
+  workflow_dispatch:
+    inputs:
+      navegador:
+        description: "Incluir os testes que abrem um navegador (filtros, abas, menu no celular)"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  testar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Baixar o projeto
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # histórico completo: o rodapé de datas do site usa o git
+
+      - name: Preparar o Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Instalar as dependências
+        run: pip install -r requirements.txt
+
+      - name: Instalar o navegador de teste
+        if: ${{ inputs.navegador }}
+        run: |
+          pip install playwright
+          python -m playwright install --with-deps chromium
+
+      - name: Rodar o teste
+        run: python scripts/testar_site.py ${{ !inputs.navegador && '--sem-navegador' || '' }}

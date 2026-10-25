@@ -30,7 +30,9 @@ admin/              Painel do Mestre (app Flask local) — ver docs/mestre/paine
 hooks/              Código que monta partes do site: NPCs, ficha de D&D 5e, linha do tempo
 dados/              linha-do-tempo.yml — acontecimentos da campanha
 fontes/             Acervo do autor (textos/, imagens/, videos/) — ver fontes/README.md
-scripts/            gerar_relacoes.py — gera as páginas de relações e intrigas
+scripts/            gerar_relacoes.py (relações e intrigas) e testar_site.py (teste fixo do site)
+.claude/            Comandos do projeto (/testar-site, /incorporar-documento, /nova-pagina) e contexto do Claude
+.github/workflows/  Botão "Testar o site" no GitHub (só roda quando acionado)
 CLAUDE.md           Regras e decisões do projeto, lidas pelo Claude Code em cada sessão
 MANUTENCAO.md       Guia técnico: comandos, rotina do dia a dia, solução de problemas
 ```
