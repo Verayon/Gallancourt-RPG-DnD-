@@ -4861,6 +4861,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ficha-de-combate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ficha de combate
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#como-adicionar-uma-pagina" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5071,6 +5082,17 @@
     <span class="md-ellipsis">
       
         Ficha de NPC
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ficha-de-combate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ficha de combate
       
     </span>
   </a>
@@ -5291,9 +5313,18 @@ mundo ajam de modo coerente sem determinar antecipadamente todas as consequênci
 <p>Essa é a ficha de <strong>planejamento</strong> do Mestre (o que o NPC quer e esconde). Para aparência física,
 personalidade e proficiências — o retrato do personagem, não seus planos —, use a seção <strong>Ficha de
 personagem</strong> (e, para cidades, <strong>Ficha da cidade</strong>), preenchida pela aba <strong>Ficha</strong> do
-<a href="../painel/">Painel do Mestre</a>. Não edite essas duas seções à mão sem necessidade: elas usam
-marcadores invisíveis (<code>&lt;!-- campo:... --&gt;</code>) que o painel espera encontrar para reler os valores
-depois.</p>
+<a href="../painel/">Painel do Mestre</a>. Para combate — atributos, CA, PV, perícias, equipamento, ações e
+magias —, use a <strong>Ficha de combate</strong> (ver abaixo). Não edite essas três seções à mão sem
+necessidade: elas usam marcadores invisíveis (<code>&lt;!-- campo:... --&gt;</code> ou <code>&lt;!-- dados:statblock ... --&gt;</code>)
+que o painel espera encontrar para reler os valores depois.</p>
+<h2 id="ficha-de-combate">Ficha de combate<a class="headerlink" href="#ficha-de-combate" title="Permanent link">&para;</a></h2>
+<p>Um cartão visual de NPC para rodar à mesa, no estilo de uma ficha oficial: nome, CA, PV,
+deslocamento, os seis atributos com modificador calculado sozinho, perícias, sentidos, idiomas,
+equipamento, traços, ações, reações e magias. Preenchida pela aba <strong>Ficha de combate</strong> do
+<a href="../painel/">Painel do Mestre</a>, que insere o cartão na página escolhida (qualquer uma — não precisa
+ser uma página de personagem) e guarda os valores num comentário invisível (<code>&lt;!-- dados:statblock
+... --&gt;</code>) para poder reabrir e editar depois. Veja exemplos em
+<a href="../sessao-0-os-grilhoes-da-estrada/#fichas-de-combate">Sessão 0 — Fichas de combate</a>.</p>
 <h2 id="como-adicionar-uma-pagina">Como adicionar uma página<a class="headerlink" href="#como-adicionar-uma-pagina" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Crie o arquivo <code>.md</code> na pasta da categoria (<code>docs/personagens/</code>, <code>docs/cidades/</code> …),

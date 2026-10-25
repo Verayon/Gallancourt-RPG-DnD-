@@ -4805,6 +4805,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#criar-ou-editar-uma-ficha-de-combate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Criar ou editar uma ficha de combate
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#editar-qualquer-pagina" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5084,6 +5095,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#criar-ou-editar-uma-ficha-de-combate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Criar ou editar uma ficha de combate
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#editar-qualquer-pagina" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5323,6 +5345,46 @@ valores atuais dos campos. Se você tiver escrito algo à mão nessa seção pel
 fora desses campos, aquele texto some na próxima vez que salvar a ficha por aqui — para
 conteúdo que não se encaixa nos campos, coloque em outra seção da página.</p>
 </div>
+<h2 id="criar-ou-editar-uma-ficha-de-combate">Criar ou editar uma ficha de combate<a class="headerlink" href="#criar-ou-editar-uma-ficha-de-combate" title="Permanent link">&para;</a></h2>
+<p>Na aba <strong>Ficha de combate</strong>, escolha a página onde o NPC deve aparecer (qualquer página da wiki,
+não precisa ser uma de personagem — a Sessão 0, por exemplo, guarda as dela na própria página do
+roteiro) e, se já existir uma ficha ali, escolha-a no segundo menu para editar; deixe em "— nova
+ficha —" para criar uma.</p>
+<p>Preencha:</p>
+<table>
+<thead>
+<tr>
+<th>Grupo</th>
+<th>Campos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identidade</td>
+<td>Nome, tipo/papel, CA, PV, deslocamento, perícias, sentidos, idiomas, equipamento</td>
+</tr>
+<tr>
+<td>Atributos</td>
+<td>FOR, DES, CON, INT, SAB, CAR — só o valor; o modificador é calculado sozinho</td>
+</tr>
+<tr>
+<td>Traços, ações e magias</td>
+<td>Uma caixa de texto para cada, um traço/ação por linha no formato <code>Nome: descrição</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ao salvar, o painel insere (ou atualiza) o cartão visual na página, com os atributos já com
+modificador, e roda <code>mkdocs build --strict</code> para confirmar que nada quebrou. Se você mudar o nome
+de uma ficha existente, o cartão é atualizado no lugar — não duplica.</p>
+<div class="admonition warning">
+<p class="admonition-title">Salvar substitui o cartão inteiro</p>
+<p>Assim como a ficha de personagem, cada vez que você salva pelo painel, o cartão inteiro é
+reescrito a partir dos campos do formulário. Não edite o texto do cartão à mão pelo editor
+genérico — na próxima vez que salvar por aqui, qualquer ajuste manual se perde.</p>
+</div>
+<p>Para uma ficha <strong>nova</strong>, um campo opcional "Inserir depois deste trecho" deixa escolher onde ela
+entra na página (por exemplo, <code>## Aliados</code>, copiando o texto exato de um cabeçalho já existente).
+Deixe em branco para simplesmente adicionar no final do texto e mover depois pelo editor genérico.</p>
 <h2 id="editar-qualquer-pagina">Editar qualquer página<a class="headerlink" href="#editar-qualquer-pagina" title="Permanent link">&para;</a></h2>
 <p>Na aba <strong>Editar</strong>, escolha uma página numa lista (com o título de cada uma, para não precisar saber
 o nome do arquivo), edite o texto Markdown na caixa e clique em <strong>Salvar</strong>. É a mesma sintaxe usada
