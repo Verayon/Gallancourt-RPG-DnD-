@@ -1,22 +1,25 @@
 ---
 tags:
-  - Personagens
-  - Baie de l'Éclair
-  - Magia
+- Personagens
+- "Baie de l'Éclair"
+- Magia
+hide:
+- toc
+npc:
+  titulo: Arquimago
+  raca: —
+  cidade: "Baie de l'Éclair"
+  afiliacao: Torre do Trovão
+  resumo: Recluso, obcecado por tempestades; despreza a política.
+  retrato: ''
+  ficha:
+    Título: Arquimago
+    Organização: "[Torre do Trovão](../faccoes/torre-do-trovao.md) (líder)"
+    Cidade: "[Baie de l'Éclair](../cidades/baie-de-l-eclair.md)"
+    Família: "Leva o nome da [Casa Lumière](../faccoes/casa-lumiere.md)"
 ---
 
 # Elian Lumière
-
-<div class="ficha" markdown>
-
-| | |
-|---|---|
-| **Título** | Arquimago |
-| **Organização** | [Torre do Trovão](../faccoes/torre-do-trovao.md) (líder) |
-| **Cidade** | [Baie de l'Éclair](../cidades/baie-de-l-eclair.md) |
-| **Família** | Leva o nome da [Casa Lumière](../faccoes/casa-lumiere.md) |
-
-</div>
 
 O recluso e enigmático líder da Torre do Trovão. Mais do que um simples administrador, Elian é
 um mestre da magia elemental, **obcecado em compreender e domar as tempestades** que dão nome à

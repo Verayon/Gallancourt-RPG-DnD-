@@ -1,23 +1,26 @@
 ---
 tags:
-  - Personagens
-  - Valynesse
+- Personagens
+- Valynesse
+hide:
+- toc
+npc:
+  titulo: Baronesa
+  raca: —
+  cidade: Valynesse
+  afiliacao: Cartel de mineração
+  resumo: "A \"Dama de Ferro\" do cartel de mineração."
+  retrato: ''
+  ficha:
+    Título: Baronesa
+    Cidade: "[Valynesse](../cidades/valynesse.md)"
+    Residência: Mansão suntuosa no distrito da nobreza
+    Esfera: Cartel de mineração
 ---
 
 # Amélie Montpensier
 
 *A "Dama de Ferro".*
-
-<div class="ficha" markdown>
-
-| | |
-|---|---|
-| **Título** | Baronesa |
-| **Cidade** | [Valynesse](../cidades/valynesse.md) |
-| **Residência** | Mansão suntuosa no distrito da nobreza |
-| **Esfera** | Cartel de mineração |
-
-</div>
 
 Controla o **cartel de mineração** de Valynesse. Sua família ganhou renome e ergueu sua fortuna
 com uma crueldade lendária: sabotando concorrentes, comprando juízes e garantindo que cada gema

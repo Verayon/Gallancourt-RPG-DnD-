@@ -199,4 +199,4 @@ escrever o próximo capítulo.
 
 ---
 
-Para conhecer cada cidade, cada casa e cada nome mencionado aqui em detalhe, visite a **[Wiki](wiki.md)**.
+Para conhecer cada cidade, cada casa e cada nome mencionado aqui em detalhe, visite a **[Wiki](../wiki/index.md)**.

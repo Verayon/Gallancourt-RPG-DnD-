@@ -12,8 +12,8 @@ hide:
 *Não com paz. Mas com uma fronteira.*
 
 <div class="hero__actions" markdown>
-[Ler a Lore](lore.md){ .md-button .md-button--primary }
-[Abrir a Wiki](wiki.md){ .md-button }
+[Ler a Lore](lore/index.md){ .md-button .md-button--primary }
+[Abrir a Wiki](wiki/index.md){ .md-button }
 </div>
 
 </div>
@@ -56,5 +56,5 @@ civil criou o mundo político que existe atualmente.
 
 ---
 
-Pronto para explorar? Leia a **[Lore](lore.md)** de cima a baixo, ou entre direto na
-**[Wiki](wiki.md)** para procurar uma cidade, um personagem ou um lugar.
+Pronto para explorar? Leia a **[Lore](lore/index.md)** de cima a baixo, ou entre direto na
+**[Wiki](wiki/index.md)** para procurar uma cidade, um personagem ou um lugar.

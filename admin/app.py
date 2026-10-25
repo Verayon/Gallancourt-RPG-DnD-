@@ -293,6 +293,84 @@ def salvar_ficha_combate():
     )
 
 
+# --------------------------------------------------------------------------
+# Botões do site: "Adicionar NPC" (tabela de NPCs) e "Nova sessão" (Mestre → Sessões)
+# --------------------------------------------------------------------------
+
+@app.get("/npc/novo")
+def formulario_npc():
+    return render_template(
+        "npc_novo.html", campos=wd.CAMPOS_NPC_NOVO, valores={},
+        cidades=wd.listar_cidades(ROOT), faccoes=wd.listar_faccoes(ROOT),
+    )
+
+
+@app.post("/npc/novo")
+def criar_npc():
+    valores = {chave: request.form.get(chave, "") for chave, _, _ in wd.CAMPOS_NPC_NOVO}
+    valores["descricao"] = request.form.get("descricao", "")
+    arquivo = request.files.get("imagem")
+    imagem = (arquivo.filename, arquivo.read()) if arquivo and arquivo.filename else None
+    try:
+        r = wd.criar_npc(ROOT, valores, imagem)
+    except ValueError as exc:
+        return render_template(
+            "npc_novo.html", campos=wd.CAMPOS_NPC_NOVO, valores=valores, erro=str(exc),
+            cidades=wd.listar_cidades(ROOT), faccoes=wd.listar_faccoes(ROOT),
+        )
+    return render_template(
+        "resultado_criacao.html", r=r, titulo_pagina=f"NPC criado: {valores['nome'].strip()}",
+        voltar_url="/npc/novo", voltar_rotulo="Adicionar outro NPC",
+    )
+
+
+@app.get("/npc/retrato")
+def formulario_retrato():
+    return render_template("npc_retrato.html", npcs=wd.listar_npcs(ROOT), escolhido=request.args.get("npc", ""))
+
+
+@app.post("/npc/retrato")
+def salvar_retrato():
+    escolhido = request.form.get("npc", "")
+    arquivo = request.files.get("imagem")
+    contexto = dict(npcs=wd.listar_npcs(ROOT), escolhido=escolhido)
+    if _resolver_pagina(escolhido) is None or not escolhido.startswith("personagens/"):
+        return render_template("npc_retrato.html", erro="Escolha um NPC da lista.", **contexto)
+    if arquivo is None or not arquivo.filename:
+        return render_template("npc_retrato.html", erro="Escolha um arquivo de imagem.", **contexto)
+    try:
+        retrato = wd.definir_retrato(ROOT, escolhido, arquivo.filename, arquivo.read())
+    except ValueError as exc:
+        return render_template("npc_retrato.html", erro=str(exc), **contexto)
+    return render_template("npc_retrato.html", salvo=retrato, **contexto)
+
+
+@app.get("/sessoes/nova")
+def formulario_sessao_nova():
+    return render_template(
+        "sessao_nova.html", numero=wd.proxima_sessao_preparo(ROOT), campos=wd.CAMPOS_SESSAO_NOVA, valores={},
+    )
+
+
+@app.post("/sessoes/nova")
+def criar_sessao_nova():
+    valores = {chave: request.form.get(chave, "") for chave, _ in wd.CAMPOS_SESSAO_NOVA}
+    valores["titulo"] = request.form.get("titulo", "")
+    valores["resumo"] = request.form.get("resumo", "")
+    try:
+        numero = int(request.form.get("numero", ""))
+        r = wd.criar_sessao_preparo(ROOT, numero, valores["titulo"], valores)
+    except ValueError as exc:
+        return render_template(
+            "sessao_nova.html", numero=request.form.get("numero", ""), campos=wd.CAMPOS_SESSAO_NOVA,
+            valores=valores, erro=str(exc) if "invalid literal" not in str(exc) else "Número de sessão inválido.",
+        )
+    return render_template(
+        "resultado_criacao.html", r=r, titulo_pagina=f"Sessão {numero} criada",
+        voltar_url="/sessoes/nova", voltar_rotulo="Criar outra sessão",
+    )
+
+
 def _resolver_pagina(rel: str) -> Path | None:
     """Resolve um caminho relativo a docs/ com segurança (sem sair de docs/)."""
     base = wd.docs_dir(ROOT).resolve()

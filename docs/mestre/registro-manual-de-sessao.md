@@ -55,7 +55,7 @@ editar os arquivos à mão, ou para entender o que o painel está fazendo.
         entre os marcadores `<!-- inicio:sessoes -->` e `<!-- fim:sessoes -->`;
       - um marco novo na linha do tempo `mermaid`, entre `<!-- inicio:timeline -->` e
         `<!-- fim:timeline -->`, na mesma página;
-      - uma entrada nova em `nav:`, dentro do `mkdocs.yml`, na seção **Wiki → Diário de Sessões**.
+      - uma entrada nova em `nav:`, dentro do `mkdocs.yml`, na seção **Mestre → Diário de Sessões**.
 5. Se uma página específica mudou de um jeito que vale a pena guardar a razão (uma revelação, uma
    morte, uma aliança quebrada), adicione nela uma seção `## Histórico de sessões` com uma linha
    como:

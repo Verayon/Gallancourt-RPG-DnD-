@@ -1,22 +1,25 @@
 ---
 tags:
-  - Personagens
-  - Valynesse
+- Personagens
+- Valynesse
+hide:
+- toc
+npc:
+  titulo: Visconde
+  raca: —
+  cidade: Valynesse
+  afiliacao: Nobreza de Valynesse
+  resumo: Playboy corrupto em público; idealista que financia rebeldes em segredo.
+  retrato: ''
+  ficha:
+    Título: Visconde
+    Cidade: "[Valynesse](../cidades/valynesse.md)"
+    Residência: Palacete decadente no distrito comercial
+    Fachada: Playboy corrupto
+    Verdade: Idealista que financia movimentos rebeldes
 ---
 
 # Henri du Valois
-
-<div class="ficha" markdown>
-
-| | |
-|---|---|
-| **Título** | Visconde |
-| **Cidade** | [Valynesse](../cidades/valynesse.md) |
-| **Residência** | Palacete decadente no distrito comercial |
-| **Fachada** | Playboy corrupto |
-| **Verdade** | Idealista que financia movimentos rebeldes |
-
-</div>
 
 **Publicamente**, é um playboy corrupto, envolvido em contrabando e negócios escusos.
 

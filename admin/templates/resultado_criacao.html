@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block titulo %}{{ titulo_pagina }}{% endblock %}
+{% block conteudo %}
+<h1>{{ titulo_pagina }}</h1>
+
+{% if r.build_ok %}
+<p class="aviso aviso--ok">✅ O site foi conferido (<code>mkdocs build --strict</code>) e está tudo certo.</p>
+{% else %}
+<p class="aviso aviso--erro">⚠️ A página foi criada, mas <code>mkdocs build --strict</code> encontrou um problema. Nada foi desfeito automaticamente — confira o erro abaixo (ou peça para o Claude Code corrigir).</p>
+<pre class="saida-build">{{ r.build_saida }}</pre>
+{% endif %}
+
+<h2>O que foi feito</h2>
+<ul>
+  <li>Página criada: <code>{{ r.arquivo }}</code></li>
+  <li>Menu do site (<code>mkdocs.yml</code>): {{ "atualizado" if r.nav_ok else "não encontrei onde inserir — confira manualmente" }}</li>
+</ul>
+
+<p>
+  <a class="botao-principal" href="http://127.0.0.1:8000/{{ r.rel_docs | replace('.md', '/') }}" target="_blank" rel="noopener">Ver a página no site ↗</a>
+  <a class="botao-secundario" href="/editar?pagina={{ r.rel_docs }}">Continuar editando a página</a>
+  <a class="botao-secundario" href="{{ voltar_url }}">{{ voltar_rotulo }}</a>
+</p>
+{% endblock %}

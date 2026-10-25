@@ -1,21 +1,24 @@
 ---
 tags:
-  - Personagens
-  - Baie de l'Éclair
-  - Naval
+- Personagens
+- "Baie de l'Éclair"
+- Naval
+hide:
+- toc
+npc:
+  titulo: Comodoro
+  raca: —
+  cidade: "Baie de l'Éclair"
+  afiliacao: Frota mercante
+  resumo: Dono da maior frota mercante; governa pelo medo.
+  retrato: ''
+  ficha:
+    Título: Comodoro
+    Cidade: "[Baie de l'Éclair](../cidades/baie-de-l-eclair.md)"
+    Esfera: Maior frota mercante do reino; monopólio de rotas comerciais
 ---
 
 # Jean Vigny
-
-<div class="ficha" markdown>
-
-| | |
-|---|---|
-| **Título** | Comodoro |
-| **Cidade** | [Baie de l'Éclair](../cidades/baie-de-l-eclair.md) |
-| **Esfera** | Maior frota mercante do reino; monopólio de rotas comerciais |
-
-</div>
 
 Um homem feito por si mesmo, cuja vasta frota mercante não foi herdada, mas **construída sobre
 a ruína de seus rivais** — entre eles a linhagem de [Étienne Rochefort](etienne-rochefort.md). É

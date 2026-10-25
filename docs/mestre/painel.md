@@ -28,6 +28,34 @@ Ou, no Windows, dê duplo clique em `admin/iniciar-painel.bat`. Depois, abra
 **http://127.0.0.1:5001/** no navegador. Deixe essa janela do terminal aberta enquanto usa o
 painel — fechá-la desliga a ferramenta (o site em si continua no ar, servido pelo `mkdocs serve`).
 
+## Adicionar um NPC
+
+Na página [NPCs](../personagens/index.md), o botão **Adicionar NPC** abre esta aba (ou acesse
+`http://127.0.0.1:5001/npc/novo`). Preencha o que já souber — só o nome é obrigatório: título,
+raça, cidade, afiliação, um resumo de uma linha, a descrição e, se quiser, o retrato. Ao clicar em
+**Criar NPC**, o painel:
+
+1. cria `docs/personagens/<nome>.md` no padrão das outras páginas de NPC (caixa com retrato e
+   dados rápidos, abas abaixo);
+2. coloca o NPC no menu, em **Wiki → NPCs**, dentro do grupo da cidade (ou em **Outros**, se a
+   cidade não tiver grupo);
+3. confere o site com `mkdocs build --strict`.
+
+O NPC aparece sozinho na tabela de NPCs. Para trocar ou adicionar o retrato de um NPC que já
+existe, use **Trocar o retrato de um NPC existente** (`/npc/retrato`).
+
+## Criar uma sessão nova
+
+Em [Mestre → Sessões](sessoes/index.md), o botão **Nova sessão** abre esta aba (ou acesse
+`http://127.0.0.1:5001/sessoes/nova`). Informe o número e o título — o resto é opcional: resumo
+rápido, jogadores, nível, duração, tom, local, missão e recompensa. O painel cria a página de
+preparação com o mesmo layout da Sessão 0 (ficha no topo e as abas Resumo, NPCs, Cenas,
+Loot & Pistas, Lugares e Segredo do Mestre), adiciona-a ao menu em **Mestre → Sessões** e confere o
+site. A sessão aparece sozinha na lista de sessões.
+
+Essa é a página de **preparação**. Depois de jogar, registre o que aconteceu em
+**Registrar sessão** (abaixo), que alimenta o [Diário de Sessões](../diario/index.md).
+
 ## Registrar uma sessão
 
 Na aba inicial:

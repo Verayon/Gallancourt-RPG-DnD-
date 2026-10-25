@@ -1,21 +1,24 @@
 ---
 tags:
-  - Personagens
-  - Dodixie
-  - Crime
+- Personagens
+- Dodixie
+- Crime
+hide:
+- toc
+npc:
+  titulo: —
+  raca: Tiefling
+  cidade: Dodixie
+  afiliacao: La Voile Noire
+  resumo: Tiefling; líder atribuído da rede criminosa.
+  retrato: ''
+  ficha:
+    Raça: Tiefling
+    Organização: "[La Voile Noire](../faccoes/la-voile-noire.md) (liderança atribuída)"
+    Cidade: "[Dodixie](../cidades/dodixie.md)"
 ---
 
 # Zepharion
-
-<div class="ficha" markdown>
-
-| | |
-|---|---|
-| **Raça** | Tiefling |
-| **Organização** | [La Voile Noire](../faccoes/la-voile-noire.md) (liderança atribuída) |
-| **Cidade** | [Dodixie](../cidades/dodixie.md) |
-
-</div>
 
 Tiefling a quem se atribui a liderança de La Voile Noire, a rede criminosa das docas de Dodixie.
 Mantém uma vida pública enquanto opera a rede clandestina.

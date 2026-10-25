@@ -1,25 +1,28 @@
 ---
 tags:
-  - Personagens
-  - Valynesse
-  - Espionagem
+- Personagens
+- Valynesse
+- Espionagem
+hide:
+- toc
+npc:
+  titulo: Conde
+  raca: —
+  cidade: Valynesse
+  afiliacao: Rede de espionagem
+  resumo: O Mestre dos Sussurros.
+  retrato: ''
+  ficha:
+    Título: Conde
+    Epíteto: Mestre dos Sussurros
+    Cidade: "[Valynesse](../cidades/valynesse.md)"
+    Base: Biblioteca particular, que dizem ter mais passagens secretas do que livros
+    Esfera: Espionagem em todo o reino
 ---
 
 # Philippe Beaumont
 
 *O Mestre dos Sussurros de Gallancourt.*
-
-<div class="ficha" markdown>
-
-| | |
-|---|---|
-| **Título** | Conde |
-| **Epíteto** | Mestre dos Sussurros |
-| **Cidade** | [Valynesse](../cidades/valynesse.md) |
-| **Base** | Biblioteca particular, que dizem ter mais passagens secretas do que livros |
-| **Esfera** | Espionagem em todo o reino |
-
-</div>
 
 A família Beaumont perdeu quase todo o seu poder militar durante a guerra civil; Philippe o
 reconstruiu com **informações**. Sua rede de espiões se estende por todo o reino, e ele sabe de

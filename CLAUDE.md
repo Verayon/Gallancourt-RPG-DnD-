@@ -25,17 +25,24 @@ Rode `mkdocs build --strict` antes de todo commit. O build precisa terminar sem 
 
 ```
 docs/
-├── index.md, visao-geral.md   Início e resumo do cenário em uma página
-├── historia/                  A crônica em capítulos + cronologia
+├── index.md                   Início
+├── lore/index.md, visao-geral.md   A Lore (narrativa contínua) e o resumo em uma página
+├── wiki/index.md              Hub da Wiki
+├── historia/                  A crônica em capítulos + cronologia (menu: Lore)
 ├── eventos/                   Uma página por evento
 ├── geografia/                 Península, cordilheira, Cicatriz, ilhas, Nirador, mapas
 ├── cidades/                   5 cidades de Gallancourt + 3 de L'Ordre
 ├── faccoes/                   Estados, casas, organizações, frotas
-├── personagens/               Uma página por NPC
+├── personagens/               Uma página por NPC (menu: Wiki → NPCs); dados no bloco `npc:`
 ├── mundo/                     Relações, intrigas, religião, economia, glossário
 ├── compendio/                 Leitura consolidada e completa: história, uma página por cidade,
 │                              personagens, política, geografia e religião, pendências
-└── mestre/                    Lacunas, inconsistências, fontes, manutenção do cânone
+├── mestre/                    Mestre: sessões (mestre/sessoes/), referência rápida; e as páginas
+│                              de Configurações (painel, lacunas, inconsistências, fontes…)
+├── configuracoes/index.md     Página de entrada de Configurações
+├── diario/                    Diário de Sessões (menu: Mestre)
+└── javascripts/gallancourt.js Tabela de NPCs (ordenar/filtrar) e abertura de abas por âncora
+hooks/gallancourt.py           Hook do MkDocs: caixa e abas dos NPCs, tabela de NPCs, lista de sessões
 fontes/                        Acervo do autor (não editar); guia em fontes/README.md
 ├── textos/                    PDFs, documentos e transcrições .md
 ├── imagens/                   Mapas, ilustrações, retratos
@@ -90,12 +97,17 @@ Perguntas ainda abertas estão em `docs/mestre/lacunas.md`.
 O site tem um padrão visual próprio, definido em `docs/stylesheets/extra.css`. Ao criar páginas
 novas, siga-o em vez do visual padrão do Material.
 
-- **Navegação:** só 3 itens de topo na barra lateral — **Início** (`index.md`), **Lore**
-  (`lore.md`, página única e contínua) e **Wiki** (`wiki.md`, hub que expande em todas as outras
-  seções: Cidades, Personagens, Facções, Eventos, Geografia, Mundo, Crônica em capítulos,
-  Compêndio, Referência do Mestre). `navigation.tabs` fica **desligado** de propósito — tudo mora
-  na barra lateral, nunca em abas no topo.
-- **A Lore é só narrativa.** `lore.md` conta a história como uma crônica contínua, sem `<sup>`,
+- **Navegação (decidida pelo autor):** 6 itens de topo na barra lateral, nesta ordem —
+  **Início** (`index.md`), **Lore** (`lore/index.md` + Gallancourt em uma página + Crônica em
+  capítulos), **Wiki** (`wiki/index.md` + Mundo, Geografia, Cidades, Facções, **NPCs**, Eventos),
+  **Compêndio**, **Mestre** (`mestre/index.md` + Sessões, Diário de Sessões, Referência rápida) e
+  **Configurações** (`configuracoes/index.md` + Painel, registro manual, manutenção do cânone,
+  lacunas, inconsistências, fontes, tags). A seção de personagens se chama **NPCs** no site (a
+  pasta continua `personagens/`). `navigation.tabs` e `navigation.sections` ficam **desligados**:
+  toda seção é uma barra que abre e fecha, com a seta dentro da própria barra.
+- **Barra lateral:** itens finos, só com contorno (sem fundo), seta integrada na barra — regras
+  na seção 4 do `extra.css`. Não volte às "caixas dentro de caixas".
+- **A Lore é só narrativa.** `lore/index.md` conta a história como uma crônica contínua, sem `<sup>`,
   sem `!!!` (admonições) e sem links de referência — é para ler como um livro. A versão anotada,
   com a origem de cada fato nas fontes (V1/V2/dossiê) e as caixas de "em aberto"/"divergência",
   mora em `compendio/historia-de-gallancourt.md` e faz parte do Compêndio, não da Lore. Ao
@@ -129,7 +141,7 @@ novas, siga-o em vez do visual padrão do Material.
   - `.lore-scroll` — envolve o corpo da página de Lore: leitura em coluna estreita, capitular na
     primeira letra, divisores ornamentais antes de cada `##`. Não aplique a páginas de referência
     (tabelas ficam apertadas nessa largura).
-  - `.wiki-portal` — envolve o hub `wiki.md`.
+  - `.wiki-portal` — envolve o hub `wiki/index.md`.
 - Favicon: `docs/assets/favicon.svg`. Logo do tema: ícone `material/sword-cross`.
 
 ## Diário de sessões e calendário
@@ -150,7 +162,7 @@ preparação. Duas peças cuidam disso:
   1. crie `diario/sessao-NN.md` a partir do modelo;
   2. edite de fato as páginas listadas em "Atualizações no cânone" daquela sessão;
   3. adicione uma linha na tabela e um marco na linha do tempo de `diario/index.md`;
-  4. registre `diario/sessao-NN.md` no `nav:` do `mkdocs.yml`, dentro de **Wiki → Diário de
+  4. registre `diario/sessao-NN.md` no `nav:` do `mkdocs.yml`, dentro de **Mestre → Diário de
      Sessões**;
   5. se a mudança merece ser lembrada na própria página do personagem/cidade/facção, adicione lá
      uma seção `## Histórico de sessões` (opcional; só existe onde já houve uma mudança
@@ -185,11 +197,36 @@ que o painel depende de encontrar, e que **não podem ser removidas** das págin
 Ao testar mudanças no painel, use uma cópia em `GALLANCOURT_ADMIN_ROOT` — nunca aplique uma sessão
 de teste direto no `docs/diario/` real.
 
+## Páginas de NPC
+
+Cada `docs/personagens/<slug>.md` tem um bloco `npc:` no front matter (`titulo`, `raca`, `cidade`,
+`afiliacao`, `resumo`, `retrato`, `ficha`) e `hide: [toc]`. O hook `hooks/gallancourt.py`:
+
+- monta, logo abaixo do `# Título`, a caixa com o retrato e as linhas de `ficha` (não escreva a
+  antiga `<div class="ficha">` nessas páginas);
+- transforma o texto antes do primeiro `##` na aba **Visão geral**, cada `##` em uma aba, e as
+  caixas `!!! question "Em aberto"` numa última aba. Por isso as ferramentas que acrescentam
+  seções `##` no fim da página (Painel, `gerar_relacoes.py`) continuam funcionando;
+- gera a tabela de `personagens/index.md` no lugar de `<!-- npcs:tabela -->`, lendo o bloco `npc:`
+  de todas as páginas. `titulo`, `raca`, `cidade` e `afiliacao` são texto simples (viram filtros);
+  links vão só em `ficha`. Valor desconhecido = `—`.
+
+## Sessões (Mestre → Sessões)
+
+Uma página por sessão em `docs/mestre/sessoes/sessao-<n>-<slug>.md`, no layout da Sessão 0: ficha
+(`<div class="ficha">`) + abas `=== "Resumo"`, `"NPCs"`, `"Cenas"`, `"Loot & Pistas"`,
+`"Lugares"`, `"Segredo do Mestre"`. O front matter tem `sessao: {numero: N}`. A lista em
+`mestre/sessoes/index.md` é gerada pelo hook no lugar de `<!-- sessoes:lista -->`.
+
+Os botões **Adicionar NPC** e **Nova sessão** apontam para o Painel (`extra.painel_url` no
+`mkdocs.yml`, rotas `/npc/novo` e `/sessoes/nova`), que cria a página e a insere no `nav` abaixo das
+linhas âncora `      - NPCs:` e `      - Sessões:` — não mude a indentação nem o texto dessas linhas.
+
 ## Convenções das páginas
 
 - Nome de arquivo: minúsculas, sem acentos, com hífens (`louis-de-montclair.md`).
 - Toda página começa com front matter de `tags` (usadas no índice de tags).
-- Personagens, cidades, facções e eventos têm uma ficha lateral:
+- Cidades, facções, eventos e sessões têm uma ficha lateral (NPCs usam o bloco `npc:`):
   `<div class="ficha" markdown>` + tabela com cabeçalho vazio (`| | |`).
 - Links sempre relativos entre arquivos `.md` (`../cidades/dodixie.md`), nunca URLs do site.
 - Toda página nova precisa entrar no `nav` do `mkdocs.yml` e receber links das páginas

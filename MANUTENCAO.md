@@ -60,6 +60,9 @@ Depois, abra no navegador:
 ### Enquanto trabalha
 
 - Editando pelo **Painel**: marque as sessões/fichas, salve. O site recarrega sozinho.
+- Os botões **Adicionar NPC** (página NPCs) e **Nova sessão** (Mestre → Sessões) do site abrem o
+  Painel. Eles só funcionam com o Painel ligado neste computador; no site publicado na internet,
+  o botão abre uma página em branco se o Painel estiver desligado.
 - Editando **arquivos `.md` direto** (VS Code, Claude Code): salve o arquivo. O site recarrega
   sozinho também — o `mkdocs serve` observa a pasta `docs/` inteira.
 - Se mudar `mkdocs.yml` (o menu do site), o `mkdocs serve` também detecta e recarrega.
@@ -114,14 +117,20 @@ roda esse comando sozinho depois de aplicar uma sessão ou uma ficha — mas se 
 ```
 gallancourt-rpg-dnd-/
 ├── docs/                A wiki em si — tudo o que aparece no site vem daqui
-│   ├── index.md, wiki.md, lore.md    As três portas de entrada (Início, Wiki, Lore)
-│   ├── cidades/ personagens/ faccoes/ eventos/ geografia/ mundo/   O conteúdo por categoria
+│   ├── index.md, lore/, wiki/   Início, Lore e o hub da Wiki
+│   ├── cidades/ personagens/ faccoes/ eventos/ geografia/ mundo/   O conteúdo da Wiki
+│   │                     (personagens/ aparece no site como "NPCs")
 │   ├── diario/           O Diário de Sessões (uma página por sessão jogada)
 │   ├── compendio/        Versão longa e anotada da história e das cidades
-│   ├── mestre/           Referência do Mestre — inclui o guia do Painel (painel.md)
+│   ├── mestre/           Mestre: sessões (mestre/sessoes/), referência rápida, e as páginas
+│   │                     de Configurações, inclusive o guia do Painel (painel.md)
+│   ├── configuracoes/    Página de entrada de Configurações
+│   ├── javascripts/      Filtros e ordenação da tabela de NPCs
 │   ├── assets/           Imagens do site: molduras provisórias, fundo da página inicial,
 │   │                     e assets/imagens/ — onde você coloca arte de verdade
 │   └── stylesheets/      O CSS do visual "high fantasy"
+├── hooks/                Código que roda ao gerar o site: caixa e abas dos NPCs, tabela de
+│                         NPCs e lista de sessões (gallancourt.py)
 ├── admin/                O Painel do Mestre (app Flask), fora do site publicado
 │   ├── app.py            As rotas (páginas) do painel
 │   ├── wiki_data.py       Toda a lógica de ler/escrever os arquivos da wiki

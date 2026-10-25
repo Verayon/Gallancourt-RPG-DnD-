@@ -1,22 +1,25 @@
 ---
 tags:
-  - Personagens
-  - Baie de l'Éclair
-  - Naval
+- Personagens
+- "Baie de l'Éclair"
+- Naval
+hide:
+- toc
+npc:
+  titulo: Capitão
+  raca: —
+  cidade: "Baie de l'Éclair"
+  afiliacao: Frota corsária
+  resumo: Nobre arruinado por Vigny; corsário ligado secretamente a Corbeau.
+  retrato: ''
+  ficha:
+    Título: Capitão corsário
+    Origem: "Linhagem nobre de [Baie de l'Éclair](../cidades/baie-de-l-eclair.md) arruinada por Jean Vigny"
+    Patrona secreta: "[Scyras Corbeau](scyras-corbeau.md)"
+    Frota: "Ver [Frotas corsárias e piratas](../faccoes/frotas-corsarias-e-piratas.md)"
 ---
 
 # Étienne Rochefort
-
-<div class="ficha" markdown>
-
-| | |
-|---|---|
-| **Título** | Capitão corsário |
-| **Origem** | Linhagem nobre de [Baie de l'Éclair](../cidades/baie-de-l-eclair.md) arruinada por Jean Vigny |
-| **Patrona secreta** | [Scyras Corbeau](scyras-corbeau.md) |
-| **Frota** | Ver [Frotas corsárias e piratas](../faccoes/frotas-corsarias-e-piratas.md) |
-
-</div>
 
 Um nobre de uma linhagem que **perdeu tudo para [Jean Vigny](jean-vigny.md)**. Desonrado e
 sedento por vingança, tornou-se um corsário temido.

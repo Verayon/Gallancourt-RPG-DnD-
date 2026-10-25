@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block titulo %}Nova sessão{% endblock %}
+{% block conteudo %}
+<h1>Nova sessão — Sessão {{ numero }}</h1>
+<p class="ajuda">
+  Cria a página de preparação da sessão com o mesmo layout das anteriores: ficha no topo e as abas
+  Resumo, NPCs, Cenas, Loot &amp; Pistas, Lugares e Segredo do Mestre. Só o título é obrigatório;
+  o resto você preenche depois, em <a href="/editar">Editar página</a>. Para registrar uma sessão
+  que já foi <em>jogada</em>, use <a href="/">Registrar sessão</a>.
+</p>
+
+{% if erro %}<p class="aviso aviso--erro">⚠️ {{ erro }}</p>{% endif %}
+
+<form method="post" action="/sessoes/nova" class="form-sessao">
+  <fieldset>
+    <legend>A sessão</legend>
+    <div class="duas-colunas">
+      <label>Número
+        <input type="number" name="numero" value="{{ numero }}" min="0" required>
+      </label>
+      <label>Título
+        <input type="text" name="titulo" value="{{ valores.get('titulo', '') }}" placeholder="Ex.: O Posto Cinzento" required>
+      </label>
+    </div>
+    <label>Resumo rápido
+      <textarea name="resumo" rows="5" placeholder="Em poucas linhas: o que acontece nesta sessão.">{{ valores.get('resumo', '') }}</textarea>
+    </label>
+  </fieldset>
+
+  <fieldset>
+    <legend>Ficha da sessão</legend>
+    {% for chave, rotulo in campos %}
+    <label>{{ rotulo }}
+      <input type="text" name="{{ chave }}" value="{{ valores.get(chave, '') }}">
+    </label>
+    {% endfor %}
+  </fieldset>
+
+  <button type="submit" class="botao-principal">Criar sessão</button>
+</form>
+{% endblock %}

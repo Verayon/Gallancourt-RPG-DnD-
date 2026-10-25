@@ -1,22 +1,25 @@
 ---
 tags:
-  - Personagens
-  - Nouvelle-Montagne
-  - Naval
+- Personagens
+- Nouvelle-Montagne
+- Naval
+hide:
+- toc
+npc:
+  titulo: Emissário
+  raca: —
+  cidade: Nouvelle-Montagne
+  afiliacao: Nobreza de Nouvelle-Montagne
+  resumo: "Financia com a própria fortuna piratas contra Baie de l'Éclair."
+  retrato: ''
+  ficha:
+    Título: Emissário; nobre menor
+    Cidade: "[Nouvelle-Montagne](../cidades/nouvelle-montagne.md)"
+    Base secreta: As Grutas Sussurrantes
+    Frota: "Frota pirata rival à de Rochefort — ver [Frotas corsárias e piratas](../faccoes/frotas-corsarias-e-piratas.md)"
 ---
 
 # Lucien de Saint-Pierre
-
-<div class="ficha" markdown>
-
-| | |
-|---|---|
-| **Título** | Emissário; nobre menor |
-| **Cidade** | [Nouvelle-Montagne](../cidades/nouvelle-montagne.md) |
-| **Base secreta** | As Grutas Sussurrantes |
-| **Frota** | Frota pirata rival à de Rochefort — ver [Frotas corsárias e piratas](../faccoes/frotas-corsarias-e-piratas.md) |
-
-</div>
 
 Nobre menor, diplomata astuto e mestre da ação secreta. Cansado da inércia do conselho de clãs,
 age por conta própria.

@@ -1,22 +1,25 @@
 ---
 tags:
-  - Personagens
-  - Saint-Armand
-  - L'Ordre de Célestien
+- Personagens
+- Saint-Armand
+- "L'Ordre de Célestien"
+hide:
+- toc
+npc:
+  titulo: Capitão-General
+  raca: —
+  cidade: Saint-Armand
+  afiliacao: Patrulha da Fronteira
+  resumo: Traidor infiltrado.
+  retrato: ''
+  ficha:
+    Título: Capitão-General — comandante da Patrulha da Fronteira
+    Cidade: "[Saint-Armand](../cidades/saint-armand.md)"
+    Lealdade real: "[L'Ordre de Célestien](../faccoes/l-ordre-de-celestien.md)"
+    Situação: Traidor infiltrado, ainda em seu posto
 ---
 
 # Thibault de la Rivière
-
-<div class="ficha" markdown>
-
-| | |
-|---|---|
-| **Título** | Capitão-General — comandante da Patrulha da Fronteira |
-| **Cidade** | [Saint-Armand](../cidades/saint-armand.md) |
-| **Lealdade real** | [L'Ordre de Célestien](../faccoes/l-ordre-de-celestien.md) |
-| **Situação** | Traidor infiltrado, ainda em seu posto |
-
-</div>
 
 Comandante da Patrulha da Fronteira e, em segredo, um traidor da mais alta ordem.
 

@@ -26,7 +26,7 @@ campanha" de cada sessão.
 
 !!! question "Em aberto"
     - Em que ano a campanha começa? Isso se define sozinho quando você registra a primeira sessão.
-    - Os eventos da [história pré-campanha](../lore.md) (Édito, guerra civil, Queda de Valynesse…)
+    - Os eventos da [história pré-campanha](../lore/index.md) (Édito, guerra civil, Queda de Valynesse…)
       continuam com datas **relativas** ("três anos de guerra", "o Ano de Sangue") — nenhum ano
       fixo foi atribuído a eles. Se quiser, podemos fixar um ano para cada um a partir do ano em
       que a campanha começa.

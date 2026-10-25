@@ -1,22 +1,25 @@
 ---
 tags:
-  - Personagens
-  - Baie de l'Éclair
-  - Naval
+- Personagens
+- "Baie de l'Éclair"
+- Naval
+hide:
+- toc
+npc:
+  titulo: Mestre
+  raca: —
+  cidade: "Baie de l'Éclair"
+  afiliacao: Guilda dos Construtores Navais
+  resumo: Líder dos construtores navais; busca se livrar de Vigny.
+  retrato: ''
+  ficha:
+    Título: Mestre
+    Organização: "[Guilda dos Construtores Navais](../faccoes/guilda-dos-construtores-navais.md) (líder)"
+    Cidade: "[Baie de l'Éclair](../cidades/baie-de-l-eclair.md)"
+    Família: Produz os melhores navios de Gallancourt há gerações
 ---
 
 # Louis de Montclair
-
-<div class="ficha" markdown>
-
-| | |
-|---|---|
-| **Título** | Mestre |
-| **Organização** | [Guilda dos Construtores Navais](../faccoes/guilda-dos-construtores-navais.md) (líder) |
-| **Cidade** | [Baie de l'Éclair](../cidades/baie-de-l-eclair.md) |
-| **Família** | Produz os melhores navios de Gallancourt há gerações |
-
-</div>
 
 O respeitado líder da guilda dos construtores navais. Artesão orgulhoso, despreza a brutalidade
 de [Jean Vigny](jean-vigny.md), mas está preso a ele em uma relação simbiótica: a imprudência de

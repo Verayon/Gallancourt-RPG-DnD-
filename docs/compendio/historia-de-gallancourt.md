@@ -8,7 +8,7 @@ tags:
 
 !!! tip "Procurando a leitura corrida?"
     Esta página traz a mesma história com a origem de cada fato marcada nas fontes. Para ler como
-    uma crônica contínua, sem anotações, veja a **[Lore](../lore.md)**.
+    uma crônica contínua, sem anotações, veja a **[Lore](../lore/index.md)**.
 
 > *Houve um tempo — e é assim que devem começar as histórias que viram herança e cicatriz — em
 > que Gallancourt respirava como um reino consolidado.* <sup>V1</sup>

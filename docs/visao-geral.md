@@ -83,7 +83,7 @@ Mapa completo em **[Intrigas da nobreza](mundo/intrigas-da-nobreza.md)**.
 |---|---|
 | O que aconteceu no passado | [História](historia/index.md) → [Cronologia](historia/cronologia.md) |
 | Um lugar | [Cidades](cidades/index.md) ou [Geografia](geografia/index.md) |
-| Uma pessoa | [Personagens](personagens/index.md) |
+| Uma pessoa | [NPCs](personagens/index.md) |
 | Uma família ou organização | [Facções](faccoes/index.md) |
 | Quem odeia quem | [Relações entre cidades](mundo/relacoes-entre-cidades.md) · [Intrigas da nobreza](mundo/intrigas-da-nobreza.md) |
 | O que ainda não foi decidido | [Lacunas em aberto](mestre/lacunas.md) |

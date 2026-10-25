@@ -1,20 +1,23 @@
 ---
 tags:
-  - Personagens
-  - Nouvelle-Montagne
+- Personagens
+- Nouvelle-Montagne
+hide:
+- toc
+npc:
+  titulo: Chefe
+  raca: —
+  cidade: Nouvelle-Montagne
+  afiliacao: Facção pragmática (conselho de clãs)
+  resumo: Quer um bloco com Dodixie e Saint-Armand.
+  retrato: ''
+  ficha:
+    Título: Chefe
+    Cidade: "[Nouvelle-Montagne](../cidades/nouvelle-montagne.md)"
+    Facção interna: Facção pragmática do conselho de clãs
 ---
 
 # Pierre Montaigne
-
-<div class="ficha" markdown>
-
-| | |
-|---|---|
-| **Título** | Chefe |
-| **Cidade** | [Nouvelle-Montagne](../cidades/nouvelle-montagne.md) |
-| **Facção interna** | Facção pragmática do conselho de clãs |
-
-</div>
 
 Homem pragmático e resiliente, líder da facção pragmática no conselho de clãs. Argumenta que **a
 neutralidade é uma forma de submissão** e defende ativamente a formação de um **bloco de poder

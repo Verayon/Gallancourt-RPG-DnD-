@@ -18,7 +18,7 @@ Gallancourt*, o dossiê e as decisões já tomadas.
 
     A versão anotada da crônica, do reino de D'Aubren à Guerra Fria, com a origem de cada fato nas
     fontes e a linha do tempo. Para a leitura corrida, sem anotações, veja a
-    **[Lore](../lore.md)**.
+    **[Lore](../lore/index.md)**.
 
 -   [![](../assets/placeholders/cidade.svg){ .card-portrait }](cidades/index.md)
 
