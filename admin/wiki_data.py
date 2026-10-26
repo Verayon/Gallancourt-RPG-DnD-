@@ -508,7 +508,7 @@ def slug_statblock(nome: str) -> str:
     return base or "npc"
 
 
-def _modificador(valor: str) -> str:
+def modificador(valor: str) -> str:
     try:
         numero = int(str(valor).strip())
     except (TypeError, ValueError):
@@ -517,7 +517,7 @@ def _modificador(valor: str) -> str:
     return f"+{mod}" if mod >= 0 else str(mod)
 
 
-def _linhas_para_trechos(texto: str) -> list[tuple[str, str]]:
+def linhas_para_trechos(texto: str) -> list[tuple[str, str]]:
     trechos = []
     for linha in (texto or "").splitlines():
         linha = linha.strip()
@@ -533,7 +533,7 @@ def _linhas_para_trechos(texto: str) -> list[tuple[str, str]]:
 
 def _renderizar_trechos(texto: str) -> str:
     partes = []
-    for nome, resto in _linhas_para_trechos(texto):
+    for nome, resto in linhas_para_trechos(texto):
         partes.append(f"***{nome}.*** {resto}" if nome else resto)
     return "\n\n".join(partes)
 
@@ -543,7 +543,7 @@ def renderizar_statblock(slug: str, v: dict) -> str:
     rotulos_linha = " | ".join(ROTULOS_ATRIBUTOS[a] for a in CAMPOS_STATBLOCK_ATRIBUTOS)
     separador_linha = "|".join("---" for _ in CAMPOS_STATBLOCK_ATRIBUTOS)
     valores_linha = " | ".join(
-        f"{(v.get(a) or '').strip() or '—'} ({_modificador(v.get(a, ''))})"
+        f"{(v.get(a) or '').strip() or '—'} ({modificador(v.get(a, ''))})"
         for a in CAMPOS_STATBLOCK_ATRIBUTOS
     )
 

@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import datetime
 import os
+import re
 from pathlib import Path
 
 from flask import Flask, abort, redirect, render_template, request, url_for
@@ -305,101 +306,207 @@ def _int_ou_none(valor: str) -> int | None:
         return None
 
 
+def _combo_ficha(pagina: str, slug: str) -> str:
+    return f"{pagina}::{slug}"
+
+
+def _parse_combo_ficha(valor: str) -> tuple[str, str]:
+    if not valor or "::" not in valor:
+        return "", ""
+    pagina, slug = valor.split("::", 1)
+    return pagina, slug
+
+
+def _pv_inicial_da_ficha(dados_ficha: dict | None) -> int | None:
+    m = re.match(r"\s*(\d+)", (dados_ficha or {}).get("pv", "") or "")
+    return int(m.group(1)) if m else None
+
+
+def _redirect_sessao_ao_vivo(pagina: str, ancora: str = ""):
+    url = url_for("ver_sessao_ao_vivo", pagina=pagina)
+    if ancora:
+        url += f"#{ancora}"
+    return redirect(url)
+
+
 @app.get("/sessao-ao-vivo")
 def ver_sessao_ao_vivo():
-    estado = sv.carregar(ROOT)
+    paginas = wd.listar_todas_paginas(ROOT)
+    pagina_escolhida = request.args.get("pagina", "")
+    contexto = dict(
+        paginas=paginas,
+        pagina_escolhida=pagina_escolhida,
+        fichas_disponiveis=wd.listar_statblocks(ROOT),
+        combo_ficha=_combo_ficha,
+    )
+    if not pagina_escolhida:
+        return render_template("sessao_ao_vivo.html", **contexto)
+
+    if _resolver_pagina(pagina_escolhida) is None:
+        abort(404)
+
+    estado = sv.carregar(ROOT, pagina_escolhida)
+
+    ficha_da_vez = None
+    atual = next((c for c in estado["combatentes"] if c["id"] == estado["turno_atual"]), None)
+    if atual and atual.get("ficha_pagina") and atual.get("ficha_slug"):
+        caminho_ficha = _resolver_pagina(atual["ficha_pagina"])
+        if caminho_ficha is not None:
+            ficha_da_vez = wd.ler_statblocks_da_pagina(caminho_ficha).get(atual["ficha_slug"])
+
     return render_template(
         "sessao_ao_vivo.html",
         estado=estado,
-        combatentes=sv.combatentes_ordenados(estado),
+        combatentes=sv.ordem_de_exibicao(estado),
         resumo_combate=sv.resumo_combate(estado),
+        diario_combate=sv.gerar_diario_de_combate(estado),
         tipos_combatente=sv.TIPOS_COMBATENTE,
         tipos_acao=sv.TIPOS_ACAO,
+        rotulos_acao=sv.ROTULOS_ACAO,
+        ficha_da_vez=ficha_da_vez,
+        atributos_ficha=wd.CAMPOS_STATBLOCK_ATRIBUTOS,
+        rotulos_atributos=wd.ROTULOS_ATRIBUTOS,
+        modificador=wd.modificador,
+        linhas_para_trechos=wd.linhas_para_trechos,
+        **contexto,
     )
 
 
 @app.post("/sessao-ao-vivo/nota")
 def adicionar_nota_ao_vivo():
-    sv.adicionar_nota(ROOT, request.form.get("texto", ""))
-    return redirect(url_for("ver_sessao_ao_vivo") + "#notas")
+    pagina = request.form.get("pagina", "")
+    if _resolver_pagina(pagina) is None:
+        abort(404)
+    sv.adicionar_nota(ROOT, pagina, request.form.get("texto", ""))
+    return _redirect_sessao_ao_vivo(pagina, "notas")
 
 
 @app.post("/sessao-ao-vivo/nota/<int:indice>/remover")
 def remover_nota_ao_vivo(indice: int):
-    sv.remover_nota(ROOT, indice)
-    return redirect(url_for("ver_sessao_ao_vivo") + "#notas")
+    pagina = request.form.get("pagina", "")
+    if _resolver_pagina(pagina) is None:
+        abort(404)
+    sv.remover_nota(ROOT, pagina, indice)
+    return _redirect_sessao_ao_vivo(pagina, "notas")
 
 
 @app.post("/sessao-ao-vivo/resumo")
 def salvar_resumo_ao_vivo():
-    sv.salvar_resumo(ROOT, request.form.get("resumo", ""))
-    return redirect(url_for("ver_sessao_ao_vivo") + "#notas")
+    pagina = request.form.get("pagina", "")
+    if _resolver_pagina(pagina) is None:
+        abort(404)
+    sv.salvar_resumo(ROOT, pagina, request.form.get("resumo", ""))
+    return _redirect_sessao_ao_vivo(pagina, "notas")
 
 
 @app.post("/sessao-ao-vivo/combatente")
 def adicionar_combatente_ao_vivo():
+    pagina = request.form.get("pagina", "")
+    if _resolver_pagina(pagina) is None:
+        abort(404)
+
     nome = request.form.get("nome", "").strip()
     tipo = request.form.get("tipo", "npc")
     iniciativa = _int_ou_none(request.form.get("iniciativa", "")) or 0
     pv_atual = _int_ou_none(request.form.get("pv_atual", ""))
     pv_maximo = _int_ou_none(request.form.get("pv_maximo", ""))
+    ficha_pagina, ficha_slug = _parse_combo_ficha(request.form.get("ficha", ""))
+
+    if ficha_pagina and ficha_slug:
+        caminho_ficha = _resolver_pagina(ficha_pagina)
+        dados_ficha = wd.ler_statblocks_da_pagina(caminho_ficha).get(ficha_slug) if caminho_ficha else None
+        if dados_ficha:
+            if not nome:
+                nome = dados_ficha.get("nome", "")
+            pv_da_ficha = _pv_inicial_da_ficha(dados_ficha)
+            if pv_da_ficha is not None:
+                pv_atual = pv_da_ficha if pv_atual is None else pv_atual
+                pv_maximo = pv_da_ficha if pv_maximo is None else pv_maximo
+
     if nome:
-        sv.adicionar_combatente(ROOT, nome, tipo, iniciativa, pv_atual, pv_maximo)
-    return redirect(url_for("ver_sessao_ao_vivo") + "#iniciativa")
+        sv.adicionar_combatente(
+            ROOT, pagina, nome, tipo, iniciativa, pv_atual, pv_maximo, ficha_pagina, ficha_slug,
+        )
+    return _redirect_sessao_ao_vivo(pagina, "iniciativa")
 
 
 @app.post("/sessao-ao-vivo/combatente/<int:cid>/remover")
 def remover_combatente_ao_vivo(cid: int):
-    sv.remover_combatente(ROOT, cid)
-    return redirect(url_for("ver_sessao_ao_vivo") + "#iniciativa")
+    pagina = request.form.get("pagina", "")
+    if _resolver_pagina(pagina) is None:
+        abort(404)
+    sv.remover_combatente(ROOT, pagina, cid)
+    return _redirect_sessao_ao_vivo(pagina, "iniciativa")
 
 
 @app.post("/sessao-ao-vivo/combatente/<int:cid>/pv")
 def ajustar_pv_ao_vivo(cid: int):
+    pagina = request.form.get("pagina", "")
+    if _resolver_pagina(pagina) is None:
+        abort(404)
     delta = _int_ou_none(request.form.get("delta", "")) or 0
-    sv.ajustar_pv(ROOT, cid, delta)
-    return redirect(url_for("ver_sessao_ao_vivo") + "#iniciativa")
+    sv.ajustar_pv(ROOT, pagina, cid, delta)
+    return _redirect_sessao_ao_vivo(pagina, "iniciativa")
 
 
 @app.post("/sessao-ao-vivo/combatente/<int:cid>/status")
 def atualizar_status_ao_vivo(cid: int):
-    sv.atualizar_status(ROOT, cid, request.form.get("status", ""))
-    return redirect(url_for("ver_sessao_ao_vivo") + "#iniciativa")
+    pagina = request.form.get("pagina", "")
+    if _resolver_pagina(pagina) is None:
+        abort(404)
+    sv.atualizar_status(ROOT, pagina, cid, request.form.get("status", ""))
+    return _redirect_sessao_ao_vivo(pagina, "iniciativa")
 
 
 @app.post("/sessao-ao-vivo/combatente/<int:cid>/flag/<campo>")
 def alternar_flag_ao_vivo(cid: int, campo: str):
-    sv.alternar_flag(ROOT, cid, campo)
-    return redirect(url_for("ver_sessao_ao_vivo") + "#iniciativa")
+    pagina = request.form.get("pagina", "")
+    if _resolver_pagina(pagina) is None:
+        abort(404)
+    sv.alternar_flag(ROOT, pagina, cid, campo)
+    return _redirect_sessao_ao_vivo(pagina, "iniciativa")
 
 
 @app.post("/sessao-ao-vivo/turno/proximo")
 def proximo_turno_ao_vivo():
-    sv.proximo_turno(ROOT)
-    return redirect(url_for("ver_sessao_ao_vivo") + "#iniciativa")
+    pagina = request.form.get("pagina", "")
+    if _resolver_pagina(pagina) is None:
+        abort(404)
+    sv.proximo_turno(ROOT, pagina)
+    return _redirect_sessao_ao_vivo(pagina, "iniciativa")
 
 
 @app.post("/sessao-ao-vivo/acao")
 def registrar_acao_ao_vivo():
+    pagina = request.form.get("pagina", "")
+    if _resolver_pagina(pagina) is None:
+        abort(404)
     autor_id = _int_ou_none(request.form.get("autor_id", ""))
     alvo_id = _int_ou_none(request.form.get("alvo_id", ""))
     valor = _int_ou_none(request.form.get("valor", ""))
     tipo = request.form.get("tipo", "outro")
+    meio = request.form.get("meio", "")
     obs = request.form.get("obs", "")
-    sv.registrar_acao(ROOT, autor_id, tipo, alvo_id, valor, obs)
-    return redirect(url_for("ver_sessao_ao_vivo") + "#acoes")
+    sv.registrar_acao(ROOT, pagina, autor_id, tipo, alvo_id, meio, valor, obs)
+    return _redirect_sessao_ao_vivo(pagina, "acoes")
 
 
 @app.post("/sessao-ao-vivo/acao/<int:acao_id>/remover")
 def remover_acao_ao_vivo(acao_id: int):
-    sv.remover_acao(ROOT, acao_id)
-    return redirect(url_for("ver_sessao_ao_vivo") + "#acoes")
+    pagina = request.form.get("pagina", "")
+    if _resolver_pagina(pagina) is None:
+        abort(404)
+    sv.remover_acao(ROOT, pagina, acao_id)
+    return _redirect_sessao_ao_vivo(pagina, "acoes")
 
 
 @app.post("/sessao-ao-vivo/arquivar")
 def arquivar_sessao_ao_vivo():
-    sv.arquivar_e_limpar(ROOT)
-    return redirect(url_for("ver_sessao_ao_vivo"))
+    pagina = request.form.get("pagina", "")
+    if _resolver_pagina(pagina) is None:
+        abort(404)
+    sv.arquivar_e_limpar(ROOT, pagina)
+    return _redirect_sessao_ao_vivo(pagina)
 
 
 def _resolver_pagina(rel: str) -> Path | None:

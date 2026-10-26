@@ -31,9 +31,12 @@ painel — fechá-la desliga a ferramenta (o site em si continua no ar, servido 
 ## Tocar uma sessão ao vivo
 
 Na aba **Sessão ao vivo** (`http://127.0.0.1:5001/sessao-ao-vivo`), um bloco de notas e um
-rastreador de combate pra usar durante a mesa. Diferente do resto do painel, nada aqui mexe em
-`docs/` nem no site — o estado fica só em `admin/dados/` (de fora do git), porque é rascunho de
-sessão, não cânone nem conteúdo da wiki.
+rastreador de combate pra usar durante a mesa — **preso à página da sessão**: a Sessão 0 tem o
+seu próprio combate, a Sessão 3 do Diário teria o dela, e por aí vai, sem se misturar. Escolha a
+página no menu do topo (ou chegue direto pela aba **⚔️ Combate ao vivo** da própria página da
+sessão, que já abre com ela selecionada). Diferente do resto do painel, nada aqui mexe em `docs/`
+nem no site — o estado fica só em `admin/dados/` (de fora do git), porque é rascunho de sessão,
+não cânone nem conteúdo da wiki.
 
 ### Notas e resumo
 
@@ -45,29 +48,47 @@ texto preenchido no campo "O que aconteceu".
 
 ### Iniciativa
 
-Adicione cada jogador ou NPC com o nome, o tipo, o valor da rolagem de iniciativa e (opcional) o
-PV. Depois de adicionar todo mundo, a tabela fica ordenada sozinha, da maior iniciativa pra menor.
+Adicione cada jogador ou NPC com o nome, o tipo e o valor da rolagem de iniciativa. Se o NPC já
+tem uma [ficha de combate](manutencao-do-canone.md#ficha-de-combate) em alguma página da wiki,
+selecione-a em **Ficha de combate vinculada** — o nome e o PV são preenchidos sozinhos (se
+deixados em branco), e a ficha completa dele passa a aparecer na tela quando for a vez dele.
+Depois de adicionar todo mundo, a tabela fica ordenada sozinha, da maior iniciativa pra menor.
+
 Clique em **Próximo turno** para avançar — na primeira vez, já começa por quem tem a iniciativa
-mais alta; ao voltar pro primeiro da lista, a rodada avança sozinha.
+mais alta. A lista exibida sempre recomeça por quem está na vez (ela "gira", mas a ordem real de
+iniciativa por baixo não muda), então não precisa catar a linha destacada numa mesa com muita
+gente; ao voltar pro primeiro da lista, a rodada avança sozinha.
 
 Cada linha tem controles rápidos:
 
 - **PV**: um campo pra somar ou subtrair (ex.: `-7` ou `+5`) e aplicar.
-- **Status**: texto livre separado por vírgula (ex.: `Envenenado, Atordoado`).
+- **Status**: texto livre separado por vírgula — exaustão, veneno, atordoado, ou qualquer outra
+  condição (ex.: `Exausto (nível 1), Envenenado`).
 - **Caído** / **Morto**: alternam um estado visual (linha apagada, nome riscado) — bons pra
   decidir rápido quem ainda está de pé numa mesa grande.
 - **Remover**: tira da iniciativa (não apaga do log de ações já registradas).
 
-### Ações — quem bateu em quem
+### Ações e diário de combate
 
 No formulário de ações, escolha quem agiu, o tipo (**Ataque**, **Cura** ou **Outro**), em quem (o
-alvo) e o valor. Ao registrar, o painel já aplica esse valor no PV do alvo lá em cima — não precisa
-fazer as duas contas. Cada ação registrada entra no log, do mais recente pro mais antigo, com um
-botão para remover em caso de engano.
+alvo), a arma/magia/habilidade usada e o valor (dano ou cura). Ao registrar, o painel já aplica
+esse valor no PV do alvo lá em cima — não precisa fazer as duas contas. Cada ação registrada entra
+no log, do mais recente pro mais antigo, com um botão para remover em caso de engano.
 
-Logo abaixo do log, um **resumo do combate** calculado sozinho a partir desse log: quem mais
-causou dano, quem mais recebeu dano, quem mais curou e quem acertou mais golpes — útil pra
-analisar depois do combate (ou da campanha) quem andou carregando o grupo.
+Logo abaixo, duas coisas calculadas sozinhas a partir desse log:
+
+- **Diário de combate**: uma frase pronta por ação, agrupada por rodada (ex.: "**Capitão Harker**
+  atacou Jogador Ana com Cimitarra, causando 6 de dano.") — rascunho pra copiar e ajustar na hora
+  de escrever a história da campanha depois.
+- **Resumo do combate**: quem mais causou dano, quem mais recebeu dano, quem mais curou e quem
+  acertou mais golpes — útil pra analisar depois quem andou carregando o grupo.
+
+### Encerrar um combate
+
+Se a mesma página for ter mais de um combate ao longo do tempo (ou pra fechar depois de registrar
+a sessão no Diário), use **Arquivar e começar do zero** no fim da página — guarda tudo (notas,
+combate, log) num arquivo com data e hora em `admin/dados/combates/arquivadas/` e limpa a tela
+para o próximo combate dessa mesma página.
 
 ### Encerrar
 

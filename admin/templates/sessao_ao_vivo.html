@@ -2,22 +2,42 @@
 {% block titulo %}Sessão ao vivo{% endblock %}
 {% block conteudo %}
 <h1>Sessão ao vivo</h1>
-<p class="ajuda">Bloco de notas e rastreador de combate para usar durante a mesa. Nada aqui entra
-  no site nem no git — é rascunho de sessão, guardado só no seu computador. Quando a sessão
-  terminar, use o resumo abaixo para
-  <a href="/?resumo={{ estado.resumo | urlencode }}">registrar a sessão no Diário</a> e depois
-  arquive para recomeçar do zero.</p>
+<p class="ajuda">Bloco de notas e rastreador de combate para usar durante a mesa, preso à página
+  da sessão — cada página tem o seu próprio. Nada aqui entra no site nem no git, é rascunho
+  guardado só no seu computador.</p>
+
+<form method="get" action="/sessao-ao-vivo" class="form-escolher">
+  <label>Página da sessão
+    <select name="pagina" onchange="this.form.submit()">
+      <option value="">— escolha uma página —</option>
+      {% for p in paginas %}
+      <option value="{{ p.rel_docs }}" {{ "selected" if p.rel_docs == pagina_escolhida else "" }}>
+        {{ p.titulo }} ({{ p.rel_docs }})
+      </option>
+      {% endfor %}
+    </select>
+  </label>
+</form>
+
+{% if not pagina_escolhida %}
+<p class="ajuda">Escolha a página da sessão acima (ex.: a Sessão 0, ou a página da próxima sessão
+  no Diário) para abrir as notas e o combate dela.</p>
+{% else %}
+
+<p class="ajuda">Quando terminar, use o resumo abaixo para
+  <a href="/?resumo={{ estado.resumo | urlencode }}">registrar a sessão no Diário</a>.</p>
 
 <nav class="abas-ancora">
   <a href="#notas">Notas e resumo</a>
   <a href="#iniciativa">Iniciativa</a>
-  <a href="#acoes">Ações e análise</a>
+  <a href="#acoes">Ações e diário de combate</a>
 </nav>
 
 <section id="notas">
   <h2>Notas e resumo</h2>
 
   <form method="post" action="/sessao-ao-vivo/nota" class="form-nota-rapida">
+    <input type="hidden" name="pagina" value="{{ pagina_escolhida }}">
     <input type="text" name="texto" placeholder="Anotação rápida (fica com a hora marcada)…">
     <button type="submit" class="botao-secundario">Adicionar</button>
   </form>
@@ -28,6 +48,7 @@
     <li>
       <span class="nota-hora">{{ nota.hora }}</span> {{ nota.texto }}
       <form method="post" action="/sessao-ao-vivo/nota/{{ loop.index0 }}/remover" class="form-inline">
+        <input type="hidden" name="pagina" value="{{ pagina_escolhida }}">
         <button type="submit" class="botao-remover" title="Remover">×</button>
       </form>
     </li>
@@ -38,6 +59,7 @@
   {% endif %}
 
   <form method="post" action="/sessao-ao-vivo/resumo">
+    <input type="hidden" name="pagina" value="{{ pagina_escolhida }}">
     <label>Resumo da sessão (isso é o que vai virar o resumo ao registrar no Diário)
       <textarea name="resumo" rows="6" placeholder="Vá escrevendo o resumo conforme a sessão acontece…">{{ estado.resumo }}</textarea>
     </label>
@@ -49,8 +71,9 @@
   <h2>Iniciativa</h2>
 
   <form method="post" action="/sessao-ao-vivo/combatente" class="form-combatente">
+    <input type="hidden" name="pagina" value="{{ pagina_escolhida }}">
     <label>Nome
-      <input type="text" name="nome" required>
+      <input type="text" name="nome">
     </label>
     <label>Tipo
       <select name="tipo">
@@ -58,29 +81,67 @@
         <option value="npc" selected>NPC</option>
       </select>
     </label>
+    <label>Ficha de combate vinculada <span class="opcional">(opcional)</span>
+      <select name="ficha">
+        <option value="">— nenhuma / preencher na mão —</option>
+        {% for f in fichas_disponiveis %}
+        <option value="{{ combo_ficha(f.pagina_rel_docs, f.slug) }}">{{ f.nome }} ({{ f.pagina_titulo }})</option>
+        {% endfor %}
+      </select>
+    </label>
     <label>Iniciativa
       <input type="number" name="iniciativa" required>
     </label>
-    <label>PV atual
+    <label>PV atual <span class="opcional">(vem da ficha, se vinculada)</span>
       <input type="number" name="pv_atual" min="0">
     </label>
-    <label>PV máximo
+    <label>PV máximo <span class="opcional">(vem da ficha, se vinculada)</span>
       <input type="number" name="pv_maximo" min="0">
     </label>
     <button type="submit" class="botao-secundario">Adicionar à iniciativa</button>
   </form>
+  <p class="ajuda">Escolher uma ficha de combate preenche o nome e o PV sozinho (se deixados em
+    branco) e faz a ficha completa aparecer na tela quando for a vez desse NPC.</p>
 
   {% if combatentes %}
   <div class="turno-atual">
     <strong>Rodada {{ estado.rodada }}</strong>
-    {% for c in combatentes %}
-      {% if c.id == estado.turno_atual %}— turno de <strong>{{ c.nome }}</strong>{% endif %}
-    {% endfor %}
-    {% if estado.turno_atual is none %}<span class="ajuda">— combate ainda não começou</span>{% endif %}
+    {% if estado.turno_atual is none %}
+    <span class="ajuda">— combate ainda não começou</span>
+    {% else %}
+    — turno de <strong>{{ combatentes[0].nome }}</strong>
+    {% endif %}
     <form method="post" action="/sessao-ao-vivo/turno/proximo" class="form-inline">
+      <input type="hidden" name="pagina" value="{{ pagina_escolhida }}">
       <button type="submit" class="botao-principal">Próximo turno →</button>
     </form>
   </div>
+
+  {% if ficha_da_vez %}
+  <div class="ficha-da-vez">
+    <h3>{{ ficha_da_vez.nome }} <span class="ajuda">— ficha de combate</span></h3>
+    {% if ficha_da_vez.subtitulo %}<p class="ajuda">{{ ficha_da_vez.subtitulo }}</p>{% endif %}
+    <div class="ficha-da-vez__topo">
+      <span><strong>CA</strong> {{ ficha_da_vez.ca }}</span>
+      <span><strong>PV</strong> {{ ficha_da_vez.pv }}</span>
+      <span><strong>Deslocamento</strong> {{ ficha_da_vez.deslocamento }}</span>
+    </div>
+    <div class="ficha-da-vez__atributos">
+      {% for a in atributos_ficha %}
+      <span><strong>{{ rotulos_atributos[a] }}</strong> {{ ficha_da_vez.get(a, "—") }} ({{ modificador(ficha_da_vez.get(a, "")) }})</span>
+      {% endfor %}
+    </div>
+    {% if ficha_da_vez.equipamento %}<p><strong>Equipamento</strong> {{ ficha_da_vez.equipamento }}</p>{% endif %}
+    {% if ficha_da_vez.acoes %}
+    <p><strong>Ações</strong></p>
+    <ul>
+      {% for nome, desc in linhas_para_trechos(ficha_da_vez.acoes) %}
+      <li>{% if nome %}<strong>{{ nome }}.</strong>{% endif %} {{ desc }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+  {% endif %}
 
   <table class="tabela-combate">
     <thead>
@@ -101,24 +162,29 @@
         <td>
           {% if c.pv_atual is not none %}{{ c.pv_atual }}{% if c.pv_maximo %}/{{ c.pv_maximo }}{% endif %}{% else %}—{% endif %}
           <form method="post" action="/sessao-ao-vivo/combatente/{{ c.id }}/pv" class="form-inline">
+            <input type="hidden" name="pagina" value="{{ pagina_escolhida }}">
             <input type="number" name="delta" placeholder="±PV" class="input-pequeno">
             <button type="submit" class="botao-remover" title="Aplicar ao PV">OK</button>
           </form>
         </td>
         <td>
           <form method="post" action="/sessao-ao-vivo/combatente/{{ c.id }}/status" class="form-inline">
-            <input type="text" name="status" value="{{ c.status | join(', ') }}" class="input-medio" placeholder="separado, por vírgula">
+            <input type="hidden" name="pagina" value="{{ pagina_escolhida }}">
+            <input type="text" name="status" value="{{ c.status | join(', ') }}" class="input-medio" placeholder="exausto, envenenado…">
             <button type="submit" class="botao-remover" title="Atualizar status">OK</button>
           </form>
         </td>
         <td class="col-acoes-combatente">
           <form method="post" action="/sessao-ao-vivo/combatente/{{ c.id }}/flag/caido" class="form-inline">
+            <input type="hidden" name="pagina" value="{{ pagina_escolhida }}">
             <button type="submit" class="botao-remover">{{ "Reerguer" if c.caido else "Caído" }}</button>
           </form>
           <form method="post" action="/sessao-ao-vivo/combatente/{{ c.id }}/flag/morto" class="form-inline">
+            <input type="hidden" name="pagina" value="{{ pagina_escolhida }}">
             <button type="submit" class="botao-remover">{{ "Reviver" if c.morto else "Morto" }}</button>
           </form>
           <form method="post" action="/sessao-ao-vivo/combatente/{{ c.id }}/remover" class="form-inline">
+            <input type="hidden" name="pagina" value="{{ pagina_escolhida }}">
             <button type="submit" class="botao-remover">Remover</button>
           </form>
         </td>
@@ -126,6 +192,8 @@
       {% endfor %}
     </tbody>
   </table>
+  <p class="ajuda">A lista acima sempre começa por quem está na vez — a ordem real de iniciativa
+    só muda quando alguém entra, sai, ou quando a rodada dá a volta.</p>
   {% else %}
   <p class="ajuda">Ninguém na iniciativa ainda — adicione os combatentes acima. Depois de
     adicionar todo mundo, a lista fica ordenada sozinha pela iniciativa.</p>
@@ -135,10 +203,11 @@
 <section id="acoes">
   <h2>Ações (ataque, cura…)</h2>
   <p class="ajuda">Cada ação registrada aqui já aplica o dano ou a cura no PV do alvo, na tabela
-    de iniciativa acima — não precisa lançar nos dois lugares.</p>
+    de iniciativa acima — e vira uma frase pronta no diário de combate, mais abaixo.</p>
 
   {% if combatentes %}
   <form method="post" action="/sessao-ao-vivo/acao" class="form-acao">
+    <input type="hidden" name="pagina" value="{{ pagina_escolhida }}">
     <label>Quem agiu
       <select name="autor_id">
         {% for c in combatentes %}
@@ -153,7 +222,7 @@
         <option value="outro">Outro</option>
       </select>
     </label>
-    <label>Em quem
+    <label>Em quem <span class="opcional">(opcional)</span>
       <select name="alvo_id">
         <option value="">—</option>
         {% for c in combatentes %}
@@ -161,11 +230,14 @@
         {% endfor %}
       </select>
     </label>
-    <label>Valor
+    <label>Arma, magia ou habilidade <span class="opcional">(opcional)</span>
+      <input type="text" name="meio" placeholder="ex.: Cimitarra, Bola de Fogo, Cura em Grupo…">
+    </label>
+    <label>Valor <span class="opcional">(dano ou cura)</span>
       <input type="number" name="valor" min="0">
     </label>
     <label>Observação <span class="opcional">(opcional)</span>
-      <input type="text" name="obs" placeholder="ex.: cimitarra, bola de fogo…">
+      <input type="text" name="obs" placeholder="algo a mais pro diário de combate">
     </label>
     <button type="submit" class="botao-secundario">Registrar ação</button>
   </form>
@@ -175,18 +247,20 @@
 
   {% if estado.log_acoes %}
   <table class="tabela-combate">
-    <thead><tr><th>Rodada</th><th>Quem</th><th>Ação</th><th>Em quem</th><th>Valor</th><th>Obs.</th><th></th></tr></thead>
+    <thead><tr><th>Rodada</th><th>Quem</th><th>Ação</th><th>Com</th><th>Em quem</th><th>Valor</th><th>Obs.</th><th></th></tr></thead>
     <tbody>
       {% for a in estado.log_acoes | reverse %}
       <tr>
         <td>{{ a.rodada }}</td>
         <td>{{ a.autor_nome }}</td>
-        <td>{{ {"ataque": "Ataque", "cura": "Cura", "outro": "Outro"}[a.tipo] }}</td>
+        <td>{{ rotulos_acao[a.tipo] }}</td>
+        <td>{{ a.meio or "—" }}</td>
         <td>{{ a.alvo_nome or "—" }}</td>
         <td>{{ a.valor if a.valor is not none else "—" }}</td>
         <td>{{ a.obs }}</td>
         <td>
           <form method="post" action="/sessao-ao-vivo/acao/{{ a.id }}/remover" class="form-inline">
+            <input type="hidden" name="pagina" value="{{ pagina_escolhida }}">
             <button type="submit" class="botao-remover" title="Remover">×</button>
           </form>
         </td>
@@ -194,6 +268,17 @@
       {% endfor %}
     </tbody>
   </table>
+
+  <h3>Diário de combate</h3>
+  <p class="ajuda">Rascunho pronto pra colar (e editar) na história da campanha depois.</p>
+  {% for grupo in diario_combate %}
+  <p><strong>Rodada {{ grupo.rodada }}</strong></p>
+  <ul>
+    {% for frase in grupo.frases %}
+    <li>{{ frase }}</li>
+    {% endfor %}
+  </ul>
+  {% endfor %}
 
   <h3>Resumo do combate</h3>
   <div class="grade-resumo">
@@ -244,13 +329,16 @@
 </section>
 
 <section class="zona-perigo">
-  <h2>Encerrar</h2>
+  <h2>Encerrar este combate</h2>
   <p class="ajuda">Guarda tudo (notas, combate, ações) num arquivo com data e hora em
-    <code>admin/dados/arquivadas/</code> e começa do zero — use ao fim da sessão, depois de
-    registrar no Diário.</p>
+    <code>admin/dados/combates/arquivadas/</code> e começa do zero — use se a mesma página for
+    ter mais de um combate ao longo do tempo, ou pra fechar depois de registrar no Diário.</p>
   <form method="post" action="/sessao-ao-vivo/arquivar"
-        onsubmit="return confirm('Arquivar e limpar tudo? A tela volta a ficar em branco (mas fica salvo em admin/dados/arquivadas/).');">
+        onsubmit="return confirm('Arquivar e limpar o combate desta página? A tela volta a ficar em branco (mas fica salvo em admin/dados/combates/arquivadas/).');">
+    <input type="hidden" name="pagina" value="{{ pagina_escolhida }}">
     <button type="submit" class="botao-secundario">Arquivar e começar do zero</button>
   </form>
 </section>
+
+{% endif %}
 {% endblock %}

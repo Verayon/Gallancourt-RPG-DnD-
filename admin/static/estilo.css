@@ -404,6 +404,30 @@ section[id]:last-of-type { border-bottom: none; }
 }
 .lista-ranking li { margin-bottom: .2rem; }
 
+.ficha-da-vez {
+  margin-bottom: 1rem;
+  padding: .9rem 1.1rem;
+  background: var(--panel);
+  border: 1px solid var(--gold);
+  border-left: 4px solid var(--gold);
+  border-radius: 6px;
+}
+.ficha-da-vez h3 { margin: 0 0 .2rem; }
+.ficha-da-vez__topo, .ficha-da-vez__atributos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: .5rem 0;
+  font-size: .9rem;
+}
+.ficha-da-vez__atributos span, .ficha-da-vez__topo span {
+  background: #171510;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: .2rem .5rem;
+}
+.ficha-da-vez ul { margin: .3rem 0 0; padding-left: 1.3rem; font-size: .9rem; }
+
 .zona-perigo {
   border: 1px dashed var(--erro);
   border-radius: 6px;
