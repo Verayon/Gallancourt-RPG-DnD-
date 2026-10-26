@@ -667,4 +667,9 @@ def _resolver_pagina(rel: str) -> Path | None:
 
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5001, debug=False)
+    # Por padrão só escuta 127.0.0.1 (ninguém mais na rede alcança o painel). Para acessar de
+    # outro aparelho seu pela Tailscale (ver docs/mestre/painel.md), rode com
+    # PAINEL_HOST=0.0.0.0 .venv\Scripts\python admin\app.py — isso ainda deixa o painel visível
+    # pra rede local também, não só pela Tailscale.
+    host = os.environ.get("PAINEL_HOST", "127.0.0.1")
+    app.run(host=host, port=5001, debug=False)

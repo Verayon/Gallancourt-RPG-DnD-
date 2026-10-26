@@ -28,6 +28,24 @@ Ou, no Windows, dê duplo clique em `admin/iniciar-painel.bat`. Depois, abra
 **http://127.0.0.1:5001/** no navegador. Deixe essa janela do terminal aberta enquanto usa o
 painel — fechá-la desliga a ferramenta (o site em si continua no ar, servido pelo `mkdocs serve`).
 
+## Acessar de outro aparelho (celular, outro PC) pela Tailscale
+
+Por padrão o painel só escuta `127.0.0.1` — nem outro aparelho na mesma rede alcança ele. Para
+abrir o painel do seu celular ou notebook enquanto o computador com o projeto fica ligado em casa,
+sem pagar por servidor nenhum:
+
+1. Instale o [Tailscale](https://tailscale.com/download) neste computador e no aparelho de onde
+   você quer acessar, entrando com a mesma conta nos dois.
+2. Neste computador, em vez do `.bat` normal, dê duplo clique em
+   `admin/iniciar-painel-tailscale.bat` (ou rode `set PAINEL_HOST=0.0.0.0` antes do comando usual).
+3. No outro aparelho, abra `http://<nome-ou-IP-tailscale-deste-pc>:5001/` — o Tailscale mostra esse
+   endereço na lista de aparelhos do seu tailnet.
+
+!!! warning "Ainda sem senha"
+    `PAINEL_HOST=0.0.0.0` também deixa o painel visível para qualquer aparelho na sua rede local
+    (Wi-Fi de casa), não só pela Tailscale — ele continua sem login. Use isso só em rede de
+    confiança, e volte para o `.bat` normal (ou feche a janela) quando terminar.
+
 ## Adicionar um NPC
 
 Na página [NPCs](../personagens/index.md), o botão **Adicionar NPC** abre esta aba (ou acesse
