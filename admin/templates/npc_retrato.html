@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block titulo %}Retrato de NPC{% endblock %}
+{% block conteudo %}
+<h1>Retrato de NPC</h1>
+<p class="ajuda">Escolha o NPC e envie a imagem. Ela vai para <code>docs/assets/imagens/personagens/</code>
+  e passa a aparecer na caixa do topo da página do NPC e na tabela de NPCs.</p>
+
+{% if erro %}<p class="aviso aviso--erro">⚠️ {{ erro }}</p>{% endif %}
+{% if salvo %}<p class="aviso aviso--ok">✅ Retrato salvo: <code>{{ salvo }}</code></p>{% endif %}
+
+<form method="post" action="/npc/retrato" class="form-sessao" enctype="multipart/form-data">
+  <fieldset>
+    <legend>Retrato</legend>
+    <label>NPC
+      <select name="npc" required>
+        <option value="">— escolha —</option>
+        {% for n in npcs %}
+        <option value="{{ n.rel_docs }}" {{ "selected" if n.rel_docs == escolhido else "" }}>{{ n.titulo }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Imagem
+      <input type="file" name="imagem" accept="image/*" required>
+    </label>
+  </fieldset>
+  <button type="submit" class="botao-principal">Salvar retrato</button>
+</form>
+{% endblock %}

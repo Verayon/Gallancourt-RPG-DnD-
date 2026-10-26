@@ -1,21 +1,24 @@
 ---
 tags:
-  - Personagens
-  - Aliança dos Lordes
-  - Saint-Armand
+- Personagens
+- Aliança dos Lordes
+- Saint-Armand
+hide:
+- toc
+npc:
+  titulo: Intendente-Geral
+  raca: —
+  cidade: Saint-Armand
+  afiliacao: Exército de Gallancourt
+  resumo: Logística; tenta frustrar o golpe de Armand.
+  retrato: ''
+  ficha:
+    Título: Intendente-Geral
+    Cidade: "[Saint-Armand](../cidades/saint-armand.md)"
+    Função: Logística do exército; voz da razão no conselho de guerra
 ---
 
 # Juliette Clermont
-
-<div class="ficha" markdown>
-
-| | |
-|---|---|
-| **Título** | Intendente-Geral |
-| **Cidade** | [Saint-Armand](../cidades/saint-armand.md) |
-| **Função** | Logística do exército; voz da razão no conselho de guerra |
-
-</div>
 
 A mente brilhante por trás da logística do exército. Enquanto Armand foca na estratégia,
 Juliette garante que os soldados estejam alimentados, armados e pagos. Mantém a relação vital

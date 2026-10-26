@@ -442,3 +442,23 @@ code {
   border-radius: 3px;
   font-size: .9em;
 }
+
+/* Ficha D&D 5e e linha do tempo */
+.grade-campos { display: grid; grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr)); gap: .6rem 1rem; }
+.grade-atributos { display: grid; grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr)); gap: .8rem; }
+.grade-atributos .atributo { border: 1px solid #c2b28a; border-radius: 6px; padding: .5rem; text-align: center; }
+.grade-atributos .mod { display: block; font-size: 1.4rem; font-weight: 700; margin: .2rem 0; }
+.grade-pericias { display: grid; grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr)); gap: .4rem 1rem; }
+.grade-moedas { display: grid; grid-template-columns: repeat(5, minmax(4rem, 1fr)); gap: .5rem; }
+.nivel-magia { display: grid; grid-template-columns: 6rem 7rem 7rem 1fr; gap: .5rem; align-items: end; margin: .5rem 0; }
+@media (max-width: 40rem) { .nivel-magia { grid-template-columns: 1fr 1fr; } }
+.bloco-ficha { margin: 1rem 0; }
+.bloco-ficha > summary { cursor: pointer; font-weight: 700; margin-bottom: .5rem; }
+.lista-marcar { display: grid; grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); gap: .2rem 1rem; margin: .4rem 0 .8rem; }
+.linha-mudanca { display: grid; grid-template-columns: 1fr 10rem 1fr; gap: .5rem; margin-bottom: .4rem; }
+@media (max-width: 40rem) { .linha-mudanca { grid-template-columns: 1fr; } }
+.tabela-eventos { width: 100%; border-collapse: collapse; font-size: .9rem; }
+.tabela-eventos th, .tabela-eventos td { border-bottom: 1px solid #c2b28a; padding: .4rem; text-align: left; vertical-align: top; }
+.tabela-eventos .acoes { white-space: nowrap; }
+.tabela-eventos .acoes form { display: inline; }
+.botao-link { background: none; border: 0; color: #8a5347; cursor: pointer; text-decoration: underline; font: inherit; padding: 0 0 0 .5rem; }

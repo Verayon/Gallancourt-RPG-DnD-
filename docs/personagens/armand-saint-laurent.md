@@ -1,22 +1,25 @@
 ---
 tags:
-  - Personagens
-  - Aliança dos Lordes
-  - Saint-Armand
+- Personagens
+- Aliança dos Lordes
+- Saint-Armand
+hide:
+- toc
+npc:
+  titulo: Lorde Comandante
+  raca: —
+  cidade: Saint-Armand
+  afiliacao: Casa Saint-Laurent
+  resumo: Líder supremo do exército; sonda oficiais para um golpe.
+  retrato: ''
+  ficha:
+    Título: Lorde Comandante — líder supremo do exército de Gallancourt
+    Casa: "[Saint-Laurent](../faccoes/casa-saint-laurent.md) (figura central)"
+    Cidade: "[Saint-Armand](../cidades/saint-armand.md)"
+    Facção: "[Aliança dos Lordes](../faccoes/alianca-dos-lordes.md)"
 ---
 
 # Armand Saint-Laurent
-
-<div class="ficha" markdown>
-
-| | |
-|---|---|
-| **Título** | Lorde Comandante — líder supremo do exército de Gallancourt |
-| **Casa** | [Saint-Laurent](../faccoes/casa-saint-laurent.md) (figura central) |
-| **Cidade** | [Saint-Armand](../cidades/saint-armand.md) |
-| **Facção** | [Aliança dos Lordes](../faccoes/alianca-dos-lordes.md) |
-
-</div>
 
 Veterano da guerra civil, viu em primeira mão como a corrupção e a decadência da monarquia
 quase destruíram o reino. Acredita com fervor que a aristocracia atual está cometendo os mesmos

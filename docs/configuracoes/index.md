@@ -1,41 +1,41 @@
 ---
 tags:
-  - Mestre
+  - Configurações
 ---
 
-# Manutenção do Projeto
+# Configurações
 
 Ferramentas, convenções e o controle do que ainda falta decidir — tudo o que mantém a wiki e o
 cânone organizados, mas que você não precisa ter em mãos durante a sessão. Para o que usar à
-mesa, veja [Referência do Mestre](index.md).
+mesa, veja [Mestre](../mestre/index.md).
 
 <div class="bar-list" markdown>
 
--   **[Painel do Mestre](painel.md)**
+-   **[Painel do Mestre](../mestre/painel.md)**
 
     Registre sessões e edite páginas por um formulário local, sem mexer em arquivo nenhum.
 
--   **[Registro manual de sessão](registro-manual-de-sessao.md)**
+-   **[Registro manual de sessão](../mestre/registro-manual-de-sessao.md)**
 
     O modelo e o passo a passo para quem prefere editar os arquivos à mão.
 
--   **[Manutenção do cânone](manutencao-do-canone.md)**
+-   **[Manutenção do cânone](../mestre/manutencao-do-canone.md)**
 
     Marcas de estado, categorias de informação e modelo de ficha de NPC.
 
--   **[Lacunas em aberto](lacunas.md)**
+-   **[Lacunas em aberto](../mestre/lacunas.md)**
 
     Perguntas de worldbuilding que o cânone ainda não responde.
 
--   **[Inconsistências a revisar](inconsistencias.md)**
+-   **[Inconsistências a revisar](../mestre/inconsistencias.md)**
 
     Pontos do dossiê original que merecem uma decisão do autor.
 
--   **[Fontes e método](fontes.md)**
+-   **[Fontes e método](../mestre/fontes.md)**
 
     De onde vem o conteúdo desta wiki e como as versões (V1, V2, dossiê) se relacionam.
 
--   **[Índice de tags](tags.md)**
+-   **[Índice de tags](../mestre/tags.md)**
 
     Todas as páginas agrupadas por tag.
 

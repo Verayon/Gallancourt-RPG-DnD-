@@ -59,13 +59,13 @@ mundo ajam de modo coerente sem determinar antecipadamente todas as consequênci
 | **Gatilhos de mudança** | O que faria este NPC mudar de lado ou de plano |
 ```
 
-Essa é a ficha de **planejamento** do Mestre (o que o NPC quer e esconde). Para aparência física,
-personalidade e proficiências — o retrato do personagem, não seus planos —, use a seção **Ficha de
-personagem** (e, para cidades, **Ficha da cidade**), preenchida pela aba **Ficha** do
-[Painel do Mestre](painel.md). Para combate — atributos, CA, PV, perícias, equipamento, ações e
-magias —, use a **Ficha de combate** (ver abaixo). Não edite essas três seções à mão sem
-necessidade: elas usam marcadores invisíveis (`<!-- campo:... -->` ou `<!-- dados:statblock ... -->`)
-que o painel espera encontrar para reler os valores depois.
+Essa é a ficha de **planejamento** do Mestre (o que o NPC quer e esconde). Para a ficha de jogo
+completa de D&D 5e — nível, atributos, perícias, CA, PV, equipamento, magias, personalidade e
+aparência —, use a aba **Ficha de NPC** do [Painel do Mestre](painel.md). Para criaturas e
+figurantes sem página própria (bandidos de uma sessão, por exemplo), use a **Ficha de combate**
+(ver abaixo). Para cidades, a **Ficha da cidade**. Não edite à mão sem necessidade as seções que
+usam marcadores invisíveis (`<!-- campo:... -->` ou `<!-- dados:statblock ... -->`): o painel
+espera encontrá-los para reler os valores depois.
 
 ## Ficha de combate
 
@@ -75,17 +75,55 @@ equipamento, traços, ações, reações e magias. Preenchida pela aba **Ficha d
 [Painel do Mestre](painel.md), que insere o cartão na página escolhida (qualquer uma — não precisa
 ser uma página de personagem) e guarda os valores num comentário invisível (`<!-- dados:statblock
 ... -->`) para poder reabrir e editar depois. Veja exemplos em
-[Sessão 0 — Fichas de combate](sessao-0-os-grilhoes-da-estrada.md#fichas-de-combate).
+[Sessão 0 — Fichas de combate](sessoes/sessao-0-os-grilhoes-da-estrada.md#fichas-de-combate).
 
 ## Como adicionar uma página
 
-1. Crie o arquivo `.md` na pasta da categoria (`docs/personagens/`, `docs/cidades/` …),
-   usando nomes em minúsculas, sem acentos e com hífens (ex.: `nova-personagem.md`).
+**NPCs e sessões:** use os botões **Adicionar NPC** (na página [NPCs](../personagens/index.md)) e
+**Nova sessão** (em [Mestre → Sessões](sessoes/index.md)). Eles abrem o
+[Painel do Mestre](painel.md), que cria a página no padrão certo e a coloca no menu.
+
+**Outras páginas:**
+
+1. Crie o arquivo `.md` na pasta da categoria (`docs/cidades/`, `docs/eventos/` …),
+   usando nomes em minúsculas, sem acentos e com hífens (ex.: `nova-cidade.md`).
 2. Copie a estrutura de uma página existente da mesma categoria: *front matter* com `tags`,
    título, ficha lateral (`<div class="ficha" markdown>`), descrição, relações e "Em aberto".
 3. Adicione a página ao `nav` em `mkdocs.yml`.
 4. Crie links a partir das páginas relacionadas (cidade, casa, eventos).
 5. Rode `mkdocs build --strict` para verificar links quebrados.
+
+## Como é uma página de NPC
+
+Os dados rápidos do NPC ficam no topo do arquivo, no bloco `npc:` do *front matter*. O site usa
+esse bloco para montar a caixa com o retrato e para preencher a tabela de [NPCs](../personagens/index.md):
+
+```yaml
+npc:
+  titulo: Marquesa            # colunas da tabela de NPCs (texto simples, para filtrar)
+  raca: Humana
+  cidade: Dodixie
+  afiliacao: Casa Corbeau
+  resumo: Governante de fato; jovem e implacável.   # aparece na tabela e na caixa do topo
+  retrato: ../assets/imagens/personagens/scyras-corbeau.png   # vazio = moldura padrão
+  ficha:                      # linhas da caixa do topo (aceitam links)
+    Título: Marquesa
+    Casa: "[Corbeau](../faccoes/casa-corbeau.md) (líder)"
+```
+
+O texto abaixo do título vira a aba **Visão geral**, e cada seção `##` vira uma aba própria
+(Intrigas, Na história…). As caixas **Em aberto** são reunidas numa última aba. Não é preciso
+escrever nada de especial para as abas: basta usar `##`.
+
+Uma aba é montada automaticamente:
+
+- **Linha do tempo** — os acontecimentos de `dados/linha-do-tempo.yml` que envolvem o NPC, em ordem
+  cronológica. Mudanças de situação, localização, afiliação ou título aparecem também na caixa do
+  topo e na tabela de NPCs. Cidades e facções ganham a mesma seção no fim da página.
+
+As demais seções da página, incluindo uma **Ficha de personagem** (preenchida pela aba **Ficha** do
+[Painel do Mestre](painel.md)) ou uma **Ficha de combate** (veja abaixo), são `##` normais no corpo
+do texto — não há mágica especial além da divisão em abas.
 
 ## Relações e intrigas
 

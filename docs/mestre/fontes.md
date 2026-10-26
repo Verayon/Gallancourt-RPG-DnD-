@@ -56,7 +56,7 @@ cidades, famílias e divisão territorial*) reúne:
 | Seção do dossiê | Onde está na wiki |
 |---|---|
 | I–XVI (a crônica) | [História](../historia/index.md) e [Eventos](../eventos/index.md) |
-| XVII–XXIV, 2 (cidades) | [Cidades](../cidades/index.md) e [Personagens](../personagens/index.md) |
+| XVII–XXIV, 2 (cidades) | [Cidades](../cidades/index.md) e [NPCs](../personagens/index.md) |
 | XXV, 3 (casas) | [Facções](../faccoes/index.md) |
 | XXVI–XXVII (teia de conexões) | [Teia política](../mundo/teia-politica.md) |
 | XXVIII–XXXV, XLI, 7–8 (geografia e mapas) | [Geografia](../geografia/index.md) |

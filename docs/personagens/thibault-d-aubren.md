@@ -1,22 +1,26 @@
 ---
 tags:
-  - Personagens
-  - Coroa
+- Personagens
+- Coroa
+hide:
+- toc
+npc:
+  titulo: Rei
+  raca: —
+  cidade: Valynesse
+  afiliacao: "Casa D'Aubren"
+  resumo: Último rei; decretou o Édito; executado.
+  situacao: Morto
+  retrato: ''
+  ficha:
+    Título: Rei de Gallancourt
+    Casa: "[D'Aubren](../faccoes/casa-d-aubren.md)"
+    Sede: "[Valynesse](../cidades/valynesse.md)"
+    Família: Rainha Isabeau; filhos Louis (herdeiro), Clarisse e Marcel
+    Situação: "Morto na [Queda de Valynesse](../eventos/queda-de-valynesse.md)"
 ---
 
 # Thibault d'Aubren
-
-<div class="ficha" markdown>
-
-| | |
-|---|---|
-| **Título** | Rei de Gallancourt |
-| **Casa** | [D'Aubren](../faccoes/casa-d-aubren.md) |
-| **Sede** | [Valynesse](../cidades/valynesse.md) |
-| **Família** | Rainha Isabeau; filhos Louis (herdeiro), Clarisse e Marcel |
-| **Situação** | Morto na [Queda de Valynesse](../eventos/queda-de-valynesse.md) |
-
-</div>
 
 Último rei de Gallancourt. Governava um reino aparentemente consolidado ao lado da rainha
 Isabeau e de seus três filhos.

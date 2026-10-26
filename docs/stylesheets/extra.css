@@ -273,49 +273,120 @@ input,
   filter: none;
 }
 
-/* Cada item do menu dentro de uma caixinha própria, em vez de uma lista de
-   links soltos. Só altera o preenchimento vertical e a cor de fundo — o
-   recuo por profundidade (padding-left/right) continua sendo o do tema,
-   então a hierarquia de seções aninhadas não muda. */
+/* Cada item do menu é uma barra fina, só com contorno. Quando a seção tem
+   página própria (Lore, Wiki, NPCs…), o link e a seta de abrir/fechar ficam
+   dentro da MESMA barra (.md-nav__container), em vez de duas caixas. */
 .md-nav--primary .md-nav__item {
-  margin: .2rem .5rem;
+  margin: .14rem 0;
+  padding-right: .4rem;
 }
 
 .md-nav--primary .md-nav__link {
   display: flex;
   align-items: center;
-  padding-top: .5rem;
-  padding-bottom: .5rem;
-  border-radius: 6px;
+  margin: 0;
+  padding: .26rem .5rem;
+  min-height: 0;
+  font-size: .74rem;
+  line-height: 1.25;
   border: 1px solid var(--gc-panel-border);
-  background: var(--gc-bg-alt);
-  transition: color .15s ease, background-color .15s ease, border-color .15s ease;
+  border-radius: 4px;
+  background: transparent;
+  transition: color .15s ease, border-color .15s ease, background-color .15s ease;
 }
 
+/* Barra única: o contêiner leva o contorno; link e seta perdem o próprio. */
+.md-nav--primary .md-nav__container,
+.md-nav--primary .md-nav__link.md-nav__container {
+  display: flex;
+  align-items: stretch;
+  padding: 0;
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 4px;
+  transition: border-color .15s ease, background-color .15s ease;
+}
+
+.md-nav--primary .md-nav__container > .md-nav__link {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.md-nav--primary .md-nav__container > a.md-nav__link {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.md-nav--primary .md-nav__container > label.md-nav__link {
+  flex: 0 0 auto;
+  padding: .26rem .4rem;
+}
+
+.md-nav--primary .md-nav__icon {
+  width: .9rem;
+  height: .9rem;
+  margin-left: auto;
+}
+
+.md-nav--primary .md-nav__icon::after {
+  width: .9rem;
+  height: .9rem;
+  -webkit-mask-size: .9rem;
+  mask-size: .9rem;
+}
+
+/* Hover: contorno dourado na barra inteira */
 .md-nav--primary .md-nav__link:hover,
-.md-nav--primary .md-nav__link:focus {
+.md-nav--primary .md-nav__link:focus-visible,
+.md-nav--primary .md-nav__container:hover {
   color: var(--gc-gold-soft);
   border-color: var(--gc-gold);
-  background: var(--md-accent-fg-color--transparent);
 }
 
+.md-nav--primary .md-nav__container .md-nav__link:hover {
+  border-color: transparent;
+}
+
+/* Página atual e seções que a contêm */
 .md-nav--primary .md-nav__link--active,
-.md-nav--primary .md-nav__link[aria-expanded="true"] {
+.md-nav--primary .md-nav__item--active > .md-nav__link,
+.md-nav--primary .md-nav__item--active > .md-nav__container,
+.md-nav--primary .md-nav__item--active > .md-nav__container > .md-nav__link {
   color: var(--gc-gold-soft) !important;
-  font-weight: 600;
   border-color: var(--gc-gold);
+}
+
+.md-nav--primary .md-nav__link--active {
+  font-weight: 600;
   background: var(--md-accent-fg-color--transparent);
 }
 
-/* Os três grandes portais: Início / Lore / Wiki, com um pouco mais de peso */
-.md-nav--primary > .md-nav__list > .md-nav__item > .md-nav__link {
-  font-size: .85rem;
+/* Itens de topo (Início, Lore, Wiki, Compêndio, Mestre, Configurações) */
+.md-nav--primary > .md-nav__list > .md-nav__item > .md-nav__link,
+.md-nav--primary > .md-nav__list > .md-nav__item > .md-nav__container > .md-nav__link {
+  font-size: .78rem;
   font-weight: 600;
 }
 
-/* Pequeno losango como marcador de item, no lugar do ponto padrão */
+/* Recuo discreto para os níveis internos */
+.md-nav--primary .md-nav__item--nested > .md-nav > .md-nav__list {
+  margin-left: .55rem;
+}
+
 .md-nav__item .md-nav__link::before {
   content: none;
+}
+
+/* No celular o tema desenha uma linha entre os itens; as barras já separam. */
+@media screen and (max-width: 76.2344em) {
+  .md-nav--primary .md-nav__item {
+    border-top: 0;
+    padding: 0 .6rem;
+  }
+
+  .md-nav--primary .md-nav__item--nested > .md-nav > .md-nav__list {
+    margin-left: 0;
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -858,4 +929,266 @@ input,
     from { opacity: 0; transform: translateY(.4rem); }
     to   { opacity: 1; transform: translateY(0); }
   }
+}
+
+/* --------------------------------------------------------------------------
+   NPCs — tabela filtrável (personagens/index.md)
+   -------------------------------------------------------------------------- */
+
+.npc-ferramentas > p {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .6rem;
+  margin: 0 0 .8rem;
+}
+
+.md-typeset .botao-painel {
+  margin: 0;
+  padding: .45em 1.1em;
+  font-size: .74rem;
+}
+
+.npc-busca {
+  flex: 1 1 14rem;
+  min-width: 0;
+  padding: .45rem .7rem;
+  font: inherit;
+  font-size: .8rem;
+  color: var(--gc-ink);
+  background: var(--gc-panel);
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 6px;
+}
+
+.npc-busca:focus {
+  outline: none;
+  border-color: var(--gc-gold);
+}
+
+.npc-contagem {
+  font-size: .75rem;
+  color: var(--gc-ink-dim);
+  font-style: italic;
+}
+
+.md-typeset .npc-tabela table:not([class]) {
+  font-size: .76rem;
+}
+
+.md-typeset .npc-tabela th,
+.md-typeset .npc-tabela td {
+  padding: .45em .7em;
+  vertical-align: middle;
+}
+
+.md-typeset .npc-tabela th {
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+.md-typeset .npc-tabela td:nth-child(2) {
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.md-typeset .npc-tabela td:last-child {
+  min-width: 16rem;
+  color: var(--gc-ink-dim);
+}
+
+.md-typeset .npc-mini {
+  display: block;
+  width: 2.3rem;
+  height: 2.3rem;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 1px solid var(--gc-gold);
+}
+
+.npc-ordenar {
+  padding: 0;
+  font: inherit;
+  font-weight: 700;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.npc-ordenar::after {
+  content: " ⇅";
+  opacity: .45;
+  font-size: .85em;
+}
+
+th[aria-sort="ascending"] .npc-ordenar::after { content: " ▲"; opacity: 1; }
+th[aria-sort="descending"] .npc-ordenar::after { content: " ▼"; opacity: 1; }
+
+.npc-filtro {
+  display: block;
+  width: 100%;
+  min-width: 6.5rem;
+  margin-top: .3rem;
+  padding: .1rem .2rem;
+  font: inherit;
+  font-size: .7rem;
+  font-weight: 400;
+  color: var(--gc-ink);
+  background: var(--gc-panel);
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   NPCs — página do personagem: cabeçalho (retrato + dados) e abas
+   -------------------------------------------------------------------------- */
+
+.npc-cabecalho {
+  display: flex;
+  gap: 1.2rem;
+  margin: .4rem 0 1.4rem;
+  padding: 1rem;
+  background: var(--gc-panel);
+  border: 1px solid var(--gc-panel-border);
+  border-top: 3px solid var(--gc-gold);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .12);
+}
+
+.npc-retrato {
+  flex: 0 0 10.5rem;
+}
+
+.md-typeset .npc-retrato p {
+  margin: 0;
+}
+
+.md-typeset .npc-retrato img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border: 1px solid var(--gc-gold);
+  border-radius: 6px;
+}
+
+.npc-dados {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.md-typeset .npc-dados > p:first-child {
+  margin: 0 0 .6rem;
+  color: var(--gc-ink-dim);
+}
+
+.md-typeset .npc-dados .md-typeset__table {
+  display: block;
+  margin: 0;
+}
+
+.md-typeset .npc-dados table:not([class]) {
+  display: table;
+  width: 100%;
+  margin: 0;
+  font-size: .76rem;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.md-typeset .npc-dados thead {
+  display: none;
+}
+
+.md-typeset .npc-dados td {
+  padding: .3em .6em;
+  border-top: 1px solid var(--gc-panel-border);
+  vertical-align: top;
+}
+
+.md-typeset .npc-dados tr:first-child td {
+  border-top: 0;
+}
+
+.md-typeset .npc-dados td:first-child {
+  width: 9.5rem;
+  white-space: nowrap;
+  color: var(--gc-ink-dim);
+  font-size: .9em;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.md-typeset .npc-dados td:first-child strong {
+  font-weight: 600;
+}
+
+.md-typeset .npc-abas {
+  margin: 0 0 1rem;
+  padding: 0 1rem .6rem;
+  background: var(--gc-panel);
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 8px;
+}
+
+.md-typeset .npc-abas > .tabbed-labels > label {
+  font-family: 'Cinzel', serif;
+  font-size: .72rem;
+  letter-spacing: .03em;
+}
+
+.md-typeset .npc-abas .tabbed-block > :first-child,
+.md-typeset .npc-abas .tabbed-block > .npc-ancora + * {
+  margin-top: .8rem;
+}
+
+@media screen and (max-width: 44.9375em) {
+  .npc-cabecalho {
+    flex-direction: column;
+    gap: .8rem;
+  }
+
+  .npc-retrato {
+    flex-basis: auto;
+    width: 9rem;
+    margin: 0 auto;
+  }
+
+  .md-typeset .npc-dados td:first-child {
+    width: 7rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Linha do tempo (NPCs, cidades, facções e Mestre → Linha do tempo)
+   -------------------------------------------------------------------------- */
+
+.md-typeset .linha-tempo > ul {
+  margin-left: .4rem;
+  padding-left: 1rem;
+  list-style: none;
+  border-left: 2px solid var(--gc-gold);
+}
+
+.md-typeset .linha-tempo > ul > li {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.md-typeset .linha-tempo > ul > li::before {
+  content: "";
+  position: absolute;
+  left: -1.42rem;
+  top: .45rem;
+  width: .6rem;
+  height: .6rem;
+  border-radius: 50%;
+  background: var(--gc-gold);
+  border: 2px solid var(--gc-bg);
+}
+
+.md-typeset .linha-tempo > ul > li > p {
+  margin: .2rem 0;
 }

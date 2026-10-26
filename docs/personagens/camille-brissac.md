@@ -1,21 +1,24 @@
 ---
 tags:
-  - Personagens
-  - Dodixie
+- Personagens
+- Dodixie
+hide:
+- toc
+npc:
+  titulo: Condessa
+  raca: —
+  cidade: Dodixie
+  afiliacao: Nobreza de Dodixie
+  resumo: Face pública da campanha de Dodixie pela capital.
+  retrato: ''
+  ficha:
+    Título: Condessa
+    Cidade: "[Dodixie](../cidades/dodixie.md)"
+    Residência: Propriedade elegante cercada por vinhedos, nos arredores da cidade
+    Papel: Face pública da campanha para tornar Dodixie a nova capital
 ---
 
 # Camille Brissac
-
-<div class="ficha" markdown>
-
-| | |
-|---|---|
-| **Título** | Condessa |
-| **Cidade** | [Dodixie](../cidades/dodixie.md) |
-| **Residência** | Propriedade elegante cercada por vinhedos, nos arredores da cidade |
-| **Papel** | Face pública da campanha para tornar Dodixie a nova capital |
-
-</div>
 
 Carismática e ambiciosa, Camille é a **face pública do desejo de Dodixie de se tornar a nova
 capital**. Enquanto [Scyras](scyras-corbeau.md) planeja nas sombras, Camille discursa nos

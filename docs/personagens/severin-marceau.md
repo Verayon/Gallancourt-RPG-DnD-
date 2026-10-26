@@ -1,23 +1,27 @@
 ---
 tags:
-  - Personagens
-  - L'Ordre de Célestien
-  - Religião
+- Personagens
+- "L'Ordre de Célestien"
+- Religião
+hide:
+- toc
+npc:
+  titulo: Primat
+  raca: —
+  cidade: Montclair de Lune
+  afiliacao: "L'Ordre de Célestien"
+  resumo: "Autor da doutrina da pureza; fundador de L'Ordre."
+  situacao: Vivo
+  retrato: ''
+  ficha:
+    Título: Primat da Igreja
+    Facção: "[L'Ordre de Célestien](../faccoes/l-ordre-de-celestien.md) (fundador e líder)"
+    Sede: "[Montclair de Lune](../cidades/montclair-de-lune.md)"
+    Fé: "Doutrina da pureza (culto radical de [Amaunator](../mundo/religiao.md))"
+    Situação: Vivo
 ---
 
 # Severin Marceau
-
-<div class="ficha" markdown>
-
-| | |
-|---|---|
-| **Título** | Primat da Igreja |
-| **Facção** | [L'Ordre de Célestien](../faccoes/l-ordre-de-celestien.md) (fundador e líder) |
-| **Sede** | [Montclair de Lune](../cidades/montclair-de-lune.md) |
-| **Fé** | Doutrina da pureza (culto radical de [Amaunator](../mundo/religiao.md)) |
-| **Situação** | Vivo |
-
-</div>
 
 A figura que mudou para sempre a história de Gallancourt.
 

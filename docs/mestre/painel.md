@@ -28,6 +28,34 @@ Ou, no Windows, dê duplo clique em `admin/iniciar-painel.bat`. Depois, abra
 **http://127.0.0.1:5001/** no navegador. Deixe essa janela do terminal aberta enquanto usa o
 painel — fechá-la desliga a ferramenta (o site em si continua no ar, servido pelo `mkdocs serve`).
 
+## Adicionar um NPC
+
+Na página [NPCs](../personagens/index.md), o botão **Adicionar NPC** abre esta aba (ou acesse
+`http://127.0.0.1:5001/npc/novo`). Preencha o que já souber — só o nome é obrigatório: título,
+raça, cidade, afiliação, um resumo de uma linha, a descrição e, se quiser, o retrato. Ao clicar em
+**Criar NPC**, o painel:
+
+1. cria `docs/personagens/<nome>.md` no padrão das outras páginas de NPC (caixa com retrato e
+   dados rápidos, abas abaixo);
+2. coloca o NPC no menu, em **Wiki → NPCs**, dentro do grupo da cidade (ou em **Outros**, se a
+   cidade não tiver grupo);
+3. confere o site com `mkdocs build --strict`.
+
+O NPC aparece sozinho na tabela de NPCs. Para trocar ou adicionar o retrato de um NPC que já
+existe, use **Trocar o retrato de um NPC existente** (`/npc/retrato`).
+
+## Criar uma sessão nova
+
+Em [Mestre → Sessões](sessoes/index.md), o botão **Nova sessão** abre esta aba (ou acesse
+`http://127.0.0.1:5001/sessoes/nova`). Informe o número e o título — o resto é opcional: resumo
+rápido, jogadores, nível, duração, tom, local, missão e recompensa. O painel cria a página de
+preparação com o mesmo layout da Sessão 0 (ficha no topo e as abas Resumo, NPCs, Cenas,
+Loot & Pistas, Lugares e Segredo do Mestre), adiciona-a ao menu em **Mestre → Sessões** e confere o
+site. A sessão aparece sozinha na lista de sessões.
+
+Essa é a página de **preparação**. Depois de jogar, registre o que aconteceu em
+**Registrar sessão** (abaixo), que alimenta o [Diário de Sessões](../diario/index.md).
+
 ## Tocar uma sessão ao vivo
 
 Na aba **Sessão ao vivo** (`http://127.0.0.1:5001/sessao-ao-vivo`), um bloco de notas e um
@@ -113,14 +141,38 @@ O painel então:
 - liga a sessão anterior a essa, no rodapé de cada uma ("Anterior" / "Próxima");
 - adiciona uma linha em [Sessões registradas](../diario/index.md#sessoes-registradas) e um marco na
   linha do tempo;
-- adiciona, no rodapé de cada NPC e cidade marcados, uma linha na seção **Histórico de sessões**
-  (criando a seção se ainda não existir);
+- cria um acontecimento na [Linha do tempo](linha-do-tempo.md) com o resumo da sessão e a nota de
+  cada NPC e lugar marcado — ele aparece na aba **Linha do tempo** de cada um, em ordem cronológica;
 - registra a página nova no menu do site (`mkdocs.yml`);
 - roda `mkdocs build --strict` para conferir que nada quebrou, e mostra o resultado na tela.
+
+Na tela de resultado, o botão **Registrar mudanças desta sessão** abre esse acontecimento na aba
+Linha do tempo, para você marcar quem morreu, quem mudou de cidade etc. (veja abaixo).
 
 Se alguma coisa der errado (por exemplo, o build falhar), o painel mostra o erro em vez de deixar o
 site quebrado em silêncio — nesse caso, nada é revertido automaticamente, então corrija o problema
 apontado (ou peça para o Claude Code corrigir) antes de rodar o `mkdocs build --strict` de novo.
+
+## Linha do tempo: o que mudou com cada NPC, cidade e facção
+
+Na aba **Linha do tempo**, registre um acontecimento: data na campanha (no formato
+`3 de março de 1453`), número da sessão (opcional), título, descrição, quem está envolvido e,
+opcionalmente, **mudanças de estado**:
+
+| Mudança | Vale para | Efeito no site |
+|---|---|---|
+| Situação (ex.: *Morto*, *Desaparecido*, *Preso*; para cidades, *Sob cerco*) | NPCs, cidades, facções | NPC: linha "Situação atual" na caixa do topo e coluna Situação da tabela. Cidade/facção: caixa "Situação atual" no topo da página |
+| Localização (ex.: *Valynesse*) | NPCs | Linha "Localização atual" na caixa do topo; coluna Cidade da tabela |
+| Afiliação | NPCs | Linha "Afiliação atual"; coluna Afiliação da tabela |
+| Título | NPCs | Linha "Título atual"; coluna Título da tabela |
+
+Cada acontecimento aparece na aba (ou seção) **Linha do tempo** de cada página envolvida e na página
+[Mestre → Linha do tempo](linha-do-tempo.md), sempre em **ordem cronológica pela data na
+campanha** — não pela ordem em que você registrou. Sem data, vale o número da sessão. Quando um
+campo muda mais de uma vez, vale a mudança mais recente na cronologia.
+
+Na lista abaixo do formulário dá para **editar** ou **apagar** qualquer acontecimento. Os dados
+ficam em `dados/linha-do-tempo.yml`.
 
 ## Preencher a ficha de um personagem ou cidade
 

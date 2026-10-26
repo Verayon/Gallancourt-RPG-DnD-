@@ -1,0 +1,16 @@
+# Linha do tempo da campanha de Gallancourt.
+#
+# Edite pelo Painel do Mestre (aba "Linha do tempo"). Cada acontecimento aparece, em ordem
+# cronológica, na página de cada NPC, cidade ou facção envolvida; as mudanças de estado
+# (situação, localização, afiliação, título) atualizam a caixa do NPC e a tabela de NPCs.
+#
+# Campos de cada acontecimento:
+#   id         número único (o Painel preenche)
+#   data       data na campanha, no formato "DD de <mês> de <ano>" (ver docs/mundo/calendario.md)
+#   sessao     número da sessão (opcional)
+#   titulo     resumo curto
+#   descricao  texto (aceita Markdown)
+#   envolvidos páginas envolvidas, relativas a docs/ (ex.: personagens/thalin.md)
+#   mudancas   lista de {pagina, campo, valor}; campos: situacao, cidade, afiliacao, titulo
+
+eventos: []

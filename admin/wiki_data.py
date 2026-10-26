@@ -18,6 +18,10 @@ from pathlib import Path
 
 DEFAULT_ROOT = Path(__file__).resolve().parent.parent
 
+# Módulo compartilhado com a geração do site (cálculos da linha do tempo)
+sys.path.insert(0, str(DEFAULT_ROOT / "hooks"))
+import linha_tempo  # noqa: E402
+
 
 @dataclass
 class Entidade:
@@ -238,26 +242,21 @@ def atualizar_indice_diario(
     _escrever(caminho, texto)
 
 
-def registrar_historico(entidade: Entidade, root: Path, numero: int, data_campanha: str, nota: str) -> None:
-    caminho = docs_dir(root) / entidade.rel_docs
-    if not caminho.exists():
-        return
-    texto = _ler(caminho)
-    heading = "## Histórico de sessões"
-    bullet = (
-        f"- **[Sessão {numero}](../diario/{_num_para_nome(numero)})** ({data_campanha}) — {nota}"
-    )
-    if heading in texto:
-        idx = texto.index(heading) + len(heading)
-        resto = texto[idx:]
-        m = re.search(r"\n#{1,6}\s", resto)
-        insere_em = idx + (m.start() if m else len(resto))
-        antes = texto[:insere_em].rstrip("\n")
-        depois = texto[insere_em:]
-        texto = antes + "\n" + bullet + "\n" + depois
-    else:
-        texto = texto.rstrip("\n") + "\n\n" + heading + "\n\n" + bullet + "\n"
-    _escrever(caminho, texto)
+def registrar_sessao_na_linha_do_tempo(
+    root: Path, numero: int, titulo: str, data_campanha: str, resumo: str,
+    atualizacoes: list[tuple[Entidade, str]],
+) -> int:
+    """Cria o acontecimento da sessão na linha do tempo, com a nota de cada NPC/lugar marcado.
+
+    Devolve o id do acontecimento (para o Mestre acrescentar mudanças de estado depois).
+    """
+    return salvar_evento(root, {
+        "data": data_campanha,
+        "sessao": numero,
+        "titulo": titulo,
+        "descricao": resumo,
+        "notas": {e.rel_docs: nota for e, nota in atualizacoes},
+    })
 
 
 def adicionar_sessao_ao_nav(root: Path, numero: int) -> bool:
@@ -307,6 +306,13 @@ def validar_build(root: Path) -> tuple[bool, str]:
 # --------------------------------------------------------------------------
 
 # Cada campo: (chave interna, rótulo mostrado, tipo de campo no formulário).
+CAMPOS_FICHA_CIDADE = [
+    ("populacao", "População", "texto"),
+    ("defesas", "Defesas e guarnição", "textarea"),
+]
+
+TITULO_SECAO_FICHA_CIDADE = "Ficha da cidade"
+
 CAMPOS_FICHA_NPC = [
     ("aparencia", "Aparência física", "textarea"),
     ("personalidade", "Personalidade", "textarea"),
@@ -317,13 +323,7 @@ CAMPOS_FICHA_NPC = [
     ("proficiencias", "Proficiências e idiomas", "textarea"),
 ]
 
-CAMPOS_FICHA_CIDADE = [
-    ("populacao", "População", "texto"),
-    ("defesas", "Defesas e guarnição", "textarea"),
-]
-
 TITULO_SECAO_FICHA = "Ficha de personagem"
-TITULO_SECAO_FICHA_CIDADE = "Ficha da cidade"
 
 TIPOS_FICHA = {
     "npc": (listar_npcs, CAMPOS_FICHA_NPC, TITULO_SECAO_FICHA),
@@ -403,8 +403,7 @@ def aplicar_sessao(
         atualizacoes,
     )
     atualizar_indice_diario(root, numero, data_real, data_campanha, titulo)
-    for entidade, nota in atualizacoes:
-        registrar_historico(entidade, root, numero, data_campanha, nota)
+    id_evento = registrar_sessao_na_linha_do_tempo(root, numero, titulo, data_campanha, resumo, atualizacoes)
     nav_ok = adicionar_sessao_ao_nav(root, numero)
     build_ok, build_saida = validar_build(root)
 
@@ -412,6 +411,7 @@ def aplicar_sessao(
         "numero": numero,
         "arquivo": str(caminho_sessao.relative_to(root)),
         "paginas_atualizadas": [e.rel_docs for e, _ in atualizacoes],
+        "id_evento": id_evento,
         "nav_ok": nav_ok,
         "build_ok": build_ok,
         "build_saida": build_saida,
@@ -682,3 +682,366 @@ def salvar_statblock(
 
     _escrever(caminho, texto)
     return novo_slug
+
+
+# --------------------------------------------------------------------------
+# Inserção no menu (nav) do mkdocs.yml
+# --------------------------------------------------------------------------
+
+def _indentacao(linha: str) -> int:
+    return len(linha) - len(linha.lstrip(" "))
+
+
+def _fim_do_bloco(linhas: list[str], inicio: int) -> int:
+    """Índice da primeira linha depois do bloco que começa em `inicio` (por indentação)."""
+    base = _indentacao(linhas[inicio])
+    pos = inicio + 1
+    while pos < len(linhas) and (not linhas[pos].strip() or _indentacao(linhas[pos]) > base):
+        pos += 1
+    while pos - 1 > inicio and not linhas[pos - 1].strip():
+        pos -= 1
+    return pos
+
+
+def _titulo_nav(titulo: str) -> str:
+    """Título entre aspas, seguro para YAML."""
+    return json.dumps(titulo, ensure_ascii=False)
+
+
+def _inserir_no_nav(root: Path, cabecalho: str, nova_linha: str, subgrupo: str = "") -> bool:
+    """Insere `nova_linha` no fim do bloco `cabecalho` do nav (ex.: '      - Sessões:').
+
+    Com `subgrupo`, procura dentro do bloco um grupo com esse título (ex.: 'Dodixie') e insere
+    no fim dele; se o grupo não existir, cria-o no fim do bloco.
+    """
+    caminho = mkdocs_yml(root)
+    linhas = _ler(caminho).split("\n")
+    try:
+        inicio = linhas.index(cabecalho)
+    except ValueError:
+        return False
+    fim = _fim_do_bloco(linhas, inicio)
+    indent_item = " " * (_indentacao(linhas[inicio]) + 4)
+    if subgrupo:
+        alvo = None
+        for i in range(inicio + 1, fim):
+            if linhas[i].rstrip() in (f"{indent_item}- {subgrupo}:", f"{indent_item}- {_titulo_nav(subgrupo)}:"):
+                alvo = i
+                break
+        if alvo is None:
+            linhas[fim:fim] = [f"{indent_item}- {_titulo_nav(subgrupo)}:", f"{indent_item}    {nova_linha}"]
+        else:
+            linhas.insert(_fim_do_bloco(linhas, alvo), f"{indent_item}    {nova_linha}")
+    else:
+        linhas.insert(fim, f"{indent_item}{nova_linha}")
+    _escrever(caminho, "\n".join(linhas))
+    return True
+
+
+# --------------------------------------------------------------------------
+# Novo NPC — botão "Adicionar NPC" da tabela de NPCs
+# --------------------------------------------------------------------------
+
+CABECALHO_NAV_NPCS = "      - NPCs:"
+
+# (chave, rótulo, obrigatório)
+CAMPOS_NPC_NOVO = [
+    ("nome", "Nome", True),
+    ("titulo", "Título (ex.: Marquesa, Capitão, Mestre)", False),
+    ("raca", "Raça", False),
+    ("cidade", "Cidade", False),
+    ("afiliacao", "Afiliação (casa, facção, organização)", False),
+    ("resumo", "Resumo de uma linha (aparece na tabela)", False),
+]
+
+
+def _front_matter(texto: str) -> tuple[dict, str]:
+    import yaml
+
+    m = re.match(r"---\n(.*?)\n---\n?(.*)", texto, re.S)
+    if not m:
+        return {}, texto
+    return yaml.safe_load(m.group(1)) or {}, m.group(2)
+
+
+def _com_front_matter(meta: dict, corpo: str) -> str:
+    import yaml
+
+    return "---\n" + yaml.dump(meta, allow_unicode=True, sort_keys=False, width=1000) + "---\n" + corpo
+
+
+def _link_se_existir(root: Path, nome: str, lista: list[Entidade], pagina_rel: str) -> str:
+    """Devolve `[nome](caminho)` se houver página com esse título; senão, o texto puro."""
+    for e in lista:
+        if e.titulo.casefold() == nome.casefold() or e.titulo.casefold().endswith(" " + nome.casefold()):
+            destino = os.path.relpath(docs_dir(root) / e.rel_docs, start=(docs_dir(root) / pagina_rel).parent)
+            return f"[{nome}]({Path(destino).as_posix()})"
+    return nome
+
+
+def _retrato_relativo(destino_imagem: Path, root: Path, pagina_rel: str) -> str:
+    return Path(os.path.relpath(destino_imagem, start=(docs_dir(root) / pagina_rel).parent)).as_posix()
+
+
+def criar_npc(root: Path, valores: dict, imagem: tuple[str, bytes] | None = None) -> dict:
+    """Cria docs/personagens/<slug>.md no padrão das páginas de NPC e o adiciona ao menu.
+
+    `imagem`, se informada, é (nome_original, conteúdo) do retrato.
+    """
+    nome = (valores.get("nome") or "").strip()
+    if not nome:
+        raise ValueError("O NPC precisa de um nome.")
+    slug = slug_statblock(nome)
+    rel = f"personagens/{slug}.md"
+    caminho = docs_dir(root) / rel
+    if caminho.exists():
+        raise ValueError(f"Já existe uma página para esse nome: docs/{rel}")
+
+    campos = {chave: (valores.get(chave) or "").strip() for chave, _, _ in CAMPOS_NPC_NOVO}
+    retrato = ""
+    if imagem and imagem[0]:
+        destino, _ = salvar_imagem(root, rel, "personagens", imagem[0], imagem[1])
+        retrato = _retrato_relativo(destino, root, rel)
+
+    ficha_rapida = {}
+    if campos["titulo"]:
+        ficha_rapida["Título"] = campos["titulo"]
+    if campos["raca"]:
+        ficha_rapida["Raça"] = campos["raca"]
+    if campos["cidade"]:
+        ficha_rapida["Cidade"] = _link_se_existir(root, campos["cidade"], listar_cidades(root), rel)
+    if campos["afiliacao"]:
+        ficha_rapida["Afiliação"] = _link_se_existir(root, campos["afiliacao"], listar_faccoes(root), rel)
+
+    meta = {
+        "tags": ["Personagens"] + ([campos["cidade"]] if campos["cidade"] else []),
+        "hide": ["toc"],
+        "npc": {
+            "titulo": campos["titulo"] or "—",
+            "raca": campos["raca"] or "—",
+            "cidade": campos["cidade"] or "—",
+            "afiliacao": campos["afiliacao"] or "—",
+            "resumo": campos["resumo"],
+            "retrato": retrato,
+            "ficha": ficha_rapida,
+        },
+    }
+    descricao = (valores.get("descricao") or "").strip()
+    corpo = "\n".join([
+        "",
+        f"# {nome}",
+        "",
+        descricao or campos["resumo"] or "*(Descrição a preencher.)*",
+        "",
+        '!!! question "Em aberto"',
+        "    História, motivações e relações deste NPC ainda não foram detalhadas.",
+        "",
+    ])
+    _escrever(caminho, _com_front_matter(meta, corpo))
+
+    grupo = campos["cidade"] or "Outros"
+    nav_ok = _inserir_no_nav(root, CABECALHO_NAV_NPCS, f"- {_titulo_nav(nome)}: {rel}", subgrupo=grupo)
+    build_ok, build_saida = validar_build(root)
+    return {"arquivo": f"docs/{rel}", "rel_docs": rel, "nav_ok": nav_ok, "build_ok": build_ok, "build_saida": build_saida}
+
+
+def definir_retrato(root: Path, npc_rel_docs: str, nome_original: str, conteudo: bytes) -> str:
+    """Salva a imagem enviada e a define como retrato do NPC (campo `npc.retrato`)."""
+    caminho = docs_dir(root) / npc_rel_docs
+    meta, corpo = _front_matter(_ler(caminho))
+    if not isinstance(meta.get("npc"), dict):
+        raise ValueError("Essa página não tem o bloco `npc:` no topo.")
+    destino, _ = salvar_imagem(root, npc_rel_docs, "personagens", nome_original, conteudo)
+    meta["npc"]["retrato"] = _retrato_relativo(destino, root, npc_rel_docs)
+    _escrever(caminho, _com_front_matter(meta, corpo))
+    return meta["npc"]["retrato"]
+
+
+# --------------------------------------------------------------------------
+# Nova sessão — botão "Nova sessão" da página Mestre → Sessões
+# --------------------------------------------------------------------------
+
+CABECALHO_NAV_SESSOES = "      - Sessões:"
+
+# (chave, rótulo na ficha da sessão)
+CAMPOS_SESSAO_NOVA = [
+    ("jogadores", "Jogadores"),
+    ("nivel", "Nível sugerido"),
+    ("duracao", "Duração estimada"),
+    ("tom", "Tom"),
+    ("local", "Local"),
+    ("missao", "Missão oferecida"),
+    ("recompensa", "Recompensa"),
+]
+
+
+def pasta_sessoes(root: Path) -> Path:
+    return docs_dir(root) / "mestre" / "sessoes"
+
+
+def proxima_sessao_preparo(root: Path) -> int:
+    numeros = []
+    for p in pasta_sessoes(root).glob("sessao-*.md"):
+        m = re.match(r"sessao-(\d+)", p.stem)
+        if m:
+            numeros.append(int(m.group(1)))
+    return max(numeros) + 1 if numeros else 0
+
+
+def _modelo_sessao(numero: int, titulo: str, valores: dict) -> str:
+    """Página de sessão com o mesmo layout da Sessão 0: ficha + abas."""
+    ficha = "\n".join(
+        f"| **{rotulo}** | {(valores.get(chave) or '').strip() or '—'} |" for chave, rotulo in CAMPOS_SESSAO_NOVA
+    )
+    resumo = (valores.get("resumo") or "").strip() or "*(Resumo da sessão a escrever.)*"
+    resumo = "\n".join("    " + l if l.strip() else "" for l in resumo.splitlines())
+    vazio = "    *(a preencher)*"
+    return f"""---
+tags:
+  - Mestre
+  - Sessão
+sessao:
+  numero: {numero}
+---
+
+# Sessão {numero} — {titulo}
+
+!!! warning "Conteúdo de campanha, não cânone do mundo"
+    Esta página é um roteiro de preparação de sessão — não documenta o mundo pré-campanha como o
+    resto da wiki. Depois de jogada, registre o que aconteceu pelo [Painel do Mestre](../painel.md)
+    ou pelo [modelo manual](../registro-manual-de-sessao.md); só promova para o cânone do mundo o
+    que você decidir manter como fato definitivo.
+
+<div class="ficha" markdown>
+
+| | |
+|---|---|
+{ficha}
+
+</div>
+
+=== "Resumo"
+
+    ## Resumo rápido
+
+{resumo}
+
+    ## Antes de sentar à mesa
+
+{vazio}
+
+=== "NPCs"
+
+    ## Aliados
+
+{vazio}
+
+    ## Inimigos
+
+{vazio}
+
+    ## Fichas de combate
+
+    Crie as fichas pela aba **Ficha de combate** do [Painel do Mestre](../painel.md), escolhendo
+    esta página.
+
+    ## Figurantes
+
+{vazio}
+
+=== "Cenas"
+
+    ### Cena 1
+
+{vazio}
+
+=== "Loot & Pistas"
+
+    ## Recompensa
+
+{vazio}
+
+    ## Itens encontrados
+
+{vazio}
+
+=== "Lugares"
+
+{vazio}
+
+=== "Segredo do Mestre"
+
+    ## Quem está por trás
+
+{vazio}
+
+    ## Pistas para distribuir
+
+{vazio}
+
+## Depois da sessão
+
+- Registre o que realmente aconteceu pelo [Painel do Mestre](../painel.md) (ou o
+  [modelo manual](../registro-manual-de-sessao.md)) — isso cria uma entrada no
+  [Diário de Sessões](../../diario/index.md).
+- Se algum elemento desta sessão virar fato definitivo do mundo, formalize-o nas páginas da wiki.
+"""
+
+
+def criar_sessao_preparo(root: Path, numero: int, titulo: str, valores: dict) -> dict:
+    """Cria docs/mestre/sessoes/sessao-<n>-<slug>.md e o adiciona ao menu, em Mestre → Sessões."""
+    titulo = titulo.strip()
+    if not titulo:
+        raise ValueError("A sessão precisa de um título.")
+    if any(re.match(rf"sessao-{numero}(-|$)", p.stem) for p in pasta_sessoes(root).glob("sessao-*.md")):
+        raise ValueError(f"Já existe uma página para a Sessão {numero}.")
+    rel = f"mestre/sessoes/sessao-{numero}-{slug_statblock(titulo)}.md"
+    _escrever(docs_dir(root) / rel, _modelo_sessao(numero, titulo, valores))
+    nav_ok = _inserir_no_nav(root, CABECALHO_NAV_SESSOES, f"- {_titulo_nav(f'Sessão {numero} — {titulo}')}: {rel}")
+    build_ok, build_saida = validar_build(root)
+    return {"arquivo": f"docs/{rel}", "rel_docs": rel, "nav_ok": nav_ok, "build_ok": build_ok, "build_saida": build_saida}
+
+
+# --------------------------------------------------------------------------
+# Linha do tempo (dados/linha-do-tempo.yml)
+# --------------------------------------------------------------------------
+
+def listar_eventos(root: Path) -> list[dict]:
+    return linha_tempo.ordenar(linha_tempo.carregar(root))
+
+
+def paginas_rastreaveis(root: Path) -> list[Entidade]:
+    """NPCs, cidades e facções — o que pode aparecer numa linha do tempo."""
+    return listar_npcs(root) + listar_cidades(root) + listar_faccoes(root)
+
+
+def salvar_evento(root: Path, dados: dict, id_evento: int | None = None) -> int:
+    """Cria (sem id) ou substitui (com id) um acontecimento. Devolve o id."""
+    if not (dados.get("titulo") or "").strip():
+        raise ValueError("O acontecimento precisa de um título.")
+    validas = {e.rel_docs for e in paginas_rastreaveis(root)}
+    paginas = set(dados.get("envolvidos") or []) | {m["pagina"] for m in dados.get("mudancas") or []}
+    paginas |= set((dados.get("notas") or {}).keys())
+    invalidas = sorted(p for p in paginas if p not in validas)
+    if invalidas:
+        raise ValueError("Página desconhecida: " + ", ".join(invalidas))
+
+    eventos = linha_tempo.carregar(root)
+    evento = {"id": id_evento or (max((int(e.get("id") or 0) for e in eventos), default=0) + 1)}
+    for chave in ("data", "sessao", "titulo", "descricao", "envolvidos", "notas", "mudancas"):
+        valor = dados.get(chave)
+        if valor not in (None, "", [], {}):
+            evento[chave] = valor
+    if id_evento:
+        if not any(int(e.get("id") or 0) == id_evento for e in eventos):
+            raise ValueError(f"Acontecimento {id_evento} não encontrado.")
+        eventos = [evento if int(e.get("id") or 0) == id_evento else e for e in eventos]
+    else:
+        eventos.append(evento)
+    linha_tempo.salvar(root, eventos)
+    return evento["id"]
+
+
+def apagar_evento(root: Path, id_evento: int) -> None:
+    eventos = linha_tempo.carregar(root)
+    linha_tempo.salvar(root, [e for e in eventos if int(e.get("id") or 0) != id_evento])

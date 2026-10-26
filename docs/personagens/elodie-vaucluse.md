@@ -1,20 +1,23 @@
 ---
 tags:
-  - Personagens
-  - Nouvelle-Montagne
+- Personagens
+- Nouvelle-Montagne
+hide:
+- toc
+npc:
+  titulo: Matriarca
+  raca: —
+  cidade: Nouvelle-Montagne
+  afiliacao: Facção radical (conselho de clãs)
+  resumo: Defende embargos de grãos.
+  retrato: ''
+  ficha:
+    Título: Matriarca
+    Cidade: "[Nouvelle-Montagne](../cidades/nouvelle-montagne.md)"
+    Facção interna: Facção radical do conselho de clãs
 ---
 
 # Élodie Vaucluse
-
-<div class="ficha" markdown>
-
-| | |
-|---|---|
-| **Título** | Matriarca |
-| **Cidade** | [Nouvelle-Montagne](../cidades/nouvelle-montagne.md) |
-| **Facção interna** | Facção radical do conselho de clãs |
-
-</div>
 
 Audaciosa e visionária, lidera a facção radical. Acredita que **a comida é a arma mais poderosa
 de Gallancourt** e está disposta a usá-la, defendendo **embargos de grãos** para forçar as

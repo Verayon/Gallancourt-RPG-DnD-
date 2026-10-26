@@ -2,6 +2,8 @@
 tags:
   - Mestre
   - Sessão
+sessao:
+  numero: 0
 ---
 
 # Sessão 0 — Os Grilhões da Estrada
@@ -12,8 +14,8 @@ tags:
     `docs/personagens/` porque nasceram da campanha, não do mundo pré-existente; se algum deles
     sobreviver e voltar a aparecer, aí sim vale criar a página dele. O segredo por trás da trama é
     uma proposta `POSSIBILIDADE` para você usar, ajustar ou substituir livremente. Depois de
-    jogada, registre a sessão pelo [Painel do Mestre](painel.md) ou o
-    [modelo manual](registro-manual-de-sessao.md); só promova para o cânone do mundo (páginas de
+    jogada, registre a sessão pelo [Painel do Mestre](../painel.md) ou o
+    [modelo manual](../registro-manual-de-sessao.md); só promova para o cânone do mundo (páginas de
     `docs/`) o que você decidir manter como fato definitivo do universo.
 
 <div class="ficha" markdown>
@@ -75,12 +77,12 @@ tags:
 
     ## Rastreador de iniciativa, status e ações
 
-    Esta aba é só um atalho — o rastreador em si roda no [Painel do Mestre](painel.md), que é uma
+    Esta aba é só um atalho — o rastreador em si roda no [Painel do Mestre](../painel.md), que é uma
     ferramenta local, separada deste site. Com o painel aberto no seu computador
     (`.venv\Scripts\python admin\app.py`), use o botão abaixo para abrir o combate desta sessão já
     selecionado:
 
-    [Abrir o combate desta sessão no Painel ↗](http://127.0.0.1:5001/sessao-ao-vivo?pagina=mestre/sessao-0-os-grilhoes-da-estrada.md){ .md-button .md-button--primary }
+    [Abrir o combate desta sessão no Painel ↗](http://127.0.0.1:5001/sessao-ao-vivo?pagina=mestre/sessoes/sessao-0-os-grilhoes-da-estrada.md){ .md-button .md-button--primary }
 
     Lá dá pra:
 
@@ -143,7 +145,7 @@ tags:
     ## Fichas de combate
 
     Ficha completa de cada NPC de combate — atributos, perícias, equipamento e ações. Gerada pela
-    aba **Ficha de combate** do [Painel do Mestre](painel.md); edite por ali se quiser ajustar
+    aba **Ficha de combate** do [Painel do Mestre](../painel.md); edite por ali se quiser ajustar
     algo, não direto no texto.
 
     **Aliados**
@@ -567,7 +569,7 @@ tags:
         Torre de vigia abandonada, erguida séculos atrás pela própria Casa Duvant. Fica na
         cadeia de montanhas menor que fica **praticamente ao sul de Dodixie** (bem mais perto da
         cidade do que de Valynesse) — um elemento do mapa regional ainda sem nome oficial na wiki
-        (ver [Leitura cartográfica](../geografia/mapas.md)). É o covil real da rede de tráfico.
+        (ver [Leitura cartográfica](../../geografia/mapas.md)). É o covil real da rede de tráfico.
         Alaric não tem ideia de que uma propriedade abandonada
         da própria família está sendo usada para isso — e vai ficar furioso ao descobrir.
 
@@ -605,11 +607,11 @@ tags:
 
 ## Depois da sessão
 
-- Registre o que realmente aconteceu pelo [Painel do Mestre](painel.md) (ou o
-  [modelo manual](registro-manual-de-sessao.md)) — isso cria a primeira entrada do
-  [Diário de Sessões](../diario/index.md) e já te dá a ficha de cada personagem envolvido.
+- Registre o que realmente aconteceu pelo [Painel do Mestre](../painel.md) (ou o
+  [modelo manual](../registro-manual-de-sessao.md)) — isso cria a primeira entrada do
+  [Diário de Sessões](../../diario/index.md) e já te dá a ficha de cada personagem envolvido.
 - Se a torre, o nome do Correntes, Olim/Milo ou qualquer outro elemento desta sessão virar fato
   definitivo do mundo (e não só da mesa), considere formalizá-lo depois nas páginas de
-  [Geografia](../geografia/index.md), [Operações clandestinas](../mundo/operacoes-clandestinas.md)
+  [Geografia](../../geografia/index.md), [Operações clandestinas](../../mundo/operacoes-clandestinas.md)
   ou, se Milo se tornar um NPC recorrente, uma página própria em `docs/personagens/` — esta
   página continua sendo só o rascunho de preparação, não o registro final.

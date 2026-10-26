@@ -55,19 +55,28 @@ editar os arquivos à mão, ou para entender o que o painel está fazendo.
         entre os marcadores `<!-- inicio:sessoes -->` e `<!-- fim:sessoes -->`;
       - um marco novo na linha do tempo `mermaid`, entre `<!-- inicio:timeline -->` e
         `<!-- fim:timeline -->`, na mesma página;
-      - uma entrada nova em `nav:`, dentro do `mkdocs.yml`, na seção **Wiki → Diário de Sessões**.
-5. Se uma página específica mudou de um jeito que vale a pena guardar a razão (uma revelação, uma
-   morte, uma aliança quebrada), adicione nela uma seção `## Histórico de sessões` com uma linha
-   como:
+      - uma entrada nova em `nav:`, dentro do `mkdocs.yml`, na seção **Mestre → Diário de Sessões**.
+5. Se um NPC, cidade ou facção mudou por causa da sessão (uma revelação, uma morte, uma viagem,
+   uma aliança quebrada), acrescente um acontecimento em `dados/linha-do-tempo.yml`:
 
-    ```markdown
-    ## Histórico de sessões
-
-    - **[Sessão 3](../diario/sessao-03.md)** (12 de novembro de 1453) — Scyras revelou que…
+    ```yaml
+    - id: 7                      # próximo número livre
+      data: 12 de novembro de 1453
+      sessao: 3
+      titulo: Scyras revela o acordo com Rochefort
+      descricao: Diante dos jogadores, no porto de Dodixie.
+      envolvidos:
+      - personagens/scyras-corbeau.md
+      - personagens/etienne-rochefort.md
+      mudancas:                  # opcional
+      - pagina: personagens/etienne-rochefort.md
+        campo: situacao          # situacao, cidade, afiliacao ou titulo
+        valor: Foragido
     ```
 
-    Essa seção é opcional e só existe nas páginas que já tiveram uma mudança registrada — não
-    precisa adicioná-la em branco nas páginas que ainda não mudaram.
+    O acontecimento aparece sozinho, em ordem cronológica, na página de cada envolvido. O jeito
+    mais fácil é a aba **Linha do tempo** do [Painel do Mestre](painel.md), que escreve esse
+    arquivo por você.
 
 Também pode pedir para eu (Claude) fazer esses passos por você em conversa: diga o que aconteceu na
 sessão e eu crio o arquivo, atualizo as páginas afetadas e registro tudo no lugar certo.

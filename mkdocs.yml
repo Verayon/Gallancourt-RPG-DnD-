@@ -15,7 +15,6 @@ theme:
     logo: material/sword-cross
   favicon: assets/favicon.svg
   features:
-    - navigation.sections
     - navigation.indexes
     - navigation.path
     - navigation.top
@@ -42,6 +41,16 @@ theme:
 
 extra_css:
   - stylesheets/extra.css
+
+extra_javascript:
+  - javascripts/gallancourt.js
+
+extra:
+  # Endereço do Painel do Mestre usado pelos botões "Nova sessão" e "Adicionar NPC"
+  painel_url: http://127.0.0.1:5001
+
+hooks:
+  - hooks/gallancourt.py
 
 plugins:
   - search:
@@ -77,12 +86,9 @@ markdown_extensions:
 
 nav:
   - Início: index.md
-  - Lore: lore.md
-  - Wiki:
-      - wiki.md
-      - Diário de Sessões:
-          - diario/index.md
-      - visao-geral.md
+  - Lore:
+      - lore/index.md
+      - Gallancourt em uma página: visao-geral.md
       - Crônica em capítulos:
           - historia/index.md
           - Antes da ruptura: historia/antes-da-ruptura.md
@@ -90,6 +96,26 @@ nav:
           - A guerra civil: historia/a-guerra-civil.md
           - O pós-guerra: historia/o-pos-guerra.md
           - Cronologia: historia/cronologia.md
+  - Wiki:
+      - wiki/index.md
+      - Mundo:
+          - mundo/index.md
+          - Calendário: mundo/calendario.md
+          - Conflitos centrais: mundo/conflitos-centrais.md
+          - Teia política: mundo/teia-politica.md
+          - Relações entre cidades: mundo/relacoes-entre-cidades.md
+          - Intrigas da nobreza: mundo/intrigas-da-nobreza.md
+          - Religião — Amaunator: mundo/religiao.md
+          - Economia política: mundo/economia.md
+          - Operações clandestinas: mundo/operacoes-clandestinas.md
+          - Glossário: mundo/glossario.md
+      - Geografia:
+          - geografia/index.md
+          - A grande cordilheira: geografia/grande-cordilheira.md
+          - A Cicatriz: geografia/a-cicatriz.md
+          - Ilhas do Relâmpago: geografia/ilhas-do-relampago.md
+          - Divisão territorial: geografia/divisao-territorial.md
+          - Mapas: geografia/mapas.md
       - Cidades:
           - cidades/index.md
           - Aliança dos Lordes:
@@ -102,7 +128,27 @@ nav:
               - Montclair de Lune: cidades/montclair-de-lune.md
               - Chantépierre: cidades/chantepierre.md
               - Valmire-sur-Rose: cidades/valmire-sur-rose.md
-      - Personagens:
+      - Facções:
+          - faccoes/index.md
+          - Estados e alianças:
+              - Aliança dos Lordes: faccoes/alianca-dos-lordes.md
+              - L'Ordre de Célestien: faccoes/l-ordre-de-celestien.md
+              - Fraternidade dos Cinco Sangues: faccoes/fraternidade-dos-cinco-sangues.md
+          - As cinco casas:
+              - Casa Magnetér: faccoes/casa-magneter.md
+              - Casa Corbeau: faccoes/casa-corbeau.md
+              - Casa Lumière: faccoes/casa-lumiere.md
+              - Casa Saint-Laurent: faccoes/casa-saint-laurent.md
+              - Casa Roche: faccoes/casa-roche.md
+          - Outras casas:
+              - Casa D'Aubren: faccoes/casa-d-aubren.md
+              - Casa Duvant: faccoes/casa-duvant.md
+          - Organizações:
+              - Torre do Trovão: faccoes/torre-do-trovao.md
+              - Guilda dos Construtores Navais: faccoes/guilda-dos-construtores-navais.md
+              - La Voile Noire: faccoes/la-voile-noire.md
+              - Frotas corsárias e piratas: faccoes/frotas-corsarias-e-piratas.md
+      - NPCs:
           - personagens/index.md
           - Coroa e L'Ordre:
               - Thibault d'Aubren: personagens/thibault-d-aubren.md
@@ -134,26 +180,6 @@ nav:
               - Amélie Montpensier: personagens/amelie-montpensier.md
               - Philippe Beaumont: personagens/philippe-beaumont.md
               - Henri du Valois: personagens/henri-du-valois.md
-      - Facções:
-          - faccoes/index.md
-          - Estados e alianças:
-              - Aliança dos Lordes: faccoes/alianca-dos-lordes.md
-              - L'Ordre de Célestien: faccoes/l-ordre-de-celestien.md
-              - Fraternidade dos Cinco Sangues: faccoes/fraternidade-dos-cinco-sangues.md
-          - As cinco casas:
-              - Casa Magnetér: faccoes/casa-magneter.md
-              - Casa Corbeau: faccoes/casa-corbeau.md
-              - Casa Lumière: faccoes/casa-lumiere.md
-              - Casa Saint-Laurent: faccoes/casa-saint-laurent.md
-              - Casa Roche: faccoes/casa-roche.md
-          - Outras casas:
-              - Casa D'Aubren: faccoes/casa-d-aubren.md
-              - Casa Duvant: faccoes/casa-duvant.md
-          - Organizações:
-              - Torre do Trovão: faccoes/torre-do-trovao.md
-              - Guilda dos Construtores Navais: faccoes/guilda-dos-construtores-navais.md
-              - La Voile Noire: faccoes/la-voile-noire.md
-              - Frotas corsárias e piratas: faccoes/frotas-corsarias-e-piratas.md
       - Eventos:
           - eventos/index.md
           - Édito da Pureza: eventos/edito-da-pureza.md
@@ -165,51 +191,38 @@ nav:
           - Fuga de Severin Marceau: eventos/fuga-de-severin-marceau.md
           - Guerra Fria: eventos/guerra-fria.md
           - Massacre da família Enry: eventos/massacre-dos-enry.md
-      - Geografia:
-          - geografia/index.md
-          - A grande cordilheira: geografia/grande-cordilheira.md
-          - A Cicatriz: geografia/a-cicatriz.md
-          - Ilhas do Relâmpago: geografia/ilhas-do-relampago.md
-          - Divisão territorial: geografia/divisao-territorial.md
-          - Mapas: geografia/mapas.md
-      - Mundo:
-          - mundo/index.md
-          - Calendário: mundo/calendario.md
-          - Conflitos centrais: mundo/conflitos-centrais.md
-          - Teia política: mundo/teia-politica.md
-          - Relações entre cidades: mundo/relacoes-entre-cidades.md
-          - Intrigas da nobreza: mundo/intrigas-da-nobreza.md
-          - Religião — Amaunator: mundo/religiao.md
-          - Economia política: mundo/economia.md
-          - Operações clandestinas: mundo/operacoes-clandestinas.md
-          - Glossário: mundo/glossario.md
-      - Compêndio:
-          - compendio/index.md
-          - História de Gallancourt (anotada): compendio/historia-de-gallancourt.md
-          - Cidades:
-              - compendio/cidades/index.md
-              - Valynesse: compendio/cidades/valynesse.md
-              - Dodixie: compendio/cidades/dodixie.md
-              - Baie de l'Éclair: compendio/cidades/baie-de-l-eclair.md
-              - Saint-Armand: compendio/cidades/saint-armand.md
-              - Nouvelle-Montagne: compendio/cidades/nouvelle-montagne.md
-              - Montclair de Lune: compendio/cidades/montclair-de-lune.md
-              - Valmire-sur-Rose: compendio/cidades/valmire-sur-rose.md
-              - Chantépierre: compendio/cidades/chantepierre.md
-          - Personagens: compendio/personagens.md
-          - Política e facções: compendio/politica-e-faccoes.md
-          - Geografia e religião: compendio/geografia-e-religiao.md
-          - Pendências para o autor: compendio/pendencias.md
-      - Referência do Mestre:
-          - mestre/index.md
-          - Sessão 0 — Os Grilhões da Estrada: mestre/sessao-0-os-grilhoes-da-estrada.md
-          - Referência rápida: mestre/referencia-rapida.md
-      - Manutenção do Projeto:
-          - mestre/manutencao-do-projeto.md
-          - Painel do Mestre: mestre/painel.md
-          - Registro manual de sessão: mestre/registro-manual-de-sessao.md
-          - Manutenção do cânone: mestre/manutencao-do-canone.md
-          - Lacunas em aberto: mestre/lacunas.md
-          - Inconsistências a revisar: mestre/inconsistencias.md
-          - Fontes e método: mestre/fontes.md
-          - Índice de tags: mestre/tags.md
+  - Compêndio:
+      - compendio/index.md
+      - História de Gallancourt (anotada): compendio/historia-de-gallancourt.md
+      - Cidades:
+          - compendio/cidades/index.md
+          - Valynesse: compendio/cidades/valynesse.md
+          - Dodixie: compendio/cidades/dodixie.md
+          - Baie de l'Éclair: compendio/cidades/baie-de-l-eclair.md
+          - Saint-Armand: compendio/cidades/saint-armand.md
+          - Nouvelle-Montagne: compendio/cidades/nouvelle-montagne.md
+          - Montclair de Lune: compendio/cidades/montclair-de-lune.md
+          - Valmire-sur-Rose: compendio/cidades/valmire-sur-rose.md
+          - Chantépierre: compendio/cidades/chantepierre.md
+      - Personagens: compendio/personagens.md
+      - Política e facções: compendio/politica-e-faccoes.md
+      - Geografia e religião: compendio/geografia-e-religiao.md
+      - Pendências para o autor: compendio/pendencias.md
+  - Mestre:
+      - mestre/index.md
+      - Sessões:
+          - mestre/sessoes/index.md
+          - "Sessão 0 — Os Grilhões da Estrada": mestre/sessoes/sessao-0-os-grilhoes-da-estrada.md
+      - Diário de Sessões:
+          - diario/index.md
+      - Linha do tempo: mestre/linha-do-tempo.md
+      - Referência rápida: mestre/referencia-rapida.md
+  - Configurações:
+      - configuracoes/index.md
+      - Painel do Mestre: mestre/painel.md
+      - Registro manual de sessão: mestre/registro-manual-de-sessao.md
+      - Manutenção do cânone: mestre/manutencao-do-canone.md
+      - Lacunas em aberto: mestre/lacunas.md
+      - Inconsistências a revisar: mestre/inconsistencias.md
+      - Fontes e método: mestre/fontes.md
+      - Índice de tags: mestre/tags.md

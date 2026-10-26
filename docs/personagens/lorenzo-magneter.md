@@ -1,22 +1,25 @@
 ---
 tags:
-  - Personagens
-  - Aliança dos Lordes
-  - Valynesse
+- Personagens
+- Aliança dos Lordes
+- Valynesse
+hide:
+- toc
+npc:
+  titulo: Doge
+  raca: —
+  cidade: Valynesse
+  afiliacao: Casa Magnetér
+  resumo: Líder eleito; manipula das sombras; ajudou a matar o rei.
+  retrato: ''
+  ficha:
+    Título: Doge (eleito)
+    Casa: "[Magnetér](../faccoes/casa-magneter.md) (figura central), família centenária"
+    Cidade: "[Valynesse](../cidades/valynesse.md)"
+    Facção: "[Aliança dos Lordes](../faccoes/alianca-dos-lordes.md)"
 ---
 
 # Lorenzo Magnetér
-
-<div class="ficha" markdown>
-
-| | |
-|---|---|
-| **Título** | Doge (eleito) |
-| **Casa** | [Magnetér](../faccoes/casa-magneter.md) (figura central), família centenária |
-| **Cidade** | [Valynesse](../cidades/valynesse.md) |
-| **Facção** | [Aliança dos Lordes](../faccoes/alianca-dos-lordes.md) |
-
-</div>
 
 O líder eleito de Valynesse. Oligarca e **mestre da manipulação que governa a partir das
 sombras**, usa a vasta fortuna e a influência de sua família centenária para manter o poder

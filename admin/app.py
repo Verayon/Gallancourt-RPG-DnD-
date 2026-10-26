@@ -106,10 +106,10 @@ def aplicar_sessao():
 
 @app.get("/ficha")
 def escolher_ficha():
-    tipo = request.args.get("tipo", "npc")
+    tipo = request.args.get("tipo", "cidade")
     item_slug = request.args.get("item", "")
     if tipo not in wd.TIPOS_FICHA:
-        tipo = "npc"
+        tipo = "cidade"
     listar_fn, campos, titulo_secao = wd.TIPOS_FICHA[tipo]
     itens = listar_fn(ROOT)
 
@@ -131,7 +131,7 @@ def escolher_ficha():
 
 @app.post("/ficha")
 def salvar_ficha():
-    tipo = request.form.get("tipo", "npc")
+    tipo = request.form.get("tipo", "cidade")
     item_slug = request.form.get("item", "")
     if tipo not in wd.TIPOS_FICHA:
         abort(400)
@@ -507,6 +507,146 @@ def arquivar_sessao_ao_vivo():
         abort(404)
     sv.arquivar_e_limpar(ROOT, pagina)
     return _redirect_sessao_ao_vivo(pagina)
+
+
+# --------------------------------------------------------------------------
+# Botões do site: "Adicionar NPC" (tabela de NPCs) e "Nova sessão" (Mestre → Sessões)
+# --------------------------------------------------------------------------
+
+@app.get("/npc/novo")
+def formulario_npc():
+    return render_template(
+        "npc_novo.html", campos=wd.CAMPOS_NPC_NOVO, valores={},
+        cidades=wd.listar_cidades(ROOT), faccoes=wd.listar_faccoes(ROOT),
+    )
+
+
+@app.post("/npc/novo")
+def criar_npc():
+    valores = {chave: request.form.get(chave, "") for chave, _, _ in wd.CAMPOS_NPC_NOVO}
+    valores["descricao"] = request.form.get("descricao", "")
+    arquivo = request.files.get("imagem")
+    imagem = (arquivo.filename, arquivo.read()) if arquivo and arquivo.filename else None
+    try:
+        r = wd.criar_npc(ROOT, valores, imagem)
+    except ValueError as exc:
+        return render_template(
+            "npc_novo.html", campos=wd.CAMPOS_NPC_NOVO, valores={**valores, **request.form.to_dict()},
+            erro=str(exc), cidades=wd.listar_cidades(ROOT), faccoes=wd.listar_faccoes(ROOT),
+        )
+    return render_template(
+        "resultado_criacao.html", r=r, titulo_pagina=f"NPC criado: {valores['nome'].strip()}",
+        voltar_url="/npc/novo", voltar_rotulo="Adicionar outro NPC",
+    )
+
+
+@app.get("/npc/retrato")
+def formulario_retrato():
+    return render_template("npc_retrato.html", npcs=wd.listar_npcs(ROOT), escolhido=request.args.get("npc", ""))
+
+
+@app.post("/npc/retrato")
+def salvar_retrato():
+    escolhido = request.form.get("npc", "")
+    arquivo = request.files.get("imagem")
+    contexto = dict(npcs=wd.listar_npcs(ROOT), escolhido=escolhido)
+    if _resolver_pagina(escolhido) is None or not escolhido.startswith("personagens/"):
+        return render_template("npc_retrato.html", erro="Escolha um NPC da lista.", **contexto)
+    if arquivo is None or not arquivo.filename:
+        return render_template("npc_retrato.html", erro="Escolha um arquivo de imagem.", **contexto)
+    try:
+        retrato = wd.definir_retrato(ROOT, escolhido, arquivo.filename, arquivo.read())
+    except ValueError as exc:
+        return render_template("npc_retrato.html", erro=str(exc), **contexto)
+    return render_template("npc_retrato.html", salvo=retrato, **contexto)
+
+
+@app.get("/sessoes/nova")
+def formulario_sessao_nova():
+    return render_template(
+        "sessao_nova.html", numero=wd.proxima_sessao_preparo(ROOT), campos=wd.CAMPOS_SESSAO_NOVA, valores={},
+    )
+
+
+@app.post("/sessoes/nova")
+def criar_sessao_nova():
+    valores = {chave: request.form.get(chave, "") for chave, _ in wd.CAMPOS_SESSAO_NOVA}
+    valores["titulo"] = request.form.get("titulo", "")
+    valores["resumo"] = request.form.get("resumo", "")
+    try:
+        numero = int(request.form.get("numero", ""))
+        r = wd.criar_sessao_preparo(ROOT, numero, valores["titulo"], valores)
+    except ValueError as exc:
+        return render_template(
+            "sessao_nova.html", numero=request.form.get("numero", ""), campos=wd.CAMPOS_SESSAO_NOVA,
+            valores=valores, erro=str(exc) if "invalid literal" not in str(exc) else "Número de sessão inválido.",
+        )
+    return render_template(
+        "resultado_criacao.html", r=r, titulo_pagina=f"Sessão {numero} criada",
+        voltar_url="/sessoes/nova", voltar_rotulo="Criar outra sessão",
+    )
+
+
+# --------------------------------------------------------------------------
+# Linha do tempo
+# --------------------------------------------------------------------------
+
+LINHAS_MUDANCA = 6  # quantas linhas de "mudança de estado" o formulário mostra
+
+
+def _contexto_linha_tempo(**extra):
+    return dict(
+        eventos=wd.listar_eventos(ROOT), npcs=wd.listar_npcs(ROOT), cidades=wd.listar_cidades(ROOT),
+        faccoes=wd.listar_faccoes(ROOT), campos_mudanca=wd.linha_tempo.CAMPOS_MUDANCA,
+        linhas_mudanca=LINHAS_MUDANCA, **extra,
+    )
+
+
+@app.get("/linha-do-tempo")
+def formulario_linha_tempo():
+    editar = request.args.get("editar", type=int)
+    evento = next((e for e in wd.listar_eventos(ROOT) if int(e.get("id") or 0) == editar), None) if editar else None
+    return render_template("linha_tempo.html", **_contexto_linha_tempo(evento=evento or {}))
+
+
+@app.post("/linha-do-tempo")
+def salvar_linha_tempo():
+    id_evento = request.form.get("id", type=int)
+    sessao = request.form.get("sessao", "").strip()
+    mudancas = []
+    for i in range(LINHAS_MUDANCA):
+        pagina = request.form.get(f"mudanca_pagina_{i}", "")
+        campo = request.form.get(f"mudanca_campo_{i}", "")
+        valor = request.form.get(f"mudanca_valor_{i}", "").strip()
+        if pagina and campo and valor:
+            mudancas.append({"pagina": pagina, "campo": campo, "valor": valor})
+    anterior = next((e for e in wd.listar_eventos(ROOT) if int(e.get("id") or 0) == id_evento), {}) if id_evento else {}
+    dados = {
+        "data": request.form.get("data", "").strip(),
+        "sessao": int(sessao) if sessao.lstrip("-").isdigit() else None,
+        "titulo": request.form.get("titulo", "").strip(),
+        "descricao": request.form.get("descricao", "").strip(),
+        "envolvidos": request.form.getlist("envolvido"),
+        "notas": anterior.get("notas"),
+        "mudancas": mudancas,
+    }
+    try:
+        novo_id = wd.salvar_evento(ROOT, dados, id_evento)
+    except ValueError as exc:
+        return render_template("linha_tempo.html", **_contexto_linha_tempo(evento={**dados, "id": id_evento}, erro=str(exc)))
+    build_ok, build_saida = wd.validar_build(ROOT)
+    return render_template(
+        "linha_tempo.html",
+        **_contexto_linha_tempo(evento={}, salvo=novo_id, build_ok=build_ok, build_saida=build_saida),
+    )
+
+
+@app.post("/linha-do-tempo/apagar")
+def apagar_linha_tempo():
+    id_evento = request.form.get("id", type=int)
+    if id_evento:
+        wd.apagar_evento(ROOT, id_evento)
+    return redirect(url_for("formulario_linha_tempo"))
 
 
 def _resolver_pagina(rel: str) -> Path | None:

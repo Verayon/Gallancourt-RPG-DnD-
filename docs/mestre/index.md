@@ -3,17 +3,22 @@ tags:
   - Mestre
 ---
 
-# Referência do Mestre
+# Mestre
 
-Conteúdo para usar durante o preparo ou à mesa — roteiros e tabelas de consulta rápida. Para
-ferramentas, convenções e o que falta decidir no mundo, veja
-[Manutenção do Projeto](manutencao-do-projeto.md).
+O que usar no preparo e à mesa: o roteiro de cada sessão, o registro do que aconteceu e tabelas
+de consulta rápida. Ferramentas e convenções do projeto ficam em
+[Configurações](../configuracoes/index.md).
 
 <div class="bar-list" markdown>
 
--   **[Sessão 0 — Os Grilhões da Estrada](sessao-0-os-grilhoes-da-estrada.md)**
+-   **[Sessões](sessoes/index.md)**
 
-    Roteiro de preparação para a primeira sessão jogada: fuga, combate e o gancho da investigação.
+    Uma página por sessão, com resumo, NPCs e fichas de combate, cenas, pistas, lugares e o
+    segredo do Mestre. O botão **Nova sessão** cria a próxima com o mesmo layout.
+
+-   **[Diário de Sessões](../diario/index.md)**
+
+    O registro do que aconteceu em cada sessão jogada, com a data real e a data na campanha.
 
 -   **[Referência rápida](referencia-rapida.md)**
 

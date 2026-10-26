@@ -1,21 +1,24 @@
 ---
 tags:
-  - Personagens
-  - Aliança dos Lordes
-  - Dodixie
+- Personagens
+- Aliança dos Lordes
+- Dodixie
+hide:
+- toc
+npc:
+  titulo: Marquês
+  raca: —
+  cidade: Dodixie
+  afiliacao: Casa Duvant
+  resumo: Coopera e compete com Corbeau.
+  retrato: ''
+  ficha:
+    Título: Marquês
+    Casa: "[Duvant](../faccoes/casa-duvant.md) (líder)"
+    Cidade: "[Dodixie](../cidades/dodixie.md)"
 ---
 
 # Alaric Duvant
-
-<div class="ficha" markdown>
-
-| | |
-|---|---|
-| **Título** | Marquês |
-| **Casa** | [Duvant](../faccoes/casa-duvant.md) (líder) |
-| **Cidade** | [Dodixie](../cidades/dodixie.md) |
-
-</div>
 
 Líder da segunda grande família de Dodixie. Coopera com a Casa Corbeau, mas também possui
 ambições próprias; reconhece a liderança de Corbeau sem se reduzir a uma extensão dela.

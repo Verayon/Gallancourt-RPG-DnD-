@@ -1,5 +1,5 @@
 """Combate ao vivo — rastreador de iniciativa e notas para usar durante a mesa, preso à página da
-sessão (ex.: docs/mestre/sessao-0-os-grilhoes-da-estrada.md).
+sessão (ex.: docs/mestre/sessoes/sessao-0-os-grilhoes-da-estrada.md).
 
 Isolado do Flask de propósito, como wiki_data.py: todas as funções recebem `root` (a raiz do
 projeto) para dar para testar contra uma cópia de teste em vez do projeto real. Ao contrário de

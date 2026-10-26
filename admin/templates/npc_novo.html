@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block titulo %}Adicionar NPC{% endblock %}
+{% block conteudo %}
+<h1>Adicionar NPC</h1>
+<p class="ajuda">
+  Preencha o que já souber — só o nome é obrigatório. O painel cria a página do NPC no mesmo
+  padrão das outras (retrato, dados rápidos e abas), coloca-o no menu, no grupo da cidade, e ele
+  aparece sozinho na tabela de NPCs. O resto você detalha depois, em <a href="/editar">Editar página</a>.
+</p>
+
+{% if erro %}<p class="aviso aviso--erro">⚠️ {{ erro }}</p>{% endif %}
+
+<form method="post" action="/npc/novo" class="form-sessao" enctype="multipart/form-data">
+  <fieldset>
+    <legend>Dados rápidos</legend>
+    {% for chave, rotulo, obrigatorio in campos %}
+    <label>{{ rotulo }}
+      <input type="text" name="{{ chave }}" value="{{ valores.get(chave, '') }}"
+        {% if chave == "cidade" %}list="lista-cidades"{% elif chave == "afiliacao" %}list="lista-faccoes"{% endif %}
+        {{ "required" if obrigatorio else "" }}>
+    </label>
+    {% endfor %}
+    <datalist id="lista-cidades">{% for c in cidades %}<option value="{{ c.titulo }}">{% endfor %}</datalist>
+    <datalist id="lista-faccoes">{% for f in faccoes %}<option value="{{ f.titulo }}">{% endfor %}</datalist>
+  </fieldset>
+
+  <fieldset>
+    <legend>Descrição e retrato</legend>
+    <label>Descrição (texto da aba "Visão geral")
+      <textarea name="descricao" rows="6" placeholder="Quem é, como age, o que quer…">{{ valores.get('descricao', '') }}</textarea>
+    </label>
+    <label>Retrato (opcional — PNG, JPG, WEBP, GIF ou SVG)
+      <input type="file" name="imagem" accept="image/*">
+    </label>
+  </fieldset>
+
+  <button type="submit" class="botao-principal">Criar NPC</button>
+  <a class="botao-secundario" href="/npc/retrato">Trocar o retrato de um NPC existente</a>
+</form>
+{% endblock %}

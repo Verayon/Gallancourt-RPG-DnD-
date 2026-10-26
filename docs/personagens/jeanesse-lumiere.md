@@ -1,22 +1,25 @@
 ---
 tags:
-  - Personagens
-  - Aliança dos Lordes
-  - Baie de l'Éclair
+- Personagens
+- Aliança dos Lordes
+- "Baie de l'Éclair"
+hide:
+- toc
+npc:
+  titulo: Duque
+  raca: —
+  cidade: "Baie de l'Éclair"
+  afiliacao: Casa Lumière
+  resumo: Aristocracia local.
+  retrato: ''
+  ficha:
+    Título: Duque
+    Casa: "[Lumière](../faccoes/casa-lumiere.md) (figura central)"
+    Cidade: "[Baie de l'Éclair](../cidades/baie-de-l-eclair.md)"
+    Facção: "[Aliança dos Lordes](../faccoes/alianca-dos-lordes.md)"
 ---
 
 # Jeanesse Lumière
-
-<div class="ficha" markdown>
-
-| | |
-|---|---|
-| **Título** | Duque |
-| **Casa** | [Lumière](../faccoes/casa-lumiere.md) (figura central) |
-| **Cidade** | [Baie de l'Éclair](../cidades/baie-de-l-eclair.md) |
-| **Facção** | [Aliança dos Lordes](../faccoes/alianca-dos-lordes.md) |
-
-</div>
 
 Representante da aristocracia local de Baie de l'Éclair. A Casa Lumière ocupa uma posição de
 intermediação entre a nobreza, o comércio e a magia, e depende da relação delicada entre

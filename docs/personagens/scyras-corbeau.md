@@ -1,27 +1,30 @@
 ---
 tags:
-  - Personagens
-  - Aliança dos Lordes
-  - Dodixie
+- Personagens
+- Aliança dos Lordes
+- Dodixie
+hide:
+- toc
+npc:
+  titulo: Marquesa
+  raca: Humana
+  cidade: Dodixie
+  afiliacao: Casa Corbeau
+  resumo: Governante de fato; jovem e implacável; vinga o pai traído pelos aristocratas da capital.
+  retrato: ''
+  ficha:
+    Título: Marquesa
+    Raça: Humana
+    Casa: "[Corbeau](../faccoes/casa-corbeau.md) (líder)"
+    Cidade: "[Dodixie](../cidades/dodixie.md), governante de fato"
+    Residência: Fortaleza Corbeau, castelo sombrio que se projeta sobre o porto
+    Facção: "[Aliança dos Lordes](../faccoes/alianca-dos-lordes.md)"
+    Motivação: Vingar a traição que levou à prisão e à execução de seu pai
 ---
 
 # Scyras Corbeau
 
 *Marquesa Scyras de la Maison Corbeau.*
-
-<div class="ficha" markdown>
-
-| | |
-|---|---|
-| **Título** | Marquesa |
-| **Raça** | Humana |
-| **Casa** | [Corbeau](../faccoes/casa-corbeau.md) (líder) |
-| **Cidade** | [Dodixie](../cidades/dodixie.md), governante de fato |
-| **Residência** | Fortaleza Corbeau, castelo sombrio que se projeta sobre o porto |
-| **Facção** | [Aliança dos Lordes](../faccoes/alianca-dos-lordes.md) |
-| **Motivação** | Vingar a traição que levou à prisão e à execução de seu pai |
-
-</div>
 
 Governante de fato de Dodixie, a cidade mais rica do reino. Apesar de jovem, é uma líder astuta,
 implacável e pragmática, que opera em uma moralidade cinzenta e faz o que for necessário para

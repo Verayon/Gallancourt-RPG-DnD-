@@ -13,21 +13,26 @@ git, solução de problemas — veja **[MANUTENCAO.md](MANUTENCAO.md)**.
 
 ```
 docs/
-├── index.md, wiki.md, lore.md   As três portas de entrada do site: Início, Wiki e Lore
+├── index.md, lore/, wiki/   Início, Lore e o hub da Wiki
 ├── historia/       A crônica em capítulos + cronologia
 ├── eventos/        Batalhas, decretos e períodos (uma página por evento)
 ├── geografia/      Península, cordilheira, Cicatriz, ilhas, divisão territorial, mapas
 ├── cidades/        As 5 cidades da Aliança e as 3 de L'Ordre
 ├── faccoes/        Estados, as cinco casas, outras casas e organizações
-├── personagens/    Uma página por NPC
+├── personagens/    Uma página por NPC (no site: Wiki → NPCs)
 ├── mundo/          Conflitos, teia política, relações, intrigas, religião, economia, calendário
 ├── diario/         O Diário de Sessões — uma página por sessão jogada
 ├── compendio/      Leitura consolidada e anotada: história completa, cidades, política
-├── mestre/         Referência rápida, lacunas, Painel do Mestre, manutenção do cânone
+├── mestre/         Sessões, referência rápida e as páginas de Configurações
+├── configuracoes/  Entrada de Configurações (Painel, cânone, lacunas, fontes)
 └── assets/         Imagens do site e o repositório de arte da campanha (assets/imagens/)
 admin/              Painel do Mestre (app Flask local) — ver docs/mestre/painel.md
+hooks/              Código que monta partes do site: NPCs, ficha de D&D 5e, linha do tempo
+dados/              linha-do-tempo.yml — acontecimentos da campanha
 fontes/             Acervo do autor (textos/, imagens/, videos/) — ver fontes/README.md
-scripts/            gerar_relacoes.py — gera as páginas de relações e intrigas
+scripts/            gerar_relacoes.py (relações e intrigas) e testar_site.py (teste fixo do site)
+.claude/            Comandos do projeto (/testar-site, /incorporar-documento, /nova-pagina) e contexto do Claude
+.github/workflows/  Botão "Testar o site" no GitHub (só roda quando acionado)
 CLAUDE.md           Regras e decisões do projeto, lidas pelo Claude Code em cada sessão
 MANUTENCAO.md       Guia técnico: comandos, rotina do dia a dia, solução de problemas
 ```

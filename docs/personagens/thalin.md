@@ -1,20 +1,23 @@
 ---
 tags:
-  - Personagens
-  - Dodixie
+- Personagens
+- Dodixie
+hide:
+- toc
+npc:
+  titulo: —
+  raca: —
+  cidade: Dodixie
+  afiliacao: Protegido de Alfonse Enry
+  resumo: Rapaz em busca de vingança pelo massacre dos Enry.
+  retrato: ''
+  ficha:
+    Cidade: "[Dodixie](../cidades/dodixie.md)"
+    Mentor: "[Alfonse Enry](alfonse-enry.md)"
+    Motivação: "Vingança pelo [massacre da família Enry](../eventos/massacre-dos-enry.md)"
 ---
 
 # Thalin
-
-<div class="ficha" markdown>
-
-| | |
-|---|---|
-| **Cidade** | [Dodixie](../cidades/dodixie.md) |
-| **Mentor** | [Alfonse Enry](alfonse-enry.md) |
-| **Motivação** | Vingança pelo [massacre da família Enry](../eventos/massacre-dos-enry.md) |
-
-</div>
 
 Rapaz treinado e guiado por Alfonse Enry, que usa os próprios recursos e os da Casa Corbeau
 para ajudá-lo em sua jornada por vingança após o massacre na mansão dos Enry.

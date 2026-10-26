@@ -14,7 +14,7 @@
 <ul>
   <li>Página criada: <code>{{ r.arquivo }}</code></li>
   <li>Menu do site (<code>mkdocs.yml</code>): {{ "atualizado" if r.nav_ok else "não encontrei onde inserir — confira manualmente" }}</li>
-  <li>Páginas com um novo registro em "Histórico de sessões":
+  <li>Acontecimento criado na <a href="/linha-do-tempo">linha do tempo</a>, aparecendo na página de:
     <ul>
       {% for p in r.paginas_atualizadas %}
       <li><code>docs/{{ p }}</code></li>
@@ -27,6 +27,7 @@
 
 <p>
   <a class="botao-principal" href="http://127.0.0.1:8000/diario/sessao-{{ "%02d"|format(r.numero) }}/" target="_blank" rel="noopener">Ver a sessão no site ↗</a>
+  <a class="botao-secundario" href="/linha-do-tempo?editar={{ r.id_evento }}">Registrar mudanças desta sessão (morte, viagem…)</a>
   <a class="botao-secundario" href="/">Registrar outra sessão</a>
 </p>
 {% endblock %}

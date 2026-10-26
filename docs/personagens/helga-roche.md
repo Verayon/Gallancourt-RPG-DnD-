@@ -1,22 +1,25 @@
 ---
 tags:
-  - Personagens
-  - Aliança dos Lordes
-  - Nouvelle-Montagne
+- Personagens
+- Aliança dos Lordes
+- Nouvelle-Montagne
+hide:
+- toc
+npc:
+  titulo: Senhora do Pico
+  raca: —
+  cidade: Nouvelle-Montagne
+  afiliacao: Casa Roche
+  resumo: Matriarca do clã mais antigo; seu povo nunca mais será explorado.
+  retrato: ''
+  ficha:
+    Título: Senhora do Pico; Matriarca do Clã Roche
+    Casa: "[Roche](../faccoes/casa-roche.md) — o clã mais antigo e poderoso da região"
+    Cidade: "[Nouvelle-Montagne](../cidades/nouvelle-montagne.md)"
+    Facção: "[Aliança dos Lordes](../faccoes/alianca-dos-lordes.md)"
 ---
 
 # Helga Roche
-
-<div class="ficha" markdown>
-
-| | |
-|---|---|
-| **Título** | Senhora do Pico; Matriarca do Clã Roche |
-| **Casa** | [Roche](../faccoes/casa-roche.md) — o clã mais antigo e poderoso da região |
-| **Cidade** | [Nouvelle-Montagne](../cidades/nouvelle-montagne.md) |
-| **Facção** | [Aliança dos Lordes](../faccoes/alianca-dos-lordes.md) |
-
-</div>
 
 Uma mulher de poucas palavras, mas de vontade de ferro, que conhece cada palmo de suas terras.
 Joga o complexo jogo político da Aliança com um único objetivo: **garantir que seu povo nunca

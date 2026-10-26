@@ -1,24 +1,27 @@
 ---
 tags:
-  - Personagens
-  - Aliança dos Lordes
-  - Dodixie
-  - Espionagem
+- Personagens
+- Aliança dos Lordes
+- Dodixie
+- Espionagem
+hide:
+- toc
+npc:
+  titulo: Lorde
+  raca: —
+  cidade: Dodixie
+  afiliacao: Família Enry
+  resumo: De uma família de assassinos; investiga o massacre de seus parentes; mentor de Thalin.
+  retrato: ''
+  ficha:
+    Título: Lorde
+    Cidade: "[Dodixie](../cidades/dodixie.md)"
+    Residência: Solar fortificado no coração de Dodixie
+    Família: Enry — nobres treinados nas artes ladina e psiônica há gerações
+    Proximidade: "[Casa Corbeau](../faccoes/casa-corbeau.md)"
 ---
 
 # Alfonse Enry
-
-<div class="ficha" markdown>
-
-| | |
-|---|---|
-| **Título** | Lorde |
-| **Cidade** | [Dodixie](../cidades/dodixie.md) |
-| **Residência** | Solar fortificado no coração de Dodixie |
-| **Família** | Enry — nobres treinados nas artes ladina e psiônica há gerações |
-| **Proximidade** | [Casa Corbeau](../faccoes/casa-corbeau.md) |
-
-</div>
 
 Nobre recluso. A família Enry, apesar de nobre, é treinada nas artes ladina e psiônica, algo
 passado de geração em geração: são **assassinos e manipuladores secretos**, que tentam mover o
