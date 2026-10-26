@@ -473,9 +473,11 @@ def salvar_imagem(
 CAMPOS_STATBLOCK_TEXTO = [
     ("nome", "Nome", True),
     ("subtitulo", "Tipo / papel (ex.: Humanoide médio, qualquer alinhamento)", False),
+    ("foto", "Foto (caminho relativo — preenchido sozinho ao enviar uma imagem abaixo)", False),
     ("ca", "Classe de Armadura", True),
     ("pv", "Pontos de Vida (ex.: 11 (2d8+2))", True),
     ("deslocamento", "Deslocamento (ex.: 9 m)", True),
+    ("slots_magia", "Espaços de magia (ex.: 1º: 4, 2º: 3)", False),
     ("pericias", "Perícias (ex.: Furtividade +3, Intimidação +1)", False),
     ("sentidos", "Sentidos (ex.: Percepção passiva 10)", False),
     ("idiomas", "Idiomas", False),
@@ -506,6 +508,13 @@ def slug_statblock(nome: str) -> str:
     base = unicodedata.normalize("NFKD", nome or "").encode("ascii", "ignore").decode("ascii")
     base = re.sub(r"[^a-zA-Z0-9]+", "-", base).strip("-").lower()
     return base or "npc"
+
+
+def salvar_foto_statblock(root: Path, pagina_rel_docs: str, nome_original: str, conteudo: bytes) -> str:
+    """Salva a foto enviada para uma ficha de combate e devolve só o caminho relativo (sem
+    Markdown), para guardar no campo `foto` da ficha."""
+    destino, _ = salvar_imagem(root, pagina_rel_docs, "personagens", nome_original, conteudo)
+    return Path(os.path.relpath(destino, start=(docs_dir(root) / pagina_rel_docs).parent)).as_posix()
 
 
 def modificador(valor: str) -> str:
@@ -569,6 +578,16 @@ def renderizar_statblock(slug: str, v: dict) -> str:
         raise ValueError("Um dos campos contém a sequência '-->', que não pode ser salva. Reescreva sem ela.")
 
     subtitulo = (v.get("subtitulo") or "").strip()
+    foto = (v.get("foto") or "").strip()
+
+    chips = [
+        f'<span><strong>CA</strong> {(v.get("ca") or "").strip() or "—"}</span>',
+        f'<span><strong>PV</strong> {(v.get("pv") or "").strip() or "—"}</span>',
+        f'<span><strong>Deslocamento</strong> {(v.get("deslocamento") or "").strip() or "—"}</span>',
+    ]
+    slots_magia = (v.get("slots_magia") or "").strip()
+    if slots_magia:
+        chips.append(f'<span><strong>Espaços de magia</strong> {slots_magia}</span>')
 
     partes = [
         _MARCADOR_INICIO.format(slug=slug),
@@ -579,15 +598,19 @@ def renderizar_statblock(slug: str, v: dict) -> str:
     ]
     if subtitulo:
         partes.append(f"*{subtitulo}*")
+    partes += ["", '<div class="stat-block__topo" markdown>', ""]
+    if foto:
+        partes += [
+            '<div class="stat-block__foto" markdown>', "",
+            f"![{(v.get('nome') or 'NPC').strip()}]({foto})", "",
+            "</div>", "",
+        ]
     partes += [
-        "",
+        '<div class="stat-block__chips" markdown>', "",
+        " ".join(chips), "",
+        "</div>", "",
+        "</div>", "",
         "---",
-        "",
-        "| | |",
-        "|---|---|",
-        f"| **CA** | {(v.get('ca') or '').strip() or '—'} |",
-        f"| **PV** | {(v.get('pv') or '').strip() or '—'} |",
-        f"| **Deslocamento** | {(v.get('deslocamento') or '').strip() or '—'} |",
         "",
         f"| {rotulos_linha} |",
         f"|{separador_linha}|",
@@ -636,6 +659,22 @@ def listar_statblocks(root: Path) -> list[dict]:
     return resultado
 
 
+def _indentar_bloco(bloco: str, prefixo: str) -> str:
+    """Reaplica `prefixo` (espaços) em cada linha não vazia — para blocos que vivem dentro de
+    uma aba ou admonição indentada (`=== "..."`, `!!! aviso`), onde perder a indentação quebra
+    o aninhamento do Markdown."""
+    if not prefixo:
+        return bloco
+    return "\n".join(prefixo + linha if linha.strip() else linha for linha in bloco.splitlines())
+
+
+def _prefixo_da_linha(texto: str, posicao: int) -> str:
+    """Espaços entre o início da linha e `posicao` — só se for só espaços; senão, vazio."""
+    inicio_linha = texto.rfind("\n", 0, posicao) + 1
+    prefixo = texto[inicio_linha:posicao]
+    return prefixo if prefixo != "" and prefixo.strip() == "" else ""
+
+
 def salvar_statblock(
     root: Path, pagina_rel_docs: str, slug_antigo: str, valores: dict, ancora: str = "",
 ) -> str:
@@ -644,7 +683,9 @@ def salvar_statblock(
     Com `slug_antigo` preenchido, substitui aquele cartão (mesmo que o nome, e portanto o
     slug novo, tenha mudado). Sem `slug_antigo`, cria um cartão novo — inserido depois do
     primeiro trecho da página igual a `ancora`, ou no final do arquivo se `ancora` estiver
-    vazia ou não for encontrada. Retorna o slug final do cartão salvo.
+    vazia ou não for encontrada. Em ambos os casos, se o ponto de inserção estiver indentado
+    (dentro de uma aba ou admonição), o cartão novo é indentado do mesmo jeito. Retorna o slug
+    final do cartão salvo.
     """
     caminho = docs_dir(root) / pagina_rel_docs
     texto = _ler(caminho)
@@ -653,14 +694,17 @@ def salvar_statblock(
 
     if slug_antigo:
         novo_slug = slug_base
-        bloco = renderizar_statblock(novo_slug, valores)
         padrao = re.search(
             rf"<!-- inicio:statblock:{re.escape(slug_antigo)} -->.*?<!-- fim:statblock:{re.escape(slug_antigo)} -->",
             texto, re.DOTALL,
         )
         if padrao:
-            texto = texto[:padrao.start()] + bloco + texto[padrao.end():]
+            prefixo = _prefixo_da_linha(texto, padrao.start())
+            bloco = _indentar_bloco(renderizar_statblock(novo_slug, valores), prefixo)
+            inicio_linha = padrao.start() - len(prefixo)
+            texto = texto[:inicio_linha] + bloco + texto[padrao.end():]
         else:
+            bloco = renderizar_statblock(novo_slug, valores)
             texto = texto.rstrip("\n") + "\n\n" + bloco + "\n"
     else:
         novo_slug = slug_base
@@ -670,13 +714,15 @@ def salvar_statblock(
             contador += 1
         bloco = renderizar_statblock(novo_slug, valores)
         if ancora and ancora in texto:
-            idx = texto.index(ancora) + len(ancora)
+            idx_ancora = texto.index(ancora)
+            prefixo = _prefixo_da_linha(texto, idx_ancora)
+            idx = idx_ancora + len(ancora)
             resto = texto[idx:]
             m = re.search(r"\n#{1,6}\s", resto)
             insere_em = idx + (m.start() if m else len(resto))
             antes = texto[:insere_em].rstrip("\n")
             depois = texto[insere_em:]
-            texto = antes + "\n\n" + bloco + "\n\n" + depois
+            texto = antes + "\n\n" + _indentar_bloco(bloco, prefixo) + "\n\n" + depois
         else:
             texto = texto.rstrip("\n") + "\n\n" + bloco + "\n"
 

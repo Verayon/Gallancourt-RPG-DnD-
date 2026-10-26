@@ -43,7 +43,7 @@
 <p class="aviso aviso--erro">⚠️ {{ erro }}</p>
 {% endif %}
 
-<form method="post" action="/ficha-combate" class="form-sessao form-statblock">
+<form method="post" action="/ficha-combate" class="form-sessao form-statblock" enctype="multipart/form-data">
   <input type="hidden" name="pagina" value="{{ pagina_escolhida }}">
   <input type="hidden" name="slug_antigo" value="{{ slug_escolhido }}">
 
@@ -53,6 +53,11 @@
     <label>{{ rotulo }}
       <input type="text" name="campo_{{ chave }}" value="{{ valores.get(chave, '') }}" {{ "required" if obrigatorio else "" }}>
     </label>
+    {% if chave == "foto" %}
+    <label>Enviar uma foto (opcional — PNG, JPG, WEBP, GIF ou SVG; substitui o campo acima)
+      <input type="file" name="arquivo_foto" accept="image/*">
+    </label>
+    {% endif %}
     {% endfor %}
   </fieldset>
 

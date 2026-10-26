@@ -216,9 +216,14 @@ Preencha:
 
 | Grupo | Campos |
 |---|---|
-| Identidade | Nome, tipo/papel, CA, PV, deslocamento, perícias, sentidos, idiomas, equipamento |
+| Identidade | Nome, tipo/papel, foto, CA, PV, deslocamento, espaços de magia, perícias, sentidos, idiomas, equipamento |
 | Atributos | FOR, DES, CON, INT, SAB, CAR — só o valor; o modificador é calculado sozinho |
 | Traços, ações e magias | Uma caixa de texto para cada, um traço/ação por linha no formato `Nome: descrição` |
+
+A **foto** é opcional: envie um arquivo pelo campo "Enviar uma foto" (PNG, JPG, WEBP, GIF ou SVG) e
+o caminho é preenchido sozinho; sem foto, o cartão aparece só com CA, PV, deslocamento e (se
+preenchido) espaços de magia, sem moldura vazia. **Espaços de magia** também é opcional e de texto
+livre (ex.: `1º: 4, 2º: 3`) — para NPCs que não conjuram, deixe em branco.
 
 Ao salvar, o painel insere (ou atualiza) o cartão visual na página, com os atributos já com
 modificador, e roda `mkdocs build --strict` para confirmar que nada quebrou. Se você mudar o nome

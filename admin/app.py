@@ -274,6 +274,12 @@ def salvar_ficha_combate():
     for chave, _ in wd.CAMPOS_STATBLOCK_LISTAS:
         valores[chave] = request.form.get(f"campo_{chave}", "")
 
+    arquivo_foto = request.files.get("arquivo_foto")
+    if arquivo_foto and arquivo_foto.filename:
+        valores["foto"] = wd.salvar_foto_statblock(
+            ROOT, pagina_escolhida, arquivo_foto.filename, arquivo_foto.read(),
+        )
+
     contexto = dict(
         paginas=paginas, pagina_escolhida=pagina_escolhida, slug_escolhido=slug_antigo,
         valores=valores, campos_texto=wd.CAMPOS_STATBLOCK_TEXTO,

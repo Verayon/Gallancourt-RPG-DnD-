@@ -69,9 +69,10 @@ espera encontrá-los para reler os valores depois.
 
 ## Ficha de combate
 
-Um cartão visual de NPC para rodar à mesa, no estilo de uma ficha oficial: nome, CA, PV,
-deslocamento, os seis atributos com modificador calculado sozinho, perícias, sentidos, idiomas,
-equipamento, traços, ações, reações e magias. Preenchida pela aba **Ficha de combate** do
+Um cartão visual de NPC para rodar à mesa, no estilo de uma ficha oficial: nome, foto opcional, CA,
+PV, deslocamento, espaços de magia (se conjurador), os seis atributos com modificador calculado
+sozinho, perícias, sentidos, idiomas, equipamento, traços, ações, reações e magias. Preenchida pela
+aba **Ficha de combate** do
 [Painel do Mestre](painel.md), que insere o cartão na página escolhida (qualquer uma — não precisa
 ser uma página de personagem) e guarda os valores num comentário invisível (`<!-- dados:statblock
 ... -->`) para poder reabrir e editar depois. Veja exemplos em

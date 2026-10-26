@@ -803,9 +803,10 @@ input,
 
 /* --------------------------------------------------------------------------
    16. Fichas de combate (stat blocks) — cartão no estilo das fichas oficiais:
-   nome, CA/PV/deslocamento, atributos com modificador, perícias e a lista de
-   ações. Gerado (e editável) pela aba "Ficha de combate" do Painel do
-   Mestre; ver docs/mestre/manutencao-do-canone.md.
+   nome, foto opcional, CA/PV/deslocamento/espaços de magia em destaque,
+   atributos com modificador, perícias e a lista de ações. Gerado (e
+   editável) pela aba "Ficha de combate" do Painel do Mestre; ver
+   docs/mestre/manutencao-do-canone.md.
    -------------------------------------------------------------------------- */
 
 .md-typeset .stat-block {
@@ -829,6 +830,53 @@ input,
   color: var(--gc-ink-dim);
   font-style: italic;
   font-size: .85rem;
+}
+
+.stat-block__topo {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin: .3rem 0 .7rem;
+}
+
+.stat-block__foto {
+  flex: 0 0 5.5rem;
+}
+
+.md-typeset .stat-block__foto img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border: 1px solid var(--gc-gold);
+  border-radius: 6px;
+}
+
+.stat-block__chips {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  align-content: flex-start;
+}
+
+.md-typeset .stat-block__chips span {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .3rem .6rem;
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 999px;
+  background: var(--gc-bg-alt);
+  font-size: .82rem;
+}
+
+.md-typeset .stat-block__chips strong {
+  color: var(--gc-gold-soft);
+  text-transform: uppercase;
+  font-size: .68rem;
+  letter-spacing: .03em;
 }
 
 .md-typeset .stat-block hr {
@@ -860,24 +908,8 @@ input,
   border-bottom: none;
 }
 
-/* Primeira tabela: CA / PV / Deslocamento — rótulo e valor alinhados à esquerda */
-.md-typeset .stat-block table:first-of-type td:first-child {
-  text-align: left;
-  width: 45%;
-  color: var(--gc-ink-dim);
-  font-weight: 700;
-  text-transform: uppercase;
-  font-size: .72rem;
-  letter-spacing: .03em;
-}
-
-.md-typeset .stat-block table:first-of-type td:last-child {
-  text-align: left;
-  font-weight: 600;
-}
-
-/* Segunda tabela: a grade de atributos (FOR/DES/CON/INT/SAB/CAR) */
-.md-typeset .stat-block table:nth-of-type(2) th {
+/* A grade de atributos (FOR/DES/CON/INT/SAB/CAR) */
+.md-typeset .stat-block table th {
   color: var(--gc-gold-soft);
   font-weight: 700;
   font-size: .78rem;
@@ -885,7 +917,7 @@ input,
   text-transform: uppercase;
 }
 
-.md-typeset .stat-block table:nth-of-type(2) td {
+.md-typeset .stat-block table td {
   font-weight: 600;
 }
 
@@ -909,10 +941,14 @@ input,
 }
 
 @media screen and (max-width: 30em) {
-  .md-typeset .stat-block table:nth-of-type(2) th,
-  .md-typeset .stat-block table:nth-of-type(2) td {
+  .md-typeset .stat-block table th,
+  .md-typeset .stat-block table td {
     padding: .25rem .2rem;
     font-size: .75rem;
+  }
+
+  .stat-block__foto {
+    flex-basis: 4.2rem;
   }
 }
 

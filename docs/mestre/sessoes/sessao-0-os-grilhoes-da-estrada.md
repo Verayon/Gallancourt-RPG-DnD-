@@ -157,13 +157,17 @@ sessao:
     ### Capitã Odette Brune {: #capita-odette-brune }
     *Humanoide médio, leal e boa — batedora da patrulha de Duvant*
 
-    ---
+    <div class="stat-block__topo" markdown>
 
-    | | |
-    |---|---|
-    | **CA** | 13 |
-    | **PV** | 16 (3d8+3) |
-    | **Deslocamento** | 9 m |
+    <div class="stat-block__chips" markdown>
+
+    <span><strong>CA</strong> 13</span> <span><strong>PV</strong> 16 (3d8+3)</span> <span><strong>Deslocamento</strong> 9 m</span>
+
+    </div>
+
+    </div>
+
+    ---
 
     | FOR | DES | CON | INT | SAB | CAR |
     |---|---|---|---|---|---|
@@ -192,13 +196,17 @@ sessao:
     ### Miliciano costeiro {: #miliciano-costeiro }
     *Humanoide médio, leal e boa — soldado de Dodixie*
 
-    ---
+    <div class="stat-block__topo" markdown>
 
-    | | |
-    |---|---|
-    | **CA** | 16 |
-    | **PV** | 11 (2d8+2) |
-    | **Deslocamento** | 9 m |
+    <div class="stat-block__chips" markdown>
+
+    <span><strong>CA</strong> 16</span> <span><strong>PV</strong> 11 (2d8+2)</span> <span><strong>Deslocamento</strong> 9 m</span>
+
+    </div>
+
+    </div>
+
+    ---
 
     | FOR | DES | CON | INT | SAB | CAR |
     |---|---|---|---|---|---|
@@ -224,13 +232,17 @@ sessao:
     ### Marquês Alaric Duvant {: #marques-alaric-duvant }
     *Humanoide médio, leal e bom — nobre de Dodixie, patrono da missão*
 
-    ---
+    <div class="stat-block__topo" markdown>
 
-    | | |
-    |---|---|
-    | **CA** | 15 |
-    | **PV** | 9 (2d8) |
-    | **Deslocamento** | 9 m (12 m montado) |
+    <div class="stat-block__chips" markdown>
+
+    <span><strong>CA</strong> 15</span> <span><strong>PV</strong> 9 (2d8)</span> <span><strong>Deslocamento</strong> 9 m (12 m montado)</span>
+
+    </div>
+
+    </div>
+
+    ---
 
     | FOR | DES | CON | INT | SAB | CAR |
     |---|---|---|---|---|---|
@@ -264,13 +276,17 @@ sessao:
     ### Bandido comum {: #bandido-comum }
     *Humanoide médio, qualquer alinhamento*
 
-    ---
+    <div class="stat-block__topo" markdown>
 
-    | | |
-    |---|---|
-    | **CA** | 12 |
-    | **PV** | 11 (2d8+2) |
-    | **Deslocamento** | 9 m |
+    <div class="stat-block__chips" markdown>
+
+    <span><strong>CA</strong> 12</span> <span><strong>PV</strong> 11 (2d8+2)</span> <span><strong>Deslocamento</strong> 9 m</span>
+
+    </div>
+
+    </div>
+
+    ---
 
     | FOR | DES | CON | INT | SAB | CAR |
     |---|---|---|---|---|---|
@@ -299,13 +315,17 @@ sessao:
     ### Sargento Grum {: #sargento-grum }
     *Humanoide médio, qualquer alinhamento — comanda o acampamento*
 
-    ---
+    <div class="stat-block__topo" markdown>
 
-    | | |
-    |---|---|
-    | **CA** | 13 |
-    | **PV** | 32 (5d8+10) |
-    | **Deslocamento** | 9 m |
+    <div class="stat-block__chips" markdown>
+
+    <span><strong>CA</strong> 13</span> <span><strong>PV</strong> 32 (5d8+10)</span> <span><strong>Deslocamento</strong> 9 m</span>
+
+    </div>
+
+    </div>
+
+    ---
 
     | FOR | DES | CON | INT | SAB | CAR |
     |---|---|---|---|---|---|
@@ -336,13 +356,17 @@ sessao:
     ### Capitão Jonas Harker {: #capitao-jonas-harker }
     *Humanoide médio, qualquer alinhamento — líder do bando*
 
-    ---
+    <div class="stat-block__topo" markdown>
 
-    | | |
-    |---|---|
-    | **CA** | 15 |
-    | **PV** | 65 (10d8+20) |
-    | **Deslocamento** | 9 m (12 m montado) |
+    <div class="stat-block__chips" markdown>
+
+    <span><strong>CA</strong> 15</span> <span><strong>PV</strong> 65 (10d8+20)</span> <span><strong>Deslocamento</strong> 9 m (12 m montado)</span>
+
+    </div>
+
+    </div>
+
+    ---
 
     | FOR | DES | CON | INT | SAB | CAR |
     |---|---|---|---|---|---|
@@ -355,7 +379,7 @@ sessao:
 
     ---
 
-    ***Fuga calculada.*** Quando perde cerca de metade dos seus bandidos, ou fica com menos da metade do PV, Harker monta a cavalo e tenta fugir pela estrada com o livro-caixa.
+    ***Fuga calculada.*** quando perde cerca de metade dos seus bandidos, ou fica com menos da metade do PV, Harker monta a cavalo e tenta fugir pela estrada com o livro-caixa.
 
     **Ações**
 
@@ -365,7 +389,7 @@ sessao:
 
     **Reações**
 
-    ***Parar.*** Quando atingido por um ataque corpo a corpo, Harker pode usar a reação para ganhar +2 na CA contra aquele ataque — podendo fazê-lo errar.
+    ***Parar.*** quando atingido por um ataque corpo a corpo, Harker pode usar a reação para ganhar +2 na CA contra aquele ataque — podendo fazê-lo errar.
 
     </div>
     <!-- fim:statblock:capitao-jonas-harker -->
