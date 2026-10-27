@@ -1,12 +1,13 @@
-"""Painel do Mestre — ferramenta local para registrar sessões e editar páginas da wiki
-de Gallancourt sem editar arquivos à mão.
+"""Servidor único de Gallancourt — serve o site (pasta site/, já construído pelo MkDocs) e o
+Painel do Mestre, na mesma origem/porta. Nada de editar arquivos à mão nem de abrir dois
+endereços diferentes.
 
 Uso:
     .venv\\Scripts\\python admin\\app.py
     (ou dê duplo clique em admin\\iniciar-painel.bat)
 
-Depois abra http://127.0.0.1:5001/. Roda só em 127.0.0.1 (não aparece na rede). Veja
-docs/mestre/painel.md para o guia de uso.
+Depois abra http://127.0.0.1:5001/ — é o site inteiro (wiki + ferramentas do Painel). Roda só em
+127.0.0.1 por padrão (não aparece na rede). Veja docs/mestre/painel.md para o guia de uso.
 """
 from __future__ import annotations
 
@@ -15,12 +16,13 @@ import os
 import re
 from pathlib import Path
 
-from flask import Flask, abort, jsonify, redirect, render_template, request, url_for
+from flask import Flask, abort, jsonify, redirect, render_template, request, send_file, url_for
 
 import sessao_viva as sv
 import wiki_data as wd
 
 ROOT = Path(os.environ.get("GALLANCOURT_ADMIN_ROOT", wd.DEFAULT_ROOT)).resolve()
+SITE_DIR = ROOT / "site"
 
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024  # 10 MB por envio
@@ -38,7 +40,7 @@ def _entidade_por_slug(lista: list[wd.Entidade], slug: str) -> wd.Entidade | Non
     return None
 
 
-@app.get("/")
+@app.get("/painel")
 def formulario_sessao():
     npcs = wd.listar_npcs(ROOT)
     cidades = wd.listar_cidades(ROOT)
@@ -144,7 +146,7 @@ def salvar_ficha():
     valores = {chave: request.form.get(f"campo_{chave}", "").strip() for chave, _, _ in campos}
     caminho = wd.docs_dir(ROOT) / entidade.rel_docs
     wd.escrever_ficha(caminho, titulo_secao, campos, valores)
-    build_ok, build_saida = wd.validar_build(ROOT)
+    build_ok, build_saida = wd.publicar_build(ROOT)
 
     valores_atuais = wd.ler_campos_ficha(caminho, campos)
     return render_template(
@@ -302,7 +304,7 @@ def salvar_ficha_combate():
         fichas = wd.listar_statblocks(ROOT)
         return render_template("ficha_combate.html", fichas=fichas, salvo=False, erro=str(exc), **contexto)
 
-    build_ok, build_saida = wd.validar_build(ROOT)
+    build_ok, build_saida = wd.publicar_build(ROOT)
     fichas = wd.listar_statblocks(ROOT)
     contexto["slug_escolhido"] = novo_slug
     return render_template(
@@ -362,7 +364,7 @@ def salvar_ficha_item():
     except ValueError as exc:
         return render_template("ficha_item.html", itens=_itens_da_pagina(caminho), salvo=False, erro=str(exc), **contexto)
 
-    build_ok, build_saida = wd.validar_build(ROOT)
+    build_ok, build_saida = wd.publicar_build(ROOT)
     contexto["slug_escolhido"] = novo_slug
     return render_template(
         "ficha_item.html", itens=_itens_da_pagina(caminho), salvo=True, build_ok=build_ok,
@@ -593,19 +595,9 @@ def arquivar_sessao_ao_vivo():
 # sendo a única fonte de verdade das regras), só devolvendo o estado como JSON em vez de uma
 # página HTML inteira. Usada pelo widget embutido na própria página da sessão
 # (docs/javascripts/painel-iniciativa.js); as rotas HTML acima continuam existindo, para quem
-# preferir usar o Painel direto, sem o site aberto.
+# preferir usar o Painel direto, sem o site aberto. Site e Painel são a mesma origem (ver
+# servir_site, mais abaixo), então não precisa de CORS.
 # --------------------------------------------------------------------------
-
-@app.after_request
-def _cors_api(resposta):
-    if request.path.startswith("/api/"):
-        origem = request.headers.get("Origin")
-        if origem:
-            resposta.headers["Access-Control-Allow-Origin"] = origem
-            resposta.headers["Vary"] = "Origin"
-        resposta.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
-        resposta.headers["Access-Control-Allow-Headers"] = "Content-Type"
-    return resposta
 
 
 def _erro_json(mensagem: str, status: int = 404):
@@ -1078,7 +1070,7 @@ def salvar_linha_tempo():
         novo_id = wd.salvar_evento(ROOT, dados, id_evento)
     except ValueError as exc:
         return render_template("linha_tempo.html", **_contexto_linha_tempo(evento={**dados, "id": id_evento}, erro=str(exc)))
-    build_ok, build_saida = wd.validar_build(ROOT)
+    build_ok, build_saida = wd.publicar_build(ROOT)
     return render_template(
         "linha_tempo.html",
         **_contexto_linha_tempo(evento={}, salvo=novo_id, build_ok=build_ok, build_saida=build_saida),
@@ -1104,10 +1096,38 @@ def _resolver_pagina(rel: str) -> Path | None:
     return candidato
 
 
+# --------------------------------------------------------------------------
+# O site em si (pasta site/, já construída pelo MkDocs) — registrada por último, depois de toda
+# rota específica do Painel, para nunca disputar caminho com elas. Nenhuma pasta de docs/ colida
+# com um prefixo de rota do Painel (conferido: /sessao, /ficha*, /editar, /sessao-ao-vivo, /api,
+# /npc, /lugar, /jogador, /sessoes, /linha-do-tempo), então só a raiz precisou mudar (ver /painel
+# acima). site/ é (re)construído por publicar_build() a cada escrita — ver wiki_data.py.
+# --------------------------------------------------------------------------
+
+@app.get("/", defaults={"caminho": ""})
+@app.get("/<path:caminho>")
+def servir_site(caminho):
+    base = SITE_DIR.resolve()
+    candidato = (base / caminho).resolve()
+    if candidato != base and base not in candidato.parents:
+        abort(404)
+    if candidato.is_dir():
+        candidato = candidato / "index.html"
+    if not candidato.is_file():
+        pagina_404 = base / "404.html"
+        if pagina_404.is_file():
+            return send_file(pagina_404), 404
+        abort(404)
+    return send_file(candidato)
+
+
 if __name__ == "__main__":
     # Por padrão só escuta 127.0.0.1 (ninguém mais na rede alcança o painel). Para acessar de
     # outro aparelho seu pela Tailscale (ver docs/mestre/painel.md), rode com
     # PAINEL_HOST=0.0.0.0 .venv\Scripts\python admin\app.py — isso ainda deixa o painel visível
     # pra rede local também, não só pela Tailscale.
+    if not (SITE_DIR / "index.html").is_file():
+        print("Construindo o site por baixo dos panos (primeira vez)...")
+        wd.publicar_build(ROOT)
     host = os.environ.get("PAINEL_HOST", "127.0.0.1")
     app.run(host=host, port=5001, debug=False)

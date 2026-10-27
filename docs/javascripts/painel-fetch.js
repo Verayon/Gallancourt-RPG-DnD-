@@ -1,8 +1,10 @@
 /* Infra compartilhada para widgets embutidos direto nas páginas do site que falam com o Painel
- * do Mestre local (Flask, admin/app.py) por fetch(), sem redirecionar para outra aba/origem.
- * Usado por gallancourt.js (formulários de NPC/Lugar/Jogador) e, mais adiante, pelo criador de
- * sessão embutido. painel-iniciativa.js tem seu próprio Widget, mais específico (re-renderiza o
- * estado inteiro a cada chamada) — continua como está, sem usar este arquivo.
+ * do Mestre local (Flask, admin/app.py) por fetch(). O site (pasta site/) e o Painel são servidos
+ * pelo mesmo processo Flask, na mesma origem/porta (ver admin/app.py) — por isso todo caminho
+ * aqui é relativo (`/api/...`), sem precisar de nenhum endereço base nem de CORS.
+ * Usado por gallancourt.js (formulários de NPC/Lugar/Jogador) e por criar-sessao.js.
+ * painel-iniciativa.js tem seu próprio Widget, mais específico (re-renderiza o estado inteiro a
+ * cada chamada) — continua como está, sem usar este arquivo.
  *
  * Precisa carregar ANTES de gallancourt.js em mkdocs.yml (extra_javascript).
  */
@@ -14,8 +16,10 @@ window.GallancourtPainel = (function () {
       .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   }
 
-  function base(elemento) {
-    return (elemento.getAttribute("data-painel-url") || "http://127.0.0.1:5001").replace(/\/$/, "");
+  // Mantido por compatibilidade de chamada (P.base(elemento) + caminho) — sempre "" agora, já
+  // que site e Painel são a mesma origem.
+  function base() {
+    return "";
   }
 
   function tratarResposta(r) {
@@ -42,9 +46,8 @@ window.GallancourtPainel = (function () {
   }
 
   function erroHtml(baseUrl, erro) {
-    return '<p class="painel-erro">⚠️ Não consegui falar com o Painel do Mestre em ' +
-      "<code>" + escapeHtml(baseUrl) + "</code>. Confirme que ele está rodando no seu " +
-      "computador (<code>admin\\iniciar-painel.bat</code>) e tente de novo. " +
+    return '<p class="painel-erro">⚠️ Não consegui falar com o Painel do Mestre. Confirme que ' +
+      "ele está rodando (<code>admin\\iniciar-painel.bat</code>) e tente de novo. " +
       "<small>(" + escapeHtml(erro && erro.message) + ")</small></p>";
   }
 

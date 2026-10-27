@@ -48,7 +48,7 @@
     {% endfor %}
   </fieldset>
   <button type="submit" class="botao-principal">Salvar</button>
-  <a class="botao-secundario" href="http://127.0.0.1:8000/{{ entidade.rel_docs | replace('.md', '/') }}" target="_blank" rel="noopener">Ver a página ↗</a>
+  <a class="botao-secundario" href="/{{ entidade.rel_docs | replace('.md', '/') }}" target="_blank" rel="noopener">Ver a página ↗</a>
 </form>
 {% endif %}
 {% endblock %}

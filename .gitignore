@@ -1,4 +1,6 @@
 site/
+site.novo/
+site.antigo/
 __pycache__/
 .venv/
 admin/dados/

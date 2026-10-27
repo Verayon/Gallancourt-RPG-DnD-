@@ -36,7 +36,8 @@
   function Widget(raiz) {
     this.raiz = raiz;
     this.pagina = raiz.getAttribute("data-pagina");
-    this.base = (raiz.getAttribute("data-painel-url") || "http://127.0.0.1:5001").replace(/\/$/, "");
+    // Site e Painel são a mesma origem/porta (ver admin/app.py) — caminho relativo, sem CORS.
+    this.base = "";
     this.dados = null;
     this.raiz.classList.add("painel-iniciativa--pronto");
     this.ligarEventos();
@@ -71,10 +72,9 @@
 
   Widget.prototype.renderizarErro = function (erro) {
     this.raiz.innerHTML =
-      '<p class="painel-iniciativa__erro">⚠️ Não consegui falar com o Painel do Mestre em ' +
-      "<code>" + escapeHtml(this.base) + "</code>. Confirme que ele está rodando no seu " +
-      "computador (<code>admin\\iniciar-painel.bat</code>) e recarregue a página. " +
-      "<small>(" + escapeHtml(erro && erro.message) + ")</small></p>";
+      '<p class="painel-iniciativa__erro">⚠️ Não consegui falar com o Painel do Mestre. ' +
+      "Confirme que ele está rodando (<code>admin\\iniciar-painel.bat</code>) e recarregue a " +
+      "página. <small>(" + escapeHtml(erro && erro.message) + ")</small></p>";
   };
 
   // --------------------------------------------------------------------

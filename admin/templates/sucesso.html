@@ -26,7 +26,7 @@
 </ul>
 
 <p>
-  <a class="botao-principal" href="http://127.0.0.1:8000/diario/sessao-{{ "%02d"|format(r.numero) }}/" target="_blank" rel="noopener">Ver a sessão no site ↗</a>
+  <a class="botao-principal" href="/diario/sessao-{{ "%02d"|format(r.numero) }}/" target="_blank" rel="noopener">Ver a sessão no site ↗</a>
   <a class="botao-secundario" href="/linha-do-tempo?editar={{ r.id_evento }}">Registrar mudanças desta sessão (morte, viagem…)</a>
   <a class="botao-secundario" href="/">Registrar outra sessão</a>
 </p>

@@ -513,6 +513,28 @@ def teste_painel_efeito(copia: Path):
     assert "Sessão de teste" in _site(copia, "mestre/sessoes"), "a sessão nova não entrou na lista"
 
 
+@verificacao("7. Painel", "Servidor único: / serve o site, /painel serve o Painel, 404 funciona")
+def teste_painel_servir_site(copia: Path):
+    if not (copia / "docs" / "personagens" / f"{SLUG_TESTE}.md").exists():
+        raise Pulado("depende dos testes anteriores do Painel")
+    c = _painel(copia)
+
+    home = c.get("/")
+    assert home.status_code == 200, f"GET / -> {home.status_code}"
+    assert "<html" in home.get_data(as_text=True).lower(), "GET / não devolveu uma página HTML"
+
+    painel = c.get("/painel")
+    assert painel.status_code == 200, f"GET /painel -> {painel.status_code}"
+    assert "sess" in painel.get_data(as_text=True).lower(), "GET /painel não parece ser o formulário de sessão"
+
+    pagina_npc = c.get(f"/personagens/{SLUG_TESTE}/")
+    assert pagina_npc.status_code == 200, "a página do NPC criado pelo Painel não é servida em /"
+    assert NPC_TESTE in pagina_npc.get_data(as_text=True), "conteúdo do NPC ausente na página servida"
+
+    ausente = c.get("/esta-pagina-nao-existe/")
+    assert ausente.status_code == 404, f"GET de página inexistente -> {ausente.status_code}, esperava 404"
+
+
 # --------------------------------------------------------------------------
 # 6. Navegador (Playwright)
 # --------------------------------------------------------------------------
@@ -676,6 +698,7 @@ def main() -> int:
                 teste_painel_lugar, teste_painel_jogador, teste_painel_sessao, teste_painel_participantes,
                 teste_painel_api_entidades, teste_painel_api_criar_sessao,
                 teste_painel_api_iniciativa, teste_painel_item, teste_painel_acontecimento, teste_painel_efeito,
+                teste_painel_servir_site,
             ):
                 t(copia)
     finally:

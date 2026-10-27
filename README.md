@@ -74,18 +74,18 @@ pip install -r requirements.txt
 ### 4. Ver o site
 
 ```bash
-mkdocs serve          # http://127.0.0.1:8000, com recarga automática a cada edição
-mkdocs build --strict # gera ./site e falha se houver links ou âncoras quebrados
+.venv\Scripts\python admin\app.py   # http://127.0.0.1:5001 — site + Painel do Mestre, juntos
 ```
 
-Para registrar uma sessão jogada ou editar uma página sem mexer em arquivo nenhum, abra também o
-**Painel do Mestre** (com o `mkdocs serve` acima já rodando):
+Ou dê duplo clique em `admin/iniciar-painel.bat`. Esse é o único servidor: abre o site inteiro e,
+nas páginas certas, os formulários do Painel para registrar sessões e editar sem mexer em arquivo
+nenhum. Guia completo em `docs/mestre/painel.md`.
 
 ```bash
-.venv\Scripts\python admin\app.py   # http://127.0.0.1:5001
+mkdocs build --strict # gera ./site e falha se houver links ou âncoras quebrados
+mkdocs serve           # opcional: recarga automática a cada edição de Markdown (porta 8000),
+                        # só para quem está editando os arquivos .md direto no editor de código
 ```
-
-Ou dê duplo clique em `admin/iniciar-painel.bat`. Guia completo em `docs/mestre/painel.md`.
 
 ### 5. Abrir o Claude Code no projeto
 

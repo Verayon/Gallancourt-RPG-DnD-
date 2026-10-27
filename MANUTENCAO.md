@@ -19,21 +19,25 @@ dia a dia".
 
 ---
 
-## 1. As três peças do projeto
+## 1. As duas peças do projeto
 
 | Peça | O que é | Onde roda | Precisa de internet? |
 |---|---|---|---|
-| **O site** (`mkdocs serve`) | Gera e serve a wiki a partir dos arquivos `.md` em `docs/` | `http://127.0.0.1:8000` | Não (só as fontes do Google, na primeira vez que o navegador carrega a página) |
-| **O Painel do Mestre** (`admin/app.py`) | App separado que escreve nos arquivos por você (sessões, NPCs, fichas de D&D 5e, linha do tempo, edição) | `http://127.0.0.1:5001` | Não |
+| **O servidor** (`admin/app.py`) | Um único processo que serve o site inteiro (wiki + formulários do Painel do Mestre, embutidos nas páginas certas) e escreve nos arquivos por você quando você usa um formulário | `http://127.0.0.1:5001` | Não |
 | **O git** | Guarda o histórico de tudo e é a "cópia de segurança" | Sua pasta local + (se você configurar) o GitHub | Só para `git push`/`git pull` |
 
-As três são **independentes**: o Painel pode estar fechado enquanto você só lê o site; o site pode
-estar fechado enquanto você só edita no Painel (mas você não vê o resultado até abrir o site). O
-Painel só faz sentido junto com o site aberto, porque é o `mkdocs serve` que atualiza a página
-sozinho quando o Painel salva um arquivo.
+Não existem mais dois endereços nem dois comandos pra lembrar de ligar — `admin/app.py` já serve
+tudo. Internamente ele guarda uma cópia já construída do site (pasta `site/`) e, a cada formulário
+salvo, reconstrói e troca essa cópia sozinho antes de responder — então a próxima página que você
+abrir já reflete a mudança, sem precisar de um segundo processo de "recarga automática" rodando.
 
-Nenhuma das duas é publicada na internet até você decidir publicar (ver `README.md`, seção
-"Publicar o site"). Enquanto isso, só quem está no seu computador acessa `127.0.0.1`.
+Só editando arquivos `.md` direto no editor de código (sem usar nenhum formulário do Painel) que
+vale abrir, **à parte**, o `mkdocs serve` (porta 8000) — ele recarrega a cada salvamento sem
+esperar o build completo do `admin/app.py`. Para o uso normal do dia a dia (navegar, cadastrar
+NPC/Lugar/Jogador, criar e tocar sessão), só o `admin/app.py` já basta.
+
+Nada disso é publicado na internet até você decidir publicar (ver `README.md`, seção "Publicar o
+site"). Enquanto isso, só quem está no seu computador acessa `127.0.0.1`.
 
 ---
 
@@ -41,33 +45,30 @@ Nenhuma das duas é publicada na internet até você decidir publicar (ver `READ
 
 ### Para começar a trabalhar
 
-Abra um terminal na pasta do projeto (`gallancourt-rpg-dnd-`) e rode, em **duas janelas de
-terminal separadas** (cada comando abaixo bloqueia o terminal enquanto roda):
+Abra um terminal na pasta do projeto (`gallancourt-rpg-dnd-`) e rode:
 
 ```powershell
-# Janela 1 — o site
-.venv\Scripts\mkdocs serve
-
-# Janela 2 — o painel (só se for registrar sessão, ficha ou editar por lá)
 .venv\Scripts\python admin\app.py
 ```
 
-Ou, para o painel, dê duplo clique em `admin\iniciar-painel.bat` (abre sozinho numa janela).
+Ou dê duplo clique em `admin\iniciar-painel.bat` (abre sozinho numa janela). Deixe a janela aberta
+enquanto usa o site — fechá-la desliga tudo.
 
 Depois, abra no navegador:
 
-- **http://127.0.0.1:8000** — o site
-- **http://127.0.0.1:5001** — o painel (se estiver usando)
+- **http://127.0.0.1:5001** — o site inteiro, com os formulários do Painel embutidos
 
 ### Enquanto trabalha
 
-- Editando pelo **Painel**: marque as sessões/fichas, salve. O site recarrega sozinho.
-- Os botões **Adicionar NPC** (página NPCs) e **Nova sessão** (Mestre → Sessões) do site abrem o
-  Painel. Eles só funcionam com o Painel ligado neste computador; no site publicado na internet,
-  o botão abre uma página em branco se o Painel estiver desligado.
-- Editando **arquivos `.md` direto** (VS Code, Claude Code): salve o arquivo. O site recarrega
-  sozinho também — o `mkdocs serve` observa a pasta `docs/` inteira.
-- Se mudar `mkdocs.yml` (o menu do site), o `mkdocs serve` também detecta e recarrega.
+- Usando um formulário embutido (Adicionar NPC/Lugar/Jogador, Nova sessão) ou o Painel direto: o
+  próprio servidor reconstrói o site antes de responder — recarregue a página pra ver a mudança.
+  Esses formulários só funcionam com o `admin/app.py` ligado neste computador; eles não existem
+  numa cópia do site publicada só como arquivos estáticos (ver `README.md`, "Publicar o site").
+- Editando **arquivos `.md` direto** (VS Code, Claude Code): a mudança só aparece no site servido
+  por `admin/app.py` depois do próximo build (próxima vez que você salvar algo por um formulário,
+  ou rodando `mkdocs build --strict` você mesmo). Pra ver o resultado instantaneamente a cada
+  salvamento, abra `mkdocs serve` (porta 8000) à parte, só enquanto estiver editando Markdown à
+  mão.
 
 ### Para terminar
 
@@ -91,9 +92,9 @@ Rode todos a partir da pasta `gallancourt-rpg-dnd-`, com o ambiente virtual já 
 
 | O que você quer fazer | Comando |
 |---|---|
-| Ligar o site | `.venv\Scripts\mkdocs serve` |
-| Ligar o site numa porta diferente | `.venv\Scripts\mkdocs serve -a 127.0.0.1:8001` |
-| Ligar o Painel do Mestre | `.venv\Scripts\python admin\app.py` |
+| Ligar o site + Painel do Mestre (uso normal) | `.venv\Scripts\python admin\app.py` |
+| Ligar só a recarga automática ao editar `.md` à mão | `.venv\Scripts\mkdocs serve` |
+| Ligar essa recarga numa porta diferente | `.venv\Scripts\mkdocs serve -a 127.0.0.1:8001` |
 | Conferir se o site está sem erros | `.venv\Scripts\mkdocs build --strict` |
 | Rodar o teste completo do site | `.venv\Scripts\python scripts\testar_site.py` |
 | Gerar o site como arquivos estáticos (pasta `site/`) | `.venv\Scripts\mkdocs build` |
@@ -186,21 +187,23 @@ primeiro para saber exatamente onde você está.
 
 ## 6. Solução de problemas comuns
 
-**"Endereço já está em uso" ao ligar o site ou o painel**
+**"Endereço já está em uso" ao ligar o site**
 Já tem um processo rodando naquela porta (às vezes de uma sessão anterior que não foi fechada
 direito). Descubra e feche:
 
 ```powershell
-netstat -ano | findstr :8000        # troque 8000 por 5001 para o painel
+netstat -ano | findstr :5001        # troque 5001 por 8000 se for o mkdocs serve
 taskkill /PID <numero-que-apareceu> /F
 ```
 
 Ou simplesmente feche a janela de terminal onde o servidor antigo ficou aberto.
 
 **O site abriu mas não mostra minhas mudanças**
-Confira se o terminal do `mkdocs serve` ainda está aberto e sem mensagens de erro em vermelho. Dê
-um "recarregar forçado" no navegador (`Ctrl+F5`). Se editou `mkdocs.yml`, espere alguns segundos —
-ele reconstrói o site inteiro, que demora um pouco mais que uma página só.
+Se a mudança veio de um formulário do Painel, confira se apareceu algum erro na tela de
+resultado — se o build falhou, o site antigo continua no ar e nada foi atualizado. Se a mudança
+foi num arquivo `.md` editado à mão, ela só aparece depois do próximo build: rode
+`mkdocs build --strict` você mesmo, ou use `mkdocs serve` à parte enquanto estiver editando.
+De qualquer forma, dê um "recarregar forçado" no navegador (`Ctrl+F5`) depois.
 
 **`mkdocs build --strict` falhou**
 A mensagem de erro sempre aponta o arquivo e o problema — os mais comuns são:

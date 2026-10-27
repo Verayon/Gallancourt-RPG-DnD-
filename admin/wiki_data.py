@@ -9,9 +9,9 @@ from __future__ import annotations
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
-import tempfile
 import unicodedata
 from dataclasses import dataclass
 from pathlib import Path
@@ -341,22 +341,38 @@ def adicionar_sessao_ao_nav(root: Path, numero: int) -> bool:
     return True
 
 
-def validar_build(root: Path) -> tuple[bool, str]:
-    """Roda `mkdocs build --strict` num diretório temporário, sem afetar o site já servido."""
+def publicar_build(root: Path) -> tuple[bool, str]:
+    """Builda o site (`mkdocs build --strict`) e só substitui o `site/` de verdade — o mesmo que
+    admin/app.py serve em / — se o build passar. Nunca deixa o site no ar pela metade: builda
+    primeiro num diretório novo (`site.novo`) e só então troca; se o build falhar, o `site/`
+    atual continua intacto e só a saída de erro é devolvida."""
     python = sys.executable
-    with tempfile.TemporaryDirectory() as tmp:
-        try:
-            resultado = subprocess.run(
-                [python, "-m", "mkdocs", "build", "--strict", "-d", tmp],
-                cwd=str(root),
-                capture_output=True,
-                text=True,
-                timeout=120,
-            )
-        except Exception as exc:  # noqa: BLE001 — queremos mostrar qualquer falha ao usuário
-            return False, f"Não consegui rodar o mkdocs build: {exc}"
-        saida = (resultado.stdout or "") + (resultado.stderr or "")
-        return resultado.returncode == 0, saida.strip()
+    destino = root / "site"
+    novo = root / "site.novo"
+    shutil.rmtree(novo, ignore_errors=True)
+    try:
+        resultado = subprocess.run(
+            [python, "-m", "mkdocs", "build", "--strict", "-d", str(novo)],
+            cwd=str(root),
+            capture_output=True,
+            text=True,
+            timeout=120,
+        )
+    except Exception as exc:  # noqa: BLE001 — queremos mostrar qualquer falha ao usuário
+        shutil.rmtree(novo, ignore_errors=True)
+        return False, f"Não consegui rodar o mkdocs build: {exc}"
+    saida = (resultado.stdout or "") + (resultado.stderr or "")
+    if resultado.returncode != 0:
+        shutil.rmtree(novo, ignore_errors=True)
+        return False, saida.strip()
+
+    antigo = root / "site.antigo"
+    shutil.rmtree(antigo, ignore_errors=True)
+    if destino.exists():
+        destino.rename(antigo)
+    novo.rename(destino)
+    shutil.rmtree(antigo, ignore_errors=True)
+    return True, saida.strip()
 
 
 # --------------------------------------------------------------------------
@@ -463,7 +479,7 @@ def aplicar_sessao(
     atualizar_indice_diario(root, numero, data_real, data_campanha, titulo)
     id_evento = registrar_sessao_na_linha_do_tempo(root, numero, titulo, data_campanha, resumo, atualizacoes)
     nav_ok = adicionar_sessao_ao_nav(root, numero)
-    build_ok, build_saida = validar_build(root)
+    build_ok, build_saida = publicar_build(root)
 
     return {
         "numero": numero,
@@ -1055,7 +1071,7 @@ def criar_npc(
 
     grupo = "Genéricos" if generico else (campos["cidade"] or "Outros")
     nav_ok = _inserir_no_nav(root, CABECALHO_NAV_NPCS, f"- {_titulo_nav(nome)}: {rel}", subgrupo=grupo)
-    build_ok, build_saida = validar_build(root)
+    build_ok, build_saida = publicar_build(root)
     return {"arquivo": f"docs/{rel}", "rel_docs": rel, "nav_ok": nav_ok, "build_ok": build_ok, "build_saida": build_saida}
 
 
@@ -1125,7 +1141,7 @@ def criar_lugar(root: Path, valores: dict) -> dict:
     _escrever(caminho, _com_front_matter(meta, corpo))
 
     nav_ok = _inserir_no_nav(root, CABECALHO_NAV_LUGARES, f"- {_titulo_nav(nome)}: {rel}")
-    build_ok, build_saida = validar_build(root)
+    build_ok, build_saida = publicar_build(root)
     return {"arquivo": f"docs/{rel}", "rel_docs": rel, "nav_ok": nav_ok, "build_ok": build_ok, "build_saida": build_saida}
 
 
@@ -1179,7 +1195,7 @@ def criar_jogador(root: Path, valores: dict) -> dict:
     _escrever(caminho, _com_front_matter(meta, corpo))
 
     nav_ok = _inserir_no_nav(root, CABECALHO_NAV_JOGADORES, f"- {_titulo_nav(nome)}: {rel}")
-    build_ok, build_saida = validar_build(root)
+    build_ok, build_saida = publicar_build(root)
     return {"arquivo": f"docs/{rel}", "rel_docs": rel, "nav_ok": nav_ok, "build_ok": build_ok, "build_saida": build_saida}
 
 
@@ -1354,7 +1370,7 @@ sessao:
 
 === "Painel de Iniciativa"
 
-    <div class="painel-iniciativa" data-pagina="{rel_docs}" data-painel-url="PAINEL_URL_AQUI" markdown>
+    <div class="painel-iniciativa" data-pagina="{rel_docs}" markdown>
 
     *(o painel aparece aqui quando a página carrega — precisa do [Painel do Mestre](../painel.md)
     rodando no seu computador)*
@@ -1418,7 +1434,7 @@ def criar_sessao_preparo(
     nav_ok = _inserir_no_nav(root, CABECALHO_NAV_SESSOES, f"- {_titulo_nav(f'Sessão {numero} — {titulo}')}: {rel}")
     if npcs or jogadores:
         salvar_participantes(root, rel, jogadores, npcs)
-    build_ok, build_saida = validar_build(root)
+    build_ok, build_saida = publicar_build(root)
     return {"arquivo": f"docs/{rel}", "rel_docs": rel, "nav_ok": nav_ok, "build_ok": build_ok, "build_saida": build_saida}
 
 

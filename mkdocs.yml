@@ -48,10 +48,6 @@ extra_javascript:
   - javascripts/criar-sessao.js
   - javascripts/painel-iniciativa.js
 
-extra:
-  # Endereço do Painel do Mestre usado pelos botões "Nova sessão" e "Adicionar NPC"
-  painel_url: http://127.0.0.1:5001
-
 hooks:
   - hooks/gallancourt.py
 

@@ -219,9 +219,7 @@
       resultado.textContent = "Criando…";
       P.chamarFormData(baseUrl, cfg.endpoint, new FormData(form)).then(function (r) {
         resultado.className = "entidade-formulario__resultado entidade-formulario__resultado--ok";
-        resultado.textContent = "✅ Criado: " + r.arquivo
-          + ". Se o mkdocs serve estiver rodando, a página atualiza sozinha em alguns segundos —"
-          + " recarregue para ver na tabela.";
+        resultado.textContent = "✅ Criado: " + r.arquivo + ". Recarregue a página para ver na tabela.";
         form.reset();
       }).catch(function (erro) {
         resultado.className = "entidade-formulario__resultado entidade-formulario__resultado--erro";

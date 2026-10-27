@@ -7,9 +7,9 @@ if not exist ".venv\Scripts\python.exe" (
     pause
     exit /b 1
 )
-echo Abrindo o Painel do Mestre tambem para a rede e a Tailscale (nao so 127.0.0.1) ...
+echo Abrindo o site completo (wiki + Painel do Mestre) tambem para a rede e a Tailscale ...
 echo Acesse pelo IP ou nome Tailscale deste computador, na porta 5001.
-echo Deixe esta janela aberta enquanto usa o painel.
+echo Deixe esta janela aberta enquanto usa o site.
 set PAINEL_HOST=0.0.0.0
 ".venv\Scripts\python.exe" "admin\app.py"
 pause

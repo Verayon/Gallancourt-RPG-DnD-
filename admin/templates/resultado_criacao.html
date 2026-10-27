@@ -17,7 +17,7 @@
 </ul>
 
 <p>
-  <a class="botao-principal" href="http://127.0.0.1:8000/{{ r.rel_docs | replace('.md', '/') }}" target="_blank" rel="noopener">Ver a página no site ↗</a>
+  <a class="botao-principal" href="/{{ r.rel_docs | replace('.md', '/') }}" target="_blank" rel="noopener">Ver a página no site ↗</a>
   <a class="botao-secundario" href="/editar?pagina={{ r.rel_docs }}">Continuar editando a página</a>
   <a class="botao-secundario" href="{{ voltar_url }}">{{ voltar_rotulo }}</a>
 </p>

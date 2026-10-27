@@ -74,7 +74,7 @@
   {% endif %}
 
   <button type="submit" class="botao-principal">Salvar item</button>
-  <a class="botao-secundario" href="http://127.0.0.1:8000/{{ pagina_escolhida | replace('.md', '/') }}" target="_blank" rel="noopener">Ver a página ↗</a>
+  <a class="botao-secundario" href="/{{ pagina_escolhida | replace('.md', '/') }}" target="_blank" rel="noopener">Ver a página ↗</a>
 </form>
 {% endif %}
 {% endblock %}

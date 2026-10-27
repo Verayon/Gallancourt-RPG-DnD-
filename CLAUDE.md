@@ -10,7 +10,8 @@ L'Ordre de Célestien, Magnetér).
 mkdocs build --strict                 # validação rápida (links, âncoras, menu)
 python scripts/testar_site.py         # teste completo e fixo — ou o comando /testar-site
 python scripts/gerar_relacoes.py      # regenera relações entre cidades e intrigas
-mkdocs serve | python admin/app.py    # site :8000 | Painel do Mestre :5001
+python admin/app.py                   # site + Painel do Mestre juntos, :5001 (um servidor só)
+mkdocs serve                          # opcional: só recarga automática ao editar .md, :8000
 ```
 
 `MANUTENCAO.md` é o manual do autor (comandos, rotina, problemas); ao mudar como o projeto é

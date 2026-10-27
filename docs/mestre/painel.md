@@ -6,10 +6,11 @@ tags:
 
 # Painel do Mestre
 
-Uma ferramenta local, separada do site, para registrar sessões e editar páginas **sem mexer em
-arquivo nenhum à mão**. Ela roda no seu computador, ao lado do site (que continua em
-`http://127.0.0.1:8000`), e escreve diretamente nos arquivos de `docs/`. Como o `mkdocs serve` fica
-de olho nessa pasta, assim que o painel salva alguma coisa, o site se atualiza sozinho.
+Um único servidor local que serve **o site inteiro** — a wiki e as ferramentas de registrar
+sessões e editar páginas **sem mexer em arquivo nenhum à mão**. Não existem dois endereços: tudo
+vive em `http://127.0.0.1:5001/`. Cada vez que você cria ou edita algo por ele, ele escreve direto
+nos arquivos de `docs/` e reconstrói o site sozinho antes de responder — a próxima página que você
+abrir já reflete a mudança.
 
 !!! warning "Ferramenta só sua"
     O painel não tem senha nem login — quem tiver acesso ao seu computador e souber o endereço
@@ -25,35 +26,36 @@ Dentro da pasta do projeto:
 ```
 
 Ou, no Windows, dê duplo clique em `admin/iniciar-painel.bat`. Depois, abra
-**http://127.0.0.1:5001/** no navegador. Deixe essa janela do terminal aberta enquanto usa o
-painel — fechá-la desliga a ferramenta (o site em si continua no ar, servido pelo `mkdocs serve`).
+**http://127.0.0.1:5001/** no navegador — é o site completo, já com os formulários do Painel
+embutidos nas páginas certas. Deixe essa janela do terminal aberta enquanto usa o site; fechá-la
+desliga tudo (site e Painel juntos).
+
+!!! info "Editando Markdown à mão?"
+    Se você for só escrever/ajustar texto direto nos arquivos `.md` pelo editor de código (sem usar
+    nenhum formulário do Painel), `mkdocs serve` (porta 8000, comando separado) ainda é o jeito mais
+    rápido de ver o resultado — ele recarrega a cada salvamento, sem precisar esperar o build do
+    Painel. Para o uso normal do site (navegar, cadastrar NPCs/Lugares/Jogadores, criar e tocar
+    sessões), só o `admin/app.py` já basta.
 
 ## Acessar de outro aparelho (celular, outro PC) pela Tailscale
 
 Por padrão o painel só escuta `127.0.0.1` — nem outro aparelho na mesma rede alcança ele. Para
-abrir o painel do seu celular ou notebook enquanto o computador com o projeto fica ligado em casa,
-sem pagar por servidor nenhum:
+abrir o site (e o Painel) do seu celular ou notebook enquanto o computador com o projeto fica
+ligado em casa, sem pagar por servidor nenhum:
 
 1. Instale o [Tailscale](https://tailscale.com/download) neste computador e no aparelho de onde
    você quer acessar, entrando com a mesma conta nos dois.
 2. Neste computador, em vez do `.bat` normal, dê duplo clique em
    `admin/iniciar-painel-tailscale.bat` (ou rode `set PAINEL_HOST=0.0.0.0` antes do comando usual).
 3. No outro aparelho, abra `http://<nome-ou-IP-tailscale-deste-pc>:5001/` — o Tailscale mostra esse
-   endereço na lista de aparelhos do seu tailnet.
+   endereço na lista de aparelhos do seu tailnet. Tudo funciona normalmente por esse endereço,
+   incluindo os formulários embutidos e o Painel de Iniciativa — como site e Painel são a mesma
+   origem, não existe nenhum endereço fixo pra reconfigurar antes de acessar de outro lugar.
 
 !!! warning "Ainda sem senha"
     `PAINEL_HOST=0.0.0.0` também deixa o painel visível para qualquer aparelho na sua rede local
     (Wi-Fi de casa), não só pela Tailscale — ele continua sem login. Use isso só em rede de
     confiança, e volte para o `.bat` normal (ou feche a janela) quando terminar.
-
-!!! info "O Painel de Iniciativa embutido precisa do endereço certo"
-    A aba **Painel de Iniciativa** de cada sessão busca os dados em `extra.painel_url`
-    (`mkdocs.yml`) — por padrão `http://127.0.0.1:5001`, que só funciona no mesmo computador.
-    Acessando o site de outro aparelho pela Tailscale, troque esse valor pelo endereço Tailscale
-    deste PC antes de gerar o site, ou ele não vai achar o painel. E se o site estiver publicado
-    em HTTPS (como o GitHub Pages), o navegador bloqueia por padrão qualquer chamada para um
-    endereço `http://` comum — o Painel de Iniciativa embutido só funciona acessando o site por
-    HTTP (ex.: `mkdocs serve` local ou pela Tailscale), não na versão publicada.
 
 ## Adicionar um NPC
 
@@ -69,9 +71,8 @@ clicar em **Criar NPC**, o painel:
    cidade não tiver grupo);
 3. confere o site com `mkdocs build --strict`.
 
-O NPC aparece na tabela depois que o site recarregar (alguns segundos, com `mkdocs serve`
-rodando). Para trocar ou adicionar o retrato de um NPC que já existe, use **Trocar o retrato de um
-NPC existente** (`http://127.0.0.1:5001/npc/retrato`).
+O NPC aparece na tabela assim que a página recarregar. Para trocar ou adicionar o retrato de um
+NPC que já existe, use **Trocar o retrato de um NPC existente** (`http://127.0.0.1:5001/npc/retrato`).
 
 Marque **É um NPC genérico** para criar um modelo reutilizável (guarda, camponês, nobre…), em vez
 de alguém específico — ele fica fora da tabela principal, num grupo **Genéricos** no menu, e
@@ -342,7 +343,7 @@ em toda a wiki: `#` para títulos, `[texto](link.md)` para links, `**negrito**`,
 
 !!! question "Em aberto"
     O painel ainda não valida a sintaxe antes de salvar. Depois de editar uma página por aqui, dê
-    uma olhada nela no site (`http://127.0.0.1:8000`) para confirmar que ficou como você queria.
+    uma olhada nela no site para confirmar que ficou como você queria.
 
 ### Adicionar uma imagem
 

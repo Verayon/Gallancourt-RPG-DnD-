@@ -114,8 +114,7 @@
       P.chamarJSON(base, "/api/sessoes/nova", "POST", corpo).then(function (r) {
         resultado.className = "criar-sessao__resultado criar-sessao__resultado--ok";
         resultado.innerHTML = "✅ Sessão criada: <a href=\"../../" + P.escapeHtml(r.rel_docs.replace(/\.md$/, "/"))
-          + "\">abrir a página</a>. Se o mkdocs serve estiver rodando, pode levar alguns segundos"
-          + " até o link funcionar.";
+          + "\">abrir a página</a>.";
         form.reset();
       }).catch(function (erro) {
         resultado.className = "criar-sessao__resultado criar-sessao__resultado--erro";

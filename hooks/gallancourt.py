@@ -40,7 +40,6 @@ _EVENTOS: list[dict] = []
 _MAGIAS: list[dict] = []
 
 RETRATO_PADRAO = "../assets/placeholders/personagem.svg"
-PAINEL_PADRAO = "http://127.0.0.1:5001"
 DICA_PAINEL = "Abre o Painel do Mestre — ele precisa estar rodando no seu computador"
 
 # Colunas da tabela de NPCs: (rótulo, chave no bloco npc:)
@@ -80,10 +79,6 @@ def _celula(valor) -> str:
     return str(valor if valor not in (None, "") else "—").replace("|", "\\|").replace("\n", " ")
 
 
-def _painel(config) -> str:
-    return (config.get("extra") or {}).get("painel_url", PAINEL_PADRAO).rstrip("/")
-
-
 # --------------------------------------------------------------------------
 # Tabela de NPCs
 # --------------------------------------------------------------------------
@@ -111,7 +106,7 @@ def _tabela_npcs(docs: Path, config) -> str:
         + f" | {_celula(npc.get('resumo'))} |"
         for nome, arq, retrato, npc in linhas
     ]
-    partes = _criar_entidade_div("npc", config, "../mestre/painel.md")
+    partes = _criar_entidade_div("npc", "../mestre/painel.md")
     partes += [
         '<div class="npc-ferramentas" markdown>',
         "",
@@ -291,9 +286,8 @@ def _lista_sessoes(docs: Path, config) -> str:
         sessoes.append((int(numero), _titulo_h1(corpo, arquivo.stem), arquivo.name, ficha))
     sessoes.sort()
 
-    painel = _painel(config)
     partes = [
-        f'<div class="criar-sessao" data-painel-url="{painel}" markdown>',
+        '<div class="criar-sessao" markdown>',
         "",
         "*(o formulário aparece aqui quando a página carrega — precisa do "
         "[Painel do Mestre](../painel.md) rodando no seu computador)*",
@@ -340,13 +334,13 @@ COLUNAS_LUGAR = [("Tipo", "tipo"), ("Cidade", "cidade")]
 COLUNAS_JOGADOR = [("Jogador", "jogador"), ("Raça e classe", "raca_classe")]
 
 
-def _criar_entidade_div(tipo: str, config: dict, caminho_painel_doc: str) -> list[str]:
+def _criar_entidade_div(tipo: str, caminho_painel_doc: str) -> list[str]:
     """Div-mount do formulário embutido "Adicionar NPC/Lugar/Jogador" (ver
-    docs/javascripts/gallancourt.js::montarFormularioEntidade e painel-fetch.js) — substitui o
-    antigo botão que abria o Painel em outra aba (`target=_blank`)."""
-    painel = _painel(config)
+    docs/javascripts/gallancourt.js::montarFormularioEntidade e painel-fetch.js). Site e Painel
+    são a mesma origem/porta, então o formulário fala com a API por caminho relativo (ver
+    painel-fetch.js) — não precisa saber nenhum endereço."""
     return [
-        f'<div class="criar-entidade" data-tipo="{tipo}" data-painel-url="{painel}" markdown>',
+        f'<div class="criar-entidade" data-tipo="{tipo}" markdown>',
         "",
         f"*(o formulário aparece aqui quando a página carrega — precisa do "
         f"[Painel do Mestre]({caminho_painel_doc}) rodando no seu computador)*",
@@ -370,7 +364,7 @@ def _lista_lugares(docs: Path, config) -> str:
             linhas.append((_titulo_h1(corpo, arquivo.stem), arquivo.name, lugar))
     linhas.sort(key=lambda l: l[0].casefold())
 
-    partes = _criar_entidade_div("lugar", config, "../mestre/painel.md")
+    partes = _criar_entidade_div("lugar", "../mestre/painel.md")
     if not linhas:
         return "\n".join(partes + ["*Nenhum lugar criado ainda.*"])
 
@@ -416,7 +410,7 @@ def _lista_jogadores(docs: Path, config) -> str:
             linhas.append((_titulo_h1(corpo, arquivo.stem), arquivo.name, jogador))
     linhas.sort(key=lambda l: l[0].casefold())
 
-    partes = _criar_entidade_div("jogador", config, "../painel.md")
+    partes = _criar_entidade_div("jogador", "../painel.md")
     if not linhas:
         return "\n".join(partes + ["*Nenhum jogador cadastrado ainda.*"])
 
@@ -589,15 +583,12 @@ def on_page_markdown(markdown: str, page, config, files):
         classe = CLASSES_CONJURADORAS.get(slug, slug.capitalize())
         markdown = markdown.replace("<!-- magias:classe -->", _tabela_magias_classe(docs, classe))
     if src.startswith("mestre/sessoes/sessao-") and "<!-- participantes:botao -->" in markdown:
-        painel = _painel(config)
         botao = (
             f"[:material-account-group: Participantes desta sessão]"
-            f"({painel}/sessoes/participantes?pagina={src}){{ .md-button .botao-painel target=_blank "
+            f"(/sessoes/participantes?pagina={src}){{ .md-button .botao-painel target=_blank "
             f'title="{DICA_PAINEL}" }}'
         )
         markdown = markdown.replace("<!-- participantes:botao -->", botao)
-    if "PAINEL_URL_AQUI" in markdown:
-        markdown = markdown.replace("PAINEL_URL_AQUI", _painel(config))
     npc = page.meta.get("npc")
     secao_tempo = linha_tempo.secao_da_pagina(docs, _EVENTOS, src)
     if isinstance(npc, dict):

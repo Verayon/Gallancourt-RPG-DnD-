@@ -602,7 +602,7 @@ sessao:
       Castellane; só recebia instruções por um contato intermediário em Dodixie.
 === "Painel de Iniciativa"
 
-    <div class="painel-iniciativa" data-pagina="mestre/sessoes/sessao-0-os-grilhoes-da-estrada.md" data-painel-url="PAINEL_URL_AQUI" markdown>
+    <div class="painel-iniciativa" data-pagina="mestre/sessoes/sessao-0-os-grilhoes-da-estrada.md" markdown>
 
     *(o painel aparece aqui quando a página carrega — precisa do [Painel do Mestre](../painel.md)
     rodando no seu computador)*

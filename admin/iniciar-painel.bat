@@ -7,7 +7,7 @@ if not exist ".venv\Scripts\python.exe" (
     pause
     exit /b 1
 )
-echo Abrindo o Painel do Mestre em http://127.0.0.1:5001/ ...
-echo Deixe esta janela aberta enquanto usa o painel.
+echo Abrindo o site completo (wiki + Painel do Mestre) em http://127.0.0.1:5001/ ...
+echo Deixe esta janela aberta enquanto usa o site.
 ".venv\Scripts\python.exe" "admin\app.py"
 pause
