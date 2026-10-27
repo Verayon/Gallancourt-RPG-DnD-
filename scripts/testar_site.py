@@ -375,6 +375,38 @@ def teste_painel_participantes(copia: Path):
     ], "participantes não gravados no front-matter da sessão"
 
 
+@verificacao("7. Painel", "API JSON do Painel de Iniciativa embutido")
+def teste_painel_api_iniciativa(copia: Path):
+    c = _painel(copia)
+    pagina = "mestre/sessoes/sessao-0-os-grilhoes-da-estrada.md"
+    base = f"/api/sessao-ao-vivo/{pagina}"
+
+    r = c.get(base)
+    assert r.status_code == 200, f"HTTP {r.status_code}"
+    dados = r.get_json()
+    assert dados["pagina"] == pagina, "resposta não trouxe a página certa"
+    # A Sessão 0 tem 6 fichas de combate na própria página e nenhum participante cadastrado —
+    # a lista tem que vir só dessas 6, nunca de todo stat-block do site (item 2.6.1 do pedido).
+    assert len(dados["fichas_disponiveis"]) == 6, (
+        f"esperava 6 fichas (só as da própria página), veio {len(dados['fichas_disponiveis'])}"
+    )
+    assert all(f["pagina_rel_docs"] == pagina for f in dados["fichas_disponiveis"]), (
+        "uma ficha de fora da página vazou para a lista — deveria estar restrita à sessão"
+    )
+
+    r2 = c.post(f"{base}/combatente", json={"nome": "Teste API", "tipo": "jogador", "iniciativa": 7})
+    assert r2.status_code == 200, f"HTTP {r2.status_code}"
+    dados2 = r2.get_json()
+    combatente = next((x for x in dados2["combatentes"] if x["nome"] == "Teste API"), None)
+    assert combatente is not None, "combatente criado pela API não apareceu no estado devolvido"
+
+    r3 = c.post(f"{base}/combatente/{combatente['id']}/remover")
+    assert r3.status_code == 200 and not r3.get_json()["combatentes"], "remoção pela API não funcionou"
+
+    r4 = c.get("/api/sessao-ao-vivo/personagens/pagina-que-nao-existe.md")
+    assert r4.status_code == 404 and r4.get_json().get("erro"), "página inexistente devia devolver 404 em JSON"
+
+
 @verificacao("7. Painel", "Criar item de Loot & Pistas dentro de uma aba de sessão")
 def teste_painel_item(copia: Path):
     pastas_sessao = list((copia / "docs" / "mestre" / "sessoes").glob("sessao-99-*.md"))
@@ -591,7 +623,7 @@ def main() -> int:
             for t in (
                 teste_painel_npc, teste_painel_npc_generico, teste_painel_copiar_ficha_generica,
                 teste_painel_lugar, teste_painel_jogador, teste_painel_sessao, teste_painel_participantes,
-                teste_painel_item, teste_painel_acontecimento, teste_painel_efeito,
+                teste_painel_api_iniciativa, teste_painel_item, teste_painel_acontecimento, teste_painel_efeito,
             ):
                 t(copia)
     finally:

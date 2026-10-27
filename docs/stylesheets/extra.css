@@ -1323,3 +1323,208 @@ th[aria-sort="descending"] .npc-ordenar::after { content: " ▼"; opacity: 1; }
 .md-typeset .linha-tempo > ul > li > p {
   margin: .2rem 0;
 }
+
+/* --------------------------------------------------------------------------
+   Painel de Iniciativa embutido (aba "Painel de Iniciativa" de uma sessão) —
+   widget em docs/javascripts/painel-iniciativa.js, falando com a API do
+   Painel do Mestre local. Estilo próprio porque é a primeira vez que o site
+   público precisa de formulários/tabelas interativas de verdade.
+   -------------------------------------------------------------------------- */
+
+.md-typeset .painel-iniciativa {
+  font-family: 'EB Garamond', serif;
+}
+
+.md-typeset .painel-iniciativa:not(.painel-iniciativa--pronto)::before {
+  content: "Carregando o Painel de Iniciativa…";
+  display: block;
+  color: var(--gc-ink-dim);
+  font-style: italic;
+  padding: .6rem 0;
+}
+
+.md-typeset .painel-iniciativa__erro {
+  background: var(--gc-panel);
+  border: 1px solid var(--gc-red);
+  border-radius: 6px;
+  padding: .7rem 1rem;
+}
+
+.md-typeset .pi-secao {
+  background: var(--gc-panel);
+  border: 1px solid var(--gc-panel-border);
+  border-top: 3px solid var(--gc-gold);
+  border-radius: 8px;
+  padding: .8rem 1.1rem 1rem;
+  margin: 0 0 1rem;
+}
+
+.md-typeset .pi-secao h3 {
+  margin-top: 0;
+  color: var(--gc-gold-soft);
+}
+
+.md-typeset .pi-secao h4,
+.md-typeset .pi-secao h5 {
+  color: var(--gc-gold-soft);
+  margin: .8rem 0 .3rem;
+}
+
+.md-typeset .pi-zona-perigo {
+  border-top-color: var(--gc-red);
+}
+
+/* Formulários — o site público não tinha nenhum até agora, então os campos
+   ganham um estilo básico próprio (o Painel admin tem o dele, em
+   admin/static/estilo.css, que não se aplica aqui). */
+.md-typeset .painel-iniciativa form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: .6rem 1rem;
+  margin: 0 0 .7rem;
+}
+
+.md-typeset .painel-iniciativa form.pi-form-inline {
+  display: inline-flex;
+  margin: 0;
+  vertical-align: middle;
+}
+
+.md-typeset .painel-iniciativa label {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  font-size: .82rem;
+  color: var(--gc-ink-dim);
+}
+
+.md-typeset .painel-iniciativa label .opcional {
+  font-weight: 400;
+  font-style: italic;
+}
+
+.md-typeset .painel-iniciativa input,
+.md-typeset .painel-iniciativa select,
+.md-typeset .painel-iniciativa textarea {
+  font-family: 'EB Garamond', serif;
+  font-size: .9rem;
+  background: var(--gc-bg-alt);
+  color: var(--gc-ink);
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 4px;
+  padding: .35rem .5rem;
+}
+
+.md-typeset .painel-iniciativa input.input-pequeno { width: 4.5rem; }
+.md-typeset .painel-iniciativa input.input-medio { width: 9rem; }
+.md-typeset .painel-iniciativa textarea { width: 100%; resize: vertical; }
+
+.md-typeset .painel-iniciativa button {
+  font-family: 'EB Garamond', serif;
+  font-weight: 700;
+  font-size: .85rem;
+  border-radius: 4px;
+  border: 1px solid var(--gc-gold);
+  color: var(--gc-gold-soft);
+  background: transparent;
+  padding: .4rem .8rem;
+  cursor: pointer;
+}
+
+.md-typeset .painel-iniciativa button:hover {
+  background-color: var(--gc-gold);
+  color: var(--md-primary-fg-color--dark);
+}
+
+.md-typeset .painel-iniciativa .botao-principal {
+  background-color: var(--gc-gold);
+  color: var(--md-primary-fg-color--dark);
+}
+
+.md-typeset .painel-iniciativa .botao-remover {
+  padding: .2rem .5rem;
+  font-size: .78rem;
+}
+
+.md-typeset .pi-lista-notas {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 .7rem;
+}
+
+.md-typeset .pi-lista-notas li {
+  padding: .3rem 0;
+  border-bottom: 1px solid var(--gc-panel-border);
+}
+
+.pi-nota-hora {
+  color: var(--gc-gold-soft);
+  font-weight: 700;
+  margin-right: .3rem;
+}
+
+.md-typeset .pi-turno-atual {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .6rem;
+  background: var(--gc-bg-alt);
+  border-radius: 6px;
+  padding: .5rem .8rem;
+  margin: .6rem 0;
+}
+
+.md-typeset .pi-ficha-da-vez {
+  border: 1px solid var(--gc-gold);
+  border-radius: 8px;
+  padding: .7rem 1rem;
+  margin: .6rem 0;
+}
+
+.md-typeset .pi-ficha-da-vez h4 { margin: 0; }
+
+.md-typeset .pi-ficha-da-vez__atributos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem .8rem;
+  margin: .5rem 0;
+  font-size: .85rem;
+}
+
+.md-typeset .tabela-combate {
+  width: 100%;
+  font-size: .82rem;
+  margin: .6rem 0;
+}
+
+.md-typeset .tabela-combate th { text-align: left; }
+
+.pi-combatente--atual { outline: 2px solid var(--gc-gold); outline-offset: -1px; }
+.pi-combatente--caido { opacity: .7; }
+.pi-combatente--morto { opacity: .5; text-decoration: line-through; }
+
+.etiqueta {
+  display: inline-block;
+  font-size: .68rem;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  padding: .05rem .4rem;
+  border-radius: 999px;
+  margin-left: .3rem;
+}
+
+.etiqueta--caido { background: var(--gc-bg-alt); color: var(--gc-ink-dim); }
+.etiqueta--morto { background: var(--gc-red); color: #fff; }
+
+.md-typeset .pi-grade-resumo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: .8rem;
+}
+
+.md-typeset .lista-ranking {
+  margin: 0;
+  padding-left: 1.2rem;
+  font-size: .85rem;
+}

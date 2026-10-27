@@ -46,6 +46,15 @@ sem pagar por servidor nenhum:
     (Wi-Fi de casa), não só pela Tailscale — ele continua sem login. Use isso só em rede de
     confiança, e volte para o `.bat` normal (ou feche a janela) quando terminar.
 
+!!! info "O Painel de Iniciativa embutido precisa do endereço certo"
+    A aba **Painel de Iniciativa** de cada sessão busca os dados em `extra.painel_url`
+    (`mkdocs.yml`) — por padrão `http://127.0.0.1:5001`, que só funciona no mesmo computador.
+    Acessando o site de outro aparelho pela Tailscale, troque esse valor pelo endereço Tailscale
+    deste PC antes de gerar o site, ou ele não vai achar o painel. E se o site estiver publicado
+    em HTTPS (como o GitHub Pages), o navegador bloqueia por padrão qualquer chamada para um
+    endereço `http://` comum — o Painel de Iniciativa embutido só funciona acessando o site por
+    HTTP (ex.: `mkdocs serve` local ou pela Tailscale), não na versão publicada.
+
 ## Adicionar um NPC
 
 Na página [NPCs](../personagens/index.md), o botão **Adicionar NPC** abre esta aba (ou acesse
@@ -102,13 +111,18 @@ Essa é a página de **preparação**. Depois de jogar, registre o que aconteceu
 
 ## Tocar uma sessão ao vivo
 
-Na aba **Sessão ao vivo** (`http://127.0.0.1:5001/sessao-ao-vivo`), um bloco de notas e um
-rastreador de combate pra usar durante a mesa — **preso à página da sessão**: a Sessão 0 tem o
-seu próprio combate, a Sessão 3 do Diário teria o dela, e por aí vai, sem se misturar. Escolha a
-página no menu do topo (ou chegue direto pela aba **⚔️ Combate ao vivo** da própria página da
-sessão, que já abre com ela selecionada). Diferente do resto do painel, nada aqui mexe em `docs/`
-nem no site — o estado fica só em `admin/dados/` (de fora do git), porque é rascunho de sessão,
-não cânone nem conteúdo da wiki.
+A aba **Painel de Iniciativa**, no final de cada página de sessão, é um bloco de notas e um
+rastreador de combate pra usar durante a mesa — embutido na própria página do site, sem precisar
+abrir outra aba do navegador nem outro site: ele busca os dados do Painel do Mestre (que precisa
+estar rodando no seu computador) por baixo dos panos, e redesenha a tela a cada ação, sem
+recarregar a página. É **preso à página da sessão**: a Sessão 0 tem o seu próprio combate, a
+Sessão 3 do Diário teria o dela, e por aí vai, sem se misturar. Diferente do resto do painel, nada
+aqui mexe em `docs/` nem no conteúdo do site — o estado fica só em `admin/dados/` (de fora do
+git), porque é rascunho de sessão, não cânone nem conteúdo da wiki.
+
+Se preferir usar o Painel direto, sem o site aberto, a mesma coisa continua disponível na aba
+**Sessão ao vivo** (`http://127.0.0.1:5001/sessao-ao-vivo`) — só que ali o seletor de ficha mostra
+todo stat-block do site, em vez de só os desta sessão.
 
 ### Notas e resumo
 
@@ -121,10 +135,13 @@ texto preenchido no campo "O que aconteceu".
 ### Iniciativa
 
 Adicione cada jogador ou NPC com o nome, o tipo e o valor da rolagem de iniciativa. Se o NPC já
-tem uma [ficha de combate](manutencao-do-canone.md#ficha-de-combate) em alguma página da wiki,
-selecione-a em **Ficha de combate vinculada** — o nome e o PV são preenchidos sozinhos (se
-deixados em branco), e a ficha completa dele passa a aparecer na tela quando for a vez dele.
-Depois de adicionar todo mundo, a tabela fica ordenada sozinha, da maior iniciativa pra menor.
+tem uma [ficha de combate](manutencao-do-canone.md#ficha-de-combate) nesta própria página ou na
+página de um jogador/NPC marcado em **Participantes da sessão** (ver "Criar uma sessão nova",
+acima), selecione-a em **Ficha vinculada** — o nome e o PV são preenchidos sozinhos (se deixados
+em branco), e a ficha completa dele passa a aparecer na tela quando for a vez dele. O menu só
+mostra essas fichas, não todo stat-block do site — é por isso que vale cadastrar os participantes
+antes de tocar a sessão. Depois de adicionar todo mundo, a tabela fica ordenada sozinha, da maior
+iniciativa pra menor.
 
 Clique em **Próximo turno** para avançar — na primeira vez, já começa por quem tem a iniciativa
 mais alta. A lista exibida sempre recomeça por quem está na vez (ela "gira", mas a ordem real de

@@ -602,25 +602,12 @@ sessao:
       Castellane; só recebia instruções por um contato intermediário em Dodixie.
 === "Painel de Iniciativa"
 
-    ## Rastreador de iniciativa, status e ações
+    <div class="painel-iniciativa" data-pagina="mestre/sessoes/sessao-0-os-grilhoes-da-estrada.md" data-painel-url="PAINEL_URL_AQUI" markdown>
 
-    Esta aba é só um atalho — o rastreador em si roda no [Painel do Mestre](../painel.md), que é uma
-    ferramenta local, separada deste site. Com o painel aberto no seu computador
-    (`.venv\Scripts\python admin\app.py`), use o botão abaixo para abrir o combate desta sessão já
-    selecionado:
+    *(o painel aparece aqui quando a página carrega — precisa do [Painel do Mestre](../painel.md)
+    rodando no seu computador)*
 
-    [Abrir o combate desta sessão no Painel ↗](http://127.0.0.1:5001/sessao-ao-vivo?pagina=mestre/sessoes/sessao-0-os-grilhoes-da-estrada.md){ .md-button .md-button--primary }
-
-    Lá dá pra:
-
-    - Montar a lista de iniciativa (jogadores e os NPCs da aba **NPCs**, inclusive já vinculando
-      a ficha de combate de cada um) e deixar ordenar sozinha.
-    - Passar o turno — o combatente da vez sobe pro topo da lista sozinho, e se for um NPC com
-      ficha vinculada, a ficha completa dele aparece na tela.
-    - Marcar status (exausto, envenenado, qualquer outro texto livre), caído e morto.
-    - Registrar cada ataque/cura (quem, em quem, com o quê, quanto de dano ou cura) — isso já
-      atualiza o PV sozinho e vira um rascunho de **diário de combate** pronto pra reaproveitar na
-      história da campanha depois.
+    </div>
 
 
 ## Depois da sessão

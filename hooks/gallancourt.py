@@ -400,6 +400,8 @@ def on_page_markdown(markdown: str, page, config, files):
             f'title="{DICA_PAINEL}" }}'
         )
         markdown = markdown.replace("<!-- participantes:botao -->", botao)
+    if "PAINEL_URL_AQUI" in markdown:
+        markdown = markdown.replace("PAINEL_URL_AQUI", _painel(config))
     npc = page.meta.get("npc")
     secao_tempo = linha_tempo.secao_da_pagina(docs, _EVENTOS, src)
     if isinstance(npc, dict):

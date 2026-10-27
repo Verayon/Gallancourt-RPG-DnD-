@@ -1286,7 +1286,7 @@ sessao:
 
 === "Painel de Iniciativa"
 
-    <div class="painel-iniciativa" data-pagina="{rel_docs}" markdown>
+    <div class="painel-iniciativa" data-pagina="{rel_docs}" data-painel-url="PAINEL_URL_AQUI" markdown>
 
     *(o painel aparece aqui quando a página carrega — precisa do [Painel do Mestre](../painel.md)
     rodando no seu computador)*

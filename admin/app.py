@@ -15,7 +15,7 @@ import os
 import re
 from pathlib import Path
 
-from flask import Flask, abort, redirect, render_template, request, url_for
+from flask import Flask, abort, jsonify, redirect, render_template, request, url_for
 
 import sessao_viva as sv
 import wiki_data as wd
@@ -403,6 +403,17 @@ def _redirect_sessao_ao_vivo(pagina: str, ancora: str = ""):
     return redirect(url)
 
 
+def _ficha_da_vez(estado: dict) -> dict | None:
+    """A ficha de combate do combatente da vez, se ele tiver uma vinculada — para mostrar o
+    cartão completo (atributos, ações…) sem precisar abrir a página dele."""
+    atual = next((c for c in estado["combatentes"] if c["id"] == estado["turno_atual"]), None)
+    if atual and atual.get("ficha_pagina") and atual.get("ficha_slug"):
+        caminho_ficha = _resolver_pagina(atual["ficha_pagina"])
+        if caminho_ficha is not None:
+            return wd.ler_statblocks_da_pagina(caminho_ficha).get(atual["ficha_slug"])
+    return None
+
+
 @app.get("/sessao-ao-vivo")
 def ver_sessao_ao_vivo():
     paginas = wd.listar_todas_paginas(ROOT)
@@ -420,13 +431,7 @@ def ver_sessao_ao_vivo():
         abort(404)
 
     estado = sv.carregar(ROOT, pagina_escolhida)
-
-    ficha_da_vez = None
-    atual = next((c for c in estado["combatentes"] if c["id"] == estado["turno_atual"]), None)
-    if atual and atual.get("ficha_pagina") and atual.get("ficha_slug"):
-        caminho_ficha = _resolver_pagina(atual["ficha_pagina"])
-        if caminho_ficha is not None:
-            ficha_da_vez = wd.ler_statblocks_da_pagina(caminho_ficha).get(atual["ficha_slug"])
+    ficha_da_vez = _ficha_da_vez(estado)
 
     return render_template(
         "sessao_ao_vivo.html",
@@ -581,6 +586,211 @@ def arquivar_sessao_ao_vivo():
         abort(404)
     sv.arquivar_e_limpar(ROOT, pagina)
     return _redirect_sessao_ao_vivo(pagina)
+
+
+# --------------------------------------------------------------------------
+# API JSON do Painel de Iniciativa — mesma lógica das rotas acima (sessao_viva.py continua
+# sendo a única fonte de verdade das regras), só devolvendo o estado como JSON em vez de uma
+# página HTML inteira. Usada pelo widget embutido na própria página da sessão
+# (docs/javascripts/painel-iniciativa.js); as rotas HTML acima continuam existindo, para quem
+# preferir usar o Painel direto, sem o site aberto.
+# --------------------------------------------------------------------------
+
+@app.after_request
+def _cors_api(resposta):
+    if request.path.startswith("/api/"):
+        origem = request.headers.get("Origin")
+        if origem:
+            resposta.headers["Access-Control-Allow-Origin"] = origem
+            resposta.headers["Vary"] = "Origin"
+        resposta.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+        resposta.headers["Access-Control-Allow-Headers"] = "Content-Type"
+    return resposta
+
+
+def _erro_json(mensagem: str, status: int = 404):
+    return jsonify(erro=mensagem), status
+
+
+def _fichas_disponiveis_sessao(pagina_rel_docs: str) -> list[dict]:
+    """Fichas de combate que fazem sentido oferecer nesta sessão: as que já estão na própria
+    página, mais as dos jogadores/NPCs marcados como participantes dela (ver
+    /sessoes/participantes) — nunca todo stat-block do site."""
+    titulos = {p.rel_docs: p.titulo for p in wd.listar_todas_paginas(ROOT)}
+    participantes = wd.ler_participantes(ROOT, pagina_rel_docs)
+    paginas_relevantes = [pagina_rel_docs] + participantes["jogadores"] + participantes["npcs"]
+
+    resultado = []
+    vistos = set()
+    for rel in paginas_relevantes:
+        caminho = _resolver_pagina(rel)
+        if caminho is None:
+            continue
+        for slug, dados in wd.ler_statblocks_da_pagina(caminho).items():
+            if (rel, slug) in vistos:
+                continue
+            vistos.add((rel, slug))
+            resultado.append({
+                "slug": slug, "nome": dados.get("nome") or slug,
+                "pagina_rel_docs": rel, "pagina_titulo": titulos.get(rel, rel),
+            })
+    return resultado
+
+
+def _estado_json(pagina: str):
+    estado = sv.carregar(ROOT, pagina)
+    return jsonify(
+        pagina=pagina,
+        estado=estado,
+        combatentes=sv.ordem_de_exibicao(estado),
+        resumo_combate=sv.resumo_combate(estado),
+        diario_combate=sv.gerar_diario_de_combate(estado),
+        ficha_da_vez=_ficha_da_vez(estado),
+        fichas_disponiveis=_fichas_disponiveis_sessao(pagina),
+        tipos_combatente=sv.TIPOS_COMBATENTE,
+        tipos_acao=sv.TIPOS_ACAO,
+        rotulos_acao=sv.ROTULOS_ACAO,
+        atributos_ficha=wd.CAMPOS_STATBLOCK_ATRIBUTOS,
+        rotulos_atributos=wd.ROTULOS_ATRIBUTOS,
+    )
+
+
+@app.get("/api/sessao-ao-vivo/<path:pagina>")
+def api_ver_sessao_ao_vivo(pagina):
+    if _resolver_pagina(pagina) is None:
+        return _erro_json("Página não encontrada.")
+    return _estado_json(pagina)
+
+
+@app.post("/api/sessao-ao-vivo/<path:pagina>/nota")
+def api_adicionar_nota(pagina):
+    if _resolver_pagina(pagina) is None:
+        return _erro_json("Página não encontrada.")
+    dados = request.get_json(silent=True) or {}
+    sv.adicionar_nota(ROOT, pagina, dados.get("texto", ""))
+    return _estado_json(pagina)
+
+
+@app.post("/api/sessao-ao-vivo/<path:pagina>/nota/<int:indice>/remover")
+def api_remover_nota(pagina, indice):
+    if _resolver_pagina(pagina) is None:
+        return _erro_json("Página não encontrada.")
+    sv.remover_nota(ROOT, pagina, indice)
+    return _estado_json(pagina)
+
+
+@app.post("/api/sessao-ao-vivo/<path:pagina>/resumo")
+def api_salvar_resumo(pagina):
+    if _resolver_pagina(pagina) is None:
+        return _erro_json("Página não encontrada.")
+    dados = request.get_json(silent=True) or {}
+    sv.salvar_resumo(ROOT, pagina, dados.get("resumo", ""))
+    return _estado_json(pagina)
+
+
+@app.post("/api/sessao-ao-vivo/<path:pagina>/combatente")
+def api_adicionar_combatente(pagina):
+    if _resolver_pagina(pagina) is None:
+        return _erro_json("Página não encontrada.")
+    dados = request.get_json(silent=True) or {}
+    nome = (dados.get("nome") or "").strip()
+    tipo = dados.get("tipo") or "npc"
+    iniciativa = _int_ou_none(str(dados.get("iniciativa", ""))) or 0
+    pv_atual = _int_ou_none(str(dados.get("pv_atual", "")))
+    pv_maximo = _int_ou_none(str(dados.get("pv_maximo", "")))
+    ficha_pagina = dados.get("ficha_pagina") or ""
+    ficha_slug = dados.get("ficha_slug") or ""
+
+    if ficha_pagina and ficha_slug:
+        caminho_ficha = _resolver_pagina(ficha_pagina)
+        dados_ficha = wd.ler_statblocks_da_pagina(caminho_ficha).get(ficha_slug) if caminho_ficha else None
+        if dados_ficha:
+            if not nome:
+                nome = dados_ficha.get("nome", "")
+            pv_da_ficha = _pv_inicial_da_ficha(dados_ficha)
+            if pv_da_ficha is not None:
+                pv_atual = pv_da_ficha if pv_atual is None else pv_atual
+                pv_maximo = pv_da_ficha if pv_maximo is None else pv_maximo
+
+    if nome:
+        sv.adicionar_combatente(
+            ROOT, pagina, nome, tipo, iniciativa, pv_atual, pv_maximo, ficha_pagina, ficha_slug,
+        )
+    return _estado_json(pagina)
+
+
+@app.post("/api/sessao-ao-vivo/<path:pagina>/combatente/<int:cid>/remover")
+def api_remover_combatente(pagina, cid):
+    if _resolver_pagina(pagina) is None:
+        return _erro_json("Página não encontrada.")
+    sv.remover_combatente(ROOT, pagina, cid)
+    return _estado_json(pagina)
+
+
+@app.post("/api/sessao-ao-vivo/<path:pagina>/combatente/<int:cid>/pv")
+def api_ajustar_pv(pagina, cid):
+    if _resolver_pagina(pagina) is None:
+        return _erro_json("Página não encontrada.")
+    dados = request.get_json(silent=True) or {}
+    delta = _int_ou_none(str(dados.get("delta", ""))) or 0
+    sv.ajustar_pv(ROOT, pagina, cid, delta)
+    return _estado_json(pagina)
+
+
+@app.post("/api/sessao-ao-vivo/<path:pagina>/combatente/<int:cid>/status")
+def api_atualizar_status(pagina, cid):
+    if _resolver_pagina(pagina) is None:
+        return _erro_json("Página não encontrada.")
+    dados = request.get_json(silent=True) or {}
+    sv.atualizar_status(ROOT, pagina, cid, dados.get("status", ""))
+    return _estado_json(pagina)
+
+
+@app.post("/api/sessao-ao-vivo/<path:pagina>/combatente/<int:cid>/flag/<campo>")
+def api_alternar_flag(pagina, cid, campo):
+    if _resolver_pagina(pagina) is None:
+        return _erro_json("Página não encontrada.")
+    sv.alternar_flag(ROOT, pagina, cid, campo)
+    return _estado_json(pagina)
+
+
+@app.post("/api/sessao-ao-vivo/<path:pagina>/turno/proximo")
+def api_proximo_turno(pagina):
+    if _resolver_pagina(pagina) is None:
+        return _erro_json("Página não encontrada.")
+    sv.proximo_turno(ROOT, pagina)
+    return _estado_json(pagina)
+
+
+@app.post("/api/sessao-ao-vivo/<path:pagina>/acao")
+def api_registrar_acao(pagina):
+    if _resolver_pagina(pagina) is None:
+        return _erro_json("Página não encontrada.")
+    dados = request.get_json(silent=True) or {}
+    autor_id = _int_ou_none(str(dados.get("autor_id", "")))
+    alvo_id = _int_ou_none(str(dados.get("alvo_id", "")))
+    valor = _int_ou_none(str(dados.get("valor", "")))
+    tipo = dados.get("tipo") or "outro"
+    meio = dados.get("meio") or ""
+    obs = dados.get("obs") or ""
+    sv.registrar_acao(ROOT, pagina, autor_id, tipo, alvo_id, meio, valor, obs)
+    return _estado_json(pagina)
+
+
+@app.post("/api/sessao-ao-vivo/<path:pagina>/acao/<int:acao_id>/remover")
+def api_remover_acao(pagina, acao_id):
+    if _resolver_pagina(pagina) is None:
+        return _erro_json("Página não encontrada.")
+    sv.remover_acao(ROOT, pagina, acao_id)
+    return _estado_json(pagina)
+
+
+@app.post("/api/sessao-ao-vivo/<path:pagina>/arquivar")
+def api_arquivar(pagina):
+    if _resolver_pagina(pagina) is None:
+        return _erro_json("Página não encontrada.")
+    sv.arquivar_e_limpar(ROOT, pagina)
+    return _estado_json(pagina)
 
 
 # --------------------------------------------------------------------------
