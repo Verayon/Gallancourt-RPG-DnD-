@@ -241,6 +241,14 @@ def escolher_ficha_combate():
         if caminho is None:
             abort(404)
         valores = wd.ler_statblocks_da_pagina(caminho).get(slug_escolhido, {})
+    elif pagina_escolhida and request.args.get("copiar_de", ""):
+        # Nova ficha, começando a partir de um NPC genérico (guarda, camponês…) — copia os
+        # valores, nunca a foto (não faz sentido reaproveitar o retrato do modelo).
+        pagina_origem, slug_origem = _parse_combo_ficha(request.args.get("copiar_de", ""))
+        caminho_origem = _resolver_pagina(pagina_origem)
+        if caminho_origem is not None:
+            valores = dict(wd.ler_statblocks_da_pagina(caminho_origem).get(slug_origem, {}))
+            valores.pop("foto", None)
 
     return render_template(
         "ficha_combate.html",
@@ -253,6 +261,7 @@ def escolher_ficha_combate():
         campos_atributos=wd.CAMPOS_STATBLOCK_ATRIBUTOS,
         rotulos_atributos=wd.ROTULOS_ATRIBUTOS,
         campos_listas=wd.CAMPOS_STATBLOCK_LISTAS,
+        copiar_de=request.args.get("copiar_de", ""),
         salvo=False,
     )
 
@@ -531,10 +540,11 @@ def formulario_npc():
 def criar_npc():
     valores = {chave: request.form.get(chave, "") for chave, _, _ in wd.CAMPOS_NPC_NOVO}
     valores["descricao"] = request.form.get("descricao", "")
+    generico = request.form.get("generico") == "on"
     arquivo = request.files.get("imagem")
     imagem = (arquivo.filename, arquivo.read()) if arquivo and arquivo.filename else None
     try:
-        r = wd.criar_npc(ROOT, valores, imagem)
+        r = wd.criar_npc(ROOT, valores, imagem, generico=generico)
     except ValueError as exc:
         return render_template(
             "npc_novo.html", campos=wd.CAMPOS_NPC_NOVO, valores={**valores, **request.form.to_dict()},
@@ -565,6 +575,77 @@ def salvar_retrato():
     except ValueError as exc:
         return render_template("npc_retrato.html", erro=str(exc), **contexto)
     return render_template("npc_retrato.html", salvo=retrato, **contexto)
+
+
+@app.get("/lugar/novo")
+def formulario_lugar():
+    return render_template(
+        "lugar_novo.html", campos=wd.CAMPOS_LUGAR_NOVO, valores={}, cidades=wd.listar_cidades(ROOT),
+    )
+
+
+@app.post("/lugar/novo")
+def criar_lugar():
+    valores = {chave: request.form.get(chave, "") for chave, _, _ in wd.CAMPOS_LUGAR_NOVO}
+    valores["descricao"] = request.form.get("descricao", "")
+    try:
+        r = wd.criar_lugar(ROOT, valores)
+    except ValueError as exc:
+        return render_template(
+            "lugar_novo.html", campos=wd.CAMPOS_LUGAR_NOVO, valores={**valores, **request.form.to_dict()},
+            erro=str(exc), cidades=wd.listar_cidades(ROOT),
+        )
+    return render_template(
+        "resultado_criacao.html", r=r, titulo_pagina=f"Lugar criado: {valores['nome'].strip()}",
+        voltar_url="/lugar/novo", voltar_rotulo="Adicionar outro lugar",
+    )
+
+
+@app.get("/jogador/novo")
+def formulario_jogador():
+    return render_template("jogador_novo.html", campos=wd.CAMPOS_JOGADOR_NOVO, valores={})
+
+
+@app.post("/jogador/novo")
+def criar_jogador():
+    valores = {chave: request.form.get(chave, "") for chave, _, _ in wd.CAMPOS_JOGADOR_NOVO}
+    try:
+        r = wd.criar_jogador(ROOT, valores)
+    except ValueError as exc:
+        return render_template(
+            "jogador_novo.html", campos=wd.CAMPOS_JOGADOR_NOVO,
+            valores={**valores, **request.form.to_dict()}, erro=str(exc),
+        )
+    return render_template(
+        "resultado_criacao.html", r=r, titulo_pagina=f"Jogador criado: {valores['nome'].strip()}",
+        voltar_url="/jogador/novo", voltar_rotulo="Adicionar outro jogador",
+    )
+
+
+@app.get("/sessoes/participantes")
+def formulario_participantes():
+    pagina = request.args.get("pagina", "")
+    if _resolver_pagina(pagina) is None:
+        abort(404)
+    atuais = wd.ler_participantes(ROOT, pagina)
+    return render_template(
+        "sessao_participantes.html", pagina=pagina, jogadores=wd.listar_jogadores(ROOT),
+        npcs=wd.listar_npcs(ROOT), atuais=atuais,
+    )
+
+
+@app.post("/sessoes/participantes")
+def salvar_participantes():
+    pagina = request.form.get("pagina", "")
+    if _resolver_pagina(pagina) is None:
+        abort(404)
+    jogadores = request.form.getlist("jogadores")
+    npcs = request.form.getlist("npcs")
+    wd.salvar_participantes(ROOT, pagina, jogadores, npcs)
+    return render_template(
+        "sessao_participantes.html", pagina=pagina, jogadores=wd.listar_jogadores(ROOT),
+        npcs=wd.listar_npcs(ROOT), atuais={"jogadores": jogadores, "npcs": npcs}, salvo=True,
+    )
 
 
 @app.get("/sessoes/nova")

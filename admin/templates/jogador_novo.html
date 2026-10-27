@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block titulo %}Adicionar jogador{% endblock %}
+{% block conteudo %}
+<h1>Adicionar jogador</h1>
+<p class="ajuda">
+  Cadastra o personagem de um jogador — só o nome é obrigatório. Ele entra no menu, em Mestre →
+  Jogadores, para você poder escolhê-lo depois numa sessão. A ficha de combate (CA, PV, ações…)
+  é criada depois, pela aba <a href="/ficha-combate">Ficha de combate</a>, escolhendo esta página.
+</p>
+
+{% if erro %}<p class="aviso aviso--erro">⚠️ {{ erro }}</p>{% endif %}
+
+<form method="post" action="/jogador/novo" class="form-sessao">
+  <fieldset>
+    <legend>Dados rápidos</legend>
+    {% for chave, rotulo, obrigatorio in campos %}
+    <label>{{ rotulo }}
+      <input type="text" name="{{ chave }}" value="{{ valores.get(chave, '') }}" {{ "required" if obrigatorio else "" }}>
+    </label>
+    {% endfor %}
+  </fieldset>
+
+  <button type="submit" class="botao-principal">Criar jogador</button>
+</form>
+{% endblock %}

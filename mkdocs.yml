@@ -128,6 +128,8 @@ nav:
               - Montclair de Lune: cidades/montclair-de-lune.md
               - Chantépierre: cidades/chantepierre.md
               - Valmire-sur-Rose: cidades/valmire-sur-rose.md
+      - Lugares:
+          - lugares/index.md
       - Facções:
           - faccoes/index.md
           - Estados e alianças:
@@ -213,6 +215,8 @@ nav:
       - Sessões:
           - mestre/sessoes/index.md
           - "Sessão 0 — Os Grilhões da Estrada": mestre/sessoes/sessao-0-os-grilhoes-da-estrada.md
+      - Jogadores:
+          - mestre/jogadores/index.md
       - Diário de Sessões:
           - diario/index.md
       - Linha do tempo: mestre/linha-do-tempo.md

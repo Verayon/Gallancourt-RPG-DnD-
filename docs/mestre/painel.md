@@ -62,14 +62,40 @@ raça, cidade, afiliação, um resumo de uma linha, a descrição e, se quiser, 
 O NPC aparece sozinho na tabela de NPCs. Para trocar ou adicionar o retrato de um NPC que já
 existe, use **Trocar o retrato de um NPC existente** (`/npc/retrato`).
 
+Marque **É um NPC genérico** para criar um modelo reutilizável (guarda, camponês, nobre…), em vez
+de alguém específico — ele fica fora da tabela principal, num grupo **Genéricos** no menu, e
+aparece como ponto de partida ao criar uma ficha de combate (ver mais abaixo).
+
+## Adicionar um lugar
+
+Em [Lugares](../lugares/index.md), o botão **Adicionar lugar** abre esta aba (ou acesse
+`http://127.0.0.1:5001/lugar/novo`). Só o nome é obrigatório; tipo, cidade ou região e um resumo
+de uma linha são opcionais. Crie o lugar aqui **antes** de escrever uma cena que acontece nele —
+assim a aba **Lugares** da sessão pode linkar para a página de verdade.
+
+## Adicionar um jogador
+
+Em [Mestre → Jogadores](jogadores/index.md), o botão **Adicionar jogador** abre esta aba (ou
+acesse `http://127.0.0.1:5001/jogador/novo`). Cadastra o personagem — nome, quem joga, raça e
+classe, um resumo. A ficha de combate dele (CA, PV, ações…) é criada depois, como a de qualquer
+NPC, pela aba **Ficha de combate**, escolhendo a página do jogador.
+
 ## Criar uma sessão nova
 
 Em [Mestre → Sessões](sessoes/index.md), o botão **Nova sessão** abre esta aba (ou acesse
-`http://127.0.0.1:5001/sessoes/nova`). Informe o número e o título — o resto é opcional: resumo
-rápido, jogadores, nível, duração, tom, local, missão e recompensa. O painel cria a página de
-preparação com o mesmo layout da Sessão 0 (ficha no topo e as abas Resumo, NPCs, Cenas,
-Loot & Pistas, Lugares e Segredo do Mestre), adiciona-a ao menu em **Mestre → Sessões** e confere o
-site. A sessão aparece sozinha na lista de sessões.
+`http://127.0.0.1:5001/sessoes/nova`). Informe o número e o título — o resto é opcional: data,
+resumo breve (aparece no cartão da lista de sessões), resumo rápido, jogadores, nível, duração,
+tom, local, missão e recompensa. O painel cria a página de preparação com o mesmo layout da
+Sessão 0 — abas **Resumo** (com a ficha da sessão), **Cenas**, **NPCs**, **Lugares**,
+**Loot & Pistas**, **Segredos do Mestre** e **Painel de Iniciativa**, nessa ordem —, adiciona-a ao
+menu em **Mestre → Sessões** e confere o site. A sessão aparece sozinha na lista de sessões, com
+título e data na mesma linha e o resumo breve abaixo.
+
+Antes de escrever as **Cenas**, vale ter os [Lugares](../lugares/index.md) e os
+[NPCs](../personagens/index.md)/[Jogadores](jogadores/index.md) envolvidos já cadastrados — a cena
+depende deles. Depois de criar a sessão, escolha quem participa dela em
+**Participantes da sessão** (`/sessoes/participantes?pagina=<página da sessão>`) — é essa lista
+que o Painel de Iniciativa embutido na própria página vai oferecer.
 
 Essa é a página de **preparação**. Depois de jogar, registre o que aconteceu em
 **Registrar sessão** (abaixo), que alimenta o [Diário de Sessões](../diario/index.md).
@@ -228,7 +254,9 @@ Cidades:
 Na aba **Ficha de combate**, escolha a página onde o NPC deve aparecer (qualquer página da wiki,
 não precisa ser uma de personagem — a Sessão 0, por exemplo, guarda as dela na própria página do
 roteiro) e, se já existir uma ficha ali, escolha-a no segundo menu para editar; deixe em "— nova
-ficha —" para criar uma.
+ficha —" para criar uma. Criando uma ficha nova, o terceiro menu, **Começar a partir de um NPC
+genérico**, preenche o formulário com os valores de um NPC-modelo já cadastrado (guarda, camponês,
+bandido…) — é só ajustar o que for diferente e salvar; o modelo original não é alterado.
 
 Preencha:
 

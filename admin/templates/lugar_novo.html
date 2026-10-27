@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block titulo %}Adicionar lugar{% endblock %}
+{% block conteudo %}
+<h1>Adicionar lugar</h1>
+<p class="ajuda">
+  Preencha o que já souber — só o nome é obrigatório. O painel cria a página do lugar e a
+  coloca no menu, em Wiki → Lugares, para você poder escolhê-lo depois numa sessão. O resto você
+  detalha depois, em <a href="/editar">Editar página</a>.
+</p>
+
+{% if erro %}<p class="aviso aviso--erro">⚠️ {{ erro }}</p>{% endif %}
+
+<form method="post" action="/lugar/novo" class="form-sessao">
+  <fieldset>
+    <legend>Dados rápidos</legend>
+    {% for chave, rotulo, obrigatorio in campos %}
+    <label>{{ rotulo }}
+      <input type="text" name="{{ chave }}" value="{{ valores.get(chave, '') }}"
+        {% if chave == "cidade" %}list="lista-cidades"{% endif %}
+        {{ "required" if obrigatorio else "" }}>
+    </label>
+    {% endfor %}
+    <datalist id="lista-cidades">{% for c in cidades %}<option value="{{ c.titulo }}">{% endfor %}</datalist>
+  </fieldset>
+
+  <fieldset>
+    <legend>Descrição</legend>
+    <textarea name="descricao" rows="6" placeholder="Como é, onde fica, o que acontece ali…">{{ valores.get('descricao', '') }}</textarea>
+  </fieldset>
+
+  <button type="submit" class="botao-principal">Criar lugar</button>
+</form>
+{% endblock %}

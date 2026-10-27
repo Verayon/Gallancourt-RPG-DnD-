@@ -22,6 +22,12 @@
     {% endfor %}
     <datalist id="lista-cidades">{% for c in cidades %}<option value="{{ c.titulo }}">{% endfor %}</datalist>
     <datalist id="lista-faccoes">{% for f in faccoes %}<option value="{{ f.titulo }}">{% endfor %}</datalist>
+    <label class="check">
+      <input type="checkbox" name="generico" {{ "checked" if valores.get('generico') else "" }}>
+      É um NPC genérico (modelo reutilizável, ex.: guarda, camponês, nobre — não um personagem
+      específico). Fica fora da tabela principal e serve de ponto de partida para fichas de
+      combate de sessão.
+    </label>
   </fieldset>
 
   <fieldset>

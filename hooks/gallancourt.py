@@ -7,6 +7,8 @@ Registrado em `mkdocs.yml` (chave `hooks:`). Roda durante a geração do site e:
 - transforma as seções `##` das páginas de NPC em abas;
 - gera a tabela de NPCs em `personagens/index.md` (marcador `<!-- npcs:tabela -->`);
 - gera a lista de sessões em `mestre/sessoes/index.md` (marcador `<!-- sessoes:lista -->`);
+- gera a lista de lugares em `lugares/index.md` (marcador `<!-- lugares:lista -->`) e a de
+  jogadores em `mestre/jogadores/index.md` (marcador `<!-- jogadores:lista -->`);
 - mostra a linha do tempo da campanha (`dados/linha-do-tempo.yml`, ver `linha_tempo.py`) em cada
   página envolvida e aplica as mudanças de estado (situação, localização…) aos NPCs;
 - gera a página geral da linha do tempo (marcador `<!-- linha-do-tempo:geral -->`).
@@ -185,11 +187,91 @@ def _lista_sessoes(docs: Path, config) -> str:
 
 
 # --------------------------------------------------------------------------
+# Lista de lugares e de jogadores — mesmo padrão simples da lista de sessões:
+# um botão "Adicionar" e um .bar-list lido direto da pasta a cada geração.
+# --------------------------------------------------------------------------
+
+def _lista_lugares(docs: Path, config) -> str:
+    itens = []
+    pasta = docs / "lugares"
+    if pasta.is_dir():
+        for arquivo in sorted(pasta.glob("*.md")):
+            if arquivo.stem == "index":
+                continue
+            meta, corpo = _front_matter(arquivo.read_text(encoding="utf-8"))
+            lugar = meta.get("lugar")
+            if not isinstance(lugar, dict):
+                continue
+            itens.append((_titulo_h1(corpo, arquivo.stem), arquivo.name, lugar))
+    itens.sort(key=lambda i: i[0].casefold())
+
+    painel = _painel(config)
+    partes = [
+        f"[:material-map-marker-plus: Adicionar lugar]({painel}/lugar/novo){{ .md-button .md-button--primary "
+        f'.botao-painel target=_blank title="{DICA_PAINEL}" }}',
+        "",
+    ]
+    if not itens:
+        return "\n".join(partes + ["*Nenhum lugar criado ainda.*"])
+    partes += ['<div class="bar-list" markdown>', ""]
+    for titulo, arq, lugar in itens:
+        detalhes = " · ".join(v for v in (lugar.get("tipo"), lugar.get("cidade")) if v and v != "—")
+        partes += [f"-   **[{titulo}]({arq})**", ""]
+        if detalhes:
+            partes += [f"    {detalhes}", ""]
+        if lugar.get("resumo"):
+            partes += [f"    {lugar['resumo']}", ""]
+    partes += ["</div>"]
+    return "\n".join(partes)
+
+
+def _lista_jogadores(docs: Path, config) -> str:
+    itens = []
+    pasta = docs / "mestre" / "jogadores"
+    if pasta.is_dir():
+        for arquivo in sorted(pasta.glob("*.md")):
+            if arquivo.stem == "index":
+                continue
+            meta, corpo = _front_matter(arquivo.read_text(encoding="utf-8"))
+            jogador = meta.get("jogador")
+            if not isinstance(jogador, dict):
+                continue
+            itens.append((_titulo_h1(corpo, arquivo.stem), arquivo.name, jogador))
+    itens.sort(key=lambda i: i[0].casefold())
+
+    painel = _painel(config)
+    partes = [
+        f"[:material-account-plus: Adicionar jogador]({painel}/jogador/novo){{ .md-button .md-button--primary "
+        f'.botao-painel target=_blank title="{DICA_PAINEL}" }}',
+        "",
+    ]
+    if not itens:
+        return "\n".join(partes + ["*Nenhum jogador cadastrado ainda.*"])
+    partes += ['<div class="bar-list" markdown>', ""]
+    for titulo, arq, jogador in itens:
+        detalhes = " · ".join(v for v in (jogador.get("jogador"), jogador.get("raca_classe")) if v and v != "—")
+        partes += [f"-   **[{titulo}]({arq})**", ""]
+        if detalhes:
+            partes += [f"    {detalhes}", ""]
+        if jogador.get("resumo"):
+            partes += [f"    {jogador['resumo']}", ""]
+    partes += ["</div>"]
+    return "\n".join(partes)
+
+
+# --------------------------------------------------------------------------
 # Página de NPC: cabeçalho e abas
 # --------------------------------------------------------------------------
 
+def _retrato_padrao(pagina: str) -> str:
+    """RETRATO_PADRAO é relativo a docs/personagens/ — para páginas mais profundas (ex.:
+    personagens/genericos/<slug>.md) precisa de um "../" extra por nível."""
+    profundidade_extra = pagina.count("/") - 1
+    return ("../" * max(profundidade_extra, 0)) + RETRATO_PADRAO
+
+
 def _cabecalho_npc(npc: dict, pagina: str, docs: Path) -> str:
-    retrato = npc.get("retrato") or RETRATO_PADRAO
+    retrato = npc.get("retrato") or _retrato_padrao(pagina)
     ficha = npc.get("ficha") or {}
     atuais = []
     for campo, (valor, evento) in linha_tempo.estado_atual(_EVENTOS, pagina).items():
@@ -306,6 +388,18 @@ def on_page_markdown(markdown: str, page, config, files):
         markdown = markdown.replace("<!-- npcs:tabela -->", _tabela_npcs(docs, config))
     if src == "mestre/sessoes/index.md" and "<!-- sessoes:lista -->" in markdown:
         markdown = markdown.replace("<!-- sessoes:lista -->", _lista_sessoes(docs, config))
+    if src == "lugares/index.md" and "<!-- lugares:lista -->" in markdown:
+        markdown = markdown.replace("<!-- lugares:lista -->", _lista_lugares(docs, config))
+    if src == "mestre/jogadores/index.md" and "<!-- jogadores:lista -->" in markdown:
+        markdown = markdown.replace("<!-- jogadores:lista -->", _lista_jogadores(docs, config))
+    if src.startswith("mestre/sessoes/sessao-") and "<!-- participantes:botao -->" in markdown:
+        painel = _painel(config)
+        botao = (
+            f"[:material-account-group: Participantes desta sessão]"
+            f"({painel}/sessoes/participantes?pagina={src}){{ .md-button .botao-painel target=_blank "
+            f'title="{DICA_PAINEL}" }}'
+        )
+        markdown = markdown.replace("<!-- participantes:botao -->", botao)
     npc = page.meta.get("npc")
     secao_tempo = linha_tempo.secao_da_pagina(docs, _EVENTOS, src)
     if isinstance(npc, dict):

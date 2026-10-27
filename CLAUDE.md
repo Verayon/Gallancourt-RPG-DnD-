@@ -20,7 +20,7 @@ operado, atualize-o junto.
 
 | Caminho | O quê |
 |---|---|
-| `docs/` | O site. Menu: Início, Lore, Wiki (Mundo, Geografia, Cidades, Facções, NPCs=`personagens/`, Eventos), Compêndio, Mestre (sessões, diário, linha do tempo), Configurações |
+| `docs/` | O site. Menu: Início, Lore, Wiki (Mundo, Geografia, Cidades, Lugares, Facções, NPCs=`personagens/`, Eventos), Compêndio, Mestre (sessões, jogadores, diário, linha do tempo), Configurações |
 | `hooks/` | Código que roda no build: `gallancourt.py` (NPCs, tabelas, abas), `linha_tempo.py` |
 | `admin/` | Painel do Mestre (Flask local) — cria NPCs, sessões, fichas, acontecimentos |
 | `dados/linha-do-tempo.yml` | Acontecimentos da campanha (fonte única) |

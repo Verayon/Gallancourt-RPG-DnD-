@@ -27,6 +27,16 @@
       {% endfor %}
     </select>
   </label>
+  {% if not slug_escolhido %}
+  <label>Começar a partir de um NPC genérico (opcional)
+    <select name="copiar_de" onchange="this.form.submit()">
+      <option value="">— preencher do zero —</option>
+      {% for f in fichas if f.pagina_rel_docs.startswith('personagens/genericos/') %}
+      <option value="{{ f.pagina_rel_docs }}::{{ f.slug }}" {{ "selected" if copiar_de == f.pagina_rel_docs ~ "::" ~ f.slug else "" }}>{{ f.nome }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  {% endif %}
   {% endif %}
 </form>
 

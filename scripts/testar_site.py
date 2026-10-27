@@ -44,7 +44,7 @@ IGNORAR_NA_COPIA = shutil.ignore_patterns("site", "fontes", ".venv", "venv", "__
 
 # Ordem do menu combinada com o autor
 MENU_TOPO = ["Início", "Lore", "Wiki", "Compêndio", "Mestre", "Configurações"]
-MENU_WIKI = ["Mundo", "Geografia", "Cidades", "Facções", "NPCs", "Eventos"]
+MENU_WIKI = ["Mundo", "Geografia", "Cidades", "Lugares", "Facções", "NPCs", "Eventos"]
 COLUNAS_NPC = ["Retrato", "Nome", "Título", "Raça", "Cidade", "Afiliação", "Situação", "Resumo"]
 
 resultados: list[tuple[str, str, str, str]] = []  # (grupo, verificação, situação, detalhe)
@@ -304,11 +304,75 @@ def teste_painel_npc(copia: Path):
     assert f"personagens/{SLUG_TESTE}.md" in ler(copia / "mkdocs.yml"), "NPC não entrou no menu"
 
 
+@verificacao("7. Painel", "Adicionar NPC genérico")
+def teste_painel_npc_generico(copia: Path):
+    c = _painel(copia)
+    _ok(c.post("/npc/novo", data={"nome": "Guarda de teste", "generico": "on"}))
+    pagina = copia / "docs" / "personagens" / "genericos" / "guarda-de-teste.md"
+    assert pagina.exists(), "página do NPC genérico não foi criada (deveria ir para personagens/genericos/)"
+    assert "personagens/genericos/guarda-de-teste.md" in ler(copia / "mkdocs.yml"), "NPC genérico não entrou no menu"
+
+
+@verificacao("7. Painel", "Começar ficha de combate a partir de um NPC genérico")
+def teste_painel_copiar_ficha_generica(copia: Path):
+    pagina_generico = copia / "docs" / "personagens" / "genericos" / "guarda-de-teste.md"
+    if not pagina_generico.exists():
+        raise Pulado("depende do teste 'Adicionar NPC genérico'")
+    c = _painel(copia)
+    _ok(c.post("/ficha-combate", data={
+        "pagina": "personagens/genericos/guarda-de-teste.md", "slug_antigo": "",
+        "campo_nome": "Guarda de teste", "campo_ca": "16", "campo_pv": "11 (2d8+2)",
+        "campo_deslocamento": "9 m",
+    }))
+    r = c.get(
+        "/ficha-combate?pagina=mestre/index.md"
+        "&copiar_de=personagens/genericos/guarda-de-teste.md::guarda-de-teste"
+    )
+    html = r.get_data(as_text=True)
+    assert 'value="16"' in html, "CA do NPC genérico não foi copiada para o formulário"
+    assert 'value="Guarda de teste"' in html, "nome do NPC genérico não foi copiado para o formulário"
+
+
+@verificacao("7. Painel", "Adicionar lugar")
+def teste_painel_lugar(copia: Path):
+    c = _painel(copia)
+    _ok(c.post("/lugar/novo", data={"nome": "Taberna de teste", "tipo": "taberna", "cidade": "Dodixie"}))
+    pagina = copia / "docs" / "lugares" / "taberna-de-teste.md"
+    assert pagina.exists(), "página do lugar não foi criada"
+    assert front_matter(ler(pagina)).get("lugar", {}).get("tipo") == "taberna", "dados do lugar não gravados"
+    assert "lugares/taberna-de-teste.md" in ler(copia / "mkdocs.yml"), "lugar não entrou no menu"
+
+
+@verificacao("7. Painel", "Adicionar jogador")
+def teste_painel_jogador(copia: Path):
+    c = _painel(copia)
+    _ok(c.post("/jogador/novo", data={"nome": "Personagem de teste", "jogador": "Jogador de teste"}))
+    pagina = copia / "docs" / "mestre" / "jogadores" / "personagem-de-teste.md"
+    assert pagina.exists(), "página do jogador não foi criada"
+    assert "mestre/jogadores/personagem-de-teste.md" in ler(copia / "mkdocs.yml"), "jogador não entrou no menu"
+
+
 @verificacao("7. Painel", "Criar sessão nova")
 def teste_painel_sessao(copia: Path):
     c = _painel(copia)
     _ok(c.post("/sessoes/nova", data={"numero": "99", "titulo": "Sessão de teste", "local": "Dodixie"}))
     assert list((copia / "docs" / "mestre" / "sessoes").glob("sessao-99-*.md")), "página da sessão não criada"
+
+
+@verificacao("7. Painel", "Salvar participantes da sessão")
+def teste_painel_participantes(copia: Path):
+    pastas_sessao = list((copia / "docs" / "mestre" / "sessoes").glob("sessao-99-*.md"))
+    pagina_jogador = copia / "docs" / "mestre" / "jogadores" / "personagem-de-teste.md"
+    if not pastas_sessao or not pagina_jogador.exists():
+        raise Pulado("depende dos testes 'Criar sessão nova' e 'Adicionar jogador'")
+    c = _painel(copia)
+    pagina_sessao = pastas_sessao[0].relative_to(copia / "docs").as_posix()
+    _ok(c.post("/sessoes/participantes", data={
+        "pagina": pagina_sessao, "jogadores": ["mestre/jogadores/personagem-de-teste.md"],
+    }))
+    assert front_matter(ler(pastas_sessao[0])).get("participantes", {}).get("jogadores") == [
+        "mestre/jogadores/personagem-de-teste.md",
+    ], "participantes não gravados no front-matter da sessão"
 
 
 @verificacao("7. Painel", "Registrar acontecimento com mudança de estado")
@@ -496,7 +560,11 @@ def main() -> int:
             for t in (teste_nav_busca, teste_nav_ordem, teste_nav_filtro, teste_nav_abas, teste_nav_celular):
                 t(copia)
         if not args.sem_painel:
-            for t in (teste_painel_npc, teste_painel_sessao, teste_painel_acontecimento, teste_painel_efeito):
+            for t in (
+                teste_painel_npc, teste_painel_npc_generico, teste_painel_copiar_ficha_generica,
+                teste_painel_lugar, teste_painel_jogador, teste_painel_sessao, teste_painel_participantes,
+                teste_painel_acontecimento, teste_painel_efeito,
+            ):
                 t(copia)
     finally:
         if "browser" in _navegador:

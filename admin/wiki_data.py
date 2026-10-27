@@ -72,12 +72,27 @@ def listar_npcs(root: Path) -> list[Entidade]:
     return _listar_entidades(docs_dir(root) / "personagens", "personagens")
 
 
+def listar_npcs_genericos(root: Path) -> list[Entidade]:
+    """NPCs-modelo (guarda, camponês, nobre…) — ficam fora da tabela principal e do
+    agrupamento por cidade porque não são ninguém específico; servem de ponto de partida para
+    fichas de combate de sessão (ver `/ficha-combate`)."""
+    return _listar_entidades(docs_dir(root) / "personagens" / "genericos", "personagens/genericos")
+
+
 def listar_cidades(root: Path) -> list[Entidade]:
     return _listar_entidades(docs_dir(root) / "cidades", "cidades")
 
 
 def listar_faccoes(root: Path) -> list[Entidade]:
     return _listar_entidades(docs_dir(root) / "faccoes", "faccoes")
+
+
+def listar_lugares(root: Path) -> list[Entidade]:
+    return _listar_entidades(docs_dir(root) / "lugares", "lugares")
+
+
+def listar_jogadores(root: Path) -> list[Entidade]:
+    return _listar_entidades(docs_dir(root) / "mestre" / "jogadores", "mestre/jogadores")
 
 
 def listar_todas_paginas(root: Path) -> list[Entidade]:
@@ -829,16 +844,22 @@ def _retrato_relativo(destino_imagem: Path, root: Path, pagina_rel: str) -> str:
     return Path(os.path.relpath(destino_imagem, start=(docs_dir(root) / pagina_rel).parent)).as_posix()
 
 
-def criar_npc(root: Path, valores: dict, imagem: tuple[str, bytes] | None = None) -> dict:
+def criar_npc(
+    root: Path, valores: dict, imagem: tuple[str, bytes] | None = None, generico: bool = False,
+) -> dict:
     """Cria docs/personagens/<slug>.md no padrão das páginas de NPC e o adiciona ao menu.
 
-    `imagem`, se informada, é (nome_original, conteúdo) do retrato.
+    `imagem`, se informada, é (nome_original, conteúdo) do retrato. Com `generico=True`, a
+    página vai para docs/personagens/genericos/ (fora da tabela principal) e para um grupo
+    "Genéricos" próprio no menu — é um NPC-modelo (guarda, camponês, nobre…), não alguém
+    específico; ver `listar_npcs_genericos`.
     """
     nome = (valores.get("nome") or "").strip()
     if not nome:
         raise ValueError("O NPC precisa de um nome.")
     slug = slug_statblock(nome)
-    rel = f"personagens/{slug}.md"
+    pasta = "personagens/genericos" if generico else "personagens"
+    rel = f"{pasta}/{slug}.md"
     caminho = docs_dir(root) / rel
     if caminho.exists():
         raise ValueError(f"Já existe uma página para esse nome: docs/{rel}")
@@ -860,7 +881,7 @@ def criar_npc(root: Path, valores: dict, imagem: tuple[str, bytes] | None = None
         ficha_rapida["Afiliação"] = _link_se_existir(root, campos["afiliacao"], listar_faccoes(root), rel)
 
     meta = {
-        "tags": ["Personagens"] + ([campos["cidade"]] if campos["cidade"] else []),
+        "tags": ["Personagens"] + (["Genérico"] if generico else []) + ([campos["cidade"]] if campos["cidade"] else []),
         "hide": ["toc"],
         "npc": {
             "titulo": campos["titulo"] or "—",
@@ -885,7 +906,7 @@ def criar_npc(root: Path, valores: dict, imagem: tuple[str, bytes] | None = None
     ])
     _escrever(caminho, _com_front_matter(meta, corpo))
 
-    grupo = campos["cidade"] or "Outros"
+    grupo = "Genéricos" if generico else (campos["cidade"] or "Outros")
     nav_ok = _inserir_no_nav(root, CABECALHO_NAV_NPCS, f"- {_titulo_nav(nome)}: {rel}", subgrupo=grupo)
     build_ok, build_saida = validar_build(root)
     return {"arquivo": f"docs/{rel}", "rel_docs": rel, "nav_ok": nav_ok, "build_ok": build_ok, "build_saida": build_saida}
@@ -901,6 +922,137 @@ def definir_retrato(root: Path, npc_rel_docs: str, nome_original: str, conteudo:
     meta["npc"]["retrato"] = _retrato_relativo(destino, root, npc_rel_docs)
     _escrever(caminho, _com_front_matter(meta, corpo))
     return meta["npc"]["retrato"]
+
+
+# --------------------------------------------------------------------------
+# Lugares — pré-requisito para uma sessão (botão "Adicionar lugar")
+# --------------------------------------------------------------------------
+
+CABECALHO_NAV_LUGARES = "      - Lugares:"
+
+# (chave, rótulo, obrigatório)
+CAMPOS_LUGAR_NOVO = [
+    ("nome", "Nome", True),
+    ("tipo", "Tipo (ex.: taberna, torre, floresta, vila)", False),
+    ("cidade", "Cidade ou região", False),
+    ("resumo", "Resumo de uma linha (aparece na lista)", False),
+]
+
+
+def criar_lugar(root: Path, valores: dict) -> dict:
+    """Cria docs/lugares/<slug>.md e o adiciona ao menu, em Wiki → Lugares."""
+    nome = (valores.get("nome") or "").strip()
+    if not nome:
+        raise ValueError("O lugar precisa de um nome.")
+    slug = slug_statblock(nome)
+    rel = f"lugares/{slug}.md"
+    caminho = docs_dir(root) / rel
+    if caminho.exists():
+        raise ValueError(f"Já existe uma página para esse nome: docs/{rel}")
+
+    campos = {chave: (valores.get(chave) or "").strip() for chave, _, _ in CAMPOS_LUGAR_NOVO}
+    ficha_rapida = {}
+    if campos["tipo"]:
+        ficha_rapida["Tipo"] = campos["tipo"]
+    if campos["cidade"]:
+        ficha_rapida["Cidade ou região"] = _link_se_existir(root, campos["cidade"], listar_cidades(root), rel)
+
+    meta = {
+        "tags": ["Lugares"] + ([campos["cidade"]] if campos["cidade"] else []),
+        "hide": ["toc"],
+        "lugar": {
+            "tipo": campos["tipo"] or "—",
+            "cidade": campos["cidade"] or "—",
+            "resumo": campos["resumo"],
+            "ficha": ficha_rapida,
+        },
+    }
+    descricao = (valores.get("descricao") or "").strip()
+    corpo = "\n".join([
+        "",
+        f"# {nome}",
+        "",
+        descricao or campos["resumo"] or "*(Descrição a preencher.)*",
+        "",
+    ])
+    _escrever(caminho, _com_front_matter(meta, corpo))
+
+    nav_ok = _inserir_no_nav(root, CABECALHO_NAV_LUGARES, f"- {_titulo_nav(nome)}: {rel}")
+    build_ok, build_saida = validar_build(root)
+    return {"arquivo": f"docs/{rel}", "rel_docs": rel, "nav_ok": nav_ok, "build_ok": build_ok, "build_saida": build_saida}
+
+
+# --------------------------------------------------------------------------
+# Jogadores — personagens dos jogadores, pré-requisito para uma sessão
+# --------------------------------------------------------------------------
+
+CABECALHO_NAV_JOGADORES = "      - Jogadores:"
+
+# (chave, rótulo, obrigatório)
+CAMPOS_JOGADOR_NOVO = [
+    ("nome", "Nome do personagem", True),
+    ("jogador", "Nome de quem joga", False),
+    ("raca_classe", "Raça e classe (ex.: Elfo guerreiro)", False),
+    ("resumo", "Resumo de uma linha (aparece na lista)", False),
+]
+
+
+def criar_jogador(root: Path, valores: dict) -> dict:
+    """Cria docs/mestre/jogadores/<slug>.md e o adiciona ao menu, em Mestre → Jogadores.
+
+    A ficha de combate do personagem (CA, PV, ações…) é criada depois, como qualquer outra,
+    pela aba "Ficha de combate" do Painel, escolhendo esta página.
+    """
+    nome = (valores.get("nome") or "").strip()
+    if not nome:
+        raise ValueError("O personagem precisa de um nome.")
+    slug = slug_statblock(nome)
+    rel = f"mestre/jogadores/{slug}.md"
+    caminho = docs_dir(root) / rel
+    if caminho.exists():
+        raise ValueError(f"Já existe uma página para esse nome: docs/{rel}")
+
+    campos = {chave: (valores.get(chave) or "").strip() for chave, _, _ in CAMPOS_JOGADOR_NOVO}
+    meta = {
+        "tags": ["Mestre", "Jogador"],
+        "hide": ["toc"],
+        "jogador": {
+            "jogador": campos["jogador"] or "—",
+            "raca_classe": campos["raca_classe"] or "—",
+            "resumo": campos["resumo"],
+        },
+    }
+    corpo = "\n".join([
+        "",
+        f"# {nome}",
+        "",
+        campos["resumo"] or "*(Descrição a preencher.)*",
+        "",
+    ])
+    _escrever(caminho, _com_front_matter(meta, corpo))
+
+    nav_ok = _inserir_no_nav(root, CABECALHO_NAV_JOGADORES, f"- {_titulo_nav(nome)}: {rel}")
+    build_ok, build_saida = validar_build(root)
+    return {"arquivo": f"docs/{rel}", "rel_docs": rel, "nav_ok": nav_ok, "build_ok": build_ok, "build_saida": build_saida}
+
+
+# --------------------------------------------------------------------------
+# Participantes de uma sessão — quem (jogadores e NPCs) está previsto nela;
+# alimenta o Painel de Iniciativa embutido (só mostra quem está nessa lista).
+# --------------------------------------------------------------------------
+
+def ler_participantes(root: Path, pagina_rel_docs: str) -> dict:
+    caminho = docs_dir(root) / pagina_rel_docs
+    meta, _ = _front_matter(_ler(caminho))
+    p = meta.get("participantes") if isinstance(meta.get("participantes"), dict) else {}
+    return {"jogadores": list(p.get("jogadores") or []), "npcs": list(p.get("npcs") or [])}
+
+
+def salvar_participantes(root: Path, pagina_rel_docs: str, jogadores: list[str], npcs: list[str]) -> None:
+    caminho = docs_dir(root) / pagina_rel_docs
+    meta, corpo = _front_matter(_ler(caminho))
+    meta["participantes"] = {"jogadores": jogadores, "npcs": npcs}
+    _escrever(caminho, _com_front_matter(meta, corpo))
 
 
 # --------------------------------------------------------------------------
@@ -964,6 +1116,8 @@ sessao:
 {ficha}
 
     </div>
+
+    <!-- participantes:botao -->
 
     ## Resumo rápido
 

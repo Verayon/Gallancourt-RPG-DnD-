@@ -26,6 +26,8 @@ sessao:
 
     </div>
 
+    <!-- participantes:botao -->
+
     ## Resumo rápido
 
     Os personagens começam **presos e desarmados**, numa carroça de bandidos que os capturou na

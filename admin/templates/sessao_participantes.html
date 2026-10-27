@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block titulo %}Participantes da sessão{% endblock %}
+{% block conteudo %}
+<h1>Participantes da sessão</h1>
+<p class="ajuda">
+  Marque os jogadores e NPCs previstos para <strong>{{ pagina }}</strong>. É essa lista que o
+  Painel de Iniciativa embutido na página da sessão vai oferecer — assim você não precisa
+  escolher entre todo NPC do site na hora de montar a iniciativa.
+</p>
+
+{% if salvo %}<p class="aviso aviso--ok">✅ Participantes salvos.</p>{% endif %}
+
+<form method="post" action="/sessoes/participantes" class="form-sessao">
+  <input type="hidden" name="pagina" value="{{ pagina }}">
+
+  <fieldset>
+    <legend>Jogadores</legend>
+    {% if not jogadores %}
+    <p class="ajuda">Nenhum jogador cadastrado ainda — crie um em <a href="/jogador/novo">Adicionar jogador</a>.</p>
+    {% endif %}
+    {% for j in jogadores %}
+    <label class="check">
+      <input type="checkbox" name="jogadores" value="{{ j.rel_docs }}" {{ "checked" if j.rel_docs in atuais.jogadores else "" }}>
+      {{ j.titulo }}
+    </label>
+    {% endfor %}
+  </fieldset>
+
+  <fieldset>
+    <legend>NPCs</legend>
+    {% if not npcs %}
+    <p class="ajuda">Nenhum NPC cadastrado ainda — crie um em <a href="/npc/novo">Adicionar NPC</a>.</p>
+    {% endif %}
+    {% for n in npcs %}
+    <label class="check">
+      <input type="checkbox" name="npcs" value="{{ n.rel_docs }}" {{ "checked" if n.rel_docs in atuais.npcs else "" }}>
+      {{ n.titulo }}
+    </label>
+    {% endfor %}
+  </fieldset>
+
+  <button type="submit" class="botao-principal">Salvar participantes</button>
+</form>
+{% endblock %}
