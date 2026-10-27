@@ -3,6 +3,8 @@
  * 1. Tabela de NPCs (personagens/index.md): ordenar clicando no cabeçalho, filtrar por coluna
  *    (listas no cabeçalho) e filtrar por texto livre.
  * 2. Páginas com abas: um link para uma seção (#ancora) abre a aba que a contém.
+ * 3. Índice (TOC) da página: só mostra os cabeçalhos da aba selecionada no momento — clicar num
+ *    cabeçalho de outra aba, escondido, não rolava a página (a aba continuava fechada).
  */
 (function () {
   "use strict";
@@ -127,9 +129,38 @@
     }
   }
 
+  // Sobe pelos .tabbed-set ancestrais de `elemento` (podem ser vários, se as abas estiverem
+  // aninhadas) e devolve false se algum deles estiver numa aba diferente da selecionada.
+  function dentroDeAbaAtiva(elemento) {
+    var bloco = elemento.closest(".tabbed-block");
+    while (bloco) {
+      var conjunto = bloco.closest(".tabbed-set");
+      if (!conjunto) return true;
+      var indice = Array.prototype.indexOf.call(bloco.parentElement.children, bloco);
+      var entrada = conjunto.querySelectorAll(":scope > input")[indice];
+      if (entrada && !entrada.checked) return false;
+      bloco = conjunto.closest(".tabbed-block");
+    }
+    return true;
+  }
+
+  function filtrarIndicePorAba() {
+    document.querySelectorAll(".md-sidebar--secondary .md-nav__item").forEach(function (item) {
+      var link = item.querySelector(":scope > .md-nav__link[href^='#']");
+      if (!link) return;
+      var alvo = document.getElementById(decodeURIComponent(link.getAttribute("href").slice(1)));
+      // Sem elemento correspondente (não devia acontecer) deixa visível, por segurança.
+      item.style.display = alvo && !dentroDeAbaAtiva(alvo) ? "none" : "";
+    });
+  }
+
   function iniciar() {
     montarTabelaNpcs(document);
     abrirAbaDaAncora();
+    filtrarIndicePorAba();
+    document.querySelectorAll(".tabbed-set > input").forEach(function (entrada) {
+      entrada.addEventListener("change", filtrarIndicePorAba);
+    });
   }
 
   // Compatível com a navegação instantânea do Material (document$), se for ativada um dia.
@@ -140,5 +171,8 @@
   } else {
     iniciar();
   }
-  window.addEventListener("hashchange", abrirAbaDaAncora);
+  window.addEventListener("hashchange", function () {
+    abrirAbaDaAncora();
+    filtrarIndicePorAba();
+  });
 })();
