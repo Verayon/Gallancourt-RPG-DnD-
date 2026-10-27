@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block titulo %}Loot & Pistas{% endblock %}
+{% block conteudo %}
+<h1>Item ou pista (Loot &amp; Pistas)</h1>
+<p class="ajuda">Crie ou edite um item, recompensa ou pista — entra como um cartão na página
+  escolhida, normalmente dentro da aba <strong>Loot &amp; Pistas</strong> de uma sessão. "Onde
+  está" e "Quem tem" viram link automaticamente se baterem com o nome de um lugar, NPC ou
+  jogador já cadastrado.</p>
+
+<form method="get" action="/ficha-item" class="form-escolher">
+  <label>Página
+    <select name="pagina" onchange="this.form.submit()">
+      <option value="">— escolha uma página —</option>
+      {% for p in paginas %}
+      <option value="{{ p.rel_docs }}" {{ "selected" if p.rel_docs == pagina_escolhida else "" }}>
+        {{ p.titulo }} ({{ p.rel_docs }})
+      </option>
+      {% endfor %}
+    </select>
+  </label>
+  {% if pagina_escolhida %}
+  <input type="hidden" name="pagina" value="{{ pagina_escolhida }}">
+  <label>Item nesta página
+    <select name="item" onchange="this.form.submit()">
+      <option value="">— novo item —</option>
+      {% for i in itens %}
+      <option value="{{ i.slug }}" {{ "selected" if i.slug == slug_escolhido else "" }}>{{ i.nome }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  {% endif %}
+</form>
+
+{% if pagina_escolhida %}
+{% if salvo %}
+  {% if build_ok %}
+  <p class="aviso aviso--ok">✅ Item salvo. Site conferido sem problemas.</p>
+  {% else %}
+  <p class="aviso aviso--erro">⚠️ Item salvo, mas <code>mkdocs build --strict</code> encontrou um problema.</p>
+  <pre class="saida-build">{{ build_saida }}</pre>
+  {% endif %}
+{% endif %}
+{% if erro %}
+<p class="aviso aviso--erro">⚠️ {{ erro }}</p>
+{% endif %}
+
+<form method="post" action="/ficha-item" class="form-sessao">
+  <input type="hidden" name="pagina" value="{{ pagina_escolhida }}">
+  <input type="hidden" name="slug_antigo" value="{{ slug_escolhido }}">
+
+  <fieldset>
+    <legend>Dados</legend>
+    {% for chave, rotulo, obrigatorio in campos %}
+    <label>{{ rotulo }}
+      {% if chave == "descricao" %}
+      <textarea name="campo_{{ chave }}" rows="4">{{ valores.get(chave, '') }}</textarea>
+      {% else %}
+      <input type="text" name="campo_{{ chave }}" value="{{ valores.get(chave, '') }}"
+        {% if chave == "local" %}list="lista-lugares"{% elif chave == "dono" %}list="lista-donos"{% endif %}
+        {{ "required" if obrigatorio else "" }}>
+      {% endif %}
+    </label>
+    {% endfor %}
+    <datalist id="lista-lugares">{% for l in lugares %}<option value="{{ l.titulo }}">{% endfor %}</datalist>
+    <datalist id="lista-donos">{% for d in donos %}<option value="{{ d.titulo }}">{% endfor %}</datalist>
+  </fieldset>
+
+  {% if not slug_escolhido %}
+  <label>Inserir depois deste trecho da página (opcional)
+    <input type="text" name="ancora" placeholder="ex.: ## Itens encontrados">
+  </label>
+  <p class="ajuda">Se deixar em branco, ou se o trecho não existir na página, o item entra no
+    final do texto — é só mover depois pelo editor genérico, se quiser.</p>
+  {% endif %}
+
+  <button type="submit" class="botao-principal">Salvar item</button>
+  <a class="botao-secundario" href="http://127.0.0.1:8000/{{ pagina_escolhida | replace('.md', '/') }}" target="_blank" rel="noopener">Ver a página ↗</a>
+</form>
+{% endif %}
+{% endblock %}

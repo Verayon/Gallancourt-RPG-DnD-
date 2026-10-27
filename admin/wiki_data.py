@@ -690,6 +690,61 @@ def _prefixo_da_linha(texto: str, posicao: int) -> str:
     return prefixo if prefixo != "" and prefixo.strip() == "" else ""
 
 
+def _slug_livre(texto: str, tipo: str, slug_base: str) -> str:
+    """`slug_base`, ou `slug_base-2`, `slug_base-3`… se já houver um cartão `tipo` com esse slug."""
+    slug = slug_base
+    contador = 2
+    while re.search(rf"<!-- inicio:{tipo}:{re.escape(slug)} -->", texto):
+        slug = f"{slug_base}-{contador}"
+        contador += 1
+    return slug
+
+
+def _fim_do_escopo_da_ancora(resto: str, prefixo: str) -> int:
+    """Índice em `resto` (texto depois da âncora) onde parar de procurar espaço pra inserir: no
+    próximo cabeçalho `#`, ou onde a indentação cair abaixo da da própria âncora — o que vier
+    primeiro. Esse segundo caso é o que importa quando a âncora é o último cabeçalho de uma aba
+    (`=== "..."`) ou admonição: sem ele, a busca passa reto pelo fim do bloco indentado e insere
+    o cartão dentro da PRÓXIMA aba, que começa sem indentação nenhuma."""
+    pos = 0
+    for linha in resto.splitlines(keepends=True):
+        if linha.strip():
+            if _indentacao(linha) < len(prefixo) or re.match(r"[ \t]*#{1,6}\s", linha):
+                return pos
+        pos += len(linha)
+    return len(resto)
+
+
+def _substituir_ou_inserir_cartao(texto: str, tipo: str, slug_antigo: str, bloco: str, ancora: str) -> str:
+    """Lógica compartilhada por fichas de combate e itens de loot: com `slug_antigo`, substitui
+    aquele cartão no lugar; sem ele, insere um cartão novo depois do primeiro trecho igual a
+    `ancora` (ou no final do arquivo, se vazia ou não encontrada). Em todo caso, se o ponto de
+    inserção estiver indentado (dentro de uma aba ou admonição), o cartão é indentado do mesmo
+    jeito — perder essa indentação quebra o aninhamento do Markdown ao redor."""
+    if slug_antigo:
+        padrao = re.search(
+            rf"<!-- inicio:{tipo}:{re.escape(slug_antigo)} -->.*?<!-- fim:{tipo}:{re.escape(slug_antigo)} -->",
+            texto, re.DOTALL,
+        )
+        if not padrao:
+            return texto.rstrip("\n") + "\n\n" + bloco + "\n"
+        prefixo = _prefixo_da_linha(texto, padrao.start())
+        bloco_indentado = _indentar_bloco(bloco, prefixo)
+        inicio_linha = padrao.start() - len(prefixo)
+        return texto[:inicio_linha] + bloco_indentado + texto[padrao.end():]
+
+    if ancora and ancora in texto:
+        idx_ancora = texto.index(ancora)
+        prefixo = _prefixo_da_linha(texto, idx_ancora)
+        idx = idx_ancora + len(ancora)
+        resto = texto[idx:]
+        insere_em = idx + _fim_do_escopo_da_ancora(resto, prefixo)
+        antes = texto[:insere_em].rstrip("\n")
+        depois = texto[insere_em:]
+        return antes + "\n\n" + _indentar_bloco(bloco, prefixo) + "\n\n" + depois
+    return texto.rstrip("\n") + "\n\n" + bloco + "\n"
+
+
 def salvar_statblock(
     root: Path, pagina_rel_docs: str, slug_antigo: str, valores: dict, ancora: str = "",
 ) -> str:
@@ -698,49 +753,98 @@ def salvar_statblock(
     Com `slug_antigo` preenchido, substitui aquele cartão (mesmo que o nome, e portanto o
     slug novo, tenha mudado). Sem `slug_antigo`, cria um cartão novo — inserido depois do
     primeiro trecho da página igual a `ancora`, ou no final do arquivo se `ancora` estiver
-    vazia ou não for encontrada. Em ambos os casos, se o ponto de inserção estiver indentado
-    (dentro de uma aba ou admonição), o cartão novo é indentado do mesmo jeito. Retorna o slug
-    final do cartão salvo.
+    vazia ou não for encontrada. Retorna o slug final do cartão salvo.
     """
     caminho = docs_dir(root) / pagina_rel_docs
     texto = _ler(caminho)
     nome = (valores.get("nome") or "").strip() or "npc"
     slug_base = slug_statblock(nome)
+    novo_slug = slug_base if slug_antigo else _slug_livre(texto, "statblock", slug_base)
+    bloco = renderizar_statblock(novo_slug, valores)
+    texto = _substituir_ou_inserir_cartao(texto, "statblock", slug_antigo, bloco, ancora)
+    _escrever(caminho, texto)
+    return novo_slug
 
-    if slug_antigo:
-        novo_slug = slug_base
-        padrao = re.search(
-            rf"<!-- inicio:statblock:{re.escape(slug_antigo)} -->.*?<!-- fim:statblock:{re.escape(slug_antigo)} -->",
-            texto, re.DOTALL,
-        )
-        if padrao:
-            prefixo = _prefixo_da_linha(texto, padrao.start())
-            bloco = _indentar_bloco(renderizar_statblock(novo_slug, valores), prefixo)
-            inicio_linha = padrao.start() - len(prefixo)
-            texto = texto[:inicio_linha] + bloco + texto[padrao.end():]
-        else:
-            bloco = renderizar_statblock(novo_slug, valores)
-            texto = texto.rstrip("\n") + "\n\n" + bloco + "\n"
-    else:
-        novo_slug = slug_base
-        contador = 2
-        while re.search(rf"<!-- inicio:statblock:{re.escape(novo_slug)} -->", texto):
-            novo_slug = f"{slug_base}-{contador}"
-            contador += 1
-        bloco = renderizar_statblock(novo_slug, valores)
-        if ancora and ancora in texto:
-            idx_ancora = texto.index(ancora)
-            prefixo = _prefixo_da_linha(texto, idx_ancora)
-            idx = idx_ancora + len(ancora)
-            resto = texto[idx:]
-            m = re.search(r"\n#{1,6}\s", resto)
-            insere_em = idx + (m.start() if m else len(resto))
-            antes = texto[:insere_em].rstrip("\n")
-            depois = texto[insere_em:]
-            texto = antes + "\n\n" + _indentar_bloco(bloco, prefixo) + "\n\n" + depois
-        else:
-            texto = texto.rstrip("\n") + "\n\n" + bloco + "\n"
 
+# --------------------------------------------------------------------------
+# Loot & Pistas — item ou pista de uma sessão. Mesmo padrão de persistência dos stat-blocks
+# (JSON num comentário HTML + cartão renderizado), vivendo dentro da própria aba "Loot & Pistas"
+# da sessão em vez de numa pasta/entidade própria.
+# --------------------------------------------------------------------------
+
+# (chave, rótulo, obrigatório)
+CAMPOS_ITEM_TEXTO = [
+    ("nome", "Nome", True),
+    ("descricao", "Descrição", False),
+    ("local", "Onde está (um lugar)", False),
+    ("dono", "Quem tem (um NPC ou jogador)", False),
+    ("situacao", "Situação (ex.: escondido, entregue, perdido)", False),
+]
+
+_MARCADOR_DADOS_ITEM = re.compile(
+    r"<!-- inicio:item:([a-z0-9-]+) -->\s*<!-- dados:item (.*?) -->", re.DOTALL,
+)
+
+
+def renderizar_item(root: Path, pagina_rel_docs: str, slug: str, v: dict) -> str:
+    dados_json = json.dumps(v, ensure_ascii=False)
+    if "-->" in dados_json:
+        raise ValueError("Um dos campos contém a sequência '-->', que não pode ser salva. Reescreva sem ela.")
+
+    nome = (v.get("nome") or "").strip() or "Item sem nome"
+    descricao = (v.get("descricao") or "").strip()
+    local = (v.get("local") or "").strip()
+    dono = (v.get("dono") or "").strip()
+    situacao = (v.get("situacao") or "").strip()
+
+    chips = []
+    if local:
+        destino = _link_se_existir(root, local, listar_lugares(root), pagina_rel_docs)
+        chips.append(f"<span><strong>Onde está</strong> {destino}</span>")
+    if dono:
+        destino = _link_se_existir(root, dono, listar_npcs(root) + listar_jogadores(root), pagina_rel_docs)
+        chips.append(f"<span><strong>Quem tem</strong> {destino}</span>")
+    if situacao:
+        chips.append(f"<span><strong>Situação</strong> {situacao}</span>")
+
+    partes = [
+        f"<!-- inicio:item:{slug} -->",
+        f"<!-- dados:item {dados_json} -->",
+        '<div class="item-loot" markdown>',
+        "",
+        f"#### {nome} {{: #{slug} }}",
+    ]
+    if chips:
+        partes += ["", '<div class="stat-block__chips" markdown>', "", " ".join(chips), "", "</div>"]
+    if descricao:
+        partes += ["", descricao]
+    partes += ["", "</div>", f"<!-- fim:item:{slug} -->"]
+    return "\n".join(partes)
+
+
+def ler_itens_da_pagina(path: Path) -> dict[str, dict]:
+    """Lê todos os itens de Loot & Pistas de uma página, pelo JSON embutido em cada um."""
+    texto = _ler(path)
+    resultado: dict[str, dict] = {}
+    for m in _MARCADOR_DADOS_ITEM.finditer(texto):
+        slug, dados_raw = m.group(1), m.group(2)
+        try:
+            resultado[slug] = json.loads(dados_raw)
+        except json.JSONDecodeError:
+            continue
+    return resultado
+
+
+def salvar_item(root: Path, pagina_rel_docs: str, slug_antigo: str, valores: dict, ancora: str = "") -> str:
+    """Cria ou atualiza um item de Loot & Pistas na página indicada — mesmas regras de
+    substituição/indentação de `salvar_statblock`."""
+    caminho = docs_dir(root) / pagina_rel_docs
+    texto = _ler(caminho)
+    nome = (valores.get("nome") or "").strip() or "item"
+    slug_base = slug_statblock(nome)
+    novo_slug = slug_base if slug_antigo else _slug_livre(texto, "item", slug_base)
+    bloco = renderizar_item(root, pagina_rel_docs, novo_slug, valores)
+    texto = _substituir_ou_inserir_cartao(texto, "item", slug_antigo, bloco, ancora)
     _escrever(caminho, texto)
     return novo_slug
 
@@ -1163,6 +1267,10 @@ sessao:
 {vazio}
 
     ## Itens encontrados
+
+    Crie cada item ou pista pela aba **Loot & Pistas** do [Painel do Mestre](../painel.md),
+    escolhendo esta página — "Onde está" e "Quem tem" linkam sozinhos para o lugar ou NPC/jogador,
+    se já estiverem cadastrados.
 
 {vazio}
 

@@ -1025,6 +1025,28 @@ input,
   }
 }
 
+/* Loot & Pistas — cartão mais simples que o stat-block: nome, chips opcionais
+   (onde está / quem tem / situação) e uma descrição. */
+.md-typeset .item-loot {
+  background: var(--gc-panel);
+  border: 1px solid var(--gc-panel-border);
+  border-top: 3px solid var(--gc-gold);
+  border-radius: 8px;
+  padding: .7rem 1.1rem .9rem;
+  margin: 1rem 0;
+}
+
+.md-typeset .item-loot h4 {
+  margin: 0 0 .4rem;
+  color: var(--gc-gold-soft);
+  font-size: 1.05em;
+}
+
+.md-typeset .item-loot .stat-block__topo,
+.md-typeset .item-loot .stat-block__chips {
+  margin: 0 0 .5rem;
+}
+
 /* --------------------------------------------------------------------------
    17. Transição de entrada — cada página assenta em vez de aparecer de supetão
    -------------------------------------------------------------------------- */

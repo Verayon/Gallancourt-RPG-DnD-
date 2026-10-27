@@ -311,6 +311,65 @@ def salvar_ficha_combate():
     )
 
 
+def _itens_da_pagina(caminho):
+    return [{"slug": s, "nome": d.get("nome") or s} for s, d in wd.ler_itens_da_pagina(caminho).items()]
+
+
+@app.get("/ficha-item")
+def escolher_ficha_item():
+    paginas = wd.listar_todas_paginas(ROOT)
+    pagina_escolhida = request.args.get("pagina", "")
+    slug_escolhido = request.args.get("item", "")
+
+    itens: list = []
+    valores: dict = {}
+    if pagina_escolhida:
+        caminho = _resolver_pagina(pagina_escolhida)
+        if caminho is None:
+            abort(404)
+        itens = _itens_da_pagina(caminho)
+        if slug_escolhido:
+            valores = wd.ler_itens_da_pagina(caminho).get(slug_escolhido, {})
+
+    return render_template(
+        "ficha_item.html", paginas=paginas, pagina_escolhida=pagina_escolhida, itens=itens,
+        slug_escolhido=slug_escolhido, valores=valores, campos=wd.CAMPOS_ITEM_TEXTO,
+        lugares=wd.listar_lugares(ROOT), donos=wd.listar_npcs(ROOT) + wd.listar_jogadores(ROOT),
+        salvo=False,
+    )
+
+
+@app.post("/ficha-item")
+def salvar_ficha_item():
+    paginas = wd.listar_todas_paginas(ROOT)
+    pagina_escolhida = request.form.get("pagina", "")
+    slug_antigo = request.form.get("slug_antigo", "")
+    ancora = request.form.get("ancora", "").strip()
+
+    caminho = _resolver_pagina(pagina_escolhida)
+    if caminho is None:
+        abort(400)
+
+    valores = {chave: request.form.get(f"campo_{chave}", "").strip() for chave, _, _ in wd.CAMPOS_ITEM_TEXTO}
+    contexto = dict(
+        paginas=paginas, pagina_escolhida=pagina_escolhida, slug_escolhido=slug_antigo, valores=valores,
+        campos=wd.CAMPOS_ITEM_TEXTO, lugares=wd.listar_lugares(ROOT),
+        donos=wd.listar_npcs(ROOT) + wd.listar_jogadores(ROOT),
+    )
+
+    try:
+        novo_slug = wd.salvar_item(ROOT, pagina_escolhida, slug_antigo, valores, ancora)
+    except ValueError as exc:
+        return render_template("ficha_item.html", itens=_itens_da_pagina(caminho), salvo=False, erro=str(exc), **contexto)
+
+    build_ok, build_saida = wd.validar_build(ROOT)
+    contexto["slug_escolhido"] = novo_slug
+    return render_template(
+        "ficha_item.html", itens=_itens_da_pagina(caminho), salvo=True, build_ok=build_ok,
+        build_saida=build_saida, **contexto,
+    )
+
+
 def _int_ou_none(valor: str) -> int | None:
     valor = (valor or "").strip()
     if not valor:

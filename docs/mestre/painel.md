@@ -284,6 +284,17 @@ Para uma ficha **nova**, um campo opcional "Inserir depois deste trecho" deixa e
 entra na página (por exemplo, `## Aliados`, copiando o texto exato de um cabeçalho já existente).
 Deixe em branco para simplesmente adicionar no final do texto e mover depois pelo editor genérico.
 
+## Criar um item de Loot & Pistas
+
+Na aba **Loot & Pistas**, escolha a página (normalmente a da sessão) e, se já existir um item ali,
+escolha-o no segundo menu para editar; deixe em "— novo item —" para criar um. Preencha nome,
+descrição, onde está (um lugar) e quem tem (um NPC ou jogador) — os dois últimos viram link
+automaticamente se baterem com o nome de algo já cadastrado, senão ficam como texto puro.
+
+Igual à ficha de combate, salvar **reescreve o cartão inteiro** a partir dos campos do formulário,
+e o mesmo campo opcional "Inserir depois deste trecho" funciona para escolher onde um item novo
+entra na página.
+
 ## Editar qualquer página
 
 Na aba **Editar**, escolha uma página numa lista (com o título de cada uma, para não precisar saber

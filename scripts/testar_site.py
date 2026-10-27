@@ -375,6 +375,34 @@ def teste_painel_participantes(copia: Path):
     ], "participantes não gravados no front-matter da sessão"
 
 
+@verificacao("7. Painel", "Criar item de Loot & Pistas dentro de uma aba de sessão")
+def teste_painel_item(copia: Path):
+    pastas_sessao = list((copia / "docs" / "mestre" / "sessoes").glob("sessao-99-*.md"))
+    if not pastas_sessao:
+        raise Pulado("depende do teste 'Criar sessão nova'")
+    pagina_sessao = pastas_sessao[0]
+    pagina_rel = pagina_sessao.relative_to(copia / "docs").as_posix()
+    c = _painel(copia)
+    _ok(c.post("/ficha-item", data={
+        "pagina": pagina_rel, "slug_antigo": "", "campo_nome": "Moeda de teste",
+        "campo_descricao": "Uma moeda qualquer.", "campo_local": "Dodixie",
+        "ancora": "## Itens encontrados",
+    }))
+    texto = ler(pagina_sessao)
+    assert "<!-- inicio:item:moeda-de-teste -->" in texto, "item não foi criado na página"
+    # A âncora "## Itens encontrados" é o último cabeçalho da aba "Loot & Pistas" — sem cuidado,
+    # a busca por "onde inserir" passa reto pelo fim da aba (indentada 4 espaços) e cai dentro da
+    # aba seguinte, "Segredos do Mestre" (sem indentação nenhuma). As duas verificações abaixo
+    # cobrem esse caso.
+    linha_cartao = next(l for l in texto.splitlines() if "inicio:item:moeda-de-teste" in l)
+    assert linha_cartao.startswith("    "), "o cartão do item perdeu a indentação da aba"
+    assert texto.index("inicio:item:moeda-de-teste") < texto.index('=== "Segredos do Mestre"'), (
+        "o item vazou para dentro da aba seguinte (Segredos do Mestre)"
+    )
+    r = construir(copia)
+    assert r.returncode == 0, "build falhou depois de criar o item de Loot & Pistas"
+
+
 @verificacao("7. Painel", "Registrar acontecimento com mudança de estado")
 def teste_painel_acontecimento(copia: Path):
     c = _painel(copia)
@@ -563,7 +591,7 @@ def main() -> int:
             for t in (
                 teste_painel_npc, teste_painel_npc_generico, teste_painel_copiar_ficha_generica,
                 teste_painel_lugar, teste_painel_jogador, teste_painel_sessao, teste_painel_participantes,
-                teste_painel_acontecimento, teste_painel_efeito,
+                teste_painel_item, teste_painel_acontecimento, teste_painel_efeito,
             ):
                 t(copia)
     finally:
