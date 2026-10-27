@@ -24,4 +24,9 @@ de consulta rápida. Ferramentas e convenções do projeto ficam em
 
     Poderes, centros e interesses de cada facção em uma tabela.
 
+-   **[Escudo do Mestre](escudo-do-mestre.md)**
+
+    Painel de consulta com as regras universais mais usadas à mesa: ações em combate, condições,
+    exaustão, viagem, descanso e CDs — tudo em abas, sem precisar abrir o livro.
+
 </div>

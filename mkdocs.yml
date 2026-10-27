@@ -328,6 +328,7 @@ nav:
           - diario/index.md
       - Linha do tempo: mestre/linha-do-tempo.md
       - Referência rápida: mestre/referencia-rapida.md
+      - Escudo do Mestre: mestre/escudo-do-mestre.md
   - Configurações:
       - configuracoes/index.md
       - Painel do Mestre: mestre/painel.md
