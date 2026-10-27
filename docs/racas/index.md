@@ -4,10 +4,17 @@ tags:
   - Raças
 ---
 
-# Raças
+# Raças (2014)
 
-As nove raças de personagem principais do D&D 5e (2014) e suas sub-raças. Cada página traz os
-traços raciais, aumento de valor de habilidade, tamanho, deslocamento, idiomas e sub-raças.
+As nove raças de personagem principais do PHB 2014 e suas sub-raças, mais Aasimar, Goliath e Órc
+(de *Volo's Guide to Monsters*, revisadas em *Tasha's Cauldron of Everything*). Cada página traz
+os traços raciais, aumento de valor de habilidade, tamanho, deslocamento, idiomas e sub-raças.
+Veja também a versão **[Espécies (2024)](../especies-2024/index.md)**.
+
+!!! tip "Regra opcional — Personalizando sua origem (Tasha's Cauldron of Everything)"
+    *Tasha's* permite trocar o aumento de valor de habilidade padrão de qualquer raça por
+    +2 em uma habilidade e +1 em outra (ou +1 em três habilidades, à escolha), e trocar certos
+    traços de proficiência por outros equivalentes. Use com o grupo e o mestre de acordo.
 
 | Raça | Tamanho | Resumo |
 |---|---|---|
@@ -20,3 +27,6 @@ traços raciais, aumento de valor de habilidade, tamanho, deslocamento, idiomas 
 | [Meio-Elfo](meio-elfo.md) | Médio | Nascido entre dois mundos, combina a versatilidade humana com os sentidos élficos. |
 | [Meio-Orc](meio-orc.md) | Médio | Força bruta e resistência implacável, capaz de continuar lutando à beira da morte. |
 | [Tiflin](tiflin.md) | Médio | Marcado por ascendência infernal, com talento inato para magia e resistência ao fogo. |
+| [Aasimar](aasimar.md) | Médio ou Pequeno | Portador de uma centelha celestial, capaz de manifestar luz, cura ou fúria divina em momentos decisivos. |
+| [Goliath](goliath.md) | Médio | Descendente de gigantes, construído para resistir a ambientes extremos e golpes devastadores. |
+| [Órc](orc.md) | Médio | Guerreiro incansável, movido por uma reserva de adrenalina que o mantém de pé muito além do limite normal. |

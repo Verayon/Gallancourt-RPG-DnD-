@@ -85,3 +85,10 @@ O Patrono Sobrenatural é escolhido no 1º nível.
 - **O Corruptor:** pacto com um demônio ou entidade infernal, favorecendo resistência pessoal e dano de fogo bruto.
 - **O Feérico Arcano:** pacto com um senhor feérico, concedendo encantamentos, teletransporte curto e truques enganosos.
 - **O Grande Ancião Esquecido:** pacto com um horror cósmico incompreensível, concedendo poder psíquico e a capacidade de perturbar mentes inimigas.
+
+## Subclasses adicionais (*Xanathar's Guide to Everything* / *Tasha's Cauldron of Everything*)
+
+- **O Celestial** *(Xanathar's Guide to Everything)*: pacto com uma entidade de luz superior, concedendo magias de cura e dano radiante pouco comuns entre bruxos.
+- **A Lâmina Amaldiçoada** *(Xanathar's Guide to Everything)*: pacto que imbui uma arma corpo a corpo com energia sombria, tornando o bruxo um combatente capaz de lutar e lançar magia ao mesmo tempo.
+- **O Insondável** *(Tasha's Cauldron of Everything)*: pacto com um horror que habita as profundezas aquáticas, concedendo tentáculos espectrais e proteção contra afogar-se em perigo.
+- **O Gênio** *(Tasha's Cauldron of Everything)*: pacto com um gênio ligado a um dos quatro elementos, concedendo acesso a um vasilhame mágico que serve de refúgio e fonte de bênçãos elementais.

@@ -108,3 +108,11 @@ A Trilha Primitiva é escolhida no 3º nível.
 
 - **Trilha do Furioso:** foca em fúria destrutiva pura, com uma reação intimidadora que aterroriza inimigos e uma fúria selvagem que ignora os limites normais, ao custo de exaustão.
 - **Trilha do Guerreiro Totêmico:** liga o bárbaro a espíritos animais totêmicos, concedendo benefícios espirituais (como o do urso, do águia, do lobo ou da raposa) que reforçam resistência, percepção ou cooperação em grupo.
+
+## Subclasses adicionais (*Xanathar's Guide to Everything* / *Tasha's Cauldron of Everything*)
+
+- **Trilha do Guardião Ancestral** *(Xanathar's Guide to Everything)*: invoca espíritos protetores que marcam um inimigo com espectros ancestrais, dificultando sua fuga e desviando parte do dano que ele causaria contra os aliados do bárbaro.
+- **Trilha do Herald da Tempestade** *(Xanathar's Guide to Everything)*: envolve o bárbaro em uma aura elemental (de fogo, gelo ou raio) que pune quem se aproxima e fortalece o grupo em combates prolongados.
+- **Trilha do Zelote** *(Xanathar's Guide to Everything)*: transforma a fúria em devoção religiosa fanática, concedendo dano extra contra mortos-vivos e corruptos e a chance de voltar à vida após cair em combate.
+- **Trilha da Fera** *(Tasha's Cauldron of Everything)*: faz brotar do próprio corpo do bárbaro armas naturais monstruosas, como garras ou uma cauda, que substituem armas convencionais durante a fúria.
+- **Trilha da Magia Selvagem** *(Tasha's Cauldron of Everything)*: canaliza energia caótica bruta durante a fúria, gerando explosões aleatórias de magia selvagem que podem tanto ajudar quanto surpreender o próprio bárbaro.

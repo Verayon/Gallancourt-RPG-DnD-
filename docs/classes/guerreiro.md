@@ -82,3 +82,11 @@ O Arquétipo Marcial é escolhido no 3º nível.
 - **Campeão:** foca em poder físico bruto, com margem de crítico ampliada e aptidões atléticas superiores.
 - **Mestre de Batalha:** usa Manobras de combate alimentadas por dados de superioridade, trazendo versatilidade tática a cada ataque.
 - **Cavaleiro Místico:** combina o guerreiro com um conjurador parcial inspirado no mago, somando lâmina e magia arcana.
+
+## Subclasses adicionais (*Xanathar's Guide to Everything* / *Tasha's Cauldron of Everything*)
+
+- **Arqueiro Arcano** *(Xanathar's Guide to Everything)*: guerreiro que infunde flechas com magias arcanas, criando efeitos especiais como explosões ou teletransporte à distância.
+- **Cavaleiro** *(Xanathar's Guide to Everything)*: especialista em combate montado, protegendo sua montaria e controlando o posicionamento de inimigos em batalha.
+- **Samurai** *(Xanathar's Guide to Everything)*: guerreiro de determinação inflexível, capaz de ganhar vantagem em ataques por vontade própria e resistir ao medo através de disciplina.
+- **Guerreiro Psíquico** *(Tasha's Cauldron of Everything)*: combina técnica marcial com poder psiônico, usando energia da mente para reforçar golpes e proteger-se de ataques.
+- **Cavaleiro das Runas** *(Tasha's Cauldron of Everything)*: grava runas gigantes em seu equipamento, ganhando força descomunal e efeitos mágicos variados conforme a runa escolhida.

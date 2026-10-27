@@ -111,3 +111,8 @@ A Tradição Arcana é escolhida no 2º nível.
 - **Escola de Ilusão:** cria enganos sensoriais convincentes o suficiente para confundir até a realidade.
 - **Escola de Necromancia:** lida com morte e energia negativa, incluindo o comando de mortos-vivos.
 - **Escola de Transmutação:** altera propriedades físicas de criaturas e objetos com grande versatilidade.
+
+## Subclasses adicionais (*Xanathar's Guide to Everything* / *Tasha's Cauldron of Everything*)
+
+- **Escola de Magia de Guerra** *(Xanathar's Guide to Everything)*: mago treinado para sobreviver em combate direto, protegendo suas magias de serem interrompidas e redirecionando ataques contra os próprios inimigos.
+- **Ordem dos Escribas** *(Tasha's Cauldron of Everything)*: mago copista que vincula sua magia a um grimório especial, podendo alterar o tipo de dano de magias e reescrever seu conteúdo com rapidez sobrenatural.

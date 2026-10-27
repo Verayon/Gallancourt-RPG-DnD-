@@ -107,3 +107,10 @@ O Domínio Divino é escolhido no 1º nível.
 - **Domínio da Tempestade:** canaliza trovão e relâmpago, retaliando contra quem ataca seus aliados.
 - **Domínio da Enganação:** favorece ilusão e trapaça, afastando-se do estereótipo de clérigo curador.
 - **Domínio da Guerra:** reforça o combate direto, concedendo ataques bônus ligados à divindade.
+
+## Subclasses adicionais (*Xanathar's Guide to Everything* / *Tasha's Cauldron of Everything*)
+
+- **Domínio da Forja** *(Xanathar's Guide to Everything)*: clérigo ligado à criação de armas e armaduras, capaz de encantar temporariamente equipamentos e resistir a dano de fogo.
+- **Domínio da Sepultura** *(Xanathar's Guide to Everything)*: guardião da fronteira entre vida e morte, especializado em evitar que criaturas caiam e em enfraquecer mortos-vivos.
+- **Domínio da Ordem** *(Tasha's Cauldron of Everything)*: clérigo que impõe lei e disciplina, usando comandos mágicos para guiar aliados e punir quem desobedece.
+- **Domínio do Crepúsculo** *(Tasha's Cauldron of Everything)*: protetor contra os perigos da noite, concedendo visão no escuro ao grupo e amparo contra o medo e o cansaço.

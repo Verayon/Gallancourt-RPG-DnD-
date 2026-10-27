@@ -121,3 +121,12 @@ A Tradição Monástica é escolhida no 3º nível.
 - **Caminho da Mão Aberta:** mestre do combate desarmado tradicional, capaz de derrubar, empurrar ou atordoar inimigos com golpes especiais.
 - **Caminho da Sombra:** monge furtivo com magias sombrias que lembram truques ninja, incluindo teletransporte entre sombras.
 - **Caminho dos Quatro Elementos:** canaliza o ki em disciplinas elementais que imitam magia de fogo, água, terra e ar.
+
+## Subclasses adicionais (*Xanathar's Guide to Everything* / *Tasha's Cauldron of Everything*)
+
+- **Caminho do Mestre Bêbado** *(Xanathar's Guide to Everything)*: estilo de luta imprevisível que imita a cambaleante arte marcial da embriaguez, confundindo inimigos com movimentos erráticos.
+- **Caminho do Kensei** *(Xanathar's Guide to Everything)*: monge que trata armas escolhidas como extensão do próprio corpo, aplicando técnicas de ki a ataques com lâminas ou projéteis.
+- **Caminho da Longa Morte** *(Xanathar's Guide to Everything)*: estuda a morte de perto para dominá-la, canalizando energia necrótica para assustar inimigos e resistir a golpes fatais.
+- **Caminho da Alma Solar** *(Xanathar's Guide to Everything)*: canaliza ki em rajadas radiantes à distância, emulando disciplinas que lembram artes marciais místicas orientais.
+- **Caminho da Misericórdia** *(Tasha's Cauldron of Everything)*: monge curandeiro que usa as mesmas mãos tanto para aliviar o sofrimento de aliados quanto para debilitar inimigos com um toque sombrio.
+- **Caminho do Eu Astral** *(Tasha's Cauldron of Everything)*: projeta braços e punhos espectrais a partir de si mesmo, estendendo seu alcance de combate através de energia psíquica.

@@ -99,3 +99,11 @@ A Origem Mágica é escolhida no 1º nível.
 
 - **Linhagem Dracônica:** marca o feiticeiro com ascendência de dragão, concedendo resistência a um tipo de dano, pele mais resistente e, eventualmente, asas espectrais.
 - **Magia Selvagem:** liga o feiticeiro ao caos puro, gerando surtos de magia selvagem imprevisíveis e permitindo manipular a sorte ao seu redor.
+
+## Subclasses adicionais (*Xanathar's Guide to Everything* / *Tasha's Cauldron of Everything*)
+
+- **Alma Divina** *(Xanathar's Guide to Everything)*: feiticeiro cuja magia nasce de uma centelha celestial, misturando feitiços de cura e radiância ao repertório arcano usual.
+- **Magia das Sombras** *(Xanathar's Guide to Everything)*: poder vindo de um contato com o Plano das Sombras, concedendo visão no escuro sobrenatural e a capacidade de moldar trevas em arma.
+- **Magia das Tempestades** *(Xanathar's Guide to Everything)*: feiticeiro nascido sob tempestades sobrenaturais, capaz de voar brevemente e proteger aliados com correntes de vento.
+- **Mente Aberrante** *(Tasha's Cauldron of Everything)*: poder psíquico implantado por uma influência alienígena, concedendo telepatia e magias que distorcem a mente dos inimigos.
+- **Alma Mecânica** *(Tasha's Cauldron of Everything)*: magia alinhada à ordem cósmica dos planos mecânicos, favorecendo previsibilidade, proteção contra o caos e pequenos autômatos de apoio.

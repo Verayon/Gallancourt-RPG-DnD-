@@ -4,10 +4,13 @@ tags:
   - Classes
 ---
 
-# Classes
+# Classes (2014)
 
-As doze classes de personagem do D&D 5e (2014). Cada página traz dado de vida, proficiências,
-equipamento inicial, a tabela de características por nível e as subclasses (arquétipos) disponíveis.
+As doze classes de personagem do PHB 2014, mais o Artífice (introduzido em *Eberron* e
+consolidado em *Tasha's Cauldron of Everything*). Cada página traz dado de vida, proficiências,
+equipamento inicial, a tabela de características por nível, as subclasses do PHB e — quando
+existem — as subclasses adicionais de *Xanathar's Guide to Everything* e *Tasha's Cauldron of
+Everything*. Veja também a versão **[Classes (2024)](../classes-2024/index.md)**.
 
 | Classe | Dado de vida | Conjurador | Resumo |
 |---|---|---|---|
@@ -23,3 +26,4 @@ equipamento inicial, a tabela de características por nível e as subclasses (ar
 | [Monge](monge.md) | d8 | Não | Guerreiro disciplinado que canaliza energia interior (ki) em golpes precisos e façanhas sobre-humanas. |
 | [Paladino](paladino.md) | d10 | Sim (Carisma, parcial) | Guerreiro sagrado ligado por um juramento, que funde combate e magia divina em nome de uma causa. |
 | [Patrulheiro](patrulheiro.md) | d10 | Sim (Sabedoria, parcial) | Caçador e explorador que combina perícia em combate com magia da natureza e rastreamento. |
+| [Artífice](artifice.md) | d8 | Sim (Inteligência, parcial) | Inventor que infunde magia em objetos mundanos, combinando engenhosidade, magia e tecnologia improvisada. *(Tasha's Cauldron of Everything)* |

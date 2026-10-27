@@ -129,3 +129,11 @@ O Arquétipo de Patrulheiro é escolhido no 3º nível.
 
 - **Caçador:** especializa-se em táticas contra tipos específicos de ameaça, desde inimigos únicos poderosos até hordas de criaturas fracas.
 - **Mestre das Feras:** ganha um companheiro animal fiel que luta ao seu lado, obedecendo comandos em combate.
+
+## Subclasses adicionais (*Xanathar's Guide to Everything* / *Tasha's Cauldron of Everything*)
+
+- **Perseguidor das Sombras** *(Xanathar's Guide to Everything)*: patrulheiro adaptado à escuridão e a planos sombrios, emboscando inimigos com ataques furtivos amplificados nas trevas.
+- **Caminhante do Horizonte** *(Xanathar's Guide to Everything)*: guardião contra ameaças de outros planos, capaz de se teletransportar em curtas distâncias para perseguir ou escapar de inimigos extraplanares.
+- **Caçador de Monstros** *(Xanathar's Guide to Everything)*: especialista em rastrear e destruir criaturas com poderes sobrenaturais, resistindo a magias e maldições ao longo da caçada.
+- **Andarilho Feérico** *(Tasha's Cauldron of Everything)*: patrulheiro com um pé no Feérico, misturando encantos sutis e ilusões a técnicas de rastreamento tradicionais.
+- **Guardião do Enxame** *(Tasha's Cauldron of Everything)*: acompanhado por uma nuvem viva de minúsculas criaturas espectrais que ataca e protege ao seu comando.

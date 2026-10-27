@@ -194,7 +194,7 @@ nav:
           - Fuga de Severin Marceau: eventos/fuga-de-severin-marceau.md
           - Guerra Fria: eventos/guerra-fria.md
           - Massacre da família Enry: eventos/massacre-dos-enry.md
-      - Regras de D&D 5e:
+      - Regras de D&D 5e (2014):
           - regras/index.md
           - Classes:
               - classes/index.md
@@ -210,6 +210,7 @@ nav:
               - Monge: classes/monge.md
               - Paladino: classes/paladino.md
               - Patrulheiro: classes/patrulheiro.md
+              - Artífice: classes/artifice.md
           - Raças:
               - racas/index.md
               - Humano: racas/humano.md
@@ -221,6 +222,9 @@ nav:
               - Meio-Elfo: racas/meio-elfo.md
               - Meio-Orc: racas/meio-orc.md
               - Tiflin: racas/tiflin.md
+              - Aasimar: racas/aasimar.md
+              - Goliath: racas/goliath.md
+              - Órc: racas/orc.md
           - Antecedentes:
               - antecedentes/index.md
               - Acólito: antecedentes/acolito.md
@@ -236,6 +240,52 @@ nav:
               - Órfão de Rua: antecedentes/orfao-de-rua.md
               - Sábio: antecedentes/sabio.md
               - Soldado: antecedentes/soldado.md
+      - Regras de D&D 5e (2024):
+          - regras-2024/index.md
+          - Classes:
+              - classes-2024/index.md
+              - Bárbaro: classes-2024/barbaro.md
+              - Bardo: classes-2024/bardo.md
+              - Bruxo: classes-2024/bruxo.md
+              - Clérigo: classes-2024/clerigo.md
+              - Druida: classes-2024/druida.md
+              - Feiticeiro: classes-2024/feiticeiro.md
+              - Guerreiro: classes-2024/guerreiro.md
+              - Ladino: classes-2024/ladino.md
+              - Mago: classes-2024/mago.md
+              - Monge: classes-2024/monge.md
+              - Paladino: classes-2024/paladino.md
+              - Patrulheiro: classes-2024/patrulheiro.md
+          - Espécies:
+              - especies-2024/index.md
+              - Humano: especies-2024/humano.md
+              - Elfo: especies-2024/elfo.md
+              - Anão: especies-2024/anao.md
+              - Halfling: especies-2024/halfling.md
+              - Draconato: especies-2024/draconato.md
+              - Gnomo: especies-2024/gnomo.md
+              - Tiflin: especies-2024/tiflin.md
+              - Órc: especies-2024/orc.md
+              - Aasimar: especies-2024/aasimar.md
+              - Goliath: especies-2024/goliath.md
+          - Antecedentes:
+              - antecedentes-2024/index.md
+              - Acólito: antecedentes-2024/acolito.md
+              - Artesão: antecedentes-2024/artesao.md
+              - Charlatão: antecedentes-2024/charlatao.md
+              - Criminoso: antecedentes-2024/criminoso.md
+              - Artista: antecedentes-2024/artista.md
+              - Fazendeiro: antecedentes-2024/fazendeiro.md
+              - Guarda: antecedentes-2024/guarda.md
+              - Guia: antecedentes-2024/guia.md
+              - Eremita: antecedentes-2024/eremita.md
+              - Mercador: antecedentes-2024/mercador.md
+              - Nobre: antecedentes-2024/nobre.md
+              - Sábio: antecedentes-2024/sabio.md
+              - Marinheiro: antecedentes-2024/marinheiro.md
+              - Escriba: antecedentes-2024/escriba.md
+              - Soldado: antecedentes-2024/soldado.md
+              - Andarilho: antecedentes-2024/andarilho.md
   - Compêndio:
       - compendio/index.md
       - História de Gallancourt (anotada): compendio/historia-de-gallancourt.md

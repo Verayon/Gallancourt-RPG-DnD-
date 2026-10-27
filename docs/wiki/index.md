@@ -54,9 +54,17 @@ mundo de Gallancourt, organizado para consulta rápida durante a mesa.
 
 -   [![](../assets/placeholders/tema.svg){ .card-portrait }](../regras/index.md)
 
-    **[Regras de D&D 5e](../regras/index.md)**
+    **[Regras de D&D 5e (2014)](../regras/index.md)**
 
-    Classes, raças e antecedentes — referência de criação de personagem, não é lore de Gallancourt.
+    Classes, raças e antecedentes (PHB 2014 + Xanathar's + Tasha's) — referência de criação de
+    personagem, não é lore de Gallancourt.
+
+-   [![](../assets/placeholders/tema.svg){ .card-portrait }](../regras-2024/index.md)
+
+    **[Regras de D&D 5e (2024)](../regras-2024/index.md)**
+
+    Classes, espécies e antecedentes do PHB revisado de 2024 — referência de criação de
+    personagem, não é lore de Gallancourt.
 
 </div>
 

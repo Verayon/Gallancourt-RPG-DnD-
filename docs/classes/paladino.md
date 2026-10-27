@@ -130,3 +130,10 @@ O Juramento Sagrado é escolhido no 3º nível.
 - **Juramento de Devoção:** o paladino clássico, dedicado a honra, justiça e proteção dos inocentes.
 - **Juramento dos Antigos:** protege a luz, a vida e a beleza contra as trevas, com forte ligação à natureza e ao feérico.
 - **Juramento de Vingança:** dedicado a punir grandes males, priorizando perseguir e eliminar alvos específicos acima de tudo.
+
+## Subclasses adicionais (*Xanathar's Guide to Everything* / *Tasha's Cauldron of Everything*)
+
+- **Juramento da Conquista** *(Xanathar's Guide to Everything)*: paladino que busca dominar através do medo, aterrorizando inimigos e impondo sua vontade sobre o campo de batalha.
+- **Juramento da Redenção** *(Xanathar's Guide to Everything)*: busca converter inimigos antes de destruí-los, preferindo persuasão e defesa a agressão direta sempre que possível.
+- **Juramento da Glória** *(Tasha's Cauldron of Everything)*: paladino movido pela busca de feitos heroicos memoráveis, destacando-se em atletismo e perseverança diante de desafios épicos.
+- **Juramento dos Vigilantes** *(Tasha's Cauldron of Everything)*: guardião secreto contra ameaças planares, capaz de detectar presenças ocultas e selar passagens perigosas entre mundos.

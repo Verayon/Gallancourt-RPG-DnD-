@@ -112,3 +112,11 @@ O Círculo Druídico é escolhido no 2º nível.
 
 - **Círculo da Terra:** druida ligado a um tipo de paisagem específico (floresta, deserto, montanha etc.), ganhando magias extras temáticas e recuperação adicional de espaços de magia.
 - **Círculo da Lua:** druida mais voltado ao combate, capaz de assumir formas selvagens mais poderosas e usá-las como arma principal, inclusive para curar a si mesmo.
+
+## Subclasses adicionais (*Xanathar's Guide to Everything* / *Tasha's Cauldron of Everything*)
+
+- **Círculo dos Sonhos** *(Xanathar's Guide to Everything)*: druida ligado ao Feérico, capaz de envolver o acampamento em uma luz curativa reconfortante e viajar por trilhas oníricas.
+- **Círculo do Pastor** *(Xanathar's Guide to Everything)*: druida protetor que invoca espíritos de bestas para guiar e fortalecer aliados, priorizando apoio em grupo sobre combate solo.
+- **Círculo dos Esporos** *(Tasha's Cauldron of Everything)*: druida sinistro associado a fungos e decomposição, capaz de reanimar temporariamente um companheiro morto-vivo feito de esporos.
+- **Círculo das Estrelas** *(Tasha's Cauldron of Everything)*: lê constelações para prever o futuro, assumindo formas estelares temporárias que auxiliam em combate ou cura.
+- **Círculo do Fogo Selvagem** *(Tasha's Cauldron of Everything)*: druida que domina o fogo como força de renovação, acompanhado por um espírito elemental que mistura chamas e cura.

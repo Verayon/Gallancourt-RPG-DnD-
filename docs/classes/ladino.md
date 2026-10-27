@@ -106,3 +106,12 @@ O Arquétipo de Ladino é escolhido no 3º nível.
 - **Ladrão:** especialista clássico em arrombamento e pilhagem, ganhando usos extras de ação bônus e escalada ágil.
 - **Assassino:** foca em eliminar alvos com um único golpe devastador, especialmente contra inimigos surpreendidos.
 - **Trapaceiro Arcano:** combina furtividade com truques e magias de ilusão e encantamento emprestadas do mago.
+
+## Subclasses adicionais (*Xanathar's Guide to Everything* / *Tasha's Cauldron of Everything*)
+
+- **Inquisitivo** *(Xanathar's Guide to Everything)*: ladino investigador com instinto afiado para detectar mentiras e identificar pontos fracos de um alvo antes de atacar.
+- **Mentor** *(Xanathar's Guide to Everything)*: estrategista que comanda a batalha de longe, ajudando aliados a acertar golpes através de dicas táticas precisas.
+- **Batedor** *(Xanathar's Guide to Everything)*: especialista em terreno e reconhecimento, movendo-se com grande agilidade e reagindo rapidamente a ameaças inesperadas.
+- **Perna-de-Pau** *(Xanathar's Guide to Everything)*: duelista estiloso que usa acrobacias para evitar contra-ataques e manter distância segura de inimigos corpo a corpo.
+- **Fantasma** *(Tasha's Cauldron of Everything)*: ladino tocado pela morte, capaz de absorver fragmentos de almas para imitar perícias de falecidos e assustar inimigos com uma presença etérea.
+- **Lâmina da Alma** *(Tasha's Cauldron of Everything)*: manifesta uma lâmina psiônica a partir da própria mente, combinando combate silencioso com pequenos poderes telepáticos.

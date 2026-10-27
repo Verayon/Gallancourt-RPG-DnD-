@@ -123,3 +123,11 @@ O Colégio de Bardo é escolhido no 3º nível.
 
 - **Colégio do Conhecimento:** bardo erudito que acumula segredos e perícias extras, usando palavras cortantes para atrapalhar inimigos.
 - **Colégio do Valor:** bardo mais voltado ao combate, que inspira aliados em batalha e pode lutar lado a lado com armadura média e escudos.
+
+## Subclasses adicionais (*Xanathar's Guide to Everything* / *Tasha's Cauldron of Everything*)
+
+- **Colégio do Glamour** *(Xanathar's Guide to Everything)*: bardo imbuído pela beleza perigosa do Feérico, capaz de encantar multidões com presença fascinante e proteger aliados com um fulgor élfico.
+- **Colégio das Espadas** *(Xanathar's Guide to Everything)*: bardo-duelista que transforma manobras de lâmina em performance, combinando golpes acrobáticos com truques musicais.
+- **Colégio dos Sussurros** *(Xanathar's Guide to Everything)*: bardo sombrio que usa medo e segredos como instrumentos, inspirando aliados com ameaças sutis e disfarçando sua própria natureza.
+- **Colégio da Criação** *(Tasha's Cauldron of Everything)*: canaliza a Canção da Criação para materializar objetos temporários a partir de som e vibração, incluindo um duplicado animado de si mesmo.
+- **Colégio da Eloquência** *(Tasha's Cauldron of Everything)*: mestre da persuasão quase irresistível, capaz de anular efeitos negativos em suas palavras e virar o resultado de testes sociais a seu favor.
