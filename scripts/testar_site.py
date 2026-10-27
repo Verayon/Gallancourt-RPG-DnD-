@@ -254,10 +254,12 @@ def teste_sessoes(copia: Path):
     return f"{len(arquivos)} sessões"
 
 
-@verificacao("5. Páginas", "Botões Adicionar NPC e Nova sessão apontam para o Painel")
+@verificacao("5. Páginas", "Formulários embutidos de Adicionar NPC e Nova sessão aparecem nas páginas")
 def teste_botoes(copia: Path):
-    assert "/npc/novo" in _site(copia, "personagens"), "botão Adicionar NPC ausente"
-    assert "/sessoes/nova" in _site(copia, "mestre/sessoes"), "botão Nova sessão ausente"
+    html_npc = _site(copia, "personagens")
+    assert 'class="criar-entidade"' in html_npc and 'data-tipo="npc"' in html_npc, "formulário de NPC ausente"
+    html_sessoes = _site(copia, "mestre/sessoes")
+    assert 'class="criar-sessao"' in html_sessoes, "formulário de Nova sessão ausente"
 
 
 @verificacao("5. Páginas", "Página geral da linha do tempo existe")
@@ -376,6 +378,52 @@ def teste_painel_participantes(copia: Path):
     assert front_matter(ler(pastas_sessao[0])).get("participantes", {}).get("jogadores") == [
         "mestre/jogadores/personagem-de-teste.md",
     ], "participantes não gravados no front-matter da sessão"
+
+
+@verificacao("7. Painel", "API JSON: listar e criar NPC/lugar/jogador")
+def teste_painel_api_entidades(copia: Path):
+    c = _painel(copia)
+
+    r = c.get("/api/npcs")
+    assert r.status_code == 200 and isinstance(r.get_json()["itens"], list), "GET /api/npcs falhou"
+
+    _ok(c.post("/api/npcs", data={"nome": "NPC via API", "cidade": "Dodixie"}))
+    assert (copia / "docs" / "personagens" / "npc-via-api.md").exists(), "POST /api/npcs não criou a página"
+    nomes = [i["nome"] for i in c.get("/api/npcs").get_json()["itens"]]
+    assert "NPC via API" in nomes, "NPC criado via API não aparece em GET /api/npcs"
+
+    _ok(c.post("/api/lugares", data={"nome": "Lugar via API", "tipo": "taberna"}))
+    assert (copia / "docs" / "lugares" / "lugar-via-api.md").exists(), "POST /api/lugares não criou a página"
+
+    _ok(c.post("/api/jogadores", data={"nome": "Jogador via API"}))
+    assert (copia / "docs" / "mestre" / "jogadores" / "jogador-via-api.md").exists(), "POST /api/jogadores não criou a página"
+
+    resposta_erro = c.post("/api/lugares", data={"tipo": "sem nome"})
+    assert resposta_erro.status_code == 400, "POST /api/lugares sem nome deveria devolver 400"
+
+
+@verificacao("7. Painel", "API JSON: criar sessão com NPCs/Jogadores/Lugares e anotação de prompt")
+def teste_painel_api_criar_sessao(copia: Path):
+    pagina_npc = copia / "docs" / "personagens" / "npc-via-api.md"
+    pagina_lugar = copia / "docs" / "lugares" / "lugar-via-api.md"
+    pagina_jogador = copia / "docs" / "mestre" / "jogadores" / "jogador-via-api.md"
+    if not (pagina_npc.exists() and pagina_lugar.exists() and pagina_jogador.exists()):
+        raise Pulado("depende do teste 'API JSON: listar e criar NPC/lugar/jogador'")
+    c = _painel(copia)
+    r = c.post("/api/sessoes/nova", json={
+        "numero": 98, "titulo": "Sessão via API", "campos": {"data": "2026-11-01"},
+        "npcs": ["personagens/npc-via-api.md"], "jogadores": ["mestre/jogadores/jogador-via-api.md"],
+        "lugares": ["lugares/lugar-via-api.md"], "prompt": "Quero uma sessão de teste.",
+    })
+    assert r.status_code == 200, f"HTTP {r.status_code}: {r.get_json()}"
+    paginas = list((copia / "docs" / "mestre" / "sessoes").glob("sessao-98-*.md"))
+    assert paginas, "página da sessão via API não foi criada"
+    texto = ler(paginas[0])
+    assert "[NPC via API]" in texto, "link do NPC selecionado não apareceu na sessão"
+    assert "[Lugar via API]" in texto, "link do lugar selecionado não apareceu na sessão"
+    assert "Quero uma sessão de teste." in texto, "anotação do prompt não apareceu na sessão"
+    assert front_matter(texto).get("participantes", {}).get("npcs") == ["personagens/npc-via-api.md"], \
+        "participantes (npcs) não gravados a partir da criação via API"
 
 
 @verificacao("7. Painel", "API JSON do Painel de Iniciativa embutido")
@@ -626,6 +674,7 @@ def main() -> int:
             for t in (
                 teste_painel_npc, teste_painel_npc_generico, teste_painel_copiar_ficha_generica,
                 teste_painel_lugar, teste_painel_jogador, teste_painel_sessao, teste_painel_participantes,
+                teste_painel_api_entidades, teste_painel_api_criar_sessao,
                 teste_painel_api_iniciativa, teste_painel_item, teste_painel_acontecimento, teste_painel_efeito,
             ):
                 t(copia)

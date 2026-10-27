@@ -9,7 +9,8 @@ hide:
 
 Todos os personagens do cânone em uma tabela. Clique no nome de uma coluna para ordenar, use as
 listas do cabeçalho para filtrar por título, raça, cidade ou afiliação, ou digite na caixa de
-busca para filtrar por qualquer texto.
+busca para filtrar por qualquer texto. O formulário abaixo cadastra um NPC novo direto nesta
+página — precisa do [Painel do Mestre](../mestre/painel.md) rodando no seu computador.
 
 <!-- npcs:tabela -->
 

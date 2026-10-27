@@ -57,10 +57,11 @@ sem pagar por servidor nenhum:
 
 ## Adicionar um NPC
 
-Na página [NPCs](../personagens/index.md), o botão **Adicionar NPC** abre esta aba (ou acesse
-`http://127.0.0.1:5001/npc/novo`). Preencha o que já souber — só o nome é obrigatório: título,
-raça, cidade, afiliação, um resumo de uma linha, a descrição e, se quiser, o retrato. Ao clicar em
-**Criar NPC**, o painel:
+Na página [NPCs](../personagens/index.md), o formulário logo acima da tabela cria o NPC **direto
+ali**, sem abrir o Painel em outra aba — ele fala com a API do Painel por baixo dos panos
+(precisa estar rodando no seu computador). Preencha o que já souber — só o nome é obrigatório:
+título, raça, cidade, afiliação, um resumo de uma linha, a descrição e, se quiser, o retrato. Ao
+clicar em **Criar NPC**, o painel:
 
 1. cria `docs/personagens/<nome>.md` no padrão das outras páginas de NPC (caixa com retrato e
    dados rápidos, abas abaixo);
@@ -68,43 +69,62 @@ raça, cidade, afiliação, um resumo de uma linha, a descrição e, se quiser, 
    cidade não tiver grupo);
 3. confere o site com `mkdocs build --strict`.
 
-O NPC aparece sozinho na tabela de NPCs. Para trocar ou adicionar o retrato de um NPC que já
-existe, use **Trocar o retrato de um NPC existente** (`/npc/retrato`).
+O NPC aparece na tabela depois que o site recarregar (alguns segundos, com `mkdocs serve`
+rodando). Para trocar ou adicionar o retrato de um NPC que já existe, use **Trocar o retrato de um
+NPC existente** (`http://127.0.0.1:5001/npc/retrato`).
 
 Marque **É um NPC genérico** para criar um modelo reutilizável (guarda, camponês, nobre…), em vez
 de alguém específico — ele fica fora da tabela principal, num grupo **Genéricos** no menu, e
 aparece como ponto de partida ao criar uma ficha de combate (ver mais abaixo).
 
+!!! info "Caminho manual"
+    O formulário clássico do Painel (`http://127.0.0.1:5001/npc/novo`) continua funcionando, para
+    quem preferir usar o Painel direto, sem o site aberto.
+
 ## Adicionar um lugar
 
-Em [Lugares](../lugares/index.md), o botão **Adicionar lugar** abre esta aba (ou acesse
-`http://127.0.0.1:5001/lugar/novo`). Só o nome é obrigatório; tipo, cidade ou região e um resumo
-de uma linha são opcionais. Crie o lugar aqui **antes** de escrever uma cena que acontece nele —
-assim a aba **Lugares** da sessão pode linkar para a página de verdade.
+Em [Lugares](../lugares/index.md), o formulário acima da tabela cria o lugar direto ali, do mesmo
+jeito que o de NPC. Só o nome é obrigatório; tipo, cidade ou região e um resumo de uma linha são
+opcionais. Crie o lugar aqui **antes** de escrever uma cena que acontece nele — assim a aba
+**Lugares** da sessão pode linkar para a página de verdade. A tabela abaixo do formulário é
+filtrável por nome, tipo ou cidade. O formulário clássico (`http://127.0.0.1:5001/lugar/novo`)
+também continua disponível.
 
 ## Adicionar um jogador
 
-Em [Mestre → Jogadores](jogadores/index.md), o botão **Adicionar jogador** abre esta aba (ou
-acesse `http://127.0.0.1:5001/jogador/novo`). Cadastra o personagem — nome, quem joga, raça e
-classe, um resumo. A ficha de combate dele (CA, PV, ações…) é criada depois, como a de qualquer
-NPC, pela aba **Ficha de combate**, escolhendo a página do jogador.
+Em [Mestre → Jogadores](jogadores/index.md), o formulário acima da tabela cadastra o personagem
+direto ali — nome, quem joga, raça e classe, um resumo. A ficha de combate dele (CA, PV, ações…) é
+criada depois, como a de qualquer NPC, pela aba **Ficha de combate**, escolhendo a página do
+jogador. O formulário clássico (`http://127.0.0.1:5001/jogador/novo`) também continua disponível.
 
 ## Criar uma sessão nova
 
-Em [Mestre → Sessões](sessoes/index.md), o botão **Nova sessão** abre esta aba (ou acesse
-`http://127.0.0.1:5001/sessoes/nova`). Informe o número e o título — o resto é opcional: data,
-resumo breve (aparece no cartão da lista de sessões), resumo rápido, jogadores, nível, duração,
-tom, local, missão e recompensa. O painel cria a página de preparação com o mesmo layout da
-Sessão 0 — abas **Resumo** (com a ficha da sessão), **Cenas**, **NPCs**, **Lugares**,
-**Loot & Pistas**, **Segredos do Mestre** e **Painel de Iniciativa**, nessa ordem —, adiciona-a ao
-menu em **Mestre → Sessões** e confere o site. A sessão aparece sozinha na lista de sessões, com
-título e data na mesma linha e o resumo breve abaixo.
+Em [Mestre → Sessões](sessoes/index.md), o formulário embutido no topo da página cria a sessão
+**sem redirecionar para o Painel**: ele busca os NPCs, Jogadores e Lugares já cadastrados e deixa
+escolher, em tabelas filtráveis com caixa de seleção, quais participam desta sessão — e tem um
+campo de texto livre para descrever como você imagina a sessão.
 
-Antes de escrever as **Cenas**, vale ter os [Lugares](../lugares/index.md) e os
-[NPCs](../personagens/index.md)/[Jogadores](jogadores/index.md) envolvidos já cadastrados — a cena
-depende deles. Depois de criar a sessão, escolha quem participa dela em
-**Participantes da sessão** (`/sessoes/participantes?pagina=<página da sessão>`) — é essa lista
-que o Painel de Iniciativa embutido na própria página vai oferecer.
+Informe o número e o título — o resto é opcional: data, resumo breve (aparece no cartão da lista
+de sessões), resumo rápido, nível, duração, tom, missão e recompensa. Marque os NPCs/Jogadores/
+Lugares envolvidos nas tabelas (cada uma com busca e filtro por coluna) e, se quiser, escreva no
+campo **Como você quer que esta sessão seja organizada**. Ao clicar em **Criar sessão**, o painel:
+
+1. cria a página de preparação com o mesmo layout da Sessão 0 — abas **Resumo** (com a ficha da
+   sessão), **Cenas**, **NPCs**, **Lugares**, **Loot & Pistas**, **Segredos do Mestre** e
+   **Painel de Iniciativa**, nessa ordem;
+2. já preenche a aba **NPCs → Aliados** e a aba **Lugares** com links reais para quem/o que foi
+   marcado, em vez de "a preencher", e já salva essa lista como participantes da sessão — sem
+   precisar passar pela tela separada de Participantes;
+3. salva o texto do campo de prompt como uma anotação sua na aba Resumo (**Como eu imaginei esta
+   sessão**) — **nenhuma IA é chamada nesta versão**; é só um lembrete para você escrever as Cenas
+   depois. A pergunta de ligar isso a um modelo de IA (e o custo de API que isso traria) ainda está
+   em aberto;
+4. adiciona a sessão ao menu em **Mestre → Sessões** e confere o site.
+
+A sessão aparece sozinha na lista de sessões, com título e data na mesma linha e o resumo breve
+abaixo. Se precisar editar os participantes depois, a tela separada **Participantes da sessão**
+(`http://127.0.0.1:5001/sessoes/participantes?pagina=<página da sessão>`) continua disponível —
+assim como o formulário clássico de criação (`http://127.0.0.1:5001/sessoes/nova`), sem o picker.
 
 Essa é a página de **preparação**. Depois de jogar, registre o que aconteceu em
 **Registrar sessão** (abaixo), que alimenta o [Diário de Sessões](../diario/index.md).

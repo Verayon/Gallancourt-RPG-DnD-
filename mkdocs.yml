@@ -43,7 +43,9 @@ extra_css:
   - stylesheets/extra.css
 
 extra_javascript:
+  - javascripts/painel-fetch.js
   - javascripts/gallancourt.js
+  - javascripts/criar-sessao.js
   - javascripts/painel-iniciativa.js
 
 extra:

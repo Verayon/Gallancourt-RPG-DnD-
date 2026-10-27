@@ -855,6 +855,32 @@ def api_criar_jogador():
     return jsonify(r)
 
 
+@app.get("/api/sessoes/proxima-numero")
+def api_proxima_sessao():
+    return jsonify(numero=wd.proxima_sessao_preparo(ROOT))
+
+
+@app.post("/api/sessoes/nova")
+def api_criar_sessao():
+    corpo = request.get_json(silent=True) or {}
+    valores = {chave: (corpo.get("campos") or {}).get(chave, "") for chave, _ in wd.CAMPOS_SESSAO_NOVA}
+    valores["resumo"] = corpo.get("resumo", "")
+    titulo = corpo.get("titulo", "")
+    try:
+        numero = int(corpo.get("numero"))
+    except (TypeError, ValueError):
+        return _erro_json("Número de sessão inválido.", 400)
+    try:
+        r = wd.criar_sessao_preparo(
+            ROOT, numero, titulo, valores,
+            npcs=corpo.get("npcs") or [], jogadores=corpo.get("jogadores") or [],
+            lugares=corpo.get("lugares") or [], prompt=corpo.get("prompt") or "",
+        )
+    except ValueError as exc:
+        return _erro_json(str(exc), 400)
+    return jsonify(r)
+
+
 # --------------------------------------------------------------------------
 # Botões do site: "Adicionar NPC" (tabela de NPCs) e "Nova sessão" (Mestre → Sessões)
 # --------------------------------------------------------------------------

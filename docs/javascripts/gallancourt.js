@@ -1,21 +1,21 @@
 /* Comportamentos da wiki de Gallancourt.
  *
- * 1. Tabela de NPCs (personagens/index.md): ordenar clicando no cabeçalho, filtrar por coluna
- *    (listas no cabeçalho) e filtrar por texto livre.
+ * 1. Tabelas filtráveis de NPCs/Lugares/Jogadores: ordenar clicando no cabeçalho, filtrar por
+ *    coluna (listas no cabeçalho) e filtrar por texto livre — mesma lógica (prepararTabelaFiltravel)
+ *    reaproveitada pelas três.
  * 2. Páginas com abas: um link para uma seção (#ancora) abre a aba que a contém.
  * 3. Índice (TOC) da página: só mostra os cabeçalhos da aba selecionada no momento — clicar num
  *    cabeçalho de outra aba, escondido, não rolava a página (a aba continuava fechada).
- * 4. Magias (magias/index.md e magias/por-classe/*.md): mesma ideia da tabela de NPCs, mas com
+ * 4. Magias (magias/index.md e magias/por-classe/*.md): mesma ideia das tabelas acima, mas com
  *    uma barra de filtros fixa (fora das abas) controlando várias tabelas ao mesmo tempo — uma
  *    por aba de nível — e colunas de classificação (Ritual, Categoria, Tipo de Dano…) escondidas
  *    por CSS, usadas só pelos filtros, não pela ordenação por clique.
+ * 5. Formulários embutidos de "Adicionar NPC/Lugar/Jogador" (personagens/lugares/jogadores
+ *    index.md): falam com a API JSON do Painel (admin/app.py, /api/npcs|lugares|jogadores) via
+ *    docs/javascripts/painel-fetch.js, sem redirecionar para outra aba.
  */
 (function () {
   "use strict";
-
-  // Colunas da tabela que ganham uma lista de filtro no cabeçalho (pelo texto do <th>).
-  var COLUNAS_COM_FILTRO = ["Título", "Raça", "Cidade", "Afiliação", "Situação"];
-  var COLUNAS_SEM_ORDEM = ["Retrato"];
 
   function normalizar(texto) {
     return (texto || "")
@@ -30,16 +30,21 @@
     return celula ? celula.textContent.trim() : "";
   }
 
-  function montarTabelaNpcs(raiz) {
-    var tabela = raiz.querySelector(".npc-tabela table");
+  // Tabela filtrável genérica, usada pelas tabelas de NPCs, Lugares e Jogadores.
+  // opcoes: { tabela, busca, contagem, colunasComFiltro, colunasSemOrdem, rotuloPlural }
+  function prepararTabelaFiltravel(opcoes) {
+    var tabela = opcoes.tabela;
     if (!tabela || tabela.dataset.pronta) return;
     tabela.dataset.pronta = "1";
 
     var corpo = tabela.tBodies[0];
     var linhas = Array.prototype.slice.call(corpo.rows);
     var cabecalhos = Array.prototype.slice.call(tabela.tHead.rows[0].cells);
-    var busca = raiz.querySelector(".npc-busca");
-    var contagem = raiz.querySelector(".npc-contagem");
+    var busca = opcoes.busca;
+    var contagem = opcoes.contagem;
+    var colunasComFiltro = opcoes.colunasComFiltro || [];
+    var colunasSemOrdem = opcoes.colunasSemOrdem || [];
+    var rotuloPlural = opcoes.rotuloPlural || "itens";
     var filtros = {}; // índice da coluna -> valor escolhido
     var ordem = { indice: -1, direcao: 1 };
 
@@ -56,8 +61,8 @@
       });
       if (contagem) {
         contagem.textContent = visiveis === linhas.length
-          ? linhas.length + " NPCs"
-          : visiveis + " de " + linhas.length + " NPCs";
+          ? linhas.length + " " + rotuloPlural
+          : visiveis + " de " + linhas.length + " " + rotuloPlural;
       }
     }
 
@@ -81,10 +86,10 @@
       var rotulo = th.textContent.trim();
       th.textContent = "";
 
-      if (COLUNAS_SEM_ORDEM.indexOf(rotulo) === -1) {
+      if (colunasSemOrdem.indexOf(rotulo) === -1) {
         var botao = document.createElement("button");
         botao.type = "button";
-        botao.className = "npc-ordenar";
+        botao.className = "tabela-ordenar";
         botao.textContent = rotulo;
         botao.title = "Ordenar por " + rotulo;
         botao.addEventListener("click", function () { ordenar(indice); });
@@ -92,16 +97,16 @@
         th.setAttribute("aria-sort", "none");
       } else {
         var span = document.createElement("span");
-        span.className = "npc-rotulo";
+        span.className = "tabela-rotulo";
         span.textContent = rotulo;
         th.appendChild(span);
       }
 
-      if (COLUNAS_COM_FILTRO.indexOf(rotulo) !== -1) {
+      if (colunasComFiltro.indexOf(rotulo) !== -1) {
         var valores = {};
         linhas.forEach(function (linha) { valores[textoCelula(linha, indice)] = true; });
         var lista = document.createElement("select");
-        lista.className = "npc-filtro";
+        lista.className = "tabela-filtro";
         lista.setAttribute("aria-label", "Filtrar por " + rotulo);
         lista.appendChild(new Option("Todos", ""));
         Object.keys(valores)
@@ -117,6 +122,116 @@
 
     if (busca) busca.addEventListener("input", aplicarFiltros);
     aplicarFiltros();
+  }
+
+  function montarTabelaNpcs(raiz) {
+    prepararTabelaFiltravel({
+      tabela: raiz.querySelector(".npc-tabela table"),
+      busca: raiz.querySelector(".npc-busca"),
+      contagem: raiz.querySelector(".npc-contagem"),
+      colunasComFiltro: ["Título", "Raça", "Cidade", "Afiliação", "Situação"],
+      colunasSemOrdem: ["Retrato"],
+      rotuloPlural: "NPCs",
+    });
+  }
+
+  function montarTabelaLugares(raiz) {
+    prepararTabelaFiltravel({
+      tabela: raiz.querySelector(".lugar-tabela table"),
+      busca: raiz.querySelector(".lugar-busca"),
+      contagem: raiz.querySelector(".lugar-contagem"),
+      colunasComFiltro: ["Tipo", "Cidade"],
+      rotuloPlural: "lugares",
+    });
+  }
+
+  function montarTabelaJogadores(raiz) {
+    prepararTabelaFiltravel({
+      tabela: raiz.querySelector(".jogador-tabela table"),
+      busca: raiz.querySelector(".jogador-busca"),
+      contagem: raiz.querySelector(".jogador-contagem"),
+      colunasComFiltro: ["Jogador"],
+      rotuloPlural: "jogadores",
+    });
+  }
+
+  // Formulários embutidos "Adicionar NPC/Lugar/Jogador" — ver docs/javascripts/painel-fetch.js.
+  var CONFIG_ENTIDADE = {
+    npc: {
+      endpoint: "/api/npcs", rotuloBotao: "Criar NPC", descricao: true, imagem: true, generico: true,
+      campos: [
+        ["nome", "Nome", true], ["titulo", "Título (ex.: Marquesa, Capitão, Mestre)", false],
+        ["raca", "Raça", false], ["cidade", "Cidade", false],
+        ["afiliacao", "Afiliação (casa, facção, organização)", false],
+        ["resumo", "Resumo de uma linha (aparece na tabela)", false],
+      ],
+    },
+    lugar: {
+      endpoint: "/api/lugares", rotuloBotao: "Criar lugar", descricao: true,
+      campos: [
+        ["nome", "Nome", true], ["tipo", "Tipo (ex.: taberna, torre, floresta, vila)", false],
+        ["cidade", "Cidade ou região", false], ["resumo", "Resumo de uma linha (aparece na lista)", false],
+      ],
+    },
+    jogador: {
+      endpoint: "/api/jogadores", rotuloBotao: "Criar jogador",
+      campos: [
+        ["nome", "Nome do personagem", true], ["jogador", "Nome de quem joga", false],
+        ["raca_classe", "Raça e classe (ex.: Elfo guerreiro)", false],
+        ["resumo", "Resumo de uma linha (aparece na lista)", false],
+      ],
+    },
+  };
+
+  function montarFormularioEntidade(elemento) {
+    if (elemento.dataset.pronta) return;
+    elemento.dataset.pronta = "1";
+    var P = window.GallancourtPainel;
+    var cfg = CONFIG_ENTIDADE[elemento.getAttribute("data-tipo")];
+    if (!cfg || !P) return;
+    var baseUrl = P.base(elemento);
+
+    var html = '<form class="entidade-formulario__form">';
+    cfg.campos.forEach(function (c) {
+      html += "<label>" + P.escapeHtml(c[1]) + '<input type="text" name="' + c[0] + '"'
+        + (c[2] ? " required" : "") + "></label>";
+    });
+    if (cfg.descricao) {
+      html += '<label>Descrição<textarea name="descricao" rows="4" '
+        + 'placeholder="Quem é, como age, o que quer / como é, onde fica, o que acontece ali…"></textarea></label>';
+    }
+    if (cfg.imagem) {
+      html += '<label>Retrato (opcional)<input type="file" name="imagem" accept="image/*"></label>';
+    }
+    if (cfg.generico) {
+      html += '<label class="check"><input type="checkbox" name="generico"> '
+        + "É um NPC genérico (modelo reutilizável — guarda, camponês, nobre… — não alguém específico)</label>";
+    }
+    html += '<button type="submit" class="botao-principal">' + P.escapeHtml(cfg.rotuloBotao) + "</button>"
+      + '<p class="entidade-formulario__resultado" aria-live="polite"></p></form>';
+    elemento.innerHTML = html;
+
+    var form = elemento.querySelector("form");
+    var resultado = elemento.querySelector(".entidade-formulario__resultado");
+    form.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      resultado.className = "entidade-formulario__resultado";
+      resultado.textContent = "Criando…";
+      P.chamarFormData(baseUrl, cfg.endpoint, new FormData(form)).then(function (r) {
+        resultado.className = "entidade-formulario__resultado entidade-formulario__resultado--ok";
+        resultado.textContent = "✅ Criado: " + r.arquivo
+          + ". Se o mkdocs serve estiver rodando, a página atualiza sozinha em alguns segundos —"
+          + " recarregue para ver na tabela.";
+        form.reset();
+      }).catch(function (erro) {
+        resultado.className = "entidade-formulario__resultado entidade-formulario__resultado--erro";
+        resultado.textContent = "⚠️ " + erro.message;
+      });
+    });
+  }
+
+  function montarFormulariosEntidade(raiz) {
+    Array.prototype.slice.call(raiz.querySelectorAll(".criar-entidade")).forEach(montarFormularioEntidade);
   }
 
   // Colunas da tabela de magias que ficam escondidas por CSS (nth-child(n+8) — ver extra.css) e
@@ -270,8 +385,15 @@
     });
   }
 
+  // Exposta para docs/javascripts/criar-sessao.js reaproveitar a mesma tabela filtrável (com
+  // checkboxes de seleção) nas três listas de NPCs/Jogadores/Lugares do criador de sessão.
+  window.GallancourtTabelas = { prepararTabelaFiltravel: prepararTabelaFiltravel };
+
   function iniciar() {
     montarTabelaNpcs(document);
+    montarTabelaLugares(document);
+    montarTabelaJogadores(document);
+    montarFormulariosEntidade(document);
     montarPainelMagias(document);
     abrirAbaDaAncora();
     filtrarIndicePorAba();

@@ -111,12 +111,10 @@ def _tabela_npcs(docs: Path, config) -> str:
         + f" | {_celula(npc.get('resumo'))} |"
         for nome, arq, retrato, npc in linhas
     ]
-    painel = _painel(config)
-    return "\n".join([
+    partes = _criar_entidade_div("npc", config, "../mestre/painel.md")
+    partes += [
         '<div class="npc-ferramentas" markdown>',
         "",
-        f'[:material-account-plus: Adicionar NPC]({painel}/npc/novo){{ .md-button .md-button--primary '
-        f'.botao-painel target=_blank title="{DICA_PAINEL}" }}',
         '<input type="search" class="npc-busca" placeholder="Filtrar por nome, cidade, afiliação…" '
         'aria-label="Filtrar NPCs">',
         '<span class="npc-contagem" aria-live="polite"></span>',
@@ -130,7 +128,8 @@ def _tabela_npcs(docs: Path, config) -> str:
         *corpo,
         "",
         "</div>",
-    ])
+    ]
+    return "\n".join(partes)
 
 
 # --------------------------------------------------------------------------
@@ -294,8 +293,12 @@ def _lista_sessoes(docs: Path, config) -> str:
 
     painel = _painel(config)
     partes = [
-        f"[:material-plus: Nova sessão]({painel}/sessoes/nova){{ .md-button .md-button--primary "
-        f'.botao-painel target=_blank title="{DICA_PAINEL}" }}',
+        f'<div class="criar-sessao" data-painel-url="{painel}" markdown>',
+        "",
+        "*(o formulário aparece aqui quando a página carrega — precisa do "
+        "[Painel do Mestre](../painel.md) rodando no seu computador)*",
+        "",
+        "</div>",
         "",
     ]
     if not sessoes:
@@ -332,8 +335,29 @@ def _lista_sessoes(docs: Path, config) -> str:
 # um botão "Adicionar" e um .bar-list lido direto da pasta a cada geração.
 # --------------------------------------------------------------------------
 
+# Colunas das tabelas de Lugares/Jogadores: (rótulo, chave no bloco lugar:/jogador:)
+COLUNAS_LUGAR = [("Tipo", "tipo"), ("Cidade", "cidade")]
+COLUNAS_JOGADOR = [("Jogador", "jogador"), ("Raça e classe", "raca_classe")]
+
+
+def _criar_entidade_div(tipo: str, config: dict, caminho_painel_doc: str) -> list[str]:
+    """Div-mount do formulário embutido "Adicionar NPC/Lugar/Jogador" (ver
+    docs/javascripts/gallancourt.js::montarFormularioEntidade e painel-fetch.js) — substitui o
+    antigo botão que abria o Painel em outra aba (`target=_blank`)."""
+    painel = _painel(config)
+    return [
+        f'<div class="criar-entidade" data-tipo="{tipo}" data-painel-url="{painel}" markdown>',
+        "",
+        f"*(o formulário aparece aqui quando a página carrega — precisa do "
+        f"[Painel do Mestre]({caminho_painel_doc}) rodando no seu computador)*",
+        "",
+        "</div>",
+        "",
+    ]
+
+
 def _lista_lugares(docs: Path, config) -> str:
-    itens = []
+    linhas = []
     pasta = docs / "lugares"
     if pasta.is_dir():
         for arquivo in sorted(pasta.glob("*.md")):
@@ -343,31 +367,43 @@ def _lista_lugares(docs: Path, config) -> str:
             lugar = meta.get("lugar")
             if not isinstance(lugar, dict):
                 continue
-            itens.append((_titulo_h1(corpo, arquivo.stem), arquivo.name, lugar))
-    itens.sort(key=lambda i: i[0].casefold())
+            linhas.append((_titulo_h1(corpo, arquivo.stem), arquivo.name, lugar))
+    linhas.sort(key=lambda l: l[0].casefold())
 
-    painel = _painel(config)
-    partes = [
-        f"[:material-map-marker-plus: Adicionar lugar]({painel}/lugar/novo){{ .md-button .md-button--primary "
-        f'.botao-painel target=_blank title="{DICA_PAINEL}" }}',
-        "",
-    ]
-    if not itens:
+    partes = _criar_entidade_div("lugar", config, "../mestre/painel.md")
+    if not linhas:
         return "\n".join(partes + ["*Nenhum lugar criado ainda.*"])
-    partes += ['<div class="bar-list" markdown>', ""]
-    for titulo, arq, lugar in itens:
-        detalhes = " · ".join(v for v in (lugar.get("tipo"), lugar.get("cidade")) if v and v != "—")
-        partes += [f"-   **[{titulo}]({arq})**", ""]
-        if detalhes:
-            partes += [f"    {detalhes}", ""]
-        if lugar.get("resumo"):
-            partes += [f"    {lugar['resumo']}", ""]
-    partes += ["</div>"]
+
+    cabecalho = "| Nome | " + " | ".join(r for r, _ in COLUNAS_LUGAR) + " | Resumo |"
+    separador = "|" + "---|" * (len(COLUNAS_LUGAR) + 2)
+    corpo_tabela = [
+        f"| [{_celula(nome)}]({arq}) | "
+        + " | ".join(_celula(lugar.get(chave)) for _, chave in COLUNAS_LUGAR)
+        + f" | {_celula(lugar.get('resumo'))} |"
+        for nome, arq, lugar in linhas
+    ]
+    partes += [
+        '<div class="lugar-ferramentas" markdown>',
+        "",
+        '<input type="search" class="lugar-busca" placeholder="Filtrar por nome, tipo, cidade…" '
+        'aria-label="Filtrar lugares">',
+        '<span class="lugar-contagem" aria-live="polite"></span>',
+        "",
+        "</div>",
+        "",
+        '<div class="lugar-tabela" markdown>',
+        "",
+        cabecalho,
+        separador,
+        *corpo_tabela,
+        "",
+        "</div>",
+    ]
     return "\n".join(partes)
 
 
 def _lista_jogadores(docs: Path, config) -> str:
-    itens = []
+    linhas = []
     pasta = docs / "mestre" / "jogadores"
     if pasta.is_dir():
         for arquivo in sorted(pasta.glob("*.md")):
@@ -377,26 +413,38 @@ def _lista_jogadores(docs: Path, config) -> str:
             jogador = meta.get("jogador")
             if not isinstance(jogador, dict):
                 continue
-            itens.append((_titulo_h1(corpo, arquivo.stem), arquivo.name, jogador))
-    itens.sort(key=lambda i: i[0].casefold())
+            linhas.append((_titulo_h1(corpo, arquivo.stem), arquivo.name, jogador))
+    linhas.sort(key=lambda l: l[0].casefold())
 
-    painel = _painel(config)
-    partes = [
-        f"[:material-account-plus: Adicionar jogador]({painel}/jogador/novo){{ .md-button .md-button--primary "
-        f'.botao-painel target=_blank title="{DICA_PAINEL}" }}',
-        "",
-    ]
-    if not itens:
+    partes = _criar_entidade_div("jogador", config, "../painel.md")
+    if not linhas:
         return "\n".join(partes + ["*Nenhum jogador cadastrado ainda.*"])
-    partes += ['<div class="bar-list" markdown>', ""]
-    for titulo, arq, jogador in itens:
-        detalhes = " · ".join(v for v in (jogador.get("jogador"), jogador.get("raca_classe")) if v and v != "—")
-        partes += [f"-   **[{titulo}]({arq})**", ""]
-        if detalhes:
-            partes += [f"    {detalhes}", ""]
-        if jogador.get("resumo"):
-            partes += [f"    {jogador['resumo']}", ""]
-    partes += ["</div>"]
+
+    cabecalho = "| Nome | " + " | ".join(r for r, _ in COLUNAS_JOGADOR) + " | Resumo |"
+    separador = "|" + "---|" * (len(COLUNAS_JOGADOR) + 2)
+    corpo_tabela = [
+        f"| [{_celula(nome)}]({arq}) | "
+        + " | ".join(_celula(jogador.get(chave)) for _, chave in COLUNAS_JOGADOR)
+        + f" | {_celula(jogador.get('resumo'))} |"
+        for nome, arq, jogador in linhas
+    ]
+    partes += [
+        '<div class="jogador-ferramentas" markdown>',
+        "",
+        '<input type="search" class="jogador-busca" placeholder="Filtrar por nome ou jogador…" '
+        'aria-label="Filtrar jogadores">',
+        '<span class="jogador-contagem" aria-live="polite"></span>',
+        "",
+        "</div>",
+        "",
+        '<div class="jogador-tabela" markdown>',
+        "",
+        cabecalho,
+        separador,
+        *corpo_tabela,
+        "",
+        "</div>",
+    ]
     return "\n".join(partes)
 
 

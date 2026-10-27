@@ -1235,15 +1235,40 @@ def proxima_sessao_preparo(root: Path) -> int:
     return max(numeros) + 1 if numeros else 0
 
 
-def _modelo_sessao(numero: int, titulo: str, valores: dict, rel_docs: str) -> str:
+def _bloco_lista_ou_vazio(links: list[str]) -> str:
+    if not links:
+        return "    *(a preencher)*"
+    return "\n".join("    - " + link for link in links)
+
+
+def _modelo_sessao(
+    numero: int, titulo: str, valores: dict, rel_docs: str,
+    links_npcs: list[str] | None = None, links_lugares: list[str] | None = None, prompt: str = "",
+) -> str:
     """Página de sessão com o mesmo layout da Sessão 0: abas logo após o título, ficha dentro de
-    Resumo, e o Painel de Iniciativa embutido por último."""
+    Resumo, e o Painel de Iniciativa embutido por último.
+
+    `links_npcs`/`links_lugares` (já resolvidos como `[Nome](caminho)` por `criar_sessao_preparo`)
+    pré-preenchem as abas NPCs → Aliados e Lugares, em vez de deixá-las "(a preencher)". `prompt`
+    é salvo como anotação de texto na aba Resumo — por ora não passa por nenhuma IA."""
     ficha = "\n".join(
         f"    | **{rotulo}** | {(valores.get(chave) or '').strip() or '—'} |" for chave, rotulo in CAMPOS_SESSAO_NOVA
     )
     resumo = (valores.get("resumo") or "").strip() or "*(Resumo da sessão a escrever.)*"
     resumo = "\n".join("    " + l if l.strip() else "" for l in resumo.splitlines())
     vazio = "    *(a preencher)*"
+    aliados = _bloco_lista_ou_vazio(links_npcs or [])
+    lugares_bloco = _bloco_lista_ou_vazio(links_lugares or [])
+
+    prompt_txt = (prompt or "").strip()
+    bloco_resumo_extra = ""
+    if prompt_txt:
+        prompt_indentado = "\n".join("    " + l if l.strip() else "" for l in prompt_txt.splitlines())
+        bloco_resumo_extra = "\n".join([
+            "", "    ## Como eu imaginei esta sessão", "",
+            '    *(Anotação de quem criou a sessão — ainda não há geração automática por IA nesta versão.)*',
+            "", prompt_indentado, "",
+        ])
     return f"""---
 tags:
   - Mestre
@@ -1269,7 +1294,7 @@ sessao:
     ## Resumo rápido
 
 {resumo}
-
+{bloco_resumo_extra}
     ## Antes de sentar à mesa
 
 {vazio}
@@ -1284,7 +1309,7 @@ sessao:
 
     ## Aliados
 
-{vazio}
+{aliados}
 
     ## Inimigos
 
@@ -1301,7 +1326,7 @@ sessao:
 
 === "Lugares"
 
-{vazio}
+{lugares_bloco}
 
 === "Loot & Pistas"
 
@@ -1345,16 +1370,54 @@ sessao:
 """
 
 
-def criar_sessao_preparo(root: Path, numero: int, titulo: str, valores: dict) -> dict:
-    """Cria docs/mestre/sessoes/sessao-<n>-<slug>.md e o adiciona ao menu, em Mestre → Sessões."""
+def criar_sessao_preparo(
+    root: Path, numero: int, titulo: str, valores: dict,
+    npcs: list[str] | None = None, jogadores: list[str] | None = None, lugares: list[str] | None = None,
+    prompt: str = "",
+) -> dict:
+    """Cria docs/mestre/sessoes/sessao-<n>-<slug>.md e o adiciona ao menu, em Mestre → Sessões.
+
+    `npcs`/`jogadores`/`lugares` (listas de `rel_docs` de páginas já cadastradas) pré-preenchem a
+    sessão: entram como links reais nas abas NPCs/Lugares (em vez de "a preencher") e, no caso de
+    npcs/jogadores, já ficam salvos como participantes (ver `salvar_participantes`) — sem precisar
+    passar pela tela separada de Participantes depois. `prompt`, se vier preenchido, é salvo como
+    anotação de texto na aba Resumo (nenhuma IA é chamada nesta versão)."""
     titulo = titulo.strip()
     if not titulo:
         raise ValueError("A sessão precisa de um título.")
     if any(re.match(rf"sessao-{numero}(-|$)", p.stem) for p in pasta_sessoes(root).glob("sessao-*.md")):
         raise ValueError(f"Já existe uma página para a Sessão {numero}.")
     rel = f"mestre/sessoes/sessao-{numero}-{slug_statblock(titulo)}.md"
-    _escrever(docs_dir(root) / rel, _modelo_sessao(numero, titulo, valores, rel))
+
+    npcs = [n for n in (npcs or []) if n]
+    jogadores = [j for j in (jogadores or []) if j]
+    lugares = [l for l in (lugares or []) if l]
+
+    def _links(rels: list[str]) -> list[str]:
+        ligados = []
+        for r in rels:
+            caminho = docs_dir(root) / r
+            if not caminho.is_file():
+                continue
+            nome = _titulo_do_arquivo(caminho)
+            destino = os.path.relpath(caminho, start=(docs_dir(root) / rel).parent)
+            ligados.append(f"[{nome}]({Path(destino).as_posix()})")
+        return ligados
+
+    links_npcs = _links(npcs)
+    links_jogadores = _links(jogadores)
+    links_lugares = _links(lugares)
+
+    valores = dict(valores)
+    if links_jogadores and not (valores.get("jogadores") or "").strip():
+        valores["jogadores"] = ", ".join(links_jogadores)
+    if links_lugares and not (valores.get("local") or "").strip():
+        valores["local"] = ", ".join(links_lugares)
+
+    _escrever(docs_dir(root) / rel, _modelo_sessao(numero, titulo, valores, rel, links_npcs, links_lugares, prompt))
     nav_ok = _inserir_no_nav(root, CABECALHO_NAV_SESSOES, f"- {_titulo_nav(f'Sessão {numero} — {titulo}')}: {rel}")
+    if npcs or jogadores:
+        salvar_participantes(root, rel, jogadores, npcs)
     build_ok, build_saida = validar_build(root)
     return {"arquivo": f"docs/{rel}", "rel_docs": rel, "nav_ok": nav_ok, "build_ok": build_ok, "build_saida": build_saida}
 

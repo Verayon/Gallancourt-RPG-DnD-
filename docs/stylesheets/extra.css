@@ -1066,7 +1066,9 @@ input,
    NPCs — tabela filtrável (personagens/index.md)
    -------------------------------------------------------------------------- */
 
-.npc-ferramentas > p {
+.npc-ferramentas > p,
+.lugar-ferramentas > p,
+.jogador-ferramentas > p {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -1080,7 +1082,9 @@ input,
   font-size: .74rem;
 }
 
-.npc-busca {
+.npc-busca,
+.lugar-busca,
+.jogador-busca {
   flex: 1 1 14rem;
   min-width: 0;
   padding: .45rem .7rem;
@@ -1092,38 +1096,54 @@ input,
   border-radius: 6px;
 }
 
-.npc-busca:focus {
+.npc-busca:focus,
+.lugar-busca:focus,
+.jogador-busca:focus {
   outline: none;
   border-color: var(--gc-gold);
 }
 
-.npc-contagem {
+.npc-contagem,
+.lugar-contagem,
+.jogador-contagem {
   font-size: .75rem;
   color: var(--gc-ink-dim);
   font-style: italic;
 }
 
-.md-typeset .npc-tabela table:not([class]) {
+.md-typeset .npc-tabela table:not([class]),
+.md-typeset .lugar-tabela table:not([class]),
+.md-typeset .jogador-tabela table:not([class]) {
   font-size: .76rem;
 }
 
 .md-typeset .npc-tabela th,
-.md-typeset .npc-tabela td {
+.md-typeset .npc-tabela td,
+.md-typeset .lugar-tabela th,
+.md-typeset .lugar-tabela td,
+.md-typeset .jogador-tabela th,
+.md-typeset .jogador-tabela td {
   padding: .45em .7em;
   vertical-align: middle;
 }
 
-.md-typeset .npc-tabela th {
+.md-typeset .npc-tabela th,
+.md-typeset .lugar-tabela th,
+.md-typeset .jogador-tabela th {
   vertical-align: top;
   white-space: nowrap;
 }
 
-.md-typeset .npc-tabela td:nth-child(2) {
+.md-typeset .npc-tabela td:nth-child(2),
+.md-typeset .lugar-tabela td:first-child,
+.md-typeset .jogador-tabela td:first-child {
   white-space: nowrap;
   font-weight: 600;
 }
 
-.md-typeset .npc-tabela td:last-child {
+.md-typeset .npc-tabela td:last-child,
+.md-typeset .lugar-tabela td:last-child,
+.md-typeset .jogador-tabela td:last-child {
   min-width: 16rem;
   color: var(--gc-ink-dim);
 }
@@ -1137,7 +1157,7 @@ input,
   border: 1px solid var(--gc-gold);
 }
 
-.npc-ordenar {
+.tabela-ordenar {
   padding: 0;
   font: inherit;
   font-weight: 700;
@@ -1147,16 +1167,16 @@ input,
   cursor: pointer;
 }
 
-.npc-ordenar::after {
+.tabela-ordenar::after {
   content: " ⇅";
   opacity: .45;
   font-size: .85em;
 }
 
-th[aria-sort="ascending"] .npc-ordenar::after { content: " ▲"; opacity: 1; }
-th[aria-sort="descending"] .npc-ordenar::after { content: " ▼"; opacity: 1; }
+th[aria-sort="ascending"] .tabela-ordenar::after { content: " ▲"; opacity: 1; }
+th[aria-sort="descending"] .tabela-ordenar::after { content: " ▼"; opacity: 1; }
 
-.npc-filtro {
+.tabela-filtro {
   display: block;
   width: 100%;
   min-width: 6.5rem;
@@ -1170,6 +1190,143 @@ th[aria-sort="descending"] .npc-ordenar::after { content: " ▼"; opacity: 1; }
   border: 1px solid var(--gc-panel-border);
   border-radius: 4px;
 }
+
+/* --------------------------------------------------------------------------
+   Formulário embutido "Adicionar NPC/Lugar/Jogador" (.criar-entidade) — ver
+   docs/javascripts/gallancourt.js::montarFormularioEntidade e painel-fetch.js
+   -------------------------------------------------------------------------- */
+
+.criar-entidade {
+  margin: 0 0 1.2rem;
+  padding: .9rem 1.1rem;
+  background: var(--gc-panel);
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 8px;
+}
+
+.entidade-formulario__form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: .6rem .8rem;
+}
+
+.entidade-formulario__form label {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  font-size: .78rem;
+  color: var(--gc-ink-dim);
+}
+
+.entidade-formulario__form label.check {
+  flex-direction: row;
+  align-items: center;
+  grid-column: 1 / -1;
+}
+
+.entidade-formulario__form input[type="text"],
+.entidade-formulario__form input[type="file"],
+.entidade-formulario__form textarea {
+  padding: .4rem .6rem;
+  font: inherit;
+  font-size: .8rem;
+  color: var(--gc-ink);
+  background: var(--md-default-bg-color);
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 6px;
+}
+
+.entidade-formulario__form textarea {
+  grid-column: 1 / -1;
+  resize: vertical;
+}
+
+.entidade-formulario__form button {
+  grid-column: 1 / -1;
+  justify-self: start;
+}
+
+.entidade-formulario__resultado {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: .8rem;
+}
+
+.entidade-formulario__resultado--ok { color: var(--gc-ink); }
+.entidade-formulario__resultado--erro { color: #b4413c; }
+
+/* --------------------------------------------------------------------------
+   Criador de sessão embutido (.criar-sessao, mestre/sessoes/index.md) — ver
+   docs/javascripts/criar-sessao.js. As tabelas de seleção dentro dele reaproveitam as classes
+   .npc-tabela/.lugar-tabela/.jogador-tabela já estilizadas acima.
+   -------------------------------------------------------------------------- */
+
+.criar-sessao {
+  margin: 0 0 1.2rem;
+  padding: 1rem 1.2rem;
+  background: var(--gc-panel);
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 8px;
+}
+
+.criar-sessao__carregando {
+  font-style: italic;
+  color: var(--gc-ink-dim);
+}
+
+.criar-sessao__form > label {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  margin: 0 0 .7rem;
+  font-size: .78rem;
+  color: var(--gc-ink-dim);
+}
+
+.criar-sessao__form input[type="text"],
+.criar-sessao__form input[type="number"],
+.criar-sessao__form textarea {
+  padding: .4rem .6rem;
+  font: inherit;
+  font-size: .8rem;
+  color: var(--gc-ink);
+  background: var(--md-default-bg-color);
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 6px;
+}
+
+.criar-sessao__form textarea {
+  resize: vertical;
+}
+
+.criar-sessao__basicos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: .3rem .8rem;
+}
+
+.criar-sessao__secao {
+  margin: 0 0 1rem;
+}
+
+.criar-sessao__secao table {
+  font-size: .76rem;
+}
+
+.criar-sessao__aviso {
+  font-size: .75rem;
+  color: var(--gc-ink-dim);
+  font-style: italic;
+  margin: 0 0 .8rem;
+}
+
+.criar-sessao__resultado {
+  margin: .6rem 0 0;
+  font-size: .82rem;
+}
+
+.criar-sessao__resultado--ok { color: var(--gc-ink); }
+.criar-sessao__resultado--erro { color: #b4413c; }
 
 /* --------------------------------------------------------------------------
    Magias — tabela filtrável por nível (magias/index.md) e por classe
