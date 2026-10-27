@@ -9,6 +9,9 @@ Registrado em `mkdocs.yml` (chave `hooks:`). Roda durante a geração do site e:
 - gera a lista de sessões em `mestre/sessoes/index.md` (marcador `<!-- sessoes:lista -->`);
 - gera a lista de lugares em `lugares/index.md` (marcador `<!-- lugares:lista -->`) e a de
   jogadores em `mestre/jogadores/index.md` (marcador `<!-- jogadores:lista -->`);
+- gera as tabelas de magias: por nível em `magias/index.md` (marcador `<!-- magias:niveis -->`)
+  e por classe em `magias/por-classe/*.md` (marcador `<!-- magias:classe -->`), lendo o bloco
+  `magia:` do front matter de cada página em `magias/*.md`;
 - mostra a linha do tempo da campanha (`dados/linha-do-tempo.yml`, ver `linha_tempo.py`) em cada
   página envolvida e aplica as mudanças de estado (situação, localização…) aos NPCs;
 - gera a página geral da linha do tempo (marcador `<!-- linha-do-tempo:geral -->`).
@@ -123,6 +126,140 @@ def _tabela_npcs(docs: Path, config) -> str:
         "",
         "</div>",
     ])
+
+
+# --------------------------------------------------------------------------
+# Magias (2014): tabela por nível (magias/index.md) e por classe (magias/por-classe/*.md)
+# --------------------------------------------------------------------------
+
+NIVEIS_MAGIA = [
+    (0, "Truque"), (1, "1º Nível"), (2, "2º Nível"), (3, "3º Nível"), (4, "4º Nível"),
+    (5, "5º Nível"), (6, "6º Nível"), (7, "7º Nível"), (8, "8º Nível"), (9, "9º Nível"),
+]
+
+CLASSES_CONJURADORAS = {
+    "artifice": "Artífice", "bardo": "Bardo", "bruxo": "Bruxo", "clerigo": "Clérigo",
+    "druida": "Druida", "feiticeiro": "Feiticeiro", "mago": "Mago",
+    "paladino": "Paladino", "patrulheiro": "Patrulheiro",
+}
+
+ESCOLAS_MAGIA = [
+    "Abjuração", "Adivinhação", "Conjuração", "Encantamento", "Evocação",
+    "Ilusão", "Necromancia", "Transmutação",
+]
+CATEGORIAS_MAGIA = ["Dano", "Suporte", "Utilidade", "Controle"]
+TIPOS_DANO_MAGIA = [
+    "Ácido", "Concussão", "Cortante", "Elétrico", "Fogo", "Frio", "Força",
+    "Necrótico", "Perfurante", "Psíquico", "Radiante", "Trovejante", "Veneno", "Nenhum",
+]
+TIPOS_ALCANCE_MAGIA = ["Pessoal", "Toque", "Distância"]
+AREAS_EFEITO_MAGIA = ["Nenhuma", "Cone", "Cubo", "Cilindro", "Esfera", "Linha"]
+
+
+def _ler_magias(docs: Path) -> list[dict]:
+    magias = []
+    for arquivo in sorted((docs / "magias").glob("*.md")):
+        if arquivo.name == "index.md":
+            continue
+        meta, corpo = _front_matter(arquivo.read_text(encoding="utf-8"))
+        dados = meta.get("magia")
+        if not isinstance(dados, dict):
+            continue
+        nome = _titulo_h1(corpo, arquivo.stem)
+        magias.append({**dados, "nome": nome, "arquivo": arquivo.name})
+    return magias
+
+
+def _select_magia(rotulo: str, coluna: str, modo: str, opcoes: list[str], todas: str) -> str:
+    itens = "".join(f'<option value="{html.escape(o)}">{html.escape(o)}</option>' for o in opcoes)
+    return (
+        f'<select class="magia-filtro" data-coluna="{coluna}" data-modo="{modo}" '
+        f'aria-label="Filtrar por {rotulo}"><option value="">{html.escape(todas)}</option>{itens}</select>'
+    )
+
+
+def _filtros_magia(incluir_classe: bool) -> list[str]:
+    controles = ['<input type="search" class="magia-busca" placeholder="Filtrar por nome…" '
+                 'aria-label="Filtrar magias">']
+    if incluir_classe:
+        controles.append(_select_magia(
+            "classe", "Classes", "contem", sorted(CLASSES_CONJURADORAS.values()), "Todas as classes",
+        ))
+    controles += [
+        _select_magia("escola", "Escola", "igual", ESCOLAS_MAGIA, "Todas as escolas"),
+        _select_magia("categoria", "Categoria", "igual", CATEGORIAS_MAGIA, "Todas as categorias"),
+        _select_magia("tipo de dano", "Tipo de Dano", "igual", TIPOS_DANO_MAGIA, "Qualquer dano"),
+        _select_magia("tipo de alcance", "Tipo de Alcance", "igual", TIPOS_ALCANCE_MAGIA, "Qualquer alcance"),
+        _select_magia("área de efeito", "Área de Efeito", "igual", AREAS_EFEITO_MAGIA, "Qualquer área"),
+        _select_magia("ritual", "Ritual", "igual", ["Sim", "Não"], "Ritual: todas"),
+        _select_magia("concentração", "Concentração", "igual", ["Sim", "Não"], "Concentração: todas"),
+        '<span class="magia-contagem" aria-live="polite"></span>',
+    ]
+    return ['<div class="magia-ferramentas" markdown>', "", *controles, "", "</div>"]
+
+
+def _linha_magia(m: dict, com_classes: bool, com_nivel: bool, prefixo: str = "") -> str:
+    celulas = []
+    if com_nivel:
+        nivel = m.get("nivel", 0)
+        celulas.append(_celula("Truque" if nivel == 0 else f"{nivel}º"))
+    celulas.append(f"[{_celula(m['nome'])}]({prefixo}{m['arquivo']})")
+    celulas += [
+        _celula(m.get("escola")), _celula(m.get("tempo")), _celula(m.get("alcance")),
+        _celula(m.get("duracao")), _celula(m.get("componentes")),
+    ]
+    if com_classes:
+        celulas.append(_celula(", ".join(sorted(m.get("classes") or []))))
+    celulas += [
+        _celula("Sim" if m.get("ritual") else "Não"),
+        _celula("Sim" if m.get("concentracao") else "Não"),
+        _celula(m.get("categoria")), _celula(m.get("dano_tipo") or "Nenhum"),
+        _celula(m.get("alcance_tipo")), _celula(m.get("area") or "Nenhuma"),
+    ]
+    return "| " + " | ".join(celulas) + " |"
+
+
+def _tabela_magia_bloco(magias: list[dict], com_classes: bool, com_nivel: bool, prefixo: str = "") -> list[str]:
+    cabecalhos = (["Nível"] if com_nivel else []) + ["Nome", "Escola", "Tempo", "Alcance", "Duração", "Componentes"]
+    if com_classes:
+        cabecalhos.append("Classes")
+    cabecalhos += ["Ritual", "Concentração", "Categoria", "Tipo de Dano", "Tipo de Alcance", "Área de Efeito"]
+    cabecalho = "| " + " | ".join(cabecalhos) + " |"
+    separador = "|" + "---|" * len(cabecalhos)
+    chave = (lambda m: (m.get("nivel", 0), m["nome"].casefold())) if com_nivel else (lambda m: m["nome"].casefold())
+    corpo = [_linha_magia(m, com_classes, com_nivel, prefixo) for m in sorted(magias, key=chave)]
+    return ['<div class="magia-tabela" markdown>', "", cabecalho, separador, *corpo, "", "</div>"]
+
+
+def _tabela_magias_por_nivel(docs: Path, config) -> str:
+    magias = _ler_magias(docs)
+    por_nivel: dict[int, list[dict]] = {n: [] for n, _ in NIVEIS_MAGIA}
+    for m in magias:
+        por_nivel.setdefault(m.get("nivel", 0), []).append(m)
+    blocos = _filtros_magia(incluir_classe=True)
+    blocos.append("")
+    for nivel, rotulo in NIVEIS_MAGIA:
+        blocos.append(f'=== "{rotulo}"')
+        blocos.append("")
+        magias_nivel = por_nivel.get(nivel, [])
+        if magias_nivel:
+            tabela = _tabela_magia_bloco(magias_nivel, com_classes=True, com_nivel=False)
+        else:
+            tabela = ["*Nenhuma magia cadastrada neste nível ainda.*"]
+        blocos += ["    " + linha if linha else "" for linha in tabela]
+        blocos.append("")
+    return "\n".join(blocos)
+
+
+def _tabela_magias_classe(docs: Path, classe: str) -> str:
+    magias = [m for m in _ler_magias(docs) if classe in (m.get("classes") or [])]
+    blocos = _filtros_magia(incluir_classe=False)
+    blocos.append("")
+    if magias:
+        blocos += _tabela_magia_bloco(magias, com_classes=False, com_nivel=True, prefixo="../")
+    else:
+        blocos.append("*Nenhuma magia cadastrada para esta classe ainda.*")
+    return "\n".join(blocos)
 
 
 # --------------------------------------------------------------------------
@@ -392,6 +529,12 @@ def on_page_markdown(markdown: str, page, config, files):
         markdown = markdown.replace("<!-- lugares:lista -->", _lista_lugares(docs, config))
     if src == "mestre/jogadores/index.md" and "<!-- jogadores:lista -->" in markdown:
         markdown = markdown.replace("<!-- jogadores:lista -->", _lista_jogadores(docs, config))
+    if src == "magias/index.md" and "<!-- magias:niveis -->" in markdown:
+        markdown = markdown.replace("<!-- magias:niveis -->", _tabela_magias_por_nivel(docs, config))
+    if src.startswith("magias/por-classe/") and "<!-- magias:classe -->" in markdown:
+        slug = Path(src).stem
+        classe = CLASSES_CONJURADORAS.get(slug, slug.capitalize())
+        markdown = markdown.replace("<!-- magias:classe -->", _tabela_magias_classe(docs, classe))
     if src.startswith("mestre/sessoes/sessao-") and "<!-- participantes:botao -->" in markdown:
         painel = _painel(config)
         botao = (

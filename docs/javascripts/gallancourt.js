@@ -5,6 +5,10 @@
  * 2. Páginas com abas: um link para uma seção (#ancora) abre a aba que a contém.
  * 3. Índice (TOC) da página: só mostra os cabeçalhos da aba selecionada no momento — clicar num
  *    cabeçalho de outra aba, escondido, não rolava a página (a aba continuava fechada).
+ * 4. Magias (magias/index.md e magias/por-classe/*.md): mesma ideia da tabela de NPCs, mas com
+ *    uma barra de filtros fixa (fora das abas) controlando várias tabelas ao mesmo tempo — uma
+ *    por aba de nível — e colunas de classificação (Ritual, Categoria, Tipo de Dano…) escondidas
+ *    por CSS, usadas só pelos filtros, não pela ordenação por clique.
  */
 (function () {
   "use strict";
@@ -115,6 +119,118 @@
     aplicarFiltros();
   }
 
+  // Colunas da tabela de magias que ficam escondidas por CSS (nth-child(n+8) — ver extra.css) e
+  // por isso não recebem botão de ordenação, só servem de alvo para os filtros da barra.
+  var COLUNAS_MAGIA_SEM_ORDEM = [
+    "Ritual", "Concentração", "Categoria", "Tipo de Dano", "Tipo de Alcance", "Área de Efeito",
+  ];
+
+  function prepararOrdenacaoMagia(tabela) {
+    var corpo = tabela.tBodies[0];
+    var linhas = Array.prototype.slice.call(corpo.rows);
+    var cabecalhos = Array.prototype.slice.call(tabela.tHead.rows[0].cells);
+    var ordem = { indice: -1, direcao: 1 };
+
+    function ordenar(indice) {
+      ordem.direcao = ordem.indice === indice ? -ordem.direcao : 1;
+      ordem.indice = indice;
+      linhas.sort(function (a, b) {
+        var va = textoCelula(a, indice), vb = textoCelula(b, indice);
+        if (va === "—" && vb !== "—") return 1;
+        if (vb === "—" && va !== "—") return -1;
+        return va.localeCompare(vb, "pt-BR", { sensitivity: "base", numeric: true }) * ordem.direcao;
+      });
+      linhas.forEach(function (linha) { corpo.appendChild(linha); });
+      cabecalhos.forEach(function (th, i) {
+        th.setAttribute("aria-sort", i === indice ? (ordem.direcao === 1 ? "ascending" : "descending") : "none");
+      });
+    }
+
+    cabecalhos.forEach(function (th, indice) {
+      var rotulo = th.textContent.trim();
+      th.textContent = "";
+      if (COLUNAS_MAGIA_SEM_ORDEM.indexOf(rotulo) === -1) {
+        var botao = document.createElement("button");
+        botao.type = "button";
+        botao.className = "magia-ordenar";
+        botao.textContent = rotulo;
+        botao.title = "Ordenar por " + rotulo;
+        botao.addEventListener("click", function () { ordenar(indice); });
+        th.appendChild(botao);
+        th.setAttribute("aria-sort", "none");
+      } else {
+        var span = document.createElement("span");
+        span.className = "magia-rotulo";
+        span.textContent = rotulo;
+        th.appendChild(span);
+      }
+    });
+  }
+
+  function indiceColunaMagia(tabela, nomeColuna) {
+    var ths = tabela.tHead.rows[0].cells;
+    for (var i = 0; i < ths.length; i++) {
+      if (ths[i].textContent.trim() === nomeColuna) return i;
+    }
+    return -1;
+  }
+
+  // Uma barra de filtros (busca + <select class="magia-filtro" data-coluna data-modo>) controla
+  // todas as tabelas de magia da página (uma por aba de nível, em magias/index.md; uma só, em
+  // magias/por-classe/*.md). data-modo="contem" faz busca por substring (coluna Classes, onde
+  // cada célula lista vários valores); o padrão é igualdade exata.
+  function montarPainelMagias(raiz) {
+    var tabelas = Array.prototype.slice.call(raiz.querySelectorAll(".magia-tabela table"));
+    if (!tabelas.length) return;
+    tabelas.forEach(function (tabela) {
+      if (tabela.dataset.pronta) return;
+      tabela.dataset.pronta = "1";
+      prepararOrdenacaoMagia(tabela);
+    });
+
+    var busca = raiz.querySelector(".magia-busca");
+    var contagem = raiz.querySelector(".magia-contagem");
+    if (contagem && contagem.dataset.pronta) return;
+    if (contagem) contagem.dataset.pronta = "1";
+    var filtros = Array.prototype.slice.call(raiz.querySelectorAll(".magia-filtro"));
+
+    function aplicarFiltros() {
+      var termo = normalizar(busca ? busca.value : "");
+      var visiveis = 0, total = 0;
+      tabelas.forEach(function (tabela) {
+        var corpo = tabela.tBodies[0];
+        var linhas = Array.prototype.slice.call(corpo.rows);
+        var ativa = dentroDeAbaAtiva(tabela);
+        linhas.forEach(function (linha) {
+          var ok = !termo || normalizar(linha.textContent).indexOf(termo) !== -1;
+          filtros.forEach(function (sel) {
+            if (!ok || !sel.value) return;
+            var indice = indiceColunaMagia(tabela, sel.dataset.coluna);
+            if (indice === -1) return;
+            var valorCelula = normalizar(textoCelula(linha, indice));
+            var valorFiltro = normalizar(sel.value);
+            var bate = sel.dataset.modo === "contem"
+              ? valorCelula.indexOf(valorFiltro) !== -1
+              : valorCelula === valorFiltro;
+            if (!bate) ok = false;
+          });
+          linha.hidden = !ok;
+          if (ativa) { total++; if (ok) visiveis++; }
+        });
+      });
+      if (contagem) {
+        contagem.textContent = visiveis === total ? total + " magias" : visiveis + " de " + total + " magias";
+      }
+    }
+
+    if (busca) busca.addEventListener("input", aplicarFiltros);
+    filtros.forEach(function (sel) { sel.addEventListener("change", aplicarFiltros); });
+    document.querySelectorAll(".tabbed-set > input").forEach(function (entrada) {
+      entrada.addEventListener("change", aplicarFiltros);
+    });
+    aplicarFiltros();
+  }
+
   function abrirAbaDaAncora() {
     if (!location.hash) return;
     var alvo = document.getElementById(decodeURIComponent(location.hash.slice(1)));
@@ -156,6 +272,7 @@
 
   function iniciar() {
     montarTabelaNpcs(document);
+    montarPainelMagias(document);
     abrirAbaDaAncora();
     filtrarIndicePorAba();
     document.querySelectorAll(".tabbed-set > input").forEach(function (entrada) {

@@ -225,6 +225,7 @@ nav:
               - Aasimar: racas/aasimar.md
               - Goliath: racas/goliath.md
               - Órc: racas/orc.md
+              - Meio-Gigante: racas/meio-gigante.md
           - Antecedentes:
               - antecedentes/index.md
               - Acólito: antecedentes/acolito.md
@@ -240,6 +241,19 @@ nav:
               - Órfão de Rua: antecedentes/orfao-de-rua.md
               - Sábio: antecedentes/sabio.md
               - Soldado: antecedentes/soldado.md
+          - Magias:
+              - magias/index.md
+              - Por classe:
+                  - magias/por-classe/index.md
+                  - Artífice: magias/por-classe/artifice.md
+                  - Bardo: magias/por-classe/bardo.md
+                  - Bruxo: magias/por-classe/bruxo.md
+                  - Clérigo: magias/por-classe/clerigo.md
+                  - Druida: magias/por-classe/druida.md
+                  - Feiticeiro: magias/por-classe/feiticeiro.md
+                  - Mago: magias/por-classe/mago.md
+                  - Paladino: magias/por-classe/paladino.md
+                  - Patrulheiro: magias/por-classe/patrulheiro.md
       - Regras de D&D 5e (2024):
           - regras-2024/index.md
           - Classes:

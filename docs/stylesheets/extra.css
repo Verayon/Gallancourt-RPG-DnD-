@@ -1172,6 +1172,100 @@ th[aria-sort="descending"] .npc-ordenar::after { content: " ▼"; opacity: 1; }
 }
 
 /* --------------------------------------------------------------------------
+   Magias — tabela filtrável por nível (magias/index.md) e por classe
+   (magias/por-classe/*.md)
+   -------------------------------------------------------------------------- */
+
+.magia-ferramentas > p {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem;
+  margin: 0 0 .9rem;
+}
+
+.magia-busca {
+  flex: 1 1 12rem;
+  min-width: 0;
+  padding: .45rem .7rem;
+  font: inherit;
+  font-size: .8rem;
+  color: var(--gc-ink);
+  background: var(--gc-panel);
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 6px;
+}
+
+.magia-busca:focus {
+  outline: none;
+  border-color: var(--gc-gold);
+}
+
+.magia-filtro {
+  flex: 0 1 auto;
+  padding: .4rem .55rem;
+  font: inherit;
+  font-size: .72rem;
+  color: var(--gc-ink);
+  background: var(--gc-panel);
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 6px;
+}
+
+.magia-contagem {
+  flex-basis: 100%;
+  font-size: .75rem;
+  color: var(--gc-ink-dim);
+  font-style: italic;
+}
+
+.md-typeset .magia-tabela table:not([class]) {
+  font-size: .76rem;
+}
+
+.md-typeset .magia-tabela th,
+.md-typeset .magia-tabela td {
+  padding: .45em .7em;
+  vertical-align: middle;
+}
+
+.md-typeset .magia-tabela th {
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+.md-typeset .magia-tabela td:first-child {
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+/* Colunas de classificação (Ritual, Concentração, Categoria, Tipo de Dano, Tipo de Alcance,
+   Área de Efeito) — sempre as 6 últimas — ficam só para os filtros lerem, não aparecem na tela. */
+.md-typeset .magia-tabela th:nth-child(n+8),
+.md-typeset .magia-tabela td:nth-child(n+8) {
+  display: none;
+}
+
+.magia-ordenar {
+  padding: 0;
+  font: inherit;
+  font-weight: 700;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.magia-ordenar::after {
+  content: " ⇅";
+  opacity: .45;
+  font-size: .85em;
+}
+
+th[aria-sort="ascending"] .magia-ordenar::after { content: " ▲"; opacity: 1; }
+th[aria-sort="descending"] .magia-ordenar::after { content: " ▼"; opacity: 1; }
+
+/* --------------------------------------------------------------------------
    NPCs — página do personagem: cabeçalho (retrato + dados) e abas
    -------------------------------------------------------------------------- */
 

@@ -23,10 +23,15 @@ as raças que *Tasha's* trouxe). Conteúdo de regras genéricas do sistema, não
 
 -   **[Raças](../racas/index.md)**
 
-    As nove raças de personagem principais e suas sub-raças, mais Aasimar, Goliath e Órc.
+    As nove raças de personagem principais e suas sub-raças, mais Aasimar, Goliath, Órc e Meio-Gigante.
 
 -   **[Antecedentes](../antecedentes/index.md)**
 
     Os treze antecedentes: perícias, equipamento e a história de vida do personagem antes da aventura.
+
+-   **[Magias](../magias/index.md)**
+
+    Lista de magias do PHB, Xanathar's e Tasha's, filtrável por nível, classe, escola, ritual,
+    concentração, categoria, tipo de dano, alcance e área de efeito.
 
 </div>
