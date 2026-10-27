@@ -95,6 +95,49 @@ def listar_jogadores(root: Path) -> list[Entidade]:
     return _listar_entidades(docs_dir(root) / "mestre" / "jogadores", "mestre/jogadores")
 
 
+def _listar_detalhado(pasta: Path, rel_prefixo: str, chave_front_matter: str, colunas: list[str]) -> list[dict]:
+    """Como `_listar_entidades`, mas também lê o bloco de front matter (`npc:`/`lugar:`/
+    `jogador:`) de cada página, para alimentar as tabelas filtráveis dos widgets embutidos no
+    site (ver admin/app.py, rotas `/api/npcs`, `/api/lugares`, `/api/jogadores`)."""
+    if not pasta.is_dir():
+        return []
+    itens = []
+    for p in sorted(pasta.glob("*.md")):
+        if p.stem == "index":
+            continue
+        meta, _ = _front_matter(_ler(p))
+        bloco = meta.get(chave_front_matter)
+        if not isinstance(bloco, dict):
+            bloco = {}
+        item = {"slug": p.stem, "nome": _titulo_do_arquivo(p), "rel_docs": f"{rel_prefixo}/{p.name}"}
+        for col in colunas:
+            valor = bloco.get(col)
+            item[col] = valor if valor and valor != "—" else ""
+        itens.append(item)
+    itens.sort(key=lambda i: i["nome"].casefold())
+    return itens
+
+
+def listar_npcs_detalhado(root: Path) -> list[dict]:
+    return _listar_detalhado(docs_dir(root) / "personagens", "personagens", "npc", ["titulo", "raca", "cidade", "afiliacao", "resumo"])
+
+
+def listar_npcs_genericos_detalhado(root: Path) -> list[dict]:
+    return _listar_detalhado(
+        docs_dir(root) / "personagens" / "genericos", "personagens/genericos", "npc", ["titulo", "raca", "resumo"],
+    )
+
+
+def listar_lugares_detalhado(root: Path) -> list[dict]:
+    return _listar_detalhado(docs_dir(root) / "lugares", "lugares", "lugar", ["tipo", "cidade", "resumo"])
+
+
+def listar_jogadores_detalhado(root: Path) -> list[dict]:
+    return _listar_detalhado(
+        docs_dir(root) / "mestre" / "jogadores", "mestre/jogadores", "jogador", ["jogador", "raca_classe", "resumo"],
+    )
+
+
 def listar_todas_paginas(root: Path) -> list[Entidade]:
     """Toda página .md dentro de docs/, para o editor genérico."""
     base = docs_dir(root)

@@ -794,6 +794,68 @@ def api_arquivar(pagina):
 
 
 # --------------------------------------------------------------------------
+# API JSON de criação/listagem de entidades — usada pelos widgets embutidos direto nas páginas
+# do site (docs/personagens/index.md, docs/lugares/index.md, docs/mestre/jogadores/index.md),
+# para não precisar mais abrir o Painel em outra aba. As rotas HTML abaixo (/npc/novo etc.)
+# continuam existindo, como caminho manual de reserva.
+# --------------------------------------------------------------------------
+
+@app.get("/api/npcs")
+def api_listar_npcs():
+    return jsonify(itens=wd.listar_npcs_detalhado(ROOT))
+
+
+@app.get("/api/npcs/genericos")
+def api_listar_npcs_genericos():
+    return jsonify(itens=wd.listar_npcs_genericos_detalhado(ROOT))
+
+
+@app.post("/api/npcs")
+def api_criar_npc():
+    valores = {chave: request.form.get(chave, "") for chave, _, _ in wd.CAMPOS_NPC_NOVO}
+    valores["descricao"] = request.form.get("descricao", "")
+    generico = request.form.get("generico") in ("on", "true", "1")
+    arquivo = request.files.get("imagem")
+    imagem = (arquivo.filename, arquivo.read()) if arquivo and arquivo.filename else None
+    try:
+        r = wd.criar_npc(ROOT, valores, imagem, generico=generico)
+    except ValueError as exc:
+        return _erro_json(str(exc), 400)
+    return jsonify(r)
+
+
+@app.get("/api/lugares")
+def api_listar_lugares():
+    return jsonify(itens=wd.listar_lugares_detalhado(ROOT))
+
+
+@app.post("/api/lugares")
+def api_criar_lugar():
+    valores = {chave: request.form.get(chave, "") for chave, _, _ in wd.CAMPOS_LUGAR_NOVO}
+    valores["descricao"] = request.form.get("descricao", "")
+    try:
+        r = wd.criar_lugar(ROOT, valores)
+    except ValueError as exc:
+        return _erro_json(str(exc), 400)
+    return jsonify(r)
+
+
+@app.get("/api/jogadores")
+def api_listar_jogadores():
+    return jsonify(itens=wd.listar_jogadores_detalhado(ROOT))
+
+
+@app.post("/api/jogadores")
+def api_criar_jogador():
+    valores = {chave: request.form.get(chave, "") for chave, _, _ in wd.CAMPOS_JOGADOR_NOVO}
+    try:
+        r = wd.criar_jogador(ROOT, valores)
+    except ValueError as exc:
+        return _erro_json(str(exc), 400)
+    return jsonify(r)
+
+
+# --------------------------------------------------------------------------
 # Botões do site: "Adicionar NPC" (tabela de NPCs) e "Nova sessão" (Mestre → Sessões)
 # --------------------------------------------------------------------------
 
