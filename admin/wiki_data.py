@@ -911,6 +911,8 @@ CABECALHO_NAV_SESSOES = "      - Sessões:"
 
 # (chave, rótulo na ficha da sessão)
 CAMPOS_SESSAO_NOVA = [
+    ("data", "Data"),
+    ("resumo_breve", "Resumo breve"),
     ("jogadores", "Jogadores"),
     ("nivel", "Nível sugerido"),
     ("duracao", "Duração estimada"),
@@ -934,10 +936,11 @@ def proxima_sessao_preparo(root: Path) -> int:
     return max(numeros) + 1 if numeros else 0
 
 
-def _modelo_sessao(numero: int, titulo: str, valores: dict) -> str:
-    """Página de sessão com o mesmo layout da Sessão 0: ficha + abas."""
+def _modelo_sessao(numero: int, titulo: str, valores: dict, rel_docs: str) -> str:
+    """Página de sessão com o mesmo layout da Sessão 0: abas logo após o título, ficha dentro de
+    Resumo, e o Painel de Iniciativa embutido por último."""
     ficha = "\n".join(
-        f"| **{rotulo}** | {(valores.get(chave) or '').strip() or '—'} |" for chave, rotulo in CAMPOS_SESSAO_NOVA
+        f"    | **{rotulo}** | {(valores.get(chave) or '').strip() or '—'} |" for chave, rotulo in CAMPOS_SESSAO_NOVA
     )
     resumo = (valores.get("resumo") or "").strip() or "*(Resumo da sessão a escrever.)*"
     resumo = "\n".join("    " + l if l.strip() else "" for l in resumo.splitlines())
@@ -952,27 +955,27 @@ sessao:
 
 # Sessão {numero} — {titulo}
 
-!!! warning "Conteúdo de campanha, não cânone do mundo"
-    Esta página é um roteiro de preparação de sessão — não documenta o mundo pré-campanha como o
-    resto da wiki. Depois de jogada, registre o que aconteceu pelo [Painel do Mestre](../painel.md)
-    ou pelo [modelo manual](../registro-manual-de-sessao.md); só promova para o cânone do mundo o
-    que você decidir manter como fato definitivo.
+=== "Resumo"
 
-<div class="ficha" markdown>
+    <div class="ficha" markdown>
 
-| | |
-|---|---|
+    | | |
+    |---|---|
 {ficha}
 
-</div>
-
-=== "Resumo"
+    </div>
 
     ## Resumo rápido
 
 {resumo}
 
     ## Antes de sentar à mesa
+
+{vazio}
+
+=== "Cenas"
+
+    ### Cena 1
 
 {vazio}
 
@@ -995,9 +998,7 @@ sessao:
 
 {vazio}
 
-=== "Cenas"
-
-    ### Cena 1
+=== "Lugares"
 
 {vazio}
 
@@ -1011,11 +1012,7 @@ sessao:
 
 {vazio}
 
-=== "Lugares"
-
-{vazio}
-
-=== "Segredo do Mestre"
+=== "Segredos do Mestre"
 
     ## Quem está por trás
 
@@ -1024,6 +1021,15 @@ sessao:
     ## Pistas para distribuir
 
 {vazio}
+
+=== "Painel de Iniciativa"
+
+    <div class="painel-iniciativa" data-pagina="{rel_docs}" markdown>
+
+    *(o painel aparece aqui quando a página carrega — precisa do [Painel do Mestre](../painel.md)
+    rodando no seu computador)*
+
+    </div>
 
 ## Depois da sessão
 
@@ -1042,7 +1048,7 @@ def criar_sessao_preparo(root: Path, numero: int, titulo: str, valores: dict) ->
     if any(re.match(rf"sessao-{numero}(-|$)", p.stem) for p in pasta_sessoes(root).glob("sessao-*.md")):
         raise ValueError(f"Já existe uma página para a Sessão {numero}.")
     rel = f"mestre/sessoes/sessao-{numero}-{slug_statblock(titulo)}.md"
-    _escrever(docs_dir(root) / rel, _modelo_sessao(numero, titulo, valores))
+    _escrever(docs_dir(root) / rel, _modelo_sessao(numero, titulo, valores, rel))
     nav_ok = _inserir_no_nav(root, CABECALHO_NAV_SESSOES, f"- {_titulo_nav(f'Sessão {numero} — {titulo}')}: {rel}")
     build_ok, build_saida = validar_build(root)
     return {"arquivo": f"docs/{rel}", "rel_docs": rel, "nav_ok": nav_ok, "build_ok": build_ok, "build_saida": build_saida}

@@ -131,7 +131,9 @@ def _ficha_markdown(corpo: str) -> dict[str, str]:
     m = re.search(r'<div class="ficha" markdown>(.*?)</div>', corpo, re.S)
     if not m:
         return {}
-    return dict(re.findall(r"^\| \*\*(.+?)\*\* \| (.*?) \|$", m.group(1), re.M))
+    # A ficha pode estar indentada (ex.: dentro da aba "Resumo" de uma sessão) ou não (ex.: NPC,
+    # cidade) — aceita espaços à esquerda de cada linha "| **Rótulo** | valor |".
+    return dict(re.findall(r"^[ \t]*\| \*\*(.+?)\*\* \| (.*?) \|$", m.group(1), re.M))
 
 
 def _lista_sessoes(docs: Path, config) -> str:
@@ -155,14 +157,29 @@ def _lista_sessoes(docs: Path, config) -> str:
     ]
     if not sessoes:
         return "\n".join(partes + ["*Nenhuma sessão criada ainda.*"])
-    partes += ['<div class="bar-list" markdown>', ""]
+    partes += ['<div class="sessao-lista" markdown>', ""]
     for _, titulo, arq, ficha in sessoes:
-        detalhes = " · ".join(
-            f"{rotulo}: {ficha[rotulo]}" for rotulo in ("Local", "Jogadores", "Nível sugerido") if ficha.get(rotulo, "—") != "—"
-        )
-        partes += [f"-   **[{titulo}]({arq})**", ""]
-        if detalhes:
-            partes += [f"    {detalhes}", ""]
+        data = ficha.get("Data", "—")
+        if data == "—":
+            data = ""
+        resumo_breve = ficha.get("Resumo breve", "—")
+        if resumo_breve == "—":
+            resumo_breve = " · ".join(
+                f"{rotulo}: {ficha[rotulo]}"
+                for rotulo in ("Local", "Jogadores", "Nível sugerido")
+                if ficha.get(rotulo, "—") != "—"
+            )
+        partes += [
+            '<div class="sessao-card" markdown>', "",
+            '<div class="sessao-card__cabecalho" markdown>', "",
+            f"**[{titulo}]({arq})**", "",
+        ]
+        if data:
+            partes += [f"{data}", ""]
+        partes += ["</div>", ""]
+        if resumo_breve:
+            partes += ["---", "", f"{resumo_breve}", ""]
+        partes += ["</div>", ""]
     partes += ["</div>"]
     return "\n".join(partes)
 

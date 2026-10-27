@@ -11,7 +11,10 @@
    O tema vem travado em max-width:61rem (header, conteúdo e rodapé usam a
    mesma classe .md-grid). As barras laterais têm largura própria fixa
    (12.1rem cada), então alargar só o grid dá mais espaço ao conteúdo sem
-   mudar o header nem o painel de navegação.
+   mudar o header nem o painel de navegação. Em vez de um segundo teto fixo
+   (ex.: 74rem), o grid usa a largura da janela menos uma margem pequena —
+   acompanha a resolução da tela em vez de parar de crescer num monitor
+   grande.
    -------------------------------------------------------------------------- */
 
 /* Só alarga a partir do ponto em que as barras laterais aparecem (mesmo
@@ -19,7 +22,7 @@
    para aproveitar, e encolher o grid lá só atrapalharia o cabeçalho. */
 @media screen and (min-width: 76.25em) {
   .md-grid {
-    max-width: min(92%, 74rem);
+    max-width: calc(100% - 2.4rem);
   }
 }
 
@@ -425,6 +428,9 @@ input,
   border-left: 4px solid var(--gc-gold);
   border-radius: 6px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, .14);
+  /* O tema por padrão usa margin:1.5625em 0 (~25px) — reduzido para não
+     empilhar tanto respiro entre uma admonição e o texto ao redor. */
+  margin: 1em 0;
 }
 
 .md-typeset .admonition-title,
@@ -459,6 +465,11 @@ input,
   border-radius: 6px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, .1);
+}
+
+.md-typeset table:not([class]) td,
+.md-typeset table:not([class]) th {
+  padding: .5rem .75rem;
 }
 
 .md-typeset table:not([class]) th {
@@ -764,15 +775,15 @@ input,
 .bar-list > ul,
 .bar-list > ol {
   list-style: none;
-  margin: 1.2rem 0;
+  margin: 1rem 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: .5rem;
+  gap: .4rem;
 }
 
 .bar-list li {
-  padding: .65rem 1rem;
+  padding: .5rem .8rem;
   background: var(--gc-panel);
   border: 1px solid var(--gc-panel-border);
   border-left: 3px solid var(--gc-gold);
@@ -799,6 +810,68 @@ input,
   color: var(--gc-ink-dim);
   font-size: .86rem;
   margin-top: .15rem;
+}
+
+/* --------------------------------------------------------------------------
+   15. Lista de sessões (Mestre → Sessões) — um cartão por sessão: título e
+   data na mesma linha, separador sutil, e um resumo breve abaixo. Gerado por
+   hooks/gallancourt.py (_lista_sessoes).
+   -------------------------------------------------------------------------- */
+
+.sessao-lista {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  margin: 1rem 0;
+}
+
+.sessao-card {
+  padding: .6rem .9rem;
+  background: var(--gc-panel);
+  border: 1px solid var(--gc-panel-border);
+  border-left: 3px solid var(--gc-gold);
+  border-radius: 6px;
+  transition: border-color .15s ease, background-color .15s ease;
+}
+
+.sessao-card:hover {
+  border-color: var(--gc-gold);
+  background: var(--md-accent-fg-color--transparent);
+}
+
+.sessao-card__cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: .6rem 1rem;
+}
+
+.sessao-card__cabecalho p {
+  margin: 0;
+  font-family: 'EB Garamond', serif;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.sessao-card__cabecalho p + p {
+  color: var(--gc-ink-dim);
+  font-weight: 600;
+  font-size: .8rem;
+  letter-spacing: .02em;
+  white-space: nowrap;
+}
+
+.sessao-card hr {
+  border: none;
+  border-top: 1px solid var(--gc-panel-border);
+  margin: .5rem 0;
+}
+
+.sessao-card > p {
+  margin: 0;
+  color: var(--gc-ink-dim);
+  font-size: .86rem;
 }
 
 /* --------------------------------------------------------------------------

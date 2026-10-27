@@ -3,10 +3,12 @@
 {% block conteudo %}
 <h1>Nova sessão — Sessão {{ numero }}</h1>
 <p class="ajuda">
-  Cria a página de preparação da sessão com o mesmo layout das anteriores: ficha no topo e as abas
-  Resumo, NPCs, Cenas, Loot &amp; Pistas, Lugares e Segredo do Mestre. Só o título é obrigatório;
-  o resto você preenche depois, em <a href="/editar">Editar página</a>. Para registrar uma sessão
-  que já foi <em>jogada</em>, use <a href="/">Registrar sessão</a>.
+  Cria a página de preparação da sessão com o mesmo layout das anteriores: abas Resumo (com a
+  ficha da sessão), Cenas, NPCs, Lugares, Loot &amp; Pistas, Segredo do Mestre e Painel de
+  Iniciativa, nessa ordem. Antes de escrever as Cenas, vale ter os Lugares e NPCs/Jogadores
+  envolvidos já cadastrados. Só o título é obrigatório; o resto você preenche depois, em
+  <a href="/editar">Editar página</a>. Para registrar uma sessão que já foi <em>jogada</em>, use
+  <a href="/">Registrar sessão</a>.
 </p>
 
 {% if erro %}<p class="aviso aviso--erro">⚠️ {{ erro }}</p>{% endif %}
