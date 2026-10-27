@@ -52,6 +52,12 @@ mundo de Gallancourt, organizado para consulta rápida durante a mesa.
 
     Batalhas, decretos e viradas que moldaram o presente.
 
+-   [![](../assets/placeholders/tema.svg){ .card-portrait }](../regras/index.md)
+
+    **[Regras de D&D 5e](../regras/index.md)**
+
+    Classes, raças e antecedentes — referência de criação de personagem, não é lore de Gallancourt.
+
 </div>
 
 ## Como ler esta wiki

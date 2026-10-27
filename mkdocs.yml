@@ -194,6 +194,48 @@ nav:
           - Fuga de Severin Marceau: eventos/fuga-de-severin-marceau.md
           - Guerra Fria: eventos/guerra-fria.md
           - Massacre da família Enry: eventos/massacre-dos-enry.md
+      - Regras de D&D 5e:
+          - regras/index.md
+          - Classes:
+              - classes/index.md
+              - Bárbaro: classes/barbaro.md
+              - Bardo: classes/bardo.md
+              - Bruxo: classes/bruxo.md
+              - Clérigo: classes/clerigo.md
+              - Druida: classes/druida.md
+              - Feiticeiro: classes/feiticeiro.md
+              - Guerreiro: classes/guerreiro.md
+              - Ladino: classes/ladino.md
+              - Mago: classes/mago.md
+              - Monge: classes/monge.md
+              - Paladino: classes/paladino.md
+              - Patrulheiro: classes/patrulheiro.md
+          - Raças:
+              - racas/index.md
+              - Humano: racas/humano.md
+              - Elfo: racas/elfo.md
+              - Anão: racas/anao.md
+              - Halfling: racas/halfling.md
+              - Draconato: racas/draconato.md
+              - Gnomo: racas/gnomo.md
+              - Meio-Elfo: racas/meio-elfo.md
+              - Meio-Orc: racas/meio-orc.md
+              - Tiflin: racas/tiflin.md
+          - Antecedentes:
+              - antecedentes/index.md
+              - Acólito: antecedentes/acolito.md
+              - Artesão de Guilda: antecedentes/artesao-de-guilda.md
+              - Artista: antecedentes/artista.md
+              - Charlatão: antecedentes/charlatao.md
+              - Criminoso: antecedentes/criminoso.md
+              - Eremita: antecedentes/eremita.md
+              - Forasteiro: antecedentes/forasteiro.md
+              - Herói do Povo: antecedentes/heroi-do-povo.md
+              - Marinheiro: antecedentes/marinheiro.md
+              - Nobre: antecedentes/nobre.md
+              - Órfão de Rua: antecedentes/orfao-de-rua.md
+              - Sábio: antecedentes/sabio.md
+              - Soldado: antecedentes/soldado.md
   - Compêndio:
       - compendio/index.md
       - História de Gallancourt (anotada): compendio/historia-de-gallancourt.md

@@ -44,7 +44,7 @@ IGNORAR_NA_COPIA = shutil.ignore_patterns("site", "fontes", ".venv", "venv", "__
 
 # Ordem do menu combinada com o autor
 MENU_TOPO = ["Início", "Lore", "Wiki", "Compêndio", "Mestre", "Configurações"]
-MENU_WIKI = ["Mundo", "Geografia", "Cidades", "Lugares", "Facções", "NPCs", "Eventos"]
+MENU_WIKI = ["Mundo", "Geografia", "Cidades", "Lugares", "Facções", "NPCs", "Eventos", "Regras de D&D 5e"]
 COLUNAS_NPC = ["Retrato", "Nome", "Título", "Raça", "Cidade", "Afiliação", "Situação", "Resumo"]
 
 resultados: list[tuple[str, str, str, str]] = []  # (grupo, verificação, situação, detalhe)
