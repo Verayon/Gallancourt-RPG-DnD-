@@ -34,6 +34,11 @@ import linha_tempo  # noqa: E402
 # Linha do tempo carregada uma vez por geração do site (on_pre_build)
 _EVENTOS: list[dict] = []
 
+# Magias carregadas uma vez por geração do site (on_pre_build) — sem este cache, cada chamada a
+# _tabela_magias_por_nivel/_tabela_magias_classe (1 + uma por classe) releria e reparsearia todos
+# os arquivos de docs/magias/ do zero, multiplicando a leitura de disco por ~10.
+_MAGIAS: list[dict] = []
+
 RETRATO_PADRAO = "../assets/placeholders/personagem.svg"
 PAINEL_PADRAO = "http://127.0.0.1:5001"
 DICA_PAINEL = "Abre o Painel do Mestre — ele precisa estar rodando no seu computador"
@@ -232,9 +237,8 @@ def _tabela_magia_bloco(magias: list[dict], com_classes: bool, com_nivel: bool, 
 
 
 def _tabela_magias_por_nivel(docs: Path, config) -> str:
-    magias = _ler_magias(docs)
     por_nivel: dict[int, list[dict]] = {n: [] for n, _ in NIVEIS_MAGIA}
-    for m in magias:
+    for m in _MAGIAS:
         por_nivel.setdefault(m.get("nivel", 0), []).append(m)
     blocos = _filtros_magia(incluir_classe=True)
     blocos.append("")
@@ -252,7 +256,7 @@ def _tabela_magias_por_nivel(docs: Path, config) -> str:
 
 
 def _tabela_magias_classe(docs: Path, classe: str) -> str:
-    magias = [m for m in _ler_magias(docs) if classe in (m.get("classes") or [])]
+    magias = [m for m in _MAGIAS if classe in (m.get("classes") or [])]
     blocos = _filtros_magia(incluir_classe=False)
     blocos.append("")
     if magias:
@@ -508,8 +512,9 @@ def _paginar_npc(conteudo: str) -> str:
 # --------------------------------------------------------------------------
 
 def on_pre_build(config):
-    global _EVENTOS
+    global _EVENTOS, _MAGIAS
     _EVENTOS = linha_tempo.carregar(Path(config["config_file_path"]).parent)
+    _MAGIAS = _ler_magias(Path(config["docs_dir"]))
 
 
 def _depois_do_h1(markdown: str, bloco: str) -> str:
