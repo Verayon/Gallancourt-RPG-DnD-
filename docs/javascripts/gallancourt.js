@@ -150,7 +150,7 @@
       tabela: raiz.querySelector(".jogador-tabela table"),
       busca: raiz.querySelector(".jogador-busca"),
       contagem: raiz.querySelector(".jogador-contagem"),
-      colunasComFiltro: ["Jogador"],
+      colunasComFiltro: ["Jogador", "Classe"],
       rotuloPlural: "jogadores",
     });
   }

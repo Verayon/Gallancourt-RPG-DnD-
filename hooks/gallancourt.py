@@ -25,6 +25,7 @@ sessão aparece sozinha, sem editar nenhuma lista à mão.
 from __future__ import annotations
 
 import html
+import json
 import re
 import sys
 from pathlib import Path
@@ -403,7 +404,23 @@ def _lista_sessoes(docs: Path, config) -> str:
 
 # Colunas das tabelas de Lugares/Jogadores: (rótulo, chave no bloco lugar:/jogador:)
 COLUNAS_LUGAR = [("Situado", "situado"), ("Região", "regiao"), ("Reino", "reino")]
-COLUNAS_JOGADOR = [("Jogador", "jogador"), ("Raça e classe", "raca_classe")]
+COLUNAS_JOGADOR = [
+    ("Jogador", "jogador"), ("Classe", "classe"), ("Nível", "nivel"), ("CA", "ca"), ("PV", "pv"),
+]
+
+_RE_STATBLOCK_DADOS = re.compile(r"<!-- dados:statblock (.*?) -->", re.DOTALL)
+
+
+def _resumo_statblock(texto: str) -> dict:
+    """Primeira ficha de combate (ver admin/wiki_data.py) anexada à página, só para ler alguns
+    valores de resumo (classe/nível/CA/PV) — não precisa renderizar nada."""
+    m = _RE_STATBLOCK_DADOS.search(texto)
+    if not m:
+        return {}
+    try:
+        return json.loads(m.group(1))
+    except json.JSONDecodeError:
+        return {}
 
 
 def _criar_entidade_div(tipo: str, caminho_painel_doc: str) -> list[str]:
@@ -548,10 +565,18 @@ def _lista_jogadores(docs: Path, config) -> str:
         for arquivo in sorted(pasta.glob("*.md")):
             if arquivo.stem == "index":
                 continue
-            meta, corpo = _front_matter(arquivo.read_text(encoding="utf-8"))
+            texto = arquivo.read_text(encoding="utf-8")
+            meta, corpo = _front_matter(texto)
             jogador = meta.get("jogador")
             if not isinstance(jogador, dict):
                 continue
+            ficha = _resumo_statblock(texto)
+            jogador = dict(jogador)
+            jogador["classe"] = ficha.get("classe") or jogador.get("raca_classe") or "—"
+            jogador["nivel"] = ficha.get("nivel") or "—"
+            jogador["ca"] = ficha.get("ca") or "—"
+            pv, pv_atual = ficha.get("pv"), ficha.get("pv_atual")
+            jogador["pv"] = (f"{pv_atual}/{pv}" if pv_atual else pv) or "—"
             linhas.append((_titulo_h1(corpo, arquivo.stem), arquivo.name, jogador))
     linhas.sort(key=lambda l: l[0].casefold())
 
@@ -655,6 +680,34 @@ def _separar_em_aberto(corpo: str) -> tuple[str, list[str]]:
     return corpo, blocos
 
 
+def _cabecalho_jogador(jogador: dict) -> str:
+    """Card de identidade no topo da página de um jogador — mesmo padrão visual de
+    _cabecalho_npc (reaproveita .npc-cabecalho/.npc-dados), só sem retrato."""
+    resumo = jogador.get("resumo")
+    linhas = ["| | |", "|---|---|"]
+    quem_joga = (jogador.get("jogador") or "").strip()
+    if quem_joga:
+        linhas.append(f"| **Jogador** | {_celula(quem_joga)} |")
+    raca_classe = (jogador.get("raca_classe") or "").strip()
+    if raca_classe:
+        linhas.append(f"| **Raça e classe** | {_celula(raca_classe)} |")
+    return "\n".join([
+        '<div class="npc-cabecalho" markdown>',
+        "",
+        '<div class="npc-dados" markdown>',
+        "",
+        *([f"*{resumo}*", ""] if resumo else []),
+        *(linhas if len(linhas) > 2 else []),
+        "",
+        "</div>",
+        "",
+        "</div>",
+        "",
+        "<!-- npc-corpo -->",
+        "",
+    ])
+
+
 def _abas(abas: list[tuple[str, str]]) -> str:
     marcado = 'checked="checked" '
     entradas = "".join(
@@ -670,10 +723,24 @@ def _abas(abas: list[tuple[str, str]]) -> str:
     )
 
 
+_RE_STATBLOCK = re.compile(
+    r"<!-- inicio:statblock:[a-z0-9-]+ -->.*?<!-- fim:statblock:[a-z0-9-]+ -->", re.DOTALL,
+)
+
+
+def _extrair_statblocks(texto: str) -> tuple[str, list[str]]:
+    """Tira do texto qualquer ficha de combate (cartão `.stat-block`, ver
+    admin/wiki_data.py::salvar_statblock) anexada à página, para reinserir dentro da aba
+    "Ficha" em vez de deixá-la solta onde o Painel a inseriu (normalmente no fim do arquivo)."""
+    fichas = _RE_STATBLOCK.findall(texto)
+    return _RE_STATBLOCK.sub("", texto), fichas
+
+
 def _paginar_npc(conteudo: str) -> str:
     if "<!-- npc-corpo -->" not in conteudo:
         return conteudo
     cabeca, corpo = conteudo.split("<!-- npc-corpo -->", 1)
+    corpo, fichas_combate = _extrair_statblocks(corpo)
     corpo, em_aberto = _separar_em_aberto(corpo)
 
     partes = re.split(r'<h2 id="([^"]+)"[^>]*>(.*?)</h2>', corpo, flags=re.S)
@@ -684,14 +751,20 @@ def _paginar_npc(conteudo: str) -> str:
         ancora, titulo_html, secao = partes[i], partes[i + 1], partes[i + 2]
         titulo = html.unescape(re.sub(r"<[^>]+>", "", titulo_html)).replace("¶", "").strip()
         abas.append((titulo, f'<span id="{ancora}" class="npc-ancora"></span>{secao}'))
-    if not any(titulo == "Ficha" for titulo, _ in abas):
-        # Reserva o espaço mesmo sem dados ainda — a ficha de combate completa (atributos,
-        # perícias, CA, PV, equipamento) é preenchida depois pelo Painel do Mestre, numa etapa
-        # futura; aqui só garante que a aba já existe em todo NPC.
-        abas.append(("Ficha", (
-            "<p><em>Ficha ainda não preenchida — isso vai ser gerado pelo Painel do Mestre em "
-            "uma próxima etapa, com atributos, perícias, CA, PV e equipamento.</em></p>"
-        )))
+    indice_ficha = next((i for i, (titulo, _) in enumerate(abas) if titulo == "Ficha"), None)
+    if indice_ficha is not None:
+        if fichas_combate:
+            titulo, conteudo_ficha = abas[indice_ficha]
+            abas[indice_ficha] = (titulo, conteudo_ficha + "".join(fichas_combate))
+    else:
+        # Sem ficha de combate anexada ainda, reserva o espaço com um aviso — o Painel do
+        # Mestre preenche isso pela aba "Ficha de combate" (atributos, perícias, CA, PV,
+        # equipamento), escolhendo esta página; o cartão então aparece aqui automaticamente.
+        conteudo_ficha = "".join(fichas_combate) if fichas_combate else (
+            "<p><em>Ficha ainda não preenchida — crie uma pela aba \"Ficha de combate\" do "
+            "Painel do Mestre, escolhendo esta página.</em></p>"
+        )
+        abas.append(("Ficha", conteudo_ficha))
     if em_aberto:
         abas.append(("Em aberto", "".join(em_aberto)))
     if not abas:
@@ -764,11 +837,14 @@ def on_page_markdown(markdown: str, page, config, files):
         )
         markdown = markdown.replace("<!-- participantes:botao -->", botao)
     npc = page.meta.get("npc")
+    jogador = page.meta.get("jogador")
     secao_tempo = linha_tempo.secao_da_pagina(docs, _EVENTOS, src)
     if isinstance(npc, dict):
         markdown = _depois_do_h1(markdown, _cabecalho_npc(npc, src, docs))
         if secao_tempo:
             markdown = markdown.rstrip("\n") + "\n\n" + secao_tempo
+    elif isinstance(jogador, dict):
+        markdown = _depois_do_h1(markdown, _cabecalho_jogador(jogador))
     elif secao_tempo:
         estado = linha_tempo.estado_atual(_EVENTOS, src)
         if "situacao" in estado:
@@ -782,6 +858,6 @@ def on_page_markdown(markdown: str, page, config, files):
 
 
 def on_page_content(conteudo: str, page, config, files):
-    if isinstance(page.meta.get("npc"), dict):
+    if isinstance(page.meta.get("npc"), dict) or isinstance(page.meta.get("jogador"), dict):
         return _paginar_npc(conteudo)
     return conteudo

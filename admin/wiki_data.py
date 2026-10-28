@@ -550,10 +550,14 @@ CAMPOS_STATBLOCK_TEXTO = [
     ("nome", "Nome", True),
     ("subtitulo", "Tipo / papel (ex.: Humanoide médio, qualquer alinhamento)", False),
     ("foto", "Foto (caminho relativo — preenchido sozinho ao enviar uma imagem abaixo)", False),
+    ("nivel", "Nível (personagens de jogador)", False),
+    ("classe", "Classe (ex.: Guerreiro)", False),
     ("ca", "Classe de Armadura", True),
-    ("pv", "Pontos de Vida (ex.: 11 (2d8+2))", True),
+    ("pv", "Pontos de Vida máximos (ex.: 11 (2d8+2))", True),
+    ("pv_atual", "PV atual (em branco = igual ao máximo; atualize conforme leva dano)", False),
     ("deslocamento", "Deslocamento (ex.: 9 m)", True),
-    ("slots_magia", "Espaços de magia (ex.: 1º: 4, 2º: 3)", False),
+    ("carga", "Carga (peso atual / capacidade — ex.: 32 kg / 90 kg)", False),
+    ("slots_magia", "Espaços de magia (ex.: 1º: 2/4, 2º: 1/3 — atualize conforme usa)", False),
     ("pericias", "Perícias (ex.: Furtividade +3, Intimidação +1)", False),
     ("sentidos", "Sentidos (ex.: Percepção passiva 10)", False),
     ("idiomas", "Idiomas", False),
@@ -656,11 +660,23 @@ def renderizar_statblock(slug: str, v: dict) -> str:
     subtitulo = (v.get("subtitulo") or "").strip()
     foto = (v.get("foto") or "").strip()
 
-    chips = [
+    nivel = (v.get("nivel") or "").strip()
+    classe = (v.get("classe") or "").strip()
+    pv = (v.get("pv") or "").strip() or "—"
+    pv_atual = (v.get("pv_atual") or "").strip()
+    chips = []
+    if nivel:
+        chips.append(f'<span><strong>Nível</strong> {nivel}</span>')
+    if classe:
+        chips.append(f'<span><strong>Classe</strong> {classe}</span>')
+    chips += [
         f'<span><strong>CA</strong> {(v.get("ca") or "").strip() or "—"}</span>',
-        f'<span><strong>PV</strong> {(v.get("pv") or "").strip() or "—"}</span>',
+        f'<span><strong>PV</strong> {f"{pv_atual}/{pv}" if pv_atual else pv}</span>',
         f'<span><strong>Deslocamento</strong> {(v.get("deslocamento") or "").strip() or "—"}</span>',
     ]
+    carga = (v.get("carga") or "").strip()
+    if carga:
+        chips.append(f'<span><strong>Carga</strong> {carga}</span>')
     slots_magia = (v.get("slots_magia") or "").strip()
     if slots_magia:
         chips.append(f'<span><strong>Espaços de magia</strong> {slots_magia}</span>')
