@@ -2,6 +2,11 @@
 tags:
   - Cidades
   - L'Ordre de Célestien
+lugar:
+  situado: Cidade
+  regiao: Montanhas
+  reino: L'Ordre de Célestien
+  resumo: "A cidade das pedras cantantes — vigilância e controle das fronteiras culturais."
 ---
 
 # Chantépierre

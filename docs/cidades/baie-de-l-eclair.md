@@ -4,6 +4,11 @@ tags:
   - Aliança dos Lordes
   - Naval
   - Magia
+lugar:
+  situado: Cidade
+  regiao: Costa oeste
+  reino: Gallancourt (Aliança dos Lordes)
+  resumo: "O Portão do Mundo — maior porto do reino, Casa Lumière."
 ---
 
 # Baie de l'Éclair

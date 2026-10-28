@@ -3,6 +3,11 @@ tags:
   - Cidades
   - Aliança dos Lordes
   - Fronteira
+lugar:
+  situado: Cidade
+  regiao: Fronteira leste
+  reino: Gallancourt (Aliança dos Lordes)
+  resumo: "O Escudo Disciplinado — cidade militar da Casa Saint-Laurent."
 ---
 
 # Saint-Armand

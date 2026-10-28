@@ -129,7 +129,9 @@ def listar_npcs_genericos_detalhado(root: Path) -> list[dict]:
 
 
 def listar_lugares_detalhado(root: Path) -> list[dict]:
-    return _listar_detalhado(docs_dir(root) / "lugares", "lugares", "lugar", ["tipo", "cidade", "resumo"])
+    return _listar_detalhado(
+        docs_dir(root) / "lugares", "lugares", "lugar", ["situado", "regiao", "reino", "resumo"],
+    )
 
 
 def listar_jogadores_detalhado(root: Path) -> list[dict]:
@@ -1096,9 +1098,10 @@ CABECALHO_NAV_LUGARES = "      - Lugares:"
 # (chave, rótulo, obrigatório)
 CAMPOS_LUGAR_NOVO = [
     ("nome", "Nome", True),
-    ("tipo", "Tipo (ex.: taberna, torre, floresta, vila)", False),
-    ("cidade", "Cidade ou região", False),
-    ("resumo", "Resumo de uma linha (aparece na lista)", False),
+    ("situado", 'Situado em (cidade onde fica — ou "Cidade"/"Vila" se este lugar for um assentamento)', False),
+    ("regiao", "Região (ex.: Costa norte, Fronteira leste)", False),
+    ("reino", "Reino ou estado (ex.: Gallancourt, L'Ordre de Célestien)", False),
+    ("resumo", "Descrição de uma linha (aparece na lista)", False),
 ]
 
 
@@ -1115,17 +1118,20 @@ def criar_lugar(root: Path, valores: dict) -> dict:
 
     campos = {chave: (valores.get(chave) or "").strip() for chave, _, _ in CAMPOS_LUGAR_NOVO}
     ficha_rapida = {}
-    if campos["tipo"]:
-        ficha_rapida["Tipo"] = campos["tipo"]
-    if campos["cidade"]:
-        ficha_rapida["Cidade ou região"] = _link_se_existir(root, campos["cidade"], listar_cidades(root), rel)
+    if campos["situado"]:
+        ficha_rapida["Situado em"] = _link_se_existir(root, campos["situado"], listar_cidades(root), rel)
+    if campos["regiao"]:
+        ficha_rapida["Região"] = campos["regiao"]
+    if campos["reino"]:
+        ficha_rapida["Reino"] = campos["reino"]
 
     meta = {
-        "tags": ["Lugares"] + ([campos["cidade"]] if campos["cidade"] else []),
+        "tags": ["Lugares"] + ([campos["situado"]] if campos["situado"] else []),
         "hide": ["toc"],
         "lugar": {
-            "tipo": campos["tipo"] or "—",
-            "cidade": campos["cidade"] or "—",
+            "situado": campos["situado"] or "—",
+            "regiao": campos["regiao"] or "—",
+            "reino": campos["reino"] or "—",
             "resumo": campos["resumo"],
             "ficha": ficha_rapida,
         },

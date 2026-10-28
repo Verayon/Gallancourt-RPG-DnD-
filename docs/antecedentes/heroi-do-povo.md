@@ -8,6 +8,8 @@ tags:
 
 Veio de origem simples, trabalhando a terra, cuidando de animais ou exercendo um ofício modesto, até que algum feito o tornou conhecido como defensor dos fracos contra os poderosos. Mesmo sem título ou fortuna, carrega o respeito de quem viu de perto sua coragem.
 
+*Não existe uma versão equivalente no PHB 2024.*
+
 ## Informações básicas
 
 - **Perícias:** Lida com Animais e Sobrevivência.

@@ -8,6 +8,8 @@ tags:
 
 O artífice é um inventor que aprende a canalizar magia arcana através de engenhocas, ferramentas e objetos do cotidiano, tratando a conjuração quase como uma ciência aplicada. Combina conhecimento técnico, improviso de bancada e fórmulas arcanas para transformar itens comuns em dispositivos extraordinários, de armaduras reforçadas a autômatos de combate. Embora associado ao cenário de Eberron, representa qualquer tradição de magos-engenheiros, alquimistas de oficina ou artesãos arcanos que preferem resolver problemas com um parafuso, uma fórmula e um pouco de energia mágica. Em um grupo de aventureiros, costuma ser o responsável por manter equipamentos funcionando, criar soluções criativas e produzir itens mágicos úteis para todos.
 
+*Não existe uma versão equivalente no PHB 2024.*
+
 ## Informações básicas
 
 - **Dado de vida:** d8
@@ -80,55 +82,38 @@ Diferente da maioria dos meio-conjuradores, o artífice obtém Conjuração já 
 
 ## Características de classe
 
-### Faz-Tudo Mágico
-
-No 1º nível, o artífice aprende a infundir brevemente um pequeno objeto não mágico ao alcance com um efeito cosmético minúsculo — uma luz fraca, um som suave, um cheiro específico ou uma imagem simples — podendo manter alguns desses truques ativos ao mesmo tempo e transferi-los para outro objeto quando desejar.
-
-### Conjuração
-
-A partir do 1º nível, o artífice ganha acesso a magias arcanas através de uma compreensão quase científica da conjuração, preparando-as diariamente a partir de toda a lista de magias de artífice disponível para ele, não apenas das que já conhece — o que o torna mais flexível do que outros meio-conjuradores à medida que ganha acesso a magias de nível mais alto.
-
-### Infundir Item
-
-A partir do 2º nível, o artífice aprende a replicar propriedades de itens mágicos em objetos comuns através de infusões conhecidas, podendo manter um número limitado de itens infundidos ativos de cada vez; tanto o número de infusões conhecidas quanto o de itens infundidos simultaneamente aumentam conforme ele ganha níveis.
-
-### A Ferramenta Certa para o Trabalho
-
-A partir do 3º nível, o artífice pode gastar uma hora de trabalho de oficina para conjurar magicamente um conjunto específico de ferramentas de artesão dentro de uma bolsa de ferramentas que ele já possua, desde que tenha proficiência na ferramenta desejada, substituindo o conjunto anterior criado dessa forma.
-
-### Perícia em Ferramentas
-
-A partir do 6º nível, o artífice dobra seu bônus de proficiência em qualquer teste de habilidade que faça usando uma ferramenta na qual seja proficiente.
-
-### Lampejo de Genialidade
-
-A partir do 7º nível, o artífice pode usar sua reação para somar seu modificador de Inteligência ao resultado de um teste de habilidade ou de resistência feito por ele mesmo ou por uma criatura que possa ver a até 9 metros, um número de vezes por dia igual ao seu modificador de Inteligência (mínimo uma vez), recuperando os usos em um descanso longo.
-
-### Adepto em Itens Mágicos
-
-A partir do 10º nível, o artífice pode manter sintonia com até quatro itens mágicos ao mesmo tempo, e o tempo e o custo em ouro necessários para ele mesmo criar itens mágicos são reduzidos à metade.
-
-### Item Armazenador de Magia
-
-A partir do 11º nível, o artífice pode gastar tempo infundindo um item com até duas de suas magias preparadas de 1º ou 2º nível, permitindo que outra criatura use cargas armazenadas para lançar essas magias mais tarde, sem precisar saber conjurá-las.
-
-### Versado em Itens Mágicos
-
-A partir do 14º nível, o artífice ignora todos os requisitos de classe, raça, nível de personagem e de magia para usar ou sintonizar com um item mágico, e pode manter sintonia com até cinco itens ao mesmo tempo.
-
-### Mestre em Itens Mágicos
-
-A partir do 18º nível, o limite de itens mágicos com os quais o artífice pode manter sintonia simultaneamente aumenta para seis.
-
-### Alma do Artifício
-
-No 20º nível, o artífice ganha um bônus de +1 em todos os testes de resistência para cada item mágico sintonizado que possuir, e quando seus pontos de vida chegam a 0, pode sacrificar a magia de um item mágico sintonizado para, em vez de morrer, cair a 1 ponto de vida.
+=== "Faz-Tudo Mágico"
+    No 1º nível, o artífice aprende a infundir brevemente um pequeno objeto não mágico ao alcance com um efeito cosmético minúsculo — uma luz fraca, um som suave, um cheiro específico ou uma imagem simples — podendo manter alguns desses truques ativos ao mesmo tempo e transferi-los para outro objeto quando desejar.
+=== "Conjuração"
+    A partir do 1º nível, o artífice ganha acesso a magias arcanas através de uma compreensão quase científica da conjuração, preparando-as diariamente a partir de toda a lista de magias de artífice disponível para ele, não apenas das que já conhece — o que o torna mais flexível do que outros meio-conjuradores à medida que ganha acesso a magias de nível mais alto.
+=== "Infundir Item"
+    A partir do 2º nível, o artífice aprende a replicar propriedades de itens mágicos em objetos comuns através de infusões conhecidas, podendo manter um número limitado de itens infundidos ativos de cada vez; tanto o número de infusões conhecidas quanto o de itens infundidos simultaneamente aumentam conforme ele ganha níveis.
+=== "A Ferramenta Certa para o Trabalho"
+    A partir do 3º nível, o artífice pode gastar uma hora de trabalho de oficina para conjurar magicamente um conjunto específico de ferramentas de artesão dentro de uma bolsa de ferramentas que ele já possua, desde que tenha proficiência na ferramenta desejada, substituindo o conjunto anterior criado dessa forma.
+=== "Perícia em Ferramentas"
+    A partir do 6º nível, o artífice dobra seu bônus de proficiência em qualquer teste de habilidade que faça usando uma ferramenta na qual seja proficiente.
+=== "Lampejo de Genialidade"
+    A partir do 7º nível, o artífice pode usar sua reação para somar seu modificador de Inteligência ao resultado de um teste de habilidade ou de resistência feito por ele mesmo ou por uma criatura que possa ver a até 9 metros, um número de vezes por dia igual ao seu modificador de Inteligência (mínimo uma vez), recuperando os usos em um descanso longo.
+=== "Adepto em Itens Mágicos"
+    A partir do 10º nível, o artífice pode manter sintonia com até quatro itens mágicos ao mesmo tempo, e o tempo e o custo em ouro necessários para ele mesmo criar itens mágicos são reduzidos à metade.
+=== "Item Armazenador de Magia"
+    A partir do 11º nível, o artífice pode gastar tempo infundindo um item com até duas de suas magias preparadas de 1º ou 2º nível, permitindo que outra criatura use cargas armazenadas para lançar essas magias mais tarde, sem precisar saber conjurá-las.
+=== "Versado em Itens Mágicos"
+    A partir do 14º nível, o artífice ignora todos os requisitos de classe, raça, nível de personagem e de magia para usar ou sintonizar com um item mágico, e pode manter sintonia com até cinco itens ao mesmo tempo.
+=== "Mestre em Itens Mágicos"
+    A partir do 18º nível, o limite de itens mágicos com os quais o artífice pode manter sintonia simultaneamente aumenta para seis.
+=== "Alma do Artifício"
+    No 20º nível, o artífice ganha um bônus de +1 em todos os testes de resistência para cada item mágico sintonizado que possuir, e quando seus pontos de vida chegam a 0, pode sacrificar a magia de um item mágico sintonizado para, em vez de morrer, cair a 1 ponto de vida.
 
 ## Subclasses
 
 A Especialização de Artífice é escolhida no 3º nível.
 
-- **Alquimista:** foca em poções, elixires e efeitos de suporte químico/alquímico para o grupo.
-- **Armeiro:** transforma a própria armadura em uma arma de combate mágica e versátil.
-- **Artilheiro:** cria torretes e dispositivos de área que concentram dano a distância.
-- **Ferreiro de Batalha:** cria um companheiro-aço (steel defender) e se especializa em combate corpo a corpo auxiliado por magia.
+??? note "Alquimista"
+    Foca em poções, elixires e efeitos de suporte químico/alquímico para o grupo. No 3º nível, ganha a Ferramenta Experimental de Alquimista e magias extras de cura/suporte sempre preparadas, além do Fogo Experimental, que pode causar um de vários efeitos aleatórios (cura, veneno, chama ou fumaça) ao acertar um ataque; no 5º nível, Soluções Alquímicas permite escolher entre bônus temporários de cura, defesa ou mobilidade para si ou aliados; no 9º nível, Fogo Experimental Aprimorado melhora os efeitos; no 15º nível, Transmutação Caótica concede resistência a um tipo de dano escolhido aleatoriamente após cada descanso longo.
+??? note "Armeiro"
+    Transforma a própria armadura em uma arma de combate mágica e versátil. No 3º nível, ganha a Armadura Arcana, infundindo uma armadura com um de dois modelos — Guardião (foco em combate corpo a corpo e proteção de aliados) ou Infiltrador (foco em furtividade e ataques à distância) — que pode vestir sem exigir proficiência; no 5º nível, Ataque Extra; no 9º nível, melhora as opções da armadura escolhida; no 15º nível, Armadura Arcana Perfeita, tornando a armadura ainda mais poderosa e versátil.
+??? note "Artilheiro"
+    Cria torretes e dispositivos de área que concentram dano a distância. No 3º nível, ganha Fogo de Artilharia (bônus de dano em magias que causam dano com ataque) e a fórmula de Torreta Arcana, um pequeno dispositivo que pode lançar magias de dano ou efeitos de área à distância; no 5º nível, Ferramenta Explosiva aumenta o alcance e dano de granadas de fumaça/trovão criadas; no 9º nível, a Torreta Arcana ganha uma opção adicional de modelo; no 15º nível, Mestre Artilheiro permite manter duas torretes simultâneas.
+??? note "Ferreiro de Batalha"
+    Cria um companheiro-aço (steel defender) e se especializa em combate corpo a corpo auxiliado por magia. No 3º nível, ganha o Companheiro-Aço, um autômato que luta ao seu lado e pode interpor-se para proteger o artífice (reduzindo dano que ele sofreria); no 5º nível, Ataque Extra; no 9º nível, o companheiro ganha Reparo em Combate, curando pontos de vida com uma ação bônus; no 15º nível, Companheiro de Aço Aprimorado fortalece ainda mais as estatísticas e opções de ataque do autômato.

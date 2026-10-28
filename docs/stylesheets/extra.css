@@ -1025,6 +1025,22 @@ input,
   }
 }
 
+/* Páginas de Classes/Raças/Antecedentes (hooks/gallancourt.py::_envolver_pagina_regra) empilham
+   várias tabelas densas (características por nível, traços) dentro de abas 2014/2024 — fonte e
+   espaçamento menores para caber mais sem rolar tanto. */
+.md-typeset .pagina-regra table:not([class]) {
+  font-size: .78rem;
+}
+
+.md-typeset .pagina-regra table:not([class]) th,
+.md-typeset .pagina-regra table:not([class]) td {
+  padding: .35rem .5rem;
+}
+
+.md-typeset .pagina-regra .tabbed-content {
+  padding-top: .3rem;
+}
+
 /* Loot & Pistas — cartão mais simples que o stat-block: nome, chips opcionais
    (onde está / quem tem / situação) e uma descrição. */
 .md-typeset .item-loot {

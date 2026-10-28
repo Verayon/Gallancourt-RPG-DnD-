@@ -2,6 +2,11 @@
 tags:
   - Cidades
   - Aliança dos Lordes
+lugar:
+  situado: Cidade
+  regiao: Sul
+  reino: Gallancourt (Aliança dos Lordes)
+  resumo: "O Coração Fértil — celeiro agrícola do reino, Casa Roche."
 ---
 
 # Nouvelle-Montagne

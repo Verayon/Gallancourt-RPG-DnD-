@@ -140,7 +140,7 @@
       tabela: raiz.querySelector(".lugar-tabela table"),
       busca: raiz.querySelector(".lugar-busca"),
       contagem: raiz.querySelector(".lugar-contagem"),
-      colunasComFiltro: ["Tipo", "Cidade"],
+      colunasComFiltro: ["Situado", "Região", "Reino"],
       rotuloPlural: "lugares",
     });
   }
@@ -169,8 +169,11 @@
     lugar: {
       endpoint: "/api/lugares", rotuloBotao: "Criar lugar", descricao: true,
       campos: [
-        ["nome", "Nome", true], ["tipo", "Tipo (ex.: taberna, torre, floresta, vila)", false],
-        ["cidade", "Cidade ou região", false], ["resumo", "Resumo de uma linha (aparece na lista)", false],
+        ["nome", "Nome", true],
+        ["situado", "Situado em (cidade onde fica — ou \"Cidade\"/\"Vila\" se este lugar for um assentamento)", false],
+        ["regiao", "Região (ex.: Costa norte, Fronteira leste)", false],
+        ["reino", "Reino ou estado (ex.: Gallancourt, L'Ordre de Célestien)", false],
+        ["resumo", "Descrição de uma linha (aparece na lista)", false],
       ],
     },
     jogador: {

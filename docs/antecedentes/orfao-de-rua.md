@@ -8,6 +8,8 @@ tags:
 
 Cresceu sem família ou proteção em uma cidade grande, aprendendo desde pequeno a se virar por conta própria, entre cantos escondidos, mendicância e pequenos furtos quando a fome apertava. Essa infância dura deixou reflexos rápidos e um conhecimento íntimo dos lugares que ninguém nota.
 
+*Não existe uma versão equivalente no PHB 2024.*
+
 ## Informações básicas
 
 - **Perícias:** Furtividade e Prestidigitação.

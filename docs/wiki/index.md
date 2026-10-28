@@ -52,19 +52,30 @@ mundo de Gallancourt, organizado para consulta rápida durante a mesa.
 
     Batalhas, decretos e viradas que moldaram o presente.
 
--   [![](../assets/placeholders/tema.svg){ .card-portrait }](../regras/index.md)
+-   [![](../assets/placeholders/tema.svg){ .card-portrait }](../classes/index.md)
 
-    **[Regras de D&D 5e (2014)](../regras/index.md)**
+    **[Classes](../classes/index.md)**
 
-    Classes, raças e antecedentes (PHB 2014 + Xanathar's + Tasha's) — referência de criação de
-    personagem, não é lore de Gallancourt.
+    As treze classes de personagem, com abas para trocar entre PHB 2014 e a revisão de 2024 —
+    referência de criação de personagem, não é lore de Gallancourt.
 
--   [![](../assets/placeholders/tema.svg){ .card-portrait }](../regras-2024/index.md)
+-   [![](../assets/placeholders/tema.svg){ .card-portrait }](../racas/index.md)
 
-    **[Regras de D&D 5e (2024)](../regras-2024/index.md)**
+    **[Raças](../racas/index.md)**
 
-    Classes, espécies e antecedentes do PHB revisado de 2024 — referência de criação de
-    personagem, não é lore de Gallancourt.
+    Traços raciais e sub-raças/linhagens, também com abas 2014/2024.
+
+-   [![](../assets/placeholders/tema.svg){ .card-portrait }](../antecedentes/index.md)
+
+    **[Antecedentes](../antecedentes/index.md)**
+
+    Perícias, ferramentas e a característica (ou dote de origem) de cada antecedente.
+
+-   [![](../assets/placeholders/tema.svg){ .card-portrait }](../magias/index.md)
+
+    **[Magias](../magias/index.md)**
+
+    Lista de magias por nível e por classe, filtrável.
 
 </div>
 

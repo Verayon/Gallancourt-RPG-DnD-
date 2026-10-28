@@ -236,6 +236,14 @@ def _tabela_magias_por_nivel(docs: Path, config) -> str:
         por_nivel.setdefault(m.get("nivel", 0), []).append(m)
     blocos = _filtros_magia(incluir_classe=True)
     blocos.append("")
+    blocos.append('=== "Todas"')
+    blocos.append("")
+    if _MAGIAS:
+        tabela = _tabela_magia_bloco(_MAGIAS, com_classes=True, com_nivel=True)
+    else:
+        tabela = ["*Nenhuma magia cadastrada ainda.*"]
+    blocos += ["    " + linha if linha else "" for linha in tabela]
+    blocos.append("")
     for nivel, rotulo in NIVEIS_MAGIA:
         blocos.append(f'=== "{rotulo}"')
         blocos.append("")
@@ -330,7 +338,7 @@ def _lista_sessoes(docs: Path, config) -> str:
 # --------------------------------------------------------------------------
 
 # Colunas das tabelas de Lugares/Jogadores: (rótulo, chave no bloco lugar:/jogador:)
-COLUNAS_LUGAR = [("Tipo", "tipo"), ("Cidade", "cidade")]
+COLUNAS_LUGAR = [("Situado", "situado"), ("Região", "regiao"), ("Reino", "reino")]
 COLUNAS_JOGADOR = [("Jogador", "jogador"), ("Raça e classe", "raca_classe")]
 
 
@@ -350,25 +358,33 @@ def _criar_entidade_div(tipo: str, caminho_painel_doc: str) -> list[str]:
     ]
 
 
-def _lista_lugares(docs: Path, config) -> str:
+def _ler_lugares_da_pasta(docs: Path, subpasta: str, prefixo_link: str) -> list[tuple[str, str, dict]]:
     linhas = []
-    pasta = docs / "lugares"
-    if pasta.is_dir():
-        for arquivo in sorted(pasta.glob("*.md")):
-            if arquivo.stem == "index":
-                continue
-            meta, corpo = _front_matter(arquivo.read_text(encoding="utf-8"))
-            lugar = meta.get("lugar")
-            if not isinstance(lugar, dict):
-                continue
-            linhas.append((_titulo_h1(corpo, arquivo.stem), arquivo.name, lugar))
+    pasta = docs / subpasta
+    if not pasta.is_dir():
+        return linhas
+    for arquivo in sorted(pasta.glob("*.md")):
+        if arquivo.stem == "index":
+            continue
+        meta, corpo = _front_matter(arquivo.read_text(encoding="utf-8"))
+        lugar = meta.get("lugar")
+        if not isinstance(lugar, dict):
+            continue
+        linhas.append((_titulo_h1(corpo, arquivo.stem), f"{prefixo_link}{arquivo.name}", lugar))
+    return linhas
+
+
+def _lista_lugares(docs: Path, config) -> str:
+    # Mesma tabela recebe tanto lugares cadastrados pelo Painel (docs/lugares/) quanto cidades
+    # (docs/cidades/) — ambas as pastas usam o mesmo bloco `lugar:` no front matter.
+    linhas = _ler_lugares_da_pasta(docs, "lugares", "") + _ler_lugares_da_pasta(docs, "cidades", "../cidades/")
     linhas.sort(key=lambda l: l[0].casefold())
 
     partes = _criar_entidade_div("lugar", "../mestre/painel.md")
     if not linhas:
         return "\n".join(partes + ["*Nenhum lugar criado ainda.*"])
 
-    cabecalho = "| Nome | " + " | ".join(r for r, _ in COLUNAS_LUGAR) + " | Resumo |"
+    cabecalho = "| Nome | " + " | ".join(r for r, _ in COLUNAS_LUGAR) + " | Descrição |"
     separador = "|" + "---|" * (len(COLUNAS_LUGAR) + 2)
     corpo_tabela = [
         f"| [{_celula(nome)}]({arq}) | "
@@ -379,7 +395,7 @@ def _lista_lugares(docs: Path, config) -> str:
     partes += [
         '<div class="lugar-ferramentas" markdown>',
         "",
-        '<input type="search" class="lugar-busca" placeholder="Filtrar por nome, tipo, cidade…" '
+        '<input type="search" class="lugar-busca" placeholder="Filtrar por nome, região, reino…" '
         'aria-label="Filtrar lugares">',
         '<span class="lugar-contagem" aria-live="polite"></span>',
         "",
@@ -539,12 +555,20 @@ def _paginar_npc(conteudo: str) -> str:
         ancora, titulo_html, secao = partes[i], partes[i + 1], partes[i + 2]
         titulo = html.unescape(re.sub(r"<[^>]+>", "", titulo_html)).replace("¶", "").strip()
         abas.append((titulo, f'<span id="{ancora}" class="npc-ancora"></span>{secao}'))
+    if not any(titulo == "Ficha" for titulo, _ in abas):
+        # Reserva o espaço mesmo sem dados ainda — a ficha de combate completa (atributos,
+        # perícias, CA, PV, equipamento) é preenchida depois pelo Painel do Mestre, numa etapa
+        # futura; aqui só garante que a aba já existe em todo NPC.
+        abas.append(("Ficha", (
+            "<p><em>Ficha ainda não preenchida — isso vai ser gerado pelo Painel do Mestre em "
+            "uma próxima etapa, com atributos, perícias, CA, PV e equipamento.</em></p>"
+        )))
     if em_aberto:
         abas.append(("Em aberto", "".join(em_aberto)))
     if not abas:
         return cabeca
-    # Ordem: Visão geral, Linha do tempo, demais seções, Em aberto.
-    prioridade = {"Visão geral": 0, "Linha do tempo": 1, "Em aberto": 99}
+    # Ordem: Visão geral, Linha do tempo, demais seções, Ficha, Em aberto.
+    prioridade = {"Visão geral": 0, "Linha do tempo": 1, "Ficha": 90, "Em aberto": 99}
     abas = [a for _, a in sorted(enumerate(abas), key=lambda x: (prioridade.get(x[1][0], 50), x[0]))]
     return cabeca + _abas(abas)
 
@@ -561,6 +585,17 @@ def on_pre_build(config):
 
 def _depois_do_h1(markdown: str, bloco: str) -> str:
     return re.sub(r"^(# .+\n)", lambda m: m.group(1) + "\n" + bloco + "\n", markdown, count=1, flags=re.M)
+
+
+# Páginas de Classes/Raças/Antecedentes empilham tabelas densas (características por nível,
+# traços, abas 2014/2024) — envolvê-las numa div própria deixa a fonte das tabelas menor só ali
+# (ver `.pagina-regra table` em extra.css), sem afetar o resto do site.
+def _envolver_pagina_regra(markdown: str) -> str:
+    m = re.match(r"^(# .+\n)", markdown, re.M)
+    if not m:
+        return markdown
+    cabeca, resto = markdown[: m.end()], markdown[m.end() :]
+    return f'{cabeca}\n<div class="pagina-regra" markdown>\n\n{resto.rstrip()}\n\n</div>\n'
 
 
 def on_page_markdown(markdown: str, page, config, files):
@@ -582,6 +617,8 @@ def on_page_markdown(markdown: str, page, config, files):
         slug = Path(src).stem
         classe = CLASSES_CONJURADORAS.get(slug, slug.capitalize())
         markdown = markdown.replace("<!-- magias:classe -->", _tabela_magias_classe(docs, classe))
+    if src.startswith(("classes/", "racas/", "antecedentes/")) and not src.endswith("index.md"):
+        markdown = _envolver_pagina_regra(markdown)
     if src.startswith("mestre/sessoes/sessao-") and "<!-- participantes:botao -->" in markdown:
         botao = (
             f"[:material-account-group: Participantes desta sessão]"

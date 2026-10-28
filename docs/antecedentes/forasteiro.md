@@ -8,6 +8,8 @@ tags:
 
 Cresceu longe de muros e ruas pavimentadas, em florestas, planícies ou terras selvagens, aprendendo a ler o céu, rastrear presas e sobreviver com o que a natureza oferece. Cidades grandes ainda parecem estranhas e apertadas, mas a trilha é um lugar familiar.
 
+*Não existe uma versão equivalente no PHB 2024.*
+
 ## Informações básicas
 
 - **Perícias:** Atletismo e Sobrevivência.

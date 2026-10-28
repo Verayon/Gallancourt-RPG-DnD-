@@ -5,9 +5,10 @@ tags:
 
 # Lugares
 
-Lugares específicos (uma taberna, uma torre, uma clareira) usados em sessões — diferente de uma
-[cidade](../cidades/index.md), que é a página de um lugar maior. Crie um lugar aqui antes de
-escrever a aba **Cenas** de uma sessão que acontece nele. O formulário abaixo cadastra um lugar
-novo direto nesta página, e a tabela que aparece depois dele é filtrável por nome, tipo ou cidade.
+Lugares específicos (uma taberna, uma torre, uma clareira) usados em sessões, **e também todas as
+cidades** — a tabela abaixo junta as duas coisas, filtrável por nome, onde está situado, região ou
+reino. A página da [cidade](../cidades/index.md) continua sendo a fonte de verdade do conteúdo;
+aqui ela só aparece como mais uma linha. Crie um lugar novo antes de escrever a aba **Cenas** de
+uma sessão que acontece nele — o formulário abaixo cadastra direto nesta página.
 
 <!-- lugares:lista -->

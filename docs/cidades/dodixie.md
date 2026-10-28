@@ -3,6 +3,11 @@ tags:
   - Cidades
   - Aliança dos Lordes
   - Naval
+lugar:
+  situado: Cidade
+  regiao: Costa norte
+  reino: Gallancourt (Aliança dos Lordes)
+  resumo: "O Leviatã Econômico — a cidade mais rica do reino, Casa Corbeau."
 ---
 
 # Dodixie

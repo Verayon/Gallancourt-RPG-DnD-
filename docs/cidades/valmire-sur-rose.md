@@ -2,6 +2,11 @@
 tags:
   - Cidades
   - L'Ordre de Célestien
+lugar:
+  situado: Cidade
+  regiao: Vale do rio Rose
+  reino: L'Ordre de Célestien
+  resumo: Vale florido onde templos e ensino propagam a doutrina da pureza.
 ---
 
 # Valmire-sur-Rose

@@ -3,6 +3,11 @@ tags:
   - Cidades
   - Aliança dos Lordes
   - Espionagem
+lugar:
+  situado: Cidade
+  regiao: Capital, ao pé da cordilheira
+  reino: Gallancourt (Aliança dos Lordes)
+  resumo: "A Gaiola Dourada — capital do reino, Casa Magnetér."
 ---
 
 # Valynesse

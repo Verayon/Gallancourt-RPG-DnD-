@@ -8,6 +8,8 @@ tags:
 
 Meio-orcs combinam a força bruta e a resistência física dos orcs com a adaptabilidade humana, resultando em guerreiros corpulentos e implacáveis. Crescem rápido e vivem menos que humanos, o que costuma lhes dar um senso de urgência para provar seu valor, seja em combate, seja superando o preconceito que muitas sociedades ainda carregam contra sua ascendência.
 
+*Não existe uma versão equivalente no PHB 2024.*
+
 ## Traços raciais
 
 - **Aumento de valor de habilidade:** +2 em Força, +1 em Constituição.

@@ -2,6 +2,11 @@
 tags:
   - Cidades
   - L'Ordre de Célestien
+lugar:
+  situado: Cidade
+  regiao: Topo de montanha sagrada
+  reino: L'Ordre de Célestien
+  resumo: Capital teocrática de L'Ordre de Célestien.
 ---
 
 # Montclair de Lune

@@ -8,6 +8,8 @@ tags:
 
 Meio-elfos nascem do encontro entre humanos e elfos, e frequentemente carregam o peso de não pertencer completamente a nenhum dos dois mundos. Herdam a versatilidade e a ambição humanas junto com os sentidos aguçados e a graça élfica, o que os torna adaptáveis a praticamente qualquer papel, ainda que às vezes se sintam estrangeiros em ambas as culturas.
 
+*Não existe uma versão equivalente no PHB 2024.*
+
 ## Traços raciais
 
 - **Aumento de valor de habilidade:** +2 em Carisma, e +1 em dois outros valores de habilidade à escolha.

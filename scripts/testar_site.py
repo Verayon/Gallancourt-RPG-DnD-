@@ -46,7 +46,7 @@ IGNORAR_NA_COPIA = shutil.ignore_patterns("site", "fontes", ".venv", "venv", "__
 MENU_TOPO = ["Início", "Lore", "Wiki", "Compêndio", "Mestre", "Configurações"]
 MENU_WIKI = [
     "Mundo", "Geografia", "Cidades", "Lugares", "Facções", "NPCs", "Eventos",
-    "Regras de D&D 5e (2014)", "Regras de D&D 5e (2024)",
+    "Classes", "Raças", "Antecedentes", "Magias",
 ]
 COLUNAS_NPC = ["Retrato", "Nome", "Título", "Raça", "Cidade", "Afiliação", "Situação", "Resumo"]
 
@@ -341,10 +341,13 @@ def teste_painel_copiar_ficha_generica(copia: Path):
 @verificacao("7. Painel", "Adicionar lugar")
 def teste_painel_lugar(copia: Path):
     c = _painel(copia)
-    _ok(c.post("/lugar/novo", data={"nome": "Taberna de teste", "tipo": "taberna", "cidade": "Dodixie"}))
+    _ok(c.post("/lugar/novo", data={
+        "nome": "Taberna de teste", "situado": "Dodixie", "regiao": "Costa norte",
+        "reino": "Gallancourt (Aliança dos Lordes)",
+    }))
     pagina = copia / "docs" / "lugares" / "taberna-de-teste.md"
     assert pagina.exists(), "página do lugar não foi criada"
-    assert front_matter(ler(pagina)).get("lugar", {}).get("tipo") == "taberna", "dados do lugar não gravados"
+    assert front_matter(ler(pagina)).get("lugar", {}).get("situado") == "Dodixie", "dados do lugar não gravados"
     assert "lugares/taberna-de-teste.md" in ler(copia / "mkdocs.yml"), "lugar não entrou no menu"
 
 

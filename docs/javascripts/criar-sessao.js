@@ -13,7 +13,7 @@
   var COLUNAS_NPC = [{ rotulo: "Título", chave: "titulo" }, { rotulo: "Raça", chave: "raca" },
     { rotulo: "Cidade", chave: "cidade" }, { rotulo: "Afiliação", chave: "afiliacao" }];
   var COLUNAS_JOGADOR = [{ rotulo: "Jogador", chave: "jogador" }, { rotulo: "Raça e classe", chave: "raca_classe" }];
-  var COLUNAS_LUGAR = [{ rotulo: "Tipo", chave: "tipo" }, { rotulo: "Cidade", chave: "cidade" }];
+  var COLUNAS_LUGAR = [{ rotulo: "Situado", chave: "situado" }, { rotulo: "Região", chave: "regiao" }];
 
   var CAMPOS_BASICOS = [
     ["data", "Data"], ["resumo_breve", "Resumo breve (aparece no card da lista)"],
