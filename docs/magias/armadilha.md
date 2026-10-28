@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Toque
   area: Nenhuma
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Snare
+  resistencia: Destreza
+  resistencia_efeito: "Nenhum efeito"
 ---
 
 # Armadilha

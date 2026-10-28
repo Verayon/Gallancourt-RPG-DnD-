@@ -17,6 +17,17 @@ magia:
   alcance_tipo: Toque
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Glyph of Warding
+  resistencia: Destreza
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["3º (mínimo)", "5d8"]
+    - ["4º", "6d8"]
+    - ["5º", "7d8"]
+    - ["6º", "8d8"]
+    - ["7º", "9d8"]
+    - ["8º", "10d8"]
+    - ["9º", "11d8"]
 ---
 
 # Símbolo de Proteção

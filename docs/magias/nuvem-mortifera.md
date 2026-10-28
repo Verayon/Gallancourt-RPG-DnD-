@@ -17,6 +17,15 @@ magia:
   alcance_tipo: Distância
   area: Esfera
   fonte: PHB
+  nome_ingles: Cloudkill
+  resistencia: Constituição
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["5º (mínimo)", "5d8"]
+    - ["6º", "6d8"]
+    - ["7º", "7d8"]
+    - ["8º", "8d8"]
+    - ["9º", "9d8"]
 ---
 
 # Nuvem Mortífera

@@ -17,6 +17,17 @@ magia:
   alcance_tipo: Pessoal
   area: Nenhuma
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Absorb Elements
+  dano:
+    - ["1º (mínimo)", "1d6"]
+    - ["2º", "2d6"]
+    - ["3º", "3d6"]
+    - ["4º", "4d6"]
+    - ["5º", "5d6"]
+    - ["6º", "6d6"]
+    - ["7º", "7d6"]
+    - ["8º", "8d6"]
+    - ["9º", "9d6"]
 ---
 
 # Absorver Elementos

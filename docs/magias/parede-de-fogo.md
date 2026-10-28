@@ -17,6 +17,16 @@ magia:
   alcance_tipo: Distância
   area: Linha
   fonte: PHB
+  nome_ingles: "Wall of Fire"
+  resistencia: Destreza
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["4º (mínimo)", "5d8"]
+    - ["5º", "6d8"]
+    - ["6º", "7d8"]
+    - ["7º", "8d8"]
+    - ["8º", "9d8"]
+    - ["9º", "10d8"]
 ---
 
 # Parede de Fogo

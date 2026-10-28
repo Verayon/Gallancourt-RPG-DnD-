@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Esfera
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Pyrotechnics
+  resistencia: Constituição
+  resistencia_efeito: "Nenhum efeito"
 ---
 
 # Pirotecnia

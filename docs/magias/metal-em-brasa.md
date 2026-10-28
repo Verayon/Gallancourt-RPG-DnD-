@@ -17,6 +17,16 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Heat Metal
+  dano:
+    - ["2º (mínimo)", "2d8"]
+    - ["3º", "3d8"]
+    - ["4º", "4d8"]
+    - ["5º", "5d8"]
+    - ["6º", "6d8"]
+    - ["7º", "7d8"]
+    - ["8º", "8d8"]
+    - ["9º", "9d8"]
 ---
 
 # Metal em Brasa

@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Esfera
   fonte: PHB
+  nome_ingles: Zone of Truth
+  resistencia: Carisma
+  resistencia_efeito: "Pode mentir normalmente"
 ---
 
 # Zona de Verdade

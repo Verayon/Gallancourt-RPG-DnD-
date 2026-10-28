@@ -17,6 +17,16 @@ magia:
   alcance_tipo: Pessoal
   area: Nenhuma
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Shadow Blade
+  dano:
+    - ["2º (mínimo)", "2d8"]
+    - ["3º", "3d8"]
+    - ["4º", "3d8"]
+    - ["5º", "4d8"]
+    - ["6º", "4d8"]
+    - ["7º", "5d8"]
+    - ["8º", "5d8"]
+    - ["9º", "5d8"]
 ---
 
 # Lâmina das Sombras

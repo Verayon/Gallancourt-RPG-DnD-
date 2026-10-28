@@ -17,6 +17,14 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: "Poison Spray"
+  resistencia: Constituição
+  resistencia_efeito: "Nenhum dano"
+  dano:
+    - ["1º–4º", "1d12"]
+    - ["5º–10º", "2d12"]
+    - ["11º–16º", "3d12"]
+    - ["17º–20º", "4d12"]
 ---
 
 # Borrifo Venenoso

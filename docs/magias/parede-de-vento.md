@@ -17,6 +17,11 @@ magia:
   alcance_tipo: Distância
   area: Linha
   fonte: PHB
+  nome_ingles: "Wind Wall"
+  resistencia: Força
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["Fixo", "3d8"]
 ---
 
 # Parede de Vento

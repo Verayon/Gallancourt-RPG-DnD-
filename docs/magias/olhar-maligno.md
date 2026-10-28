@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Pessoal
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Eyebite
+  resistencia: Sabedoria
+  resistencia_efeito: "Nenhum efeito"
 ---
 
 # Olhar Maligno

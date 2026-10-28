@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Polymorph
+  resistencia: Sabedoria
+  resistencia_efeito: "Nenhum efeito"
 ---
 
 # Polimorfia

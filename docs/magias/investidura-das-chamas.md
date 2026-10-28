@@ -17,6 +17,11 @@ magia:
   alcance_tipo: Pessoal
   area: Linha
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Investiture of Flame
+  resistencia: Destreza
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["Fixo", "4d8"]
 ---
 
 # Investidura das Chamas

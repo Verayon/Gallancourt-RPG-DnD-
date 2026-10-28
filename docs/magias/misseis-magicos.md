@@ -17,6 +17,17 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Magic Missile
+  dano:
+    - ["1º (mínimo)", "3d4+3"]
+    - ["2º", "4d4+4"]
+    - ["3º", "5d4+5"]
+    - ["4º", "6d4+6"]
+    - ["5º", "7d4+7"]
+    - ["6º", "8d4+8"]
+    - ["7º", "9d4+9"]
+    - ["8º", "10d4+10"]
+    - ["9º", "11d4+11"]
 ---
 
 # Mísseis Mágicos

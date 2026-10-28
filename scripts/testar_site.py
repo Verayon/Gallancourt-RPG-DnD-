@@ -46,7 +46,7 @@ IGNORAR_NA_COPIA = shutil.ignore_patterns("site", "fontes", ".venv", "venv", "__
 MENU_TOPO = ["Início", "Lore", "Wiki", "Compêndio", "Mestre", "Configurações"]
 MENU_WIKI = [
     "Mundo", "Geografia", "Cidades", "Lugares", "Facções", "NPCs", "Eventos",
-    "Classes", "Raças", "Antecedentes", "Magias",
+    "Classes", "Raças", "Antecedentes", "Magias", "Dotes", "Perícias",
 ]
 COLUNAS_NPC = ["Retrato", "Nome", "Título", "Raça", "Cidade", "Afiliação", "Situação", "Resumo"]
 

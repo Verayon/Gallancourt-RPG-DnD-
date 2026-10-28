@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Esfera
   fonte: PHB
+  nome_ingles: Spike Growth
+  dano:
+    - ["Fixo", "2d4"]
 ---
 
 # Crescimento de Espinhos

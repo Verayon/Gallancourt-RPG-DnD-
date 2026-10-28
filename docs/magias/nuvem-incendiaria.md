@@ -17,6 +17,12 @@ magia:
   alcance_tipo: Distância
   area: Esfera
   fonte: PHB
+  nome_ingles: Incendiary Cloud
+  resistencia: Destreza
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["8º (mínimo)", "10d8"]
+    - ["9º", "10d8"]
 ---
 
 # Nuvem Incendiária

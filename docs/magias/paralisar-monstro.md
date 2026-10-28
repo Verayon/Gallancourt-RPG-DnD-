@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: "Hold Monster"
+  resistencia: Sabedoria
+  resistencia_efeito: "Nenhum efeito"
 ---
 
 # Paralisar Monstro

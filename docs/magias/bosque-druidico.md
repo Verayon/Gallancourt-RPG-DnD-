@@ -17,6 +17,7 @@ magia:
   alcance_tipo: Toque
   area: Cubo
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: "Druid Grove"
 ---
 
 # Bosque Druídico

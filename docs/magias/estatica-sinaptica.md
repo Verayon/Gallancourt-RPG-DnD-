@@ -17,6 +17,11 @@ magia:
   alcance_tipo: Distância
   area: Esfera
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Synaptic Static
+  resistencia: Inteligência
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["Fixo", "8d6"]
 ---
 
 # Estática Sináptica

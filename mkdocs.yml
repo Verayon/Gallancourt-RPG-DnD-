@@ -256,6 +256,68 @@ nav:
               - Mago: magias/por-classe/mago.md
               - Paladino: magias/por-classe/paladino.md
               - Patrulheiro: magias/por-classe/patrulheiro.md
+      - Dotes:
+          - dotes/index.md
+          - Adepto Elemental: dotes/adepto-elemental.md
+          - Adepto em Combate: dotes/adepto-em-combate.md
+          - Agarrador: dotes/agarrador.md
+          - Ágil: dotes/agil.md
+          - Alerta: dotes/alerta.md
+          - Armadura Leve: dotes/armadura-leve.md
+          - Armadura Pesada: dotes/armadura-pesada.md
+          - Atacante Selvagem: dotes/atacante-selvagem.md
+          - Atirador de Elite: dotes/atirador-de-elite.md
+          - Atleta: dotes/atleta.md
+          - Ator: dotes/ator.md
+          - Caçador de Magos: dotes/cacador-de-magos.md
+          - Carga: dotes/carga.md
+          - Combatente com Duas Armas: dotes/combatente-com-duas-armas.md
+          - Combatente Montado: dotes/combatente-montado.md
+          - Conjurador de Guerra: dotes/conjurador-de-guerra.md
+          - Conjurador de Rituais: dotes/conjurador-de-rituais.md
+          - Curandeiro: dotes/curandeiro.md
+          - Duelista Defensivo: dotes/duelista-defensivo.md
+          - Durável: dotes/duravel.md
+          - Especialista em Bestas: dotes/especialista-em-bestas.md
+          - Explorador de Masmorras: dotes/explorador-de-masmorras.md
+          - Franco-Atirador Arcano: dotes/franco-atirador-arcano.md
+          - Furtivo: dotes/furtivo.md
+          - Guarnição Moderada: dotes/guarnicao-moderada.md
+          - Habilidoso: dotes/habilidoso.md
+          - Líder Inspirador: dotes/lider-inspirador.md
+          - Linguista: dotes/linguista.md
+          - Mente Aguçada: dotes/mente-agucada.md
+          - Mestre de Armas: dotes/mestre-de-armas.md
+          - Mestre de Armas de Haste: dotes/mestre-de-armas-de-haste.md
+          - Mestre do Escudo: dotes/mestre-do-escudo.md
+          - Mestre em Armadura Média: dotes/mestre-em-armadura-media.md
+          - Mestre em Armadura Pesada: dotes/mestre-em-armadura-pesada.md
+          - Mestre em Armas Grandes: dotes/mestre-em-armas-grandes.md
+          - Observador: dotes/observador.md
+          - Resiliente: dotes/resiliente.md
+          - Resistente: dotes/resistente.md
+          - Sentinela: dotes/sentinela.md
+          - Sortudo: dotes/sortudo.md
+      - Perícias:
+          - pericias/index.md
+          - Acrobacia: pericias/acrobacia.md
+          - Arcanismo: pericias/arcanismo.md
+          - Atletismo: pericias/atletismo.md
+          - Atuação: pericias/atuacao.md
+          - Enganação: pericias/enganacao.md
+          - Furtividade: pericias/furtividade.md
+          - História: pericias/historia.md
+          - Intimidação: pericias/intimidacao.md
+          - Intuição: pericias/intuicao.md
+          - Investigação: pericias/investigacao.md
+          - Lidar com Animais: pericias/lidar-com-animais.md
+          - Medicina: pericias/medicina.md
+          - Natureza: pericias/natureza.md
+          - Percepção: pericias/percepcao.md
+          - Persuasão: pericias/persuasao.md
+          - Prestidigitação: pericias/prestidigitacao.md
+          - Religião: pericias/religiao.md
+          - Sobrevivência: pericias/sobrevivencia.md
   - Compêndio:
       - compendio/index.md
       - História de Gallancourt (anotada): compendio/historia-de-gallancourt.md

@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Telekinesis
+  resistencia: Força
+  resistencia_efeito: "Nenhum efeito"
 ---
 
 # Telecinesia

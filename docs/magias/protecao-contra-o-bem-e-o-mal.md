@@ -17,6 +17,7 @@ magia:
   alcance_tipo: Toque
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Protection from Evil and Good
 ---
 
 # Proteção contra o Bem e o Mal

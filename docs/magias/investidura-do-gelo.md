@@ -17,6 +17,11 @@ magia:
   alcance_tipo: Pessoal
   area: Cone
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Investiture of Ice
+  resistencia: Constituição
+  resistencia_efeito: "Metade do dano, sem redução de deslocamento"
+  dano:
+    - ["Fixo", "4d6"]
 ---
 
 # Investidura do Gelo

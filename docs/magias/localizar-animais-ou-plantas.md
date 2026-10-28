@@ -17,6 +17,7 @@ magia:
   alcance_tipo: Pessoal
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Locate Animals or Plants
 ---
 
 # Localizar Animais ou Plantas

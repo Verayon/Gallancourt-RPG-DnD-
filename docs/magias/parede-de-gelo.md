@@ -17,6 +17,14 @@ magia:
   alcance_tipo: Distância
   area: Linha
   fonte: PHB
+  nome_ingles: "Wall of Ice"
+  resistencia: Destreza
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["6º (mínimo)", "10d6"]
+    - ["7º", "12d6"]
+    - ["8º", "14d6"]
+    - ["9º", "16d6"]
 ---
 
 # Parede de Gelo

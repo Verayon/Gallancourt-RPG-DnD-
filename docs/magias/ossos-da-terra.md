@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Bones of the Earth
+  resistencia: Destreza
+  resistencia_efeito: "Evita ser erguida pelo pilar"
 ---
 
 # Ossos da Terra

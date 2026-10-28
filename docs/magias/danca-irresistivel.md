@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Irresistible Dance
+  resistencia: Sabedoria
+  resistencia_efeito: "Encerra o efeito"
 ---
 
 # Dança Irresistível

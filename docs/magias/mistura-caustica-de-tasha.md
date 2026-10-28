@@ -17,6 +17,19 @@ magia:
   alcance_tipo: Pessoal
   area: Linha
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: "Tasha's Caustic Brew"
+  resistencia: Destreza
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["1º (mínimo)", "2d4"]
+    - ["2º", "4d4"]
+    - ["3º", "6d4"]
+    - ["4º", "8d4"]
+    - ["5º", "10d4"]
+    - ["6º", "12d4"]
+    - ["7º", "14d4"]
+    - ["8º", "16d4"]
+    - ["9º", "18d4"]
 ---
 
 # Mistura Cáustica de Tasha

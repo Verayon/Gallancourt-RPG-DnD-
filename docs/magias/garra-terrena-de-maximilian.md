@@ -17,6 +17,11 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Maximilian's Earthen Grasp
+  resistencia: Força
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["Fixo", "2d6"]
 ---
 
 # Garra Terrena de Maximilian

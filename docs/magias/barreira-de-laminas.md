@@ -17,6 +17,11 @@ magia:
   alcance_tipo: Distância
   area: Linha
   fonte: PHB
+  nome_ingles: "Blade Barrier"
+  resistencia: Destreza
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["Fixo", "6d10"]
 ---
 
 # Barreira de Lâminas

@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Esfera
   fonte: PHB
+  nome_ingles: Otiluke's Resilient Sphere
+  resistencia: Destreza
+  resistencia_efeito: "Evita ser envolvida"
 ---
 
 # Esfera Resiliente

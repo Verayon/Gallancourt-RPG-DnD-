@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Esfera
   fonte: PHB
+  nome_ingles: Confusion
+  resistencia: Sabedoria
+  resistencia_efeito: "Nenhum efeito"
 ---
 
 # Confusão

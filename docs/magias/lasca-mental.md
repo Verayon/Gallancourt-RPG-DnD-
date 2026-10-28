@@ -17,6 +17,14 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: "Tasha's Cauldron of Everything"
+  nome_ingles: Mind Sliver
+  resistencia: Inteligência
+  resistencia_efeito: "Nenhum efeito"
+  dano:
+    - ["1º–4º", "1d6"]
+    - ["5º–10º", "2d6"]
+    - ["11º–16º", "3d6"]
+    - ["17º–20º", "4d6"]
 ---
 
 # Lasca Mental

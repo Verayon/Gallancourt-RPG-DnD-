@@ -17,6 +17,11 @@ magia:
   alcance_tipo: Distância
   area: Esfera
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: "Melf's Minute Meteors"
+  resistencia: Destreza
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["Fixo", "2d6"]
 ---
 
 # Meteoros Diminutos de Melf

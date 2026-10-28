@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Pessoal
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Shining Smite
+  dano:
+    - ["Fixo", "2d6"]
 ---
 
 # Investida Marcante

@@ -17,6 +17,7 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: "Tasha's Cauldron of Everything"
+  nome_ingles: Summon Fiend
 ---
 
 # Invocar Corruptor

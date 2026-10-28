@@ -17,6 +17,7 @@ magia:
   alcance_tipo: Pessoal
   area: Nenhuma
   fonte: PHB
+  nome_ingles: "Misty Step"
 ---
 
 # Passo Nebuloso

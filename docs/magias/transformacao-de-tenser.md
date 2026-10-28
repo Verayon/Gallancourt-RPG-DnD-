@@ -17,6 +17,11 @@ magia:
   alcance_tipo: Pessoal
   area: Nenhuma
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: "Tenser's Transformation"
+  resistencia: Constituição
+  resistencia_efeito: "Não ganha nível de exaustão"
+  dano:
+    - ["Fixo", "2d12"]
 ---
 
 # Transformação de Tenser

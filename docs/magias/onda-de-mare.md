@@ -17,6 +17,11 @@ magia:
   alcance_tipo: Distância
   area: Linha
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Tidal Wave
+  resistencia: Destreza
+  resistencia_efeito: "Metade do dano, sem derrubar"
+  dano:
+    - ["Fixo", "4d8"]
 ---
 
 # Onda de Maré

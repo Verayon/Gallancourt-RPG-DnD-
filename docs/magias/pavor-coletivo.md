@@ -17,6 +17,11 @@ magia:
   alcance_tipo: Distância
   area: Esfera
   fonte: PHB
+  nome_ingles: Weird
+  resistencia: Sabedoria
+  resistencia_efeito: "Nenhum efeito"
+  dano:
+    - ["9º (mínimo)", "4d10"]
 ---
 
 # Pavor Coletivo

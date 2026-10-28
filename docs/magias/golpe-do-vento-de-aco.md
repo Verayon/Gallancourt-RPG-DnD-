@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Steel Wind Strike
+  dano:
+    - ["Fixo", "6d10"]
 ---
 
 # Golpe do Vento de Aço

@@ -17,6 +17,11 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Psychic Scream
+  resistencia: Inteligência
+  resistencia_efeito: "Metade do dano, sem atordoar"
+  dano:
+    - ["Fixo", "14d6"]
 ---
 
 # Grito Psíquico

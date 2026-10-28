@@ -17,6 +17,11 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Negative Energy Flood
+  resistencia: Constituição
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["Fixo", "5d12"]
 ---
 
 # Dilúvio de Energia Negativa

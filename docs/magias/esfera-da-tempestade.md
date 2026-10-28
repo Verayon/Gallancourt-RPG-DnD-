@@ -17,6 +17,16 @@ magia:
   alcance_tipo: Distância
   area: Esfera
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Storm Sphere
+  resistencia: Força
+  resistencia_efeito: "Nenhum dano"
+  dano:
+    - ["4º (mínimo)", "4d6"]
+    - ["5º", "5d6"]
+    - ["6º", "6d6"]
+    - ["7º", "7d6"]
+    - ["8º", "8d6"]
+    - ["9º", "9d6"]
 ---
 
 # Esfera da Tempestade

@@ -17,6 +17,13 @@ magia:
   alcance_tipo: Distância
   area: Esfera
   fonte: PHB
+  nome_ingles: "Delayed Blast Fireball"
+  resistencia: Destreza
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["7º (mínimo)", "12d6"]
+    - ["8º", "13d6"]
+    - ["9º", "14d6"]
 ---
 
 # Bola de Fogo de Explosão Retardada

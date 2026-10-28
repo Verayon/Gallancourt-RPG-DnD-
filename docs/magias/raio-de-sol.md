@@ -17,6 +17,11 @@ magia:
   alcance_tipo: Pessoal
   area: Linha
   fonte: PHB
+  nome_ingles: Sunbeam
+  resistencia: Constituição
+  resistencia_efeito: "Metade do dano, sem cegueira"
+  dano:
+    - ["Fixo", "6d8"]
 ---
 
 # Raio de Sol

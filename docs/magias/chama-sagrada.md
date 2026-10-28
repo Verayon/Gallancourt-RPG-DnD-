@@ -17,6 +17,14 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: "Sacred Flame"
+  resistencia: Destreza
+  resistencia_efeito: "Nenhum dano"
+  dano:
+    - ["1º–4º", "1d8"]
+    - ["5º–10º", "2d8"]
+    - ["11º–16º", "3d8"]
+    - ["17º–20º", "4d8"]
 ---
 
 # Chama Sagrada

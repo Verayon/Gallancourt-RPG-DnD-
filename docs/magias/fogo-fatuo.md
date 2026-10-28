@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Cubo
   fonte: PHB
+  nome_ingles: Faerie Fire
+  resistencia: Destreza
+  resistencia_efeito: "Nenhum efeito"
 ---
 
 # Fogo Fátuo

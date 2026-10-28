@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Cubo
   fonte: PHB
+  nome_ingles: Slow
+  resistencia: Sabedoria
+  resistencia_efeito: "Nenhum efeito"
 ---
 
 # Lentidão

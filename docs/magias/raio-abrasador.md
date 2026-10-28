@@ -17,6 +17,16 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Scorching Ray
+  dano:
+    - ["2º (mínimo)", "3x2d6"]
+    - ["3º", "4x2d6"]
+    - ["4º", "5x2d6"]
+    - ["5º", "6x2d6"]
+    - ["6º", "7x2d6"]
+    - ["7º", "8x2d6"]
+    - ["8º", "9x2d6"]
+    - ["9º", "10x2d6"]
 ---
 
 # Raio Abrasador

@@ -17,6 +17,17 @@ magia:
   alcance_tipo: Toque
   area: Nenhuma
   fonte: PHB
+  nome_ingles: "Inflict Wounds"
+  dano:
+    - ["1º (mínimo)", "3d10"]
+    - ["2º", "4d10"]
+    - ["3º", "5d10"]
+    - ["4º", "6d10"]
+    - ["5º", "7d10"]
+    - ["6º", "8d10"]
+    - ["7º", "9d10"]
+    - ["8º", "10d10"]
+    - ["9º", "11d10"]
 ---
 
 # Causar Ferimentos

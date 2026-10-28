@@ -17,6 +17,12 @@ magia:
   alcance_tipo: Toque
   area: Nenhuma
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: "Holy Weapon"
+  resistencia: Constituição
+  resistencia_efeito: "Metade do dano, sem ficar cego"
+  dano:
+    - ["Acerto com a arma (passivo, sem teste)", "+2d8"]
+    - ["Explosão final (ao encerrar a magia)", "4d8"]
 ---
 
 # Arma Sagrada

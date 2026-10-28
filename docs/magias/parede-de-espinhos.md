@@ -17,6 +17,14 @@ magia:
   alcance_tipo: Distância
   area: Linha
   fonte: PHB
+  nome_ingles: "Wall of Thorns"
+  resistencia: Destreza
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["6º (mínimo)", "7d8"]
+    - ["7º", "8d8"]
+    - ["8º", "9d8"]
+    - ["9º", "10d8"]
 ---
 
 # Parede de Espinhos

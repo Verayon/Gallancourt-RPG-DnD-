@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Elemental Bane
+  resistencia: Constituição
+  resistencia_efeito: "Nenhum efeito"
 ---
 
 # Flagelo Elemental

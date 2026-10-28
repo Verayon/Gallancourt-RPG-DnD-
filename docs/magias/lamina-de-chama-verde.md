@@ -17,6 +17,7 @@ magia:
   alcance_tipo: Pessoal
   area: Nenhuma
   fonte: "Tasha's Cauldron of Everything"
+  nome_ingles: Green-Flame Blade
 ---
 
 # Lâmina de Chama Verde

@@ -17,6 +17,19 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Hellish Rebuke
+  resistencia: Destreza
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["1º (mínimo)", "2d10"]
+    - ["2º", "3d10"]
+    - ["3º", "4d10"]
+    - ["4º", "5d10"]
+    - ["5º", "6d10"]
+    - ["6º", "7d10"]
+    - ["7º", "8d10"]
+    - ["8º", "9d10"]
+    - ["9º", "10d10"]
 ---
 
 # Repreensão Infernal

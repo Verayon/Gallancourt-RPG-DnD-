@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Pessoal
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Fire Shield
+  dano:
+    - ["Fixo", "2d8"]
 ---
 
 # Escudo de Fogo

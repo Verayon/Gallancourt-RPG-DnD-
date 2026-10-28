@@ -17,6 +17,11 @@ magia:
   alcance_tipo: Distância
   area: Cubo
   fonte: PHB
+  nome_ingles: Black Tentacles
+  resistencia: Destreza
+  resistencia_efeito: "Nenhum dano e não fica agarrada"
+  dano:
+    - ["Fixo", "3d6"]
 ---
 
 # Tentáculos Negros

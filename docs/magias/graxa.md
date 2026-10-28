@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Grease
+  resistencia: Destreza
+  resistencia_efeito: "Nenhum efeito"
 ---
 
 # Graxa

@@ -17,6 +17,11 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Feeblemind
+  resistencia: Inteligência
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["Fixo", "4d6"]
 ---
 
 # Mente Frágil

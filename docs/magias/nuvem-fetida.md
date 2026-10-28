@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Esfera
   fonte: PHB
+  nome_ingles: Stinking Cloud
+  resistencia: Constituição
+  resistencia_efeito: "Nenhum efeito"
 ---
 
 # Nuvem Fétida

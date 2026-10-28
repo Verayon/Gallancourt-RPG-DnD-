@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Cubo
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Control Winds
+  resistencia: Força
+  resistencia_efeito: "Nenhum efeito"
 ---
 
 # Controlar os Ventos

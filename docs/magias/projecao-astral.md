@@ -17,6 +17,7 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Astral Projection
 ---
 
 # Projeção Astral

@@ -17,6 +17,7 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Create or Destroy Water
 ---
 
 # Criar ou Destruir Água

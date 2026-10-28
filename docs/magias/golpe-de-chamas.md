@@ -17,6 +17,15 @@ magia:
   alcance_tipo: Distância
   area: Cilindro
   fonte: PHB
+  nome_ingles: Flame Strike
+  resistencia: Destreza
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["5º (mínimo)", "4d6"]
+    - ["6º", "5d6"]
+    - ["7º", "6d6"]
+    - ["8º", "7d6"]
+    - ["9º", "8d6"]
 ---
 
 # Golpe de Chamas

@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Mordenkainen's Sword
+  dano:
+    - ["Fixo", "3d10"]
 ---
 
 # Espada Arcana

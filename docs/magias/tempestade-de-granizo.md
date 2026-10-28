@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Cilindro
   fonte: PHB
+  nome_ingles: Sleet Storm
+  resistencia: Destreza
+  resistencia_efeito: "Não cai prostrado"
 ---
 
 # Tempestade de Granizo

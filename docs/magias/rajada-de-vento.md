@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Pessoal
   area: Linha
   fonte: PHB
+  nome_ingles: Gust of Wind
+  resistencia: Força
+  resistencia_efeito: "Não é empurrado"
 ---
 
 # Rajada de Vento

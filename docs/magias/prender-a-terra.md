@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Earthbind
+  resistencia: Força
+  resistencia_efeito: "Nenhum efeito"
 ---
 
 # Prender à Terra

@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Catapult
+  resistencia: Destreza
+  resistencia_efeito: "Nenhum dano"
 ---
 
 # Catapulta

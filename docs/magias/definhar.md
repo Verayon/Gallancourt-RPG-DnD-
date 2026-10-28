@@ -17,6 +17,16 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Blight
+  resistencia: Constituição
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["4º (mínimo)", "8d8"]
+    - ["5º", "9d8"]
+    - ["6º", "10d8"]
+    - ["7º", "11d8"]
+    - ["8º", "12d8"]
+    - ["9º", "13d8"]
 ---
 
 # Definhar

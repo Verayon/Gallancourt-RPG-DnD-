@@ -17,6 +17,18 @@ magia:
   alcance_tipo: Distância
   area: Cilindro
   fonte: PHB
+  nome_ingles: Moonbeam
+  resistencia: Constituição
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["2º (mínimo)", "2d10"]
+    - ["3º", "2d10"]
+    - ["4º", "3d10"]
+    - ["5º", "3d10"]
+    - ["6º", "4d10"]
+    - ["7º", "4d10"]
+    - ["8º", "5d10"]
+    - ["9º", "5d10"]
 ---
 
 # Raio Lunar

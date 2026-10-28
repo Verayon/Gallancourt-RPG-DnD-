@@ -17,6 +17,15 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Enervation
+  resistencia: Destreza
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["5º (mínimo)", "4d8"]
+    - ["6º", "5d8"]
+    - ["7º", "6d8"]
+    - ["8º", "7d8"]
+    - ["9º", "8d8"]
 ---
 
 # Enervação

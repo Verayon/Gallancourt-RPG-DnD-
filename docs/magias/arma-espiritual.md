@@ -17,6 +17,16 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Spiritual Weapon
+  dano:
+    - ["2º (mínimo)", "1d8"]
+    - ["3º", "1d8"]
+    - ["4º", "2d8"]
+    - ["5º", "2d8"]
+    - ["6º", "3d8"]
+    - ["7º", "3d8"]
+    - ["8º", "4d8"]
+    - ["9º", "4d8"]
 ---
 
 # Arma Espiritual

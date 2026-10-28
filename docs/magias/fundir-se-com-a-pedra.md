@@ -17,6 +17,7 @@ magia:
   alcance_tipo: Toque
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Meld into Stone
 ---
 
 # Fundir-se com a Pedra

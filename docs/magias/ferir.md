@@ -17,6 +17,11 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Harm
+  resistencia: Constituição
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["Fixo", "14d6"]
 ---
 
 # Ferir

@@ -17,6 +17,11 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Immolation
+  resistencia: Destreza
+  resistencia_efeito: "Metade do dano, sem queimar"
+  dano:
+    - ["Fixo", "8d6"]
 ---
 
 # Imolação

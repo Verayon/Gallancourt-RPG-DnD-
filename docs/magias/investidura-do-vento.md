@@ -17,6 +17,11 @@ magia:
   alcance_tipo: Pessoal
   area: Cubo
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Investiture of Wind
+  resistencia: Constituição
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["Fixo", "2d10"]
 ---
 
 # Investidura do Vento

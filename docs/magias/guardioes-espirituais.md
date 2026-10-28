@@ -17,6 +17,17 @@ magia:
   alcance_tipo: Pessoal
   area: Esfera
   fonte: PHB
+  nome_ingles: Spirit Guardians
+  resistencia: Sabedoria
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["3º (mínimo)", "3d8"]
+    - ["4º", "4d8"]
+    - ["5º", "5d8"]
+    - ["6º", "6d8"]
+    - ["7º", "7d8"]
+    - ["8º", "8d8"]
+    - ["9º", "9d8"]
 ---
 
 # Guardiões Espirituais

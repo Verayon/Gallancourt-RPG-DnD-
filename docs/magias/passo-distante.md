@@ -17,6 +17,7 @@ magia:
   alcance_tipo: Pessoal
   area: Nenhuma
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: "Far Step"
 ---
 
 # Passo Distante

@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Pessoal
   area: Cone
   fonte: PHB
+  nome_ingles: Fear
+  resistencia: Sabedoria
+  resistencia_efeito: "Nenhum efeito"
 ---
 
 # Medo

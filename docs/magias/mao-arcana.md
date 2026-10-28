@@ -17,6 +17,13 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Arcane Hand
+  dano:
+    - ["5º (mínimo)", "4d8"]
+    - ["6º", "6d8"]
+    - ["7º", "8d8"]
+    - ["8º", "10d8"]
+    - ["9º", "12d8"]
 ---
 
 # Mão Arcana

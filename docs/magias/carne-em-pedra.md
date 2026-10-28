@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: "Flesh to Stone"
+  resistencia: Constituição
+  resistencia_efeito: "Nenhum efeito"
 ---
 
 # Carne em Pedra

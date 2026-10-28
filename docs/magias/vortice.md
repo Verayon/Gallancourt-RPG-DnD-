@@ -17,6 +17,11 @@ magia:
   alcance_tipo: Distância
   area: Esfera
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Maelstrom
+  resistencia: Força
+  resistencia_efeito: "Nenhum dano e não é arrastado"
+  dano:
+    - ["Fixo", "6d6"]
 ---
 
 # Vórtice

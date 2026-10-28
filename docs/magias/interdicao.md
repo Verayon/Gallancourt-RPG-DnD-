@@ -17,6 +17,7 @@ magia:
   alcance_tipo: Toque
   area: Cubo
   fonte: PHB
+  nome_ingles: Forbiddance
 ---
 
 # Interdição

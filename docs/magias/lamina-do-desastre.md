@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: "Tasha's Cauldron of Everything"
+  nome_ingles: Blade of Disaster
+  dano:
+    - ["Fixo", "4d12"]
 ---
 
 # Lâmina do Desastre

@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Cubo
   fonte: PHB
+  nome_ingles: Web
+  resistencia: Destreza
+  resistencia_efeito: "Não fica presa"
 ---
 
 # Teia

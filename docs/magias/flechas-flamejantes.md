@@ -17,6 +17,7 @@ magia:
   alcance_tipo: Toque
   area: Nenhuma
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Flame Arrows
 ---
 
 # Flechas Flamejantes

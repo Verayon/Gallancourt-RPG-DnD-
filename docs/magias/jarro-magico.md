@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Pessoal
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Magic Jar
+  resistencia: Carisma
+  resistencia_efeito: "Nenhum efeito"
 ---
 
 # Jarro Mágico

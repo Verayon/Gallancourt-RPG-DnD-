@@ -17,6 +17,15 @@ magia:
   alcance_tipo: Distância
   area: Esfera
   fonte: PHB
+  nome_ingles: Insect Plague
+  resistencia: Constituição
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["5º (mínimo)", "4d10"]
+    - ["6º", "5d10"]
+    - ["7º", "6d10"]
+    - ["8º", "7d10"]
+    - ["9º", "8d10"]
 ---
 
 # Praga de Insetos

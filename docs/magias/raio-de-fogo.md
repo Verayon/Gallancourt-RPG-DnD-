@@ -17,6 +17,12 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Fire Bolt
+  dano:
+    - ["1º–4º", "1d10"]
+    - ["5º–10º", "2d10"]
+    - ["11º–16º", "3d10"]
+    - ["17º–20º", "4d10"]
 ---
 
 # Raio de Fogo

@@ -17,6 +17,14 @@ magia:
   alcance_tipo: Distância
   area: Esfera
   fonte: PHB
+  nome_ingles: Otiluke's Freezing Sphere
+  resistencia: Constituição
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["6º (mínimo)", "10d6"]
+    - ["7º", "11d6"]
+    - ["8º", "12d6"]
+    - ["9º", "13d6"]
 ---
 
 # Esfera Congelante

@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Toque
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Stone Shape
+  resistencia: Destreza
+  resistencia_efeito: "Escapa antes da pedra se solidificar"
 ---
 
 # Moldar Pedra

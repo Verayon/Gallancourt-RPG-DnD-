@@ -17,6 +17,11 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Mental Prison
+  resistencia: Inteligência
+  resistencia_efeito: "Dano, mas sem aprisionamento"
+  dano:
+    - ["Fixo", "5d10"]
 ---
 
 # Prisão Mental

@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Pessoal
   area: Esfera
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Investiture of Stone
+  resistencia: Destreza
+  resistencia_efeito: "Nenhum efeito"
 ---
 
 # Investidura da Pedra

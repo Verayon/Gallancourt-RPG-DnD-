@@ -17,6 +17,17 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Guiding Bolt
+  dano:
+    - ["1º (mínimo)", "4d6"]
+    - ["2º", "5d6"]
+    - ["3º", "6d6"]
+    - ["4º", "7d6"]
+    - ["5º", "8d6"]
+    - ["6º", "9d6"]
+    - ["7º", "10d6"]
+    - ["8º", "11d6"]
+    - ["9º", "12d6"]
 ---
 
 # Raio Guia

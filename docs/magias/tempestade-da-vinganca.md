@@ -17,6 +17,7 @@ magia:
   alcance_tipo: Distância
   area: Cilindro
   fonte: PHB
+  nome_ingles: Storm of Vengeance
 ---
 
 # Tempestade da Vingança

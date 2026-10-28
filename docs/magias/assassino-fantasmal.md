@@ -17,6 +17,16 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: "Phantasmal Killer"
+  resistencia: Sabedoria
+  resistencia_efeito: "Nenhum efeito"
+  dano:
+    - ["4º (mínimo)", "4d10"]
+    - ["5º", "5d10"]
+    - ["6º", "6d10"]
+    - ["7º", "7d10"]
+    - ["8º", "8d10"]
+    - ["9º", "9d10"]
 ---
 
 # Assassino Fantasmal

@@ -11,7 +11,10 @@ Registrado em `mkdocs.yml` (chave `hooks:`). Roda durante a geração do site e:
   jogadores em `mestre/jogadores/index.md` (marcador `<!-- jogadores:lista -->`);
 - gera as tabelas de magias: por nível em `magias/index.md` (marcador `<!-- magias:niveis -->`)
   e por classe em `magias/por-classe/*.md` (marcador `<!-- magias:classe -->`), lendo o bloco
-  `magia:` do front matter de cada página em `magias/*.md`;
+  `magia:` do front matter de cada página em `magias/*.md`; e, na página de cada magia, acrescenta
+  a seção "Dano e teste de resistência" quando o front matter tiver os campos `resistencia`/`dano`;
+- gera as listas de dotes (`docs/dotes/index.md`, marcador `<!-- dotes:lista -->`) e perícias
+  (`docs/pericias/index.md`, marcador `<!-- pericias:lista -->`);
 - mostra a linha do tempo da campanha (`dados/linha-do-tempo.yml`, ver `linha_tempo.py`) em cada
   página envolvida e aplica as mudanças de estado (situação, localização…) aos NPCs;
 - gera a página geral da linha do tempo (marcador `<!-- linha-do-tempo:geral -->`).
@@ -152,7 +155,13 @@ TIPOS_DANO_MAGIA = [
     "Necrótico", "Perfurante", "Psíquico", "Radiante", "Trovejante", "Veneno", "Nenhum",
 ]
 TIPOS_ALCANCE_MAGIA = ["Pessoal", "Toque", "Distância"]
-AREAS_EFEITO_MAGIA = ["Nenhuma", "Cone", "Cubo", "Cilindro", "Esfera", "Linha"]
+# Mesmos valores exibidos na coluna "Área" da tabela (ver _rotulo_area) — "Nenhuma" no front
+# matter aparece como "Alvo único" tanto na célula quanto nas opções do filtro.
+AREAS_EFEITO_MAGIA = ["Alvo único", "Cone", "Cubo", "Cilindro", "Esfera", "Linha"]
+
+# Colunas das tabelas de Dotes/Perícias: (rótulo, chave no bloco dote:/pericia:)
+COLUNAS_DOTE = [("Pré-requisito", "pre_requisito"), ("Fonte", "fonte")]
+COLUNAS_PERICIA = [("Atributo", "atributo"), ("Fonte", "fonte")]
 
 
 def _ler_magias(docs: Path) -> list[dict]:
@@ -189,7 +198,7 @@ def _filtros_magia(incluir_classe: bool) -> list[str]:
         _select_magia("categoria", "Categoria", "igual", CATEGORIAS_MAGIA, "Todas as categorias"),
         _select_magia("tipo de dano", "Tipo de Dano", "igual", TIPOS_DANO_MAGIA, "Qualquer dano"),
         _select_magia("tipo de alcance", "Tipo de Alcance", "igual", TIPOS_ALCANCE_MAGIA, "Qualquer alcance"),
-        _select_magia("área de efeito", "Área de Efeito", "igual", AREAS_EFEITO_MAGIA, "Qualquer área"),
+        _select_magia("área", "Área", "igual", AREAS_EFEITO_MAGIA, "Qualquer área"),
         _select_magia("ritual", "Ritual", "igual", ["Sim", "Não"], "Ritual: todas"),
         _select_magia("concentração", "Concentração", "igual", ["Sim", "Não"], "Concentração: todas"),
         '<span class="magia-contagem" aria-live="polite"></span>',
@@ -197,37 +206,92 @@ def _filtros_magia(incluir_classe: bool) -> list[str]:
     return ['<div class="magia-ferramentas" markdown>', "", *controles, "", "</div>"]
 
 
+def _rotulo_area(area: str | None) -> str:
+    """"Nenhuma" no front matter (sem área de efeito, alvo único) aparece como "Alvo único"."""
+    return "Alvo único" if not area or area == "Nenhuma" else area
+
+
+_RE_DURACAO_MAXIMA = re.compile(r"(\d+)\s+(rodadas?|minutos?|horas?|dias?)\b", re.I)
+
+
+def _duracao_maxima(duracao: str | None) -> str:
+    """Tempo máximo de uma duração (ex.: "Concentração, até 1 minuto" -> "1 minuto"), sem o
+    "até"/"ou até" — vazio para durações sem número (Instantânea, Especial, Até ser dissipada)."""
+    m = _RE_DURACAO_MAXIMA.search(duracao or "")
+    return f"{m.group(1)} {m.group(2)}" if m else ""
+
+
+def _icone_tempo(tempo: str | None) -> str:
+    """Marcador visual do tipo de ação gasto para conjurar — só para Ação/Ação Bônus/Reação
+    (os demais tempos, como "1 minuto" ou tempos de ritual, não ganham ícone)."""
+    t = (tempo or "").strip().lower()
+    if t.startswith("1 ação bônus"):
+        return '<span class="magia-icone-tempo magia-icone-tempo--bonus" title="Ação Bônus"></span>'
+    if t.startswith("1 reação"):
+        return '<span class="magia-icone-tempo magia-icone-tempo--reacao" title="Reação"></span>'
+    if t.startswith("1 ação"):
+        return '<span class="magia-icone-tempo magia-icone-tempo--acao" title="Ação"></span>'
+    return ""
+
+
 def _linha_magia(m: dict, com_classes: bool, com_nivel: bool, prefixo: str = "") -> str:
     celulas = []
     if com_nivel:
         nivel = m.get("nivel", 0)
         celulas.append(_celula("Truque" if nivel == 0 else f"{nivel}º"))
-    celulas.append(f"[{_celula(m['nome'])}]({prefixo}{m['arquivo']})")
-    celulas += [
-        _celula(m.get("escola")), _celula(m.get("tempo")), _celula(m.get("alcance")),
-        _celula(m.get("duracao")), _celula(m.get("componentes")),
-    ]
+    nome_en = m.get("nome_ingles")
+    sufixo_nome = f'<br><span class="magia-nome-en">{html.escape(nome_en)}</span>' if nome_en else ""
+    celulas.append(f"[{_celula(m['nome'])}]({prefixo}{m['arquivo']}){sufixo_nome}")
+    celulas.append(_celula(m.get("escola")))
+    celulas.append(f"{_icone_tempo(m.get('tempo'))}{_celula(m.get('tempo'))}")
+    celulas.append(_celula(m.get("alcance")))
+    celulas.append(_rotulo_area(m.get("area")))
+    duracao_max = _duracao_maxima(m.get("duracao"))
+    sufixo_duracao = f'<br><span class="magia-duracao-max">{duracao_max}</span>' if duracao_max else ""
+    celulas.append(f"{_celula(m.get('duracao'))}{sufixo_duracao}")
+    celulas.append(_celula(m.get("componentes")))
     if com_classes:
         celulas.append(_celula(", ".join(sorted(m.get("classes") or []))))
     celulas += [
         _celula("Sim" if m.get("ritual") else "Não"),
         _celula("Sim" if m.get("concentracao") else "Não"),
         _celula(m.get("categoria")), _celula(m.get("dano_tipo") or "Nenhum"),
-        _celula(m.get("alcance_tipo")), _celula(m.get("area") or "Nenhuma"),
+        _celula(m.get("alcance_tipo")),
     ]
     return "| " + " | ".join(celulas) + " |"
 
 
 def _tabela_magia_bloco(magias: list[dict], com_classes: bool, com_nivel: bool, prefixo: str = "") -> list[str]:
-    cabecalhos = (["Nível"] if com_nivel else []) + ["Nome", "Escola", "Tempo", "Alcance", "Duração", "Componentes"]
+    cabecalhos = (["Nível"] if com_nivel else []) + ["Nome", "Escola", "Tempo", "Alcance", "Área", "Duração", "Componentes"]
     if com_classes:
         cabecalhos.append("Classes")
-    cabecalhos += ["Ritual", "Concentração", "Categoria", "Tipo de Dano", "Tipo de Alcance", "Área de Efeito"]
+    cabecalhos += ["Ritual", "Concentração", "Categoria", "Tipo de Dano", "Tipo de Alcance"]
     cabecalho = "| " + " | ".join(cabecalhos) + " |"
     separador = "|" + "---|" * len(cabecalhos)
     chave = (lambda m: (m.get("nivel", 0), m["nome"].casefold())) if com_nivel else (lambda m: m["nome"].casefold())
     corpo = [_linha_magia(m, com_classes, com_nivel, prefixo) for m in sorted(magias, key=chave)]
     return ['<div class="magia-tabela" markdown>', "", cabecalho, separador, *corpo, "", "</div>"]
+
+
+def _secao_dano_magia(m: dict) -> str:
+    """Bloco "## Dano e teste de resistência" acrescentado ao final da página de uma magia,
+    a partir dos campos opcionais `resistencia`/`resistencia_efeito`/`dano` do front matter
+    (ver hooks/gallancourt.py, docstring do módulo, e o plano que introduziu estes campos)."""
+    partes = ["## Dano e teste de resistência", ""]
+    resistencia = m.get("resistencia")
+    if resistencia:
+        efeito = m.get("resistencia_efeito")
+        linha = f"- **Teste de resistência:** {resistencia}"
+        if efeito:
+            linha += f" — {efeito} em caso de sucesso"
+        partes += [linha, ""]
+    dano = m.get("dano")
+    if dano:
+        rotulo_coluna = "Nível de personagem" if m.get("nivel", 0) == 0 else "Nível do espaço"
+        partes += [f"| {rotulo_coluna} | Dano |", "|---|---|"]
+        partes += [f"| {rotulo} | {dado} |" for rotulo, dado in dano]
+        partes.append("")
+    return "\n".join(partes)
 
 
 def _tabela_magias_por_nivel(docs: Path, config) -> str:
@@ -410,6 +474,71 @@ def _lista_lugares(docs: Path, config) -> str:
         "</div>",
     ]
     return "\n".join(partes)
+
+
+def _ler_entidades_da_pasta(docs: Path, subpasta: str, campo: str) -> list[tuple[str, str, dict]]:
+    """Mesmo molde de _ler_lugares_da_pasta, para listas simples sem formulário do Painel
+    (Dotes/Perícias — conteúdo fixo escrito à mão, não cadastrado em tempo de jogo)."""
+    linhas = []
+    pasta = docs / subpasta
+    if not pasta.is_dir():
+        return linhas
+    for arquivo in sorted(pasta.glob("*.md")):
+        if arquivo.stem == "index":
+            continue
+        meta, corpo = _front_matter(arquivo.read_text(encoding="utf-8"))
+        dados = meta.get(campo)
+        if not isinstance(dados, dict):
+            continue
+        linhas.append((_titulo_h1(corpo, arquivo.stem), arquivo.name, dados))
+    linhas.sort(key=lambda l: l[0].casefold())
+    return linhas
+
+
+def _tabela_entidade_simples(
+    linhas: list[tuple[str, str, dict]], colunas: list[tuple[str, str]],
+    classe_css: str, placeholder_busca: str, vazio: str,
+) -> str:
+    if not linhas:
+        return f"*{vazio}*"
+    cabecalho = "| Nome | " + " | ".join(r for r, _ in colunas) + " |"
+    separador = "|" + "---|" * (len(colunas) + 1)
+    corpo_tabela = [
+        f"| [{_celula(nome)}]({arq}) | " + " | ".join(_celula(dados.get(chave)) for _, chave in colunas) + " |"
+        for nome, arq, dados in linhas
+    ]
+    partes = [
+        f'<div class="{classe_css}-ferramentas" markdown>',
+        "",
+        f'<input type="search" class="{classe_css}-busca" placeholder="{placeholder_busca}" '
+        f'aria-label="Filtrar">',
+        f'<span class="{classe_css}-contagem" aria-live="polite"></span>',
+        "",
+        "</div>",
+        "",
+        f'<div class="{classe_css}-tabela" markdown>',
+        "",
+        cabecalho,
+        separador,
+        *corpo_tabela,
+        "",
+        "</div>",
+    ]
+    return "\n".join(partes)
+
+
+def _lista_dotes(docs: Path, config) -> str:
+    linhas = _ler_entidades_da_pasta(docs, "dotes", "dote")
+    return _tabela_entidade_simples(
+        linhas, COLUNAS_DOTE, "dote", "Filtrar por nome…", "Nenhum dote cadastrado ainda.",
+    )
+
+
+def _lista_pericias(docs: Path, config) -> str:
+    linhas = _ler_entidades_da_pasta(docs, "pericias", "pericia")
+    return _tabela_entidade_simples(
+        linhas, COLUNAS_PERICIA, "pericia", "Filtrar por nome…", "Nenhuma perícia cadastrada ainda.",
+    )
 
 
 def _lista_jogadores(docs: Path, config) -> str:
@@ -617,6 +746,14 @@ def on_page_markdown(markdown: str, page, config, files):
         slug = Path(src).stem
         classe = CLASSES_CONJURADORAS.get(slug, slug.capitalize())
         markdown = markdown.replace("<!-- magias:classe -->", _tabela_magias_classe(docs, classe))
+    if src.startswith("magias/") and not src.endswith("index.md") and "/por-classe/" not in src:
+        dados_magia = page.meta.get("magia")
+        if isinstance(dados_magia, dict) and (dados_magia.get("resistencia") or dados_magia.get("dano")):
+            markdown = markdown.rstrip("\n") + "\n\n" + _secao_dano_magia(dados_magia)
+    if src == "dotes/index.md" and "<!-- dotes:lista -->" in markdown:
+        markdown = markdown.replace("<!-- dotes:lista -->", _lista_dotes(docs, config))
+    if src == "pericias/index.md" and "<!-- pericias:lista -->" in markdown:
+        markdown = markdown.replace("<!-- pericias:lista -->", _lista_pericias(docs, config))
     if src.startswith(("classes/", "racas/", "antecedentes/")) and not src.endswith("index.md"):
         markdown = _envolver_pagina_regra(markdown)
     if src.startswith("mestre/sessoes/sessao-") and "<!-- participantes:botao -->" in markdown:

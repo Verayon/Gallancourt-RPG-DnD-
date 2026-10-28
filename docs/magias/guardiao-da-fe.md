@@ -17,6 +17,11 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Guardian of Faith
+  resistencia: Destreza
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["Fixo", "20"]
 ---
 
 # Guardião da Fé

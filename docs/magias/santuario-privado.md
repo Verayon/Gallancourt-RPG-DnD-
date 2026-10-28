@@ -17,6 +17,7 @@ magia:
   alcance_tipo: Distância
   area: Cubo
   fonte: PHB
+  nome_ingles: Private Sanctum
 ---
 
 # Santuário Privado

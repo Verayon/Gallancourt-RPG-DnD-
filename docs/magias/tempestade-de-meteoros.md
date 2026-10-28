@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Esfera
   fonte: PHB
+  nome_ingles: Meteor Swarm
+  resistencia: Destreza
+  resistencia_efeito: "Metade do dano"
 ---
 
 # Tempestade de Meteoros

@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Esfera
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Watery Sphere
+  resistencia: Força
+  resistencia_efeito: "Não é retida (empurrada para fora)"
 ---
 
 # Esfera Aquática

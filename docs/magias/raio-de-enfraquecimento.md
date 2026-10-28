@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Ray of Enfeeblement
+  resistencia: Constituição
+  resistencia_efeito: "Nenhum efeito"
 ---
 
 # Raio de Enfraquecimento

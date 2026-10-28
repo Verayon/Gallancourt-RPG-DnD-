@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Pessoal
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Divine Favor
+  dano:
+    - ["Fixo", "1d4"]
 ---
 
 # Favor Divino

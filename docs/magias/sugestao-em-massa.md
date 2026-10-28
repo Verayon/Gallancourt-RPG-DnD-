@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Mass Suggestion
+  resistencia: Sabedoria
+  resistencia_efeito: "Não é afetado pela sugestão"
 ---
 
 # Sugestão em Massa

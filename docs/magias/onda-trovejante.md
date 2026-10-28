@@ -17,6 +17,19 @@ magia:
   alcance_tipo: Pessoal
   area: Cubo
   fonte: PHB
+  nome_ingles: Thunderwave
+  resistencia: Constituição
+  resistencia_efeito: "Metade do dano, sem empurrão"
+  dano:
+    - ["1º (mínimo)", "2d8"]
+    - ["2º", "3d8"]
+    - ["3º", "4d8"]
+    - ["4º", "5d8"]
+    - ["5º", "6d8"]
+    - ["6º", "7d8"]
+    - ["7º", "8d8"]
+    - ["8º", "9d8"]
+    - ["9º", "10d8"]
 ---
 
 # Onda Trovejante

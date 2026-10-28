@@ -17,6 +17,18 @@ magia:
   alcance_tipo: Distância
   area: Cubo
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Dust Devil
+  resistencia: Força
+  resistencia_efeito: "Metade do dano, sem ser empurrada"
+  dano:
+    - ["2º (mínimo)", "1d8"]
+    - ["3º", "2d8"]
+    - ["4º", "3d8"]
+    - ["5º", "4d8"]
+    - ["6º", "5d8"]
+    - ["7º", "6d8"]
+    - ["8º", "7d8"]
+    - ["9º", "8d8"]
 ---
 
 # Diabo da Poeira

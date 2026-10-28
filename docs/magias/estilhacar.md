@@ -17,6 +17,18 @@ magia:
   alcance_tipo: Distância
   area: Esfera
   fonte: PHB
+  nome_ingles: Shatter
+  resistencia: Constituição
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["2º (mínimo)", "3d8"]
+    - ["3º", "4d8"]
+    - ["4º", "5d8"]
+    - ["5º", "6d8"]
+    - ["6º", "7d8"]
+    - ["7º", "8d8"]
+    - ["8º", "9d8"]
+    - ["9º", "10d8"]
 ---
 
 # Estilhaçar

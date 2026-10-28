@@ -17,6 +17,7 @@ magia:
   alcance_tipo: Toque
   area: Esfera
   fonte: PHB
+  nome_ingles: Symbol
 ---
 
 # Símbolo

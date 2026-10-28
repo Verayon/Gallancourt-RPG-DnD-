@@ -17,6 +17,7 @@ magia:
   alcance_tipo: Pessoal
   area: Cone
   fonte: PHB
+  nome_ingles: Prismatic Spray
 ---
 
 # Rajada Prismática

@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Gate
+  resistencia: Carisma
+  resistencia_efeito: "Resiste à convocação"
 ---
 
 # Portal

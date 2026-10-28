@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Pessoal
   area: Esfera
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Shadow of Moil
+  dano:
+    - ["Fixo", "2d8"]
 ---
 
 # Manto Sombrio

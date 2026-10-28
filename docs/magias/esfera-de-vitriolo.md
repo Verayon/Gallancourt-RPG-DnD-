@@ -17,6 +17,16 @@ magia:
   alcance_tipo: Distância
   area: Esfera
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Vitriolic Sphere
+  resistencia: Destreza
+  resistencia_efeito: "Metade do dano inicial (sem dano adicional)"
+  dano:
+    - ["4º (mínimo)", "10d4"]
+    - ["5º", "12d4"]
+    - ["6º", "14d4"]
+    - ["7º", "16d4"]
+    - ["8º", "18d4"]
+    - ["9º", "20d4"]
 ---
 
 # Esfera de Vitríolo

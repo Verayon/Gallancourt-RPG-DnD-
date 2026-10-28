@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Enemies Abound
+  resistencia: Inteligência
+  resistencia_efeito: "Nenhum efeito"
 ---
 
 # Inimigos por Todo Lado

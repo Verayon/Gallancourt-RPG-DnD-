@@ -17,6 +17,7 @@ magia:
   alcance_tipo: Distância
   area: Cubo
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Healing Spirit
 ---
 
 # Espírito Curativo

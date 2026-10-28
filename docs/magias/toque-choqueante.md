@@ -17,6 +17,12 @@ magia:
   alcance_tipo: Toque
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Shocking Grasp
+  dano:
+    - ["1º–4º", "1d8"]
+    - ["5º–10º", "2d8"]
+    - ["11º–16º", "3d8"]
+    - ["17º–20º", "4d8"]
 ---
 
 # Toque Choqueante

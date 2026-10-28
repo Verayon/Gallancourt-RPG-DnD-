@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Pessoal
   area: Nenhuma
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Crown of Stars
+  dano:
+    - ["Fixo", "4d12"]
 ---
 
 # Coroa de Estrelas

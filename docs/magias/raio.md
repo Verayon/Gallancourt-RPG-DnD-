@@ -17,6 +17,17 @@ magia:
   alcance_tipo: Pessoal
   area: Linha
   fonte: PHB
+  nome_ingles: Lightning Bolt
+  resistencia: Destreza
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["3º (mínimo)", "8d6"]
+    - ["4º", "9d6"]
+    - ["5º", "10d6"]
+    - ["6º", "11d6"]
+    - ["7º", "12d6"]
+    - ["8º", "13d6"]
+    - ["9º", "14d6"]
 ---
 
 # Raio

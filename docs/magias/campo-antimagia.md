@@ -17,6 +17,7 @@ magia:
   alcance_tipo: Pessoal
   area: Esfera
   fonte: PHB
+  nome_ingles: "Antimagic Field"
 ---
 
 # Campo Antimagia

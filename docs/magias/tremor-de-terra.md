@@ -17,6 +17,19 @@ magia:
   alcance_tipo: Pessoal
   area: Esfera
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Earth Tremor
+  resistencia: Destreza
+  resistencia_efeito: "Metade do dano e não cai sentada"
+  dano:
+    - ["1º (mínimo)", "1d6"]
+    - ["2º", "2d6"]
+    - ["3º", "3d6"]
+    - ["4º", "4d6"]
+    - ["5º", "5d6"]
+    - ["6º", "6d6"]
+    - ["7º", "7d6"]
+    - ["8º", "8d6"]
+    - ["9º", "9d6"]
 ---
 
 # Tremor de Terra

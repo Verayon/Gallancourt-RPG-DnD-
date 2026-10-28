@@ -17,6 +17,15 @@ magia:
   alcance_tipo: Pessoal
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Vampiric Touch
+  dano:
+    - ["3º (mínimo)", "3d6"]
+    - ["4º", "4d6"]
+    - ["5º", "5d6"]
+    - ["6º", "6d6"]
+    - ["7º", "7d6"]
+    - ["8º", "8d6"]
+    - ["9º", "9d6"]
 ---
 
 # Toque Vampírico

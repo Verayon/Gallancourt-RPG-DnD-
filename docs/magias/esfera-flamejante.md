@@ -17,6 +17,18 @@ magia:
   alcance_tipo: Distância
   area: Esfera
   fonte: PHB
+  nome_ingles: Flaming Sphere
+  resistencia: Destreza
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["2º (mínimo)", "2d6"]
+    - ["3º", "3d6"]
+    - ["4º", "4d6"]
+    - ["5º", "5d6"]
+    - ["6º", "6d6"]
+    - ["7º", "7d6"]
+    - ["8º", "8d6"]
+    - ["9º", "9d6"]
 ---
 
 # Esfera Flamejante

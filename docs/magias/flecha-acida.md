@@ -17,6 +17,16 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Melf's Acid Arrow
+  dano:
+    - ["2º (mínimo)", "4d4"]
+    - ["3º", "5d4"]
+    - ["4º", "6d4"]
+    - ["5º", "7d4"]
+    - ["6º", "8d4"]
+    - ["7º", "9d4"]
+    - ["8º", "10d4"]
+    - ["9º", "11d4"]
 ---
 
 # Flecha Ácida

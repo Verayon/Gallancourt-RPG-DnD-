@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Planar Binding
+  resistencia: Carisma
+  resistencia_efeito: "Nenhum efeito"
 ---
 
 # Vínculo Planar

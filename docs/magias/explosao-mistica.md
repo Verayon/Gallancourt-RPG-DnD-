@@ -17,6 +17,12 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Eldritch Blast
+  dano:
+    - ["1º–4º", "1x1d10"]
+    - ["5º–10º", "2x1d10"]
+    - ["11º–16º", "3x1d10"]
+    - ["17º–20º", "4x1d10"]
 ---
 
 # Explosão Mística

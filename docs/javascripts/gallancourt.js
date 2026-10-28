@@ -155,6 +155,26 @@
     });
   }
 
+  function montarTabelaDotes(raiz) {
+    prepararTabelaFiltravel({
+      tabela: raiz.querySelector(".dote-tabela table"),
+      busca: raiz.querySelector(".dote-busca"),
+      contagem: raiz.querySelector(".dote-contagem"),
+      colunasComFiltro: ["Pré-requisito", "Fonte"],
+      rotuloPlural: "dotes",
+    });
+  }
+
+  function montarTabelaPericias(raiz) {
+    prepararTabelaFiltravel({
+      tabela: raiz.querySelector(".pericia-tabela table"),
+      busca: raiz.querySelector(".pericia-busca"),
+      contagem: raiz.querySelector(".pericia-contagem"),
+      colunasComFiltro: ["Atributo", "Fonte"],
+      rotuloPlural: "perícias",
+    });
+  }
+
   // Formulários embutidos "Adicionar NPC/Lugar/Jogador" — ver docs/javascripts/painel-fetch.js.
   var CONFIG_ENTIDADE = {
     npc: {
@@ -235,10 +255,11 @@
     Array.prototype.slice.call(raiz.querySelectorAll(".criar-entidade")).forEach(montarFormularioEntidade);
   }
 
-  // Colunas da tabela de magias que ficam escondidas por CSS (nth-child(n+8) — ver extra.css) e
-  // por isso não recebem botão de ordenação, só servem de alvo para os filtros da barra.
+  // Colunas da tabela de magias que ficam escondidas por CSS (nth-last-child(-n+5) — ver
+  // extra.css) e por isso não recebem botão de ordenação, só servem de alvo para os filtros da
+  // barra. São sempre as últimas 5, independente de quantas colunas visíveis vêm antes.
   var COLUNAS_MAGIA_SEM_ORDEM = [
-    "Ritual", "Concentração", "Categoria", "Tipo de Dano", "Tipo de Alcance", "Área de Efeito",
+    "Ritual", "Concentração", "Categoria", "Tipo de Dano", "Tipo de Alcance",
   ];
 
   function prepararOrdenacaoMagia(tabela) {
@@ -394,6 +415,8 @@
     montarTabelaNpcs(document);
     montarTabelaLugares(document);
     montarTabelaJogadores(document);
+    montarTabelaDotes(document);
+    montarTabelaPericias(document);
     montarFormulariosEntidade(document);
     montarPainelMagias(document);
     abrirAbaDaAncora();

@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: "Hunter's Mark"
+  dano:
+    - ["Fixo", "1d6"]
 ---
 
 # Marca do Caçador

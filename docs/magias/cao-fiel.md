@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: "Faithful Hound"
+  dano:
+    - ["Fixo", "4d8"]
 ---
 
 # Cão Fiel

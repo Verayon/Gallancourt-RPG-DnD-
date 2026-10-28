@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: "Power Word Pain"
+  resistencia: Constituição
+  resistencia_efeito: "Nenhum efeito"
 ---
 
 # Palavra de Poder: Dor

@@ -17,6 +17,11 @@ magia:
   alcance_tipo: Distância
   area: Esfera
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Sickening Radiance
+  resistencia: Constituição
+  resistencia_efeito: "Nenhum efeito"
+  dano:
+    - ["Fixo", "4d10"]
 ---
 
 # Radiância Nauseante

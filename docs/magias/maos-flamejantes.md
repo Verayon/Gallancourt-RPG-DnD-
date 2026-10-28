@@ -17,6 +17,19 @@ magia:
   alcance_tipo: Pessoal
   area: Cone
   fonte: PHB
+  nome_ingles: Burning Hands
+  resistencia: Destreza
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["1º (mínimo)", "3d6"]
+    - ["2º", "4d6"]
+    - ["3º", "5d6"]
+    - ["4º", "6d6"]
+    - ["5º", "7d6"]
+    - ["6º", "8d6"]
+    - ["7º", "9d6"]
+    - ["8º", "10d6"]
+    - ["9º", "11d6"]
 ---
 
 # Mãos Flamejantes

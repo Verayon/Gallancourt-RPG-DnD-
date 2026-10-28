@@ -17,6 +17,14 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Disintegrate
+  resistencia: Destreza
+  resistencia_efeito: "Nenhum dano"
+  dano:
+    - ["6º (mínimo)", "10d6 + 40"]
+    - ["7º", "13d6 + 40"]
+    - ["8º", "16d6 + 40"]
+    - ["9º", "19d6 + 40"]
 ---
 
 # Desintegrar

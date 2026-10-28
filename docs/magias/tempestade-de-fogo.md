@@ -17,6 +17,11 @@ magia:
   alcance_tipo: Distância
   area: Cubo
   fonte: PHB
+  nome_ingles: Fire Storm
+  resistencia: Destreza
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["Fixo", "7d10"]
 ---
 
 # Tempestade de Fogo

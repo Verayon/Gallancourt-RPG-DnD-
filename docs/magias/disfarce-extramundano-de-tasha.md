@@ -17,6 +17,7 @@ magia:
   alcance_tipo: Pessoal
   area: Nenhuma
   fonte: "Tasha's Cauldron of Everything"
+  nome_ingles: Tasha's Otherworldly Guise
 ---
 
 # Disfarce Extramundano de Tasha

@@ -17,6 +17,14 @@ magia:
   alcance_tipo: Pessoal
   area: Esfera
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Sword Burst
+  resistencia: Destreza
+  resistencia_efeito: "Nenhum dano"
+  dano:
+    - ["1º–4º", "1d6"]
+    - ["5º–10º", "2d6"]
+    - ["11º–16º", "3d6"]
+    - ["17º–20º", "4d6"]
 ---
 
 # Explosão de Espadas

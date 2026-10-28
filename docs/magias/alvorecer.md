@@ -17,6 +17,11 @@ magia:
   alcance_tipo: Distância
   area: Cilindro
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Dawn
+  resistencia: Constituição
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["Fixo", "4d10"]
 ---
 
 # Alvorecer

@@ -17,6 +17,7 @@ magia:
   alcance_tipo: Pessoal
   area: Nenhuma
   fonte: PHB
+  nome_ingles: "Pass without Trace"
 ---
 
 # Passar sem Deixar Rastro

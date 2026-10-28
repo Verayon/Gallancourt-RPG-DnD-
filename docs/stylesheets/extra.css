@@ -1084,7 +1084,9 @@ input,
 
 .npc-ferramentas > p,
 .lugar-ferramentas > p,
-.jogador-ferramentas > p {
+.jogador-ferramentas > p,
+.dote-ferramentas > p,
+.pericia-ferramentas > p {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -1100,7 +1102,9 @@ input,
 
 .npc-busca,
 .lugar-busca,
-.jogador-busca {
+.jogador-busca,
+.dote-busca,
+.pericia-busca {
   flex: 1 1 14rem;
   min-width: 0;
   padding: .45rem .7rem;
@@ -1114,14 +1118,18 @@ input,
 
 .npc-busca:focus,
 .lugar-busca:focus,
-.jogador-busca:focus {
+.jogador-busca:focus,
+.dote-busca:focus,
+.pericia-busca:focus {
   outline: none;
   border-color: var(--gc-gold);
 }
 
 .npc-contagem,
 .lugar-contagem,
-.jogador-contagem {
+.jogador-contagem,
+.dote-contagem,
+.pericia-contagem {
   font-size: .75rem;
   color: var(--gc-ink-dim);
   font-style: italic;
@@ -1129,7 +1137,9 @@ input,
 
 .md-typeset .npc-tabela table:not([class]),
 .md-typeset .lugar-tabela table:not([class]),
-.md-typeset .jogador-tabela table:not([class]) {
+.md-typeset .jogador-tabela table:not([class]),
+.md-typeset .dote-tabela table:not([class]),
+.md-typeset .pericia-tabela table:not([class]) {
   font-size: .76rem;
 }
 
@@ -1138,21 +1148,29 @@ input,
 .md-typeset .lugar-tabela th,
 .md-typeset .lugar-tabela td,
 .md-typeset .jogador-tabela th,
-.md-typeset .jogador-tabela td {
+.md-typeset .jogador-tabela td,
+.md-typeset .dote-tabela th,
+.md-typeset .dote-tabela td,
+.md-typeset .pericia-tabela th,
+.md-typeset .pericia-tabela td {
   padding: .45em .7em;
   vertical-align: middle;
 }
 
 .md-typeset .npc-tabela th,
 .md-typeset .lugar-tabela th,
-.md-typeset .jogador-tabela th {
+.md-typeset .jogador-tabela th,
+.md-typeset .dote-tabela th,
+.md-typeset .pericia-tabela th {
   vertical-align: top;
   white-space: nowrap;
 }
 
 .md-typeset .npc-tabela td:nth-child(2),
 .md-typeset .lugar-tabela td:first-child,
-.md-typeset .jogador-tabela td:first-child {
+.md-typeset .jogador-tabela td:first-child,
+.md-typeset .dote-tabela td:first-child,
+.md-typeset .pericia-tabela td:first-child {
   white-space: nowrap;
   font-weight: 600;
 }
@@ -1412,11 +1430,48 @@ th[aria-sort="descending"] .tabela-ordenar::after { content: " ▼"; opacity: 1;
   font-weight: 600;
 }
 
-/* Colunas de classificação (Ritual, Concentração, Categoria, Tipo de Dano, Tipo de Alcance,
-   Área de Efeito) — sempre as 6 últimas — ficam só para os filtros lerem, não aparecem na tela. */
-.md-typeset .magia-tabela th:nth-child(n+8),
-.md-typeset .magia-tabela td:nth-child(n+8) {
+/* Colunas de classificação (Ritual, Concentração, Categoria, Tipo de Dano, Tipo de Alcance) —
+   sempre as 5 últimas, não importa quantas colunas visíveis vêm antes (Nível/Classes são
+   opcionais) — ficam só para os filtros lerem, não aparecem na tela. nth-last-child conta a
+   partir do fim, por isso não se confunde com o número de colunas visíveis. */
+.md-typeset .magia-tabela th:nth-last-child(-n+5),
+.md-typeset .magia-tabela td:nth-last-child(-n+5) {
   display: none;
+}
+
+.magia-nome-en,
+.magia-duracao-max {
+  font-size: .68rem;
+  color: var(--gc-ink-dim);
+  font-weight: 400;
+  display: block;
+}
+
+.magia-icone-tempo {
+  display: inline-block;
+  margin-right: .35em;
+  vertical-align: middle;
+}
+
+.magia-icone-tempo--acao {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4caf7a;
+}
+
+.magia-icone-tempo--bonus {
+  width: 8px;
+  height: 8px;
+  background: #d98c3a;
+}
+
+.magia-icone-tempo--reacao {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 8px solid #4a90d9;
 }
 
 .magia-ordenar {

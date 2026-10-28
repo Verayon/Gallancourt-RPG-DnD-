@@ -17,6 +17,18 @@ magia:
   alcance_tipo: Toque
   area: Cone
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Dragon's Breath
+  resistencia: Constituição
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["2º (mínimo)", "3d6"]
+    - ["3º", "4d6"]
+    - ["4º", "5d6"]
+    - ["5º", "6d6"]
+    - ["6º", "7d6"]
+    - ["7º", "8d6"]
+    - ["8º", "9d6"]
+    - ["9º", "10d6"]
 ---
 
 # Sopro de Dragão

@@ -17,6 +17,11 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Geas
+  resistencia: Sabedoria
+  resistencia_efeito: "Nenhum efeito"
+  dano:
+    - ["Fixo", "5d10"]
 ---
 
 # Geas

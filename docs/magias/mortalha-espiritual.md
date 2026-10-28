@@ -17,6 +17,15 @@ magia:
   alcance_tipo: Pessoal
   area: Nenhuma
   fonte: "Tasha's Cauldron of Everything"
+  nome_ingles: Spirit Shroud
+  dano:
+    - ["3º (mínimo)", "1d8"]
+    - ["4º", "1d8"]
+    - ["5º", "2d8"]
+    - ["6º", "2d8"]
+    - ["7º", "3d8"]
+    - ["8º", "3d8"]
+    - ["9º", "4d8"]
 ---
 
 # Mortalha Espiritual

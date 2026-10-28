@@ -17,6 +17,11 @@ magia:
   alcance_tipo: Distância
   area: Esfera
   fonte: PHB
+  nome_ingles: Sunburst
+  resistencia: Constituição
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["Fixo", "12d6"]
 ---
 
 # Explosão Solar

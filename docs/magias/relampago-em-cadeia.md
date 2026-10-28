@@ -17,6 +17,14 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Chain Lightning
+  resistencia: Destreza
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["6º (mínimo)", "10d8"]
+    - ["7º", "10d8"]
+    - ["8º", "10d8"]
+    - ["9º", "10d8"]
 ---
 
 # Relâmpago em Cadeia

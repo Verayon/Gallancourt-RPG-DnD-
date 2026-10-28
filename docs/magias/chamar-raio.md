@@ -17,6 +17,17 @@ magia:
   alcance_tipo: Distância
   area: Cilindro
   fonte: PHB
+  nome_ingles: "Call Lightning"
+  resistencia: Destreza
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["3º (mínimo)", "3d10"]
+    - ["4º", "4d10"]
+    - ["5º", "5d10"]
+    - ["6º", "6d10"]
+    - ["7º", "7d10"]
+    - ["8º", "8d10"]
+    - ["9º", "9d10"]
 ---
 
 # Chamar Raio

@@ -17,6 +17,7 @@ magia:
   alcance_tipo: Distância
   area: Esfera
   fonte: PHB
+  nome_ingles: Darkness
 ---
 
 # Escuridão

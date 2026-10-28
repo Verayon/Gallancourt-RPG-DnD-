@@ -17,6 +17,14 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: PHB
+  nome_ingles: Vicious Mockery
+  resistencia: Sabedoria
+  resistencia_efeito: "Nenhum dano"
+  dano:
+    - ["1º–4º", "1d4"]
+    - ["5º–10º", "2d4"]
+    - ["11º–16º", "3d4"]
+    - ["17º–20º", "4d4"]
 ---
 
 # Escárnio Cruel

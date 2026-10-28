@@ -17,6 +17,15 @@ magia:
   alcance_tipo: Distância
   area: Nenhuma
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Life Transference
+  dano:
+    - ["3º (mínimo)", "4d8"]
+    - ["4º", "5d8"]
+    - ["5º", "6d8"]
+    - ["6º", "7d8"]
+    - ["7º", "8d8"]
+    - ["8º", "9d8"]
+    - ["9º", "10d8"]
 ---
 
 # Transferência de Vida

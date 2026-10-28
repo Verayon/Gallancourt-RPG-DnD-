@@ -17,6 +17,9 @@ magia:
   alcance_tipo: Distância
   area: Cilindro
   fonte: PHB
+  nome_ingles: Ice Storm
+  resistencia: Destreza
+  resistencia_efeito: "Metade do dano de concussão, sem dano de frio"
 ---
 
 # Tempestade de Gelo

@@ -17,6 +17,17 @@ magia:
   alcance_tipo: Distância
   area: Cubo
   fonte: "Xanathar's Guide to Everything"
+  nome_ingles: Erupting Earth
+  resistencia: Destreza
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["3º (mínimo)", "3d12"]
+    - ["4º", "4d12"]
+    - ["5º", "5d12"]
+    - ["6º", "6d12"]
+    - ["7º", "7d12"]
+    - ["8º", "8d12"]
+    - ["9º", "9d12"]
 ---
 
 # Erupção da Terra

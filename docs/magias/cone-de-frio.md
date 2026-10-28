@@ -17,6 +17,15 @@ magia:
   alcance_tipo: Pessoal
   area: Cone
   fonte: PHB
+  nome_ingles: Cone of Cold
+  resistencia: Constituição
+  resistencia_efeito: "Metade do dano"
+  dano:
+    - ["5º (mínimo)", "8d8"]
+    - ["6º", "9d8"]
+    - ["7º", "10d8"]
+    - ["8º", "11d8"]
+    - ["9º", "12d8"]
 ---
 
 # Cone de Frio
