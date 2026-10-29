@@ -17,7 +17,13 @@ Registrado em `mkdocs.yml` (chave `hooks:`). Roda durante a geração do site e:
   (`docs/pericias/index.md`, marcador `<!-- pericias:lista -->`);
 - mostra a linha do tempo da campanha (`dados/linha-do-tempo.yml`, ver `linha_tempo.py`) em cada
   página envolvida e aplica as mudanças de estado (situação, localização…) aos NPCs;
-- gera a página geral da linha do tempo (marcador `<!-- linha-do-tempo:geral -->`).
+- gera a página geral da linha do tempo (marcador `<!-- linha-do-tempo:geral -->`);
+- gera a página do changelog (`docs/changelog/index.md`, marcador `<!-- changelog:lista -->`,
+  ver `changelog.py`) e a do roadmap (`docs/roadmap/index.md`, marcador `<!-- roadmap:lista -->`,
+  ver `roadmap.py`), e a lista de bugs reportados (`docs/configuracoes/bugs.md`, marcador
+  `<!-- bugs:lista -->`, ver `bugs.py`);
+- acrescenta, em toda página, o selo da versão atual (canto inferior esquerdo) e o botão de
+  "Reportar bug" (canto inferior direito).
 
 A tabela e a lista são lidas direto dos arquivos a cada geração: uma página nova de NPC ou de
 sessão aparece sozinha, sem editar nenhuma lista à mão.
@@ -34,6 +40,9 @@ import yaml
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import linha_tempo  # noqa: E402
+import changelog  # noqa: E402
+import roadmap  # noqa: E402
+import bugs  # noqa: E402
 
 # Linha do tempo carregada uma vez por geração do site (on_pre_build)
 _EVENTOS: list[dict] = []
@@ -43,8 +52,14 @@ _EVENTOS: list[dict] = []
 # os arquivos de docs/magias/ do zero, multiplicando a leitura de disco por ~10.
 _MAGIAS: list[dict] = []
 
+# Changelog/Roadmap/Bugs carregados uma vez por geração do site (on_pre_build)
+_CHANGELOG: list[dict] = []
+_ROADMAP: list[dict] = []
+_BUGS: list[dict] = []
+
 RETRATO_PADRAO = "../assets/placeholders/personagem.svg"
 DICA_PAINEL = "Abre o Painel do Mestre — ele precisa estar rodando no seu computador"
+DICA_BUG = "Reportar um problema — abre um formulário (precisa do Painel rodando no seu computador)"
 
 # Colunas da tabela de NPCs: (rótulo, chave no bloco npc:)
 COLUNAS_NPC = [
@@ -780,9 +795,13 @@ def _paginar_npc(conteudo: str) -> str:
 # --------------------------------------------------------------------------
 
 def on_pre_build(config):
-    global _EVENTOS, _MAGIAS
-    _EVENTOS = linha_tempo.carregar(Path(config["config_file_path"]).parent)
+    global _EVENTOS, _MAGIAS, _CHANGELOG, _ROADMAP, _BUGS
+    raiz = Path(config["config_file_path"]).parent
+    _EVENTOS = linha_tempo.carregar(raiz)
     _MAGIAS = _ler_magias(Path(config["docs_dir"]))
+    _CHANGELOG = changelog.carregar(raiz)
+    _ROADMAP = roadmap.carregar(raiz)
+    _BUGS = bugs.carregar(raiz)
 
 
 def _depois_do_h1(markdown: str, bloco: str) -> str:
@@ -827,6 +846,12 @@ def on_page_markdown(markdown: str, page, config, files):
         markdown = markdown.replace("<!-- dotes:lista -->", _lista_dotes(docs, config))
     if src == "pericias/index.md" and "<!-- pericias:lista -->" in markdown:
         markdown = markdown.replace("<!-- pericias:lista -->", _lista_pericias(docs, config))
+    if src == "changelog/index.md" and "<!-- changelog:lista -->" in markdown:
+        markdown = markdown.replace("<!-- changelog:lista -->", changelog.pagina_geral(_CHANGELOG))
+    if src == "roadmap/index.md" and "<!-- roadmap:lista -->" in markdown:
+        markdown = markdown.replace("<!-- roadmap:lista -->", roadmap.tabela(_ROADMAP))
+    if src == "configuracoes/bugs.md" and "<!-- bugs:lista -->" in markdown:
+        markdown = markdown.replace("<!-- bugs:lista -->", bugs.tabela(_BUGS))
     if src.startswith(("classes/", "racas/", "antecedentes/")) and not src.endswith("index.md"):
         markdown = _envolver_pagina_regra(markdown)
     if src.startswith("mestre/sessoes/sessao-") and "<!-- participantes:botao -->" in markdown:
@@ -857,7 +882,23 @@ def on_page_markdown(markdown: str, page, config, files):
     return markdown
 
 
+def _rodape_global() -> str:
+    """Selo da versão atual (canto inferior esquerdo) e botão de report de bug (canto inferior
+    direito) — presentes em toda página do site, por isso ficam fora do fluxo de conteúdo
+    (position: fixed, ver extra.css) e usam caminho absoluto (o site sempre é servido da raiz
+    pelo Painel, nunca aberto como arquivo solto)."""
+    atual = changelog.versao_atual(_CHANGELOG)
+    rotulo = f"v{atual['versao']}" if atual and atual.get("versao") else "v0 — pré-lançamento"
+    selo = f'<a class="selo-versao" href="/changelog/" title="Ver o changelog">{html.escape(rotulo)}</a>'
+    botao = (
+        f'<a class="botao-reportar-bug" href="/bug/novo" target="_blank" rel="noopener" '
+        f'title="{DICA_BUG}">🐞 Reportar bug</a>'
+    )
+    return f"\n{selo}\n{botao}\n"
+
+
 def on_page_content(conteudo: str, page, config, files):
     if isinstance(page.meta.get("npc"), dict) or isinstance(page.meta.get("jogador"), dict):
-        return _paginar_npc(conteudo)
+        conteudo = _paginar_npc(conteudo)
+    return conteudo + _rodape_global()
     return conteudo

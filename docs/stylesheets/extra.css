@@ -1086,7 +1086,9 @@ input,
 .lugar-ferramentas > p,
 .jogador-ferramentas > p,
 .dote-ferramentas > p,
-.pericia-ferramentas > p {
+.pericia-ferramentas > p,
+.roadmap-ferramentas > p,
+.bug-ferramentas > p {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -1104,7 +1106,9 @@ input,
 .lugar-busca,
 .jogador-busca,
 .dote-busca,
-.pericia-busca {
+.pericia-busca,
+.roadmap-busca,
+.bug-busca {
   flex: 1 1 14rem;
   min-width: 0;
   padding: .45rem .7rem;
@@ -1120,7 +1124,9 @@ input,
 .lugar-busca:focus,
 .jogador-busca:focus,
 .dote-busca:focus,
-.pericia-busca:focus {
+.pericia-busca:focus,
+.roadmap-busca:focus,
+.bug-busca:focus {
   outline: none;
   border-color: var(--gc-gold);
 }
@@ -1129,7 +1135,9 @@ input,
 .lugar-contagem,
 .jogador-contagem,
 .dote-contagem,
-.pericia-contagem {
+.pericia-contagem,
+.roadmap-contagem,
+.bug-contagem {
   font-size: .75rem;
   color: var(--gc-ink-dim);
   font-style: italic;
@@ -1139,7 +1147,9 @@ input,
 .md-typeset .lugar-tabela table:not([class]),
 .md-typeset .jogador-tabela table:not([class]),
 .md-typeset .dote-tabela table:not([class]),
-.md-typeset .pericia-tabela table:not([class]) {
+.md-typeset .pericia-tabela table:not([class]),
+.md-typeset .roadmap-tabela table:not([class]),
+.md-typeset .bug-tabela table:not([class]) {
   font-size: .76rem;
 }
 
@@ -1152,7 +1162,11 @@ input,
 .md-typeset .dote-tabela th,
 .md-typeset .dote-tabela td,
 .md-typeset .pericia-tabela th,
-.md-typeset .pericia-tabela td {
+.md-typeset .pericia-tabela td,
+.md-typeset .roadmap-tabela th,
+.md-typeset .roadmap-tabela td,
+.md-typeset .bug-tabela th,
+.md-typeset .bug-tabela td {
   padding: .45em .7em;
   vertical-align: middle;
 }
@@ -1161,7 +1175,9 @@ input,
 .md-typeset .lugar-tabela th,
 .md-typeset .jogador-tabela th,
 .md-typeset .dote-tabela th,
-.md-typeset .pericia-tabela th {
+.md-typeset .pericia-tabela th,
+.md-typeset .roadmap-tabela th,
+.md-typeset .bug-tabela th {
   vertical-align: top;
   white-space: nowrap;
 }
@@ -1849,4 +1865,77 @@ th[aria-sort="descending"] .magia-ordenar::after { content: " ▼"; opacity: 1; 
   margin: 0;
   padding-left: 1.2rem;
   font-size: .85rem;
+}
+
+/* --------------------------------------------------------------------------
+   Selos de prioridade/status — Roadmap (docs/roadmap/index.md) e Bugs
+   (docs/configuracoes/bugs.md)
+   -------------------------------------------------------------------------- */
+
+.md-typeset .selo {
+  display: inline-block;
+  font-size: .68rem;
+  font-weight: 700;
+  color: #fff;
+  padding: .1rem .55rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.md-typeset .selo--alta,
+.md-typeset .selo--aguardando { background: #c0392b; }
+.md-typeset .selo--media,
+.md-typeset .selo--andamento { background: #d98c3a; }
+.md-typeset .selo--baixa,
+.md-typeset .selo--concluido,
+.md-typeset .selo--resolvido { background: #4caf7a; }
+.md-typeset .selo--planejado { background: #4a90d9; }
+.md-typeset .selo--neutro { background: var(--gc-bg-alt); color: var(--gc-ink-dim); }
+
+/* --------------------------------------------------------------------------
+   Selo de versão (canto inferior esquerdo) e botão de report de bug (canto
+   inferior direito) — presentes em toda página, ver hooks/gallancourt.py::_rodape_global.
+   -------------------------------------------------------------------------- */
+
+.md-typeset .selo-versao,
+.md-typeset .botao-reportar-bug {
+  position: fixed;
+  bottom: .6rem;
+  z-index: 10;
+  padding: .3rem .8rem;
+  font-size: .7rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 999px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, .3);
+}
+
+.md-typeset .selo-versao {
+  left: .6rem;
+  color: var(--gc-ink-dim);
+  background: var(--gc-panel);
+  border: 1px solid var(--gc-panel-border);
+}
+
+.md-typeset .selo-versao:hover {
+  color: var(--gc-gold);
+  border-color: var(--gc-gold);
+}
+
+.md-typeset .botao-reportar-bug {
+  right: .6rem;
+  color: #fff;
+  background: #c0392b;
+}
+
+.md-typeset .botao-reportar-bug:hover {
+  background: #a53125;
+  color: #fff;
+}
+
+@media (max-width: 44.9375em) {
+  .md-typeset .selo-versao,
+  .md-typeset .botao-reportar-bug {
+    bottom: 3.6rem; /* acima da barra de busca/navegação inferior do Material no celular */
+  }
 }

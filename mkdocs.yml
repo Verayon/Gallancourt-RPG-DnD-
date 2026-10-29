@@ -364,3 +364,6 @@ nav:
       - Inconsistências a revisar: mestre/inconsistencias.md
       - Fontes e método: mestre/fontes.md
       - Índice de tags: mestre/tags.md
+      - Bugs reportados: configuracoes/bugs.md
+  - Changelog: changelog/index.md
+  - Roadmap: roadmap/index.md

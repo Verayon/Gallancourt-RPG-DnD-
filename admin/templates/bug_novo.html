@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block titulo %}Reportar bug{% endblock %}
+{% block conteudo %}
+<h1>Reportar bug</h1>
+<p class="ajuda">
+  Encontrou algo errado no site? Descreva aqui. Fica registrado com status "Aguardando" até
+  alguém investigar, corrigir e testar a correção — aí passa para "Resolvido".
+</p>
+
+{% if erro %}<p class="aviso aviso--erro">⚠️ {{ erro }}</p>{% endif %}
+{% if salvo %}
+<p class="aviso aviso--ok">✅ Bug {{ salvo }} registrado. Obrigado! Ele aparece como "Aguardando"
+  em Configurações → Bugs reportados.</p>
+{% endif %}
+
+<form method="post" action="/bug/novo" class="form-sessao">
+  <fieldset>
+    <legend>O que está errado</legend>
+    <label>Área do site
+      <select name="area">
+        {% for a in areas %}
+        <option value="{{ a }}">{{ a }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Descreva o problema
+      <textarea name="descricao" rows="5" placeholder="O que você esperava que acontecesse, o que aconteceu de errado, e como repetir o problema." required></textarea>
+    </label>
+  </fieldset>
+  <button type="submit" class="botao-principal">Enviar report</button>
+</form>
+{% endblock %}

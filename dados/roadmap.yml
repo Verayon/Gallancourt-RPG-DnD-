@@ -1,0 +1,53 @@
+# Roadmap de Crônicas de Gallancourt — o que falta implementar.
+#
+# Edite pelo Painel do Mestre (aba "Roadmap"). Lista aberta: acrescente itens à vontade.
+#
+# Campos de cada item:
+#   id          número único (o Painel preenche)
+#   item        descrição do que falta fazer
+#   prioridade  Alta, Média ou Baixa
+#   tipo        UI, Engine, Conteúdo, Infra ou Dados
+#   status      Planejado, Em andamento ou Concluído
+
+itens:
+- id: 1
+  item: Preencher a ficha de combate completa dos 7 jogadores (atributos, PV, CA, equipamento, espaços
+    de magia e magias do nível atual).
+  prioridade: Alta
+  tipo: Conteúdo
+  status: Planejado
+- id: 2
+  item: Criar páginas de NPC para o Sargento Grum e os demais nomes citados só em fichas de combate da
+    Sessão 0 (Capitão Harker, Capitã Odette Brune, Olim/Milo Favreau), para dar a eles uma Situação rastreável
+    na linha do tempo.
+  prioridade: Baixa
+  tipo: Conteúdo
+  status: Planejado
+- id: 3
+  item: Automatizar o disparo da investigação de bugs "Aguardando" (hoje precisa pedir pro agente processá-los;
+    um agendamento via cron poderia disparar sozinho).
+  prioridade: Média
+  tipo: Engine
+  status: Planejado
+- id: 4
+  item: Implementar o sistema de audio. o sistema irá permitir selecionar sons e musicas para tocar em
+    diferentes cenas e situações.
+  prioridade: Média
+  tipo: Conteúdo
+  status: Planejado
+- id: 5
+  item: Atualizar a UI do site para algo mais minimalista, com fontes menores, aproveitar melhor o espaço
+    de tela
+  prioridade: Baixa
+  tipo: UI
+  status: Planejado
+- id: 6
+  item: em Raças, alterar os valores da coluna "Livro" de 2014 e 2024 para "PBH 2014" e "PBH 2024" respectivamente
+  prioridade: Baixa
+  tipo: Conteúdo
+  status: Planejado
+- id: 7
+  item: em Raças, alterar os valores da coluna "Livro" de 2014 e 2024 para "PBH 2014" e "PBH 2024" respectivamente
+  prioridade: Baixa
+  tipo: Conteúdo
+  status: Planejado

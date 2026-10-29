@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block titulo %}Changelog{% endblock %}
+{% block conteudo %}
+<h1>Changelog</h1>
+<p class="ajuda">
+  Registre o que mudou em cada versão do site. A versão mais recente aqui de baixo é "a versão
+  atual", mostrada no selo no canto inferior esquerdo de toda página. A versão <strong>1.0</strong>
+  só deve ser usada quando você decidir que o projeto está pronto — até lá, use números abaixo
+  de 1.0 (0.1, 0.2...).
+</p>
+
+{% if erro %}<p class="aviso aviso--erro">⚠️ {{ erro }}</p>{% endif %}
+{% if salvo %}
+  {% if build_ok %}
+  <p class="aviso aviso--ok">✅ Versão {{ salvo }} registrada. Site conferido sem problemas.</p>
+  {% else %}
+  <p class="aviso aviso--erro">⚠️ Salvo, mas <code>mkdocs build --strict</code> encontrou um problema.</p>
+  <pre class="saida-build">{{ build_saida }}</pre>
+  {% endif %}
+{% endif %}
+
+<form method="post" action="/changelog" class="form-sessao">
+  <fieldset>
+    <legend>Nova versão</legend>
+    <div class="duas-colunas">
+      <label>Versão
+        <input type="text" name="versao" placeholder="0.2" required>
+      </label>
+      <label>Data
+        <input type="date" name="data" value="{{ hoje if hoje else '' }}">
+      </label>
+    </div>
+    <label>O que mudou (uma mudança por linha)
+      <textarea name="mudancas" rows="5" placeholder="Changelog do projeto&#10;Roadmap com prioridade e funcionalidade"></textarea>
+    </label>
+  </fieldset>
+  <button type="submit" class="botao-principal">Registrar versão</button>
+</form>
+
+<h2>Versões registradas</h2>
+{% if not versoes %}
+<p class="ajuda">Nenhuma versão ainda.</p>
+{% else %}
+<table class="tabela-eventos">
+  <thead><tr><th>Versão</th><th>Data</th><th>Mudanças</th><th></th></tr></thead>
+  <tbody>
+  {% for v in versoes %}
+  <tr>
+    <td>{{ v.get('versao') }}</td>
+    <td>{{ v.get('data') or '—' }}</td>
+    <td>{% for m in v.get('mudancas') or [] %}{{ m }}{% if not loop.last %}<br>{% endif %}{% endfor %}</td>
+    <td class="acoes">
+      <form method="post" action="/changelog/apagar" onsubmit="return confirm('Apagar esta versão?');">
+        <input type="hidden" name="id" value="{{ v.id }}">
+        <button type="submit" class="botao-link">Apagar</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+{% endblock %}

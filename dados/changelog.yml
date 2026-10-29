@@ -1,0 +1,22 @@
+# Changelog de Crônicas de Gallancourt.
+#
+# Edite pelo Painel do Mestre (aba "Changelog"). A última versão da lista é "a versão atual",
+# mostrada no selo no canto inferior esquerdo do site. A versão 1.0 só existe quando o projeto
+# for considerado pronto — até lá, use números abaixo de 1.0 (0.1, 0.2...).
+#
+# Campos de cada versão:
+#   id        número único (o Painel preenche)
+#   versao    rótulo da versão (ex.: "0.1")
+#   data      data real do lançamento (ex.: "2026-10-28")
+#   mudancas  lista de textos, um por mudança
+
+versoes:
+  - id: 1
+    versao: '0.1'
+    data: '2026-10-28'
+    mudancas:
+      - Changelog do projeto, com selo da versão atual no canto inferior esquerdo do site.
+      - Roadmap com prioridade e funcionalidade por item, em docs/roadmap.
+      - Botão de "Reportar bug", visível em qualquer página, com acompanhamento de status
+        (Aguardando/Resolvido) pelo Painel do Mestre.
+      - Menu da esquerda passou a abrir só uma categoria por vez (accordion).

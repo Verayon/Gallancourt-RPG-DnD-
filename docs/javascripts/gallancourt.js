@@ -13,6 +13,9 @@
  * 5. Formulários embutidos de "Adicionar NPC/Lugar/Jogador" (personagens/lugares/jogadores
  *    index.md): falam com a API JSON do Painel (admin/app.py, /api/npcs|lugares|jogadores) via
  *    docs/javascripts/painel-fetch.js, sem redirecionar para outra aba.
+ * 6. Tabelas de Roadmap e Bugs: mesma prepararTabelaFiltravel de novo.
+ * 7. Menu da esquerda: ao abrir uma categoria de topo, as outras que estiverem abertas retraem
+ *    (restringirAccordionNav) — só uma por vez.
  */
 (function () {
   "use strict";
@@ -172,6 +175,48 @@
       contagem: raiz.querySelector(".pericia-contagem"),
       colunasComFiltro: ["Atributo", "Fonte"],
       rotuloPlural: "perícias",
+    });
+  }
+
+  function montarTabelaRoadmap(raiz) {
+    prepararTabelaFiltravel({
+      tabela: raiz.querySelector(".roadmap-tabela table"),
+      busca: raiz.querySelector(".roadmap-busca"),
+      contagem: raiz.querySelector(".roadmap-contagem"),
+      colunasComFiltro: ["Prioridade", "Funcionalidade", "Status"],
+      rotuloPlural: "itens",
+    });
+  }
+
+  function montarTabelaBugs(raiz) {
+    prepararTabelaFiltravel({
+      tabela: raiz.querySelector(".bug-tabela table"),
+      busca: raiz.querySelector(".bug-busca"),
+      contagem: raiz.querySelector(".bug-contagem"),
+      colunasComFiltro: ["Área", "Status"],
+      rotuloPlural: "bugs",
+    });
+  }
+
+  // Menu da esquerda: só uma categoria de topo aberta por vez. O Material usa um <input
+  // type=checkbox> por item de menu com subcategorias (ver md-nav__toggle); ao marcar um,
+  // desmarca os outros checkboxes do mesmo nível (irmãos na mesma <ul>) — funciona em qualquer
+  // profundidade, mas na prática só os de topo (Lore, Wiki, Compêndio...) têm vários irmãos.
+  function restringirAccordionNav() {
+    document.querySelectorAll(".md-nav--primary input.md-nav__toggle").forEach(function (toggle) {
+      if (toggle.dataset.accordionPronto) return;
+      toggle.dataset.accordionPronto = "1";
+      toggle.addEventListener("change", function () {
+        if (!toggle.checked) return;
+        var item = toggle.closest(".md-nav__item");
+        var lista = item && item.parentElement;
+        if (!lista) return;
+        Array.prototype.slice.call(lista.children).forEach(function (irmao) {
+          if (irmao === item) return;
+          var outro = irmao.querySelector(":scope > input.md-nav__toggle");
+          if (outro && outro.checked) outro.checked = false;
+        });
+      });
     });
   }
 
@@ -417,8 +462,11 @@
     montarTabelaJogadores(document);
     montarTabelaDotes(document);
     montarTabelaPericias(document);
+    montarTabelaRoadmap(document);
+    montarTabelaBugs(document);
     montarFormulariosEntidade(document);
     montarPainelMagias(document);
+    restringirAccordionNav();
     abrirAbaDaAncora();
     filtrarIndicePorAba();
     document.querySelectorAll(".tabbed-set > input").forEach(function (entrada) {

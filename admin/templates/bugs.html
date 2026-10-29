@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block titulo %}Bugs{% endblock %}
+{% block conteudo %}
+<h1>Bugs reportados</h1>
+<p class="ajuda">
+  Reportados por qualquer pessoa pelo botão "Reportar bug", visível em toda página do site.
+  Para corrigir um bug "Aguardando", peça para um agente (o Claude Code) investigar, corrigir e
+  testar a correção — ele pode usar esta lista e marcar como "Resolvido" por aqui, com uma nota
+  do que foi feito.
+</p>
+
+{% if not bugs %}
+<p class="ajuda">Nenhum bug reportado ainda.</p>
+{% else %}
+<table class="tabela-eventos">
+  <thead><tr><th>#</th><th>Área</th><th>Descrição</th><th>Status</th><th>Reportado em</th><th></th></tr></thead>
+  <tbody>
+  {% for b in bugs %}
+  <tr>
+    <td>{{ b.id }}</td>
+    <td>{{ b.get('area') }}</td>
+    <td>{{ b.get('descricao') }}</td>
+    <td>
+      {{ b.get('status') }}
+      {% if b.get('status') == 'Resolvido' and b.get('nota_resolucao') %}
+      <br><span class="ajuda">{{ b.nota_resolucao }} ({{ b.get('resolvido_em') }})</span>
+      {% endif %}
+    </td>
+    <td>{{ b.get('criado_em') }}</td>
+    <td class="acoes">
+      {% if b.get('status') == 'Aguardando' %}
+      <form method="post" action="/bugs/{{ b.id }}/resolver">
+        <input type="text" name="nota" placeholder="O que foi feito para corrigir" style="width:14rem">
+        <button type="submit" class="botao-link">Marcar resolvido</button>
+      </form>
+      {% else %}
+      <form method="post" action="/bugs/{{ b.id }}/reabrir" onsubmit="return confirm('Reabrir este bug?');">
+        <button type="submit" class="botao-link">Reabrir</button>
+      </form>
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+{% endblock %}

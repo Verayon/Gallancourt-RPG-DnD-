@@ -39,6 +39,18 @@ mesa, veja [Mestre](../mestre/index.md).
 
     Todas as páginas agrupadas por tag.
 
+-   **[Bugs reportados](bugs.md)**
+
+    Status (Aguardando/Resolvido) de cada bug reportado pelo botão do site.
+
+-   **[Changelog](../changelog/index.md)**
+
+    O histórico de versões do site.
+
+-   **[Roadmap](../roadmap/index.md)**
+
+    O que ainda falta implementar.
+
 </div>
 
 ## Filosofia da ambientação

@@ -18,9 +18,12 @@ from pathlib import Path
 
 DEFAULT_ROOT = Path(__file__).resolve().parent.parent
 
-# Módulo compartilhado com a geração do site (cálculos da linha do tempo)
+# Módulos compartilhados com a geração do site
 sys.path.insert(0, str(DEFAULT_ROOT / "hooks"))
 import linha_tempo  # noqa: E402
+import changelog  # noqa: E402
+import roadmap  # noqa: E402
+import bugs  # noqa: E402
 
 
 @dataclass
@@ -1503,3 +1506,85 @@ def salvar_evento(root: Path, dados: dict, id_evento: int | None = None) -> int:
 def apagar_evento(root: Path, id_evento: int) -> None:
     eventos = linha_tempo.carregar(root)
     linha_tempo.salvar(root, [e for e in eventos if int(e.get("id") or 0) != id_evento])
+
+
+# --------------------------------------------------------------------------
+# Changelog
+# --------------------------------------------------------------------------
+
+def listar_changelog(root: Path) -> list[dict]:
+    return changelog.carregar(root)
+
+
+def adicionar_versao_changelog(root: Path, versao: str, data: str, mudancas: list[str]) -> int:
+    if not versao.strip():
+        raise ValueError("A versão precisa de um número ou rótulo.")
+    versoes = changelog.carregar(root)
+    novo_id = max((int(v.get("id") or 0) for v in versoes), default=0) + 1
+    versoes.append({
+        "id": novo_id, "versao": versao.strip(), "data": data.strip(),
+        "mudancas": [m.strip() for m in mudancas if m.strip()],
+    })
+    changelog.salvar(root, versoes)
+    return novo_id
+
+
+def apagar_versao_changelog(root: Path, id_versao: int) -> None:
+    versoes = changelog.carregar(root)
+    changelog.salvar(root, [v for v in versoes if int(v.get("id") or 0) != id_versao])
+
+
+# --------------------------------------------------------------------------
+# Roadmap
+# --------------------------------------------------------------------------
+
+def listar_roadmap(root: Path) -> list[dict]:
+    return roadmap.ordenar(roadmap.carregar(root))
+
+
+def salvar_item_roadmap(root: Path, dados: dict, id_item: int | None = None) -> int:
+    if not (dados.get("item") or "").strip():
+        raise ValueError("O item do roadmap precisa de uma descrição.")
+    itens = roadmap.carregar(root)
+    item = {
+        "id": id_item or (max((int(i.get("id") or 0) for i in itens), default=0) + 1),
+        "item": dados["item"].strip(),
+        "prioridade": dados.get("prioridade") or roadmap.PRIORIDADES[-1],
+        "tipo": dados.get("tipo") or roadmap.TIPOS[0],
+        "status": dados.get("status") or roadmap.STATUS[0],
+    }
+    if id_item:
+        if not any(int(i.get("id") or 0) == id_item for i in itens):
+            raise ValueError(f"Item {id_item} não encontrado.")
+        itens = [item if int(i.get("id") or 0) == id_item else i for i in itens]
+    else:
+        itens.append(item)
+    roadmap.salvar(root, itens)
+    return item["id"]
+
+
+def apagar_item_roadmap(root: Path, id_item: int) -> None:
+    itens = roadmap.carregar(root)
+    roadmap.salvar(root, [i for i in itens if int(i.get("id") or 0) != id_item])
+
+
+# --------------------------------------------------------------------------
+# Bugs reportados
+# --------------------------------------------------------------------------
+
+def listar_bugs(root: Path) -> list[dict]:
+    return bugs.ordenar(bugs.carregar(root))
+
+
+def criar_bug(root: Path, area: str, descricao: str) -> int:
+    if not descricao.strip():
+        raise ValueError("Descreva o problema antes de enviar.")
+    return bugs.criar(root, area.strip(), descricao.strip())
+
+
+def marcar_bug_resolvido(root: Path, id_bug: int, nota: str) -> bool:
+    return bugs.marcar_resolvido(root, id_bug, nota.strip())
+
+
+def reabrir_bug(root: Path, id_bug: int) -> bool:
+    return bugs.reabrir(root, id_bug)

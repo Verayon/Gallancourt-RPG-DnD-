@@ -1,0 +1,15 @@
+# Bugs reportados em Crônicas de Gallancourt.
+#
+# Criados pelo botão "Reportar bug" do site (qualquer página) e processados pelo Painel do
+# Mestre (aba "Bugs"). Status: Aguardando (ainda não corrigido) ou Resolvido.
+#
+# Campos de cada bug:
+#   id             número único (o Painel preenche)
+#   area           parte do site afetada
+#   descricao      o que está errado, descrito por quem reportou
+#   status         Aguardando ou Resolvido
+#   criado_em      data em que foi reportado (AAAA-MM-DD)
+#   resolvido_em   data em que foi corrigido (AAAA-MM-DD, vazio até ser resolvido)
+#   nota_resolucao o que foi feito para corrigir (preenchido ao marcar como Resolvido)
+
+bugs: []

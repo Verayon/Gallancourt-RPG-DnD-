@@ -20,6 +20,8 @@ from flask import Flask, abort, jsonify, redirect, render_template, request, sen
 
 import sessao_viva as sv
 import wiki_data as wd
+import roadmap
+import bugs
 
 ROOT = Path(os.environ.get("GALLANCOURT_ADMIN_ROOT", wd.DEFAULT_ROOT)).resolve()
 SITE_DIR = ROOT / "site"
@@ -1083,6 +1085,133 @@ def apagar_linha_tempo():
     if id_evento:
         wd.apagar_evento(ROOT, id_evento)
     return redirect(url_for("formulario_linha_tempo"))
+
+
+# --------------------------------------------------------------------------
+# Changelog
+# --------------------------------------------------------------------------
+
+@app.get("/changelog")
+def formulario_changelog():
+    return render_template(
+        "changelog.html", versoes=list(reversed(wd.listar_changelog(ROOT))),
+        hoje=datetime.date.today().isoformat(),
+    )
+
+
+@app.post("/changelog")
+def salvar_changelog():
+    versao = request.form.get("versao", "")
+    data = request.form.get("data", "") or datetime.date.today().isoformat()
+    mudancas = [l for l in request.form.get("mudancas", "").splitlines()]
+    try:
+        novo_id = wd.adicionar_versao_changelog(ROOT, versao, data, mudancas)
+    except ValueError as exc:
+        return render_template(
+            "changelog.html", versoes=list(reversed(wd.listar_changelog(ROOT))), erro=str(exc),
+        )
+    build_ok, build_saida = wd.publicar_build(ROOT)
+    return render_template(
+        "changelog.html", versoes=list(reversed(wd.listar_changelog(ROOT))), salvo=novo_id,
+        build_ok=build_ok, build_saida=build_saida,
+    )
+
+
+@app.post("/changelog/apagar")
+def apagar_changelog():
+    id_versao = request.form.get("id", type=int)
+    if id_versao:
+        wd.apagar_versao_changelog(ROOT, id_versao)
+        wd.publicar_build(ROOT)
+    return redirect(url_for("formulario_changelog"))
+
+
+# --------------------------------------------------------------------------
+# Roadmap
+# --------------------------------------------------------------------------
+
+def _contexto_roadmap(**extra):
+    return dict(
+        itens=wd.listar_roadmap(ROOT), prioridades=roadmap.PRIORIDADES,
+        tipos=roadmap.TIPOS, status_opcoes=roadmap.STATUS, **extra,
+    )
+
+
+@app.get("/roadmap")
+def formulario_roadmap():
+    editar = request.args.get("editar", type=int)
+    item = next((i for i in wd.listar_roadmap(ROOT) if int(i.get("id") or 0) == editar), None) if editar else None
+    return render_template("roadmap.html", **_contexto_roadmap(item=item or {}))
+
+
+@app.post("/roadmap")
+def salvar_roadmap():
+    id_item = request.form.get("id", type=int)
+    dados = {
+        "item": request.form.get("item", "").strip(),
+        "prioridade": request.form.get("prioridade", ""),
+        "tipo": request.form.get("tipo", ""),
+        "status": request.form.get("status", ""),
+    }
+    try:
+        novo_id = wd.salvar_item_roadmap(ROOT, dados, id_item)
+    except ValueError as exc:
+        return render_template("roadmap.html", **_contexto_roadmap(item={**dados, "id": id_item}, erro=str(exc)))
+    build_ok, build_saida = wd.publicar_build(ROOT)
+    return render_template(
+        "roadmap.html", **_contexto_roadmap(item={}, salvo=novo_id, build_ok=build_ok, build_saida=build_saida),
+    )
+
+
+@app.post("/roadmap/apagar")
+def apagar_roadmap():
+    id_item = request.form.get("id", type=int)
+    if id_item:
+        wd.apagar_item_roadmap(ROOT, id_item)
+        wd.publicar_build(ROOT)
+    return redirect(url_for("formulario_roadmap"))
+
+
+# --------------------------------------------------------------------------
+# Bugs reportados — /bug/novo é o botão público (qualquer página do site); /bugs é a triagem,
+# só pelo Painel.
+# --------------------------------------------------------------------------
+
+@app.get("/bug/novo")
+def formulario_bug():
+    return render_template("bug_novo.html", areas=bugs.AREAS, salvo=False)
+
+
+@app.post("/bug/novo")
+def criar_bug():
+    area = request.form.get("area", "")
+    descricao = request.form.get("descricao", "")
+    try:
+        novo_id = wd.criar_bug(ROOT, area, descricao)
+    except ValueError as exc:
+        return render_template("bug_novo.html", areas=bugs.AREAS, salvo=False, erro=str(exc))
+    wd.publicar_build(ROOT)
+    return render_template("bug_novo.html", areas=bugs.AREAS, salvo=novo_id)
+
+
+@app.get("/bugs")
+def listar_bugs_painel():
+    return render_template("bugs.html", bugs=wd.listar_bugs(ROOT))
+
+
+@app.post("/bugs/<int:id_bug>/resolver")
+def resolver_bug(id_bug: int):
+    nota = request.form.get("nota", "")
+    wd.marcar_bug_resolvido(ROOT, id_bug, nota)
+    wd.publicar_build(ROOT)
+    return redirect(url_for("listar_bugs_painel"))
+
+
+@app.post("/bugs/<int:id_bug>/reabrir")
+def reabrir_bug_painel(id_bug: int):
+    wd.reabrir_bug(ROOT, id_bug)
+    wd.publicar_build(ROOT)
+    return redirect(url_for("listar_bugs_painel"))
 
 
 def _resolver_pagina(rel: str) -> Path | None:
