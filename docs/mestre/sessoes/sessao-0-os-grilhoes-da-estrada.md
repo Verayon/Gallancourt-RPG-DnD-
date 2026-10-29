@@ -14,9 +14,9 @@ sessao:
 
     | | |
     |---|---|
-    | **Data** | A definir — ainda não jogada |
+    | **Data** | Jogada em 25/10/2026 — ver [Diário de Sessões](../../diario/sessao-00.md) |
     | **Resumo breve** | Presos numa carroça de bandidos, os personagens fogem e lutam numa clareira antes de Alaric Duvant lhes oferecer a missão. |
-    | **Jogadores** | 9 |
+    | **Jogadores** | 7 |
     | **Nível sugerido** | 1 (ou funil de nível 0, já que começam desarmados) |
     | **Duração estimada** | 2–3 horas |
     | **Tom** | Tenso, cinematográfico, com alívio ao final |

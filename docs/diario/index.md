@@ -33,7 +33,7 @@ site direto pelo navegador.
 <!-- inicio:sessoes -->
 | Sessão | Data real | Data na campanha | Resumo |
 |---|---|---|---|
-| — | — | — | Nenhuma sessão registrada ainda. Use o [Painel do Mestre](../mestre/painel.md) para criar a primeira. |
+| [Sessão 0](sessao-00.md) | 2026-10-25 | 25 de outubro de 1453 | Os Grilhões da Estrada |
 <!-- fim:sessoes -->
 
 ## Linha do tempo
@@ -44,7 +44,7 @@ timeline
     title Linha do tempo — história e campanha
     Antes da campanha : Queda de Valynesse — fundação da Aliança dos Lordes
              : Fuga de Severin Marceau e fundação de L'Ordre
-    Hoje : (a primeira sessão aparecerá aqui)
+    25 de outubro de 1453 : Sessão 0 — Os Grilhões da Estrada
 ```
 <!-- fim:timeline -->
 

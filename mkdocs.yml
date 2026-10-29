@@ -348,8 +348,10 @@ nav:
           - "Astraelle": mestre/jogadores/astraelle.md
           - "Elariel Fogo do Sol": mestre/jogadores/elariel-fogo-do-sol.md
           - "Rowan CataPedras": mestre/jogadores/rowan-catapedras.md
+          - "Perry": mestre/jogadores/perry.md
       - Diário de Sessões:
           - diario/index.md
+          - Sessão 0: diario/sessao-00.md
       - Linha do tempo: mestre/linha-do-tempo.md
       - Referência rápida: mestre/referencia-rapida.md
       - Escudo do Mestre: mestre/escudo-do-mestre.md
