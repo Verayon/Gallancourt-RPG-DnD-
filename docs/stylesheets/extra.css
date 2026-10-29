@@ -1088,7 +1088,9 @@ input,
 .dote-ferramentas > p,
 .pericia-ferramentas > p,
 .roadmap-ferramentas > p,
-.bug-ferramentas > p {
+.bug-ferramentas > p,
+.item-ferramentas > p,
+.monstro-ferramentas > p {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -1108,7 +1110,9 @@ input,
 .dote-busca,
 .pericia-busca,
 .roadmap-busca,
-.bug-busca {
+.bug-busca,
+.item-busca,
+.monstro-busca {
   flex: 1 1 14rem;
   min-width: 0;
   padding: .45rem .7rem;
@@ -1126,7 +1130,9 @@ input,
 .dote-busca:focus,
 .pericia-busca:focus,
 .roadmap-busca:focus,
-.bug-busca:focus {
+.bug-busca:focus,
+.item-busca:focus,
+.monstro-busca:focus {
   outline: none;
   border-color: var(--gc-gold);
 }
@@ -1137,7 +1143,9 @@ input,
 .dote-contagem,
 .pericia-contagem,
 .roadmap-contagem,
-.bug-contagem {
+.bug-contagem,
+.item-contagem,
+.monstro-contagem {
   font-size: .75rem;
   color: var(--gc-ink-dim);
   font-style: italic;
@@ -1149,7 +1157,9 @@ input,
 .md-typeset .dote-tabela table:not([class]),
 .md-typeset .pericia-tabela table:not([class]),
 .md-typeset .roadmap-tabela table:not([class]),
-.md-typeset .bug-tabela table:not([class]) {
+.md-typeset .bug-tabela table:not([class]),
+.md-typeset .item-tabela table:not([class]),
+.md-typeset .monstro-tabela table:not([class]) {
   font-size: .76rem;
 }
 
@@ -1166,7 +1176,11 @@ input,
 .md-typeset .roadmap-tabela th,
 .md-typeset .roadmap-tabela td,
 .md-typeset .bug-tabela th,
-.md-typeset .bug-tabela td {
+.md-typeset .bug-tabela td,
+.md-typeset .item-tabela th,
+.md-typeset .item-tabela td,
+.md-typeset .monstro-tabela th,
+.md-typeset .monstro-tabela td {
   padding: .45em .7em;
   vertical-align: middle;
 }
@@ -1177,7 +1191,9 @@ input,
 .md-typeset .dote-tabela th,
 .md-typeset .pericia-tabela th,
 .md-typeset .roadmap-tabela th,
-.md-typeset .bug-tabela th {
+.md-typeset .bug-tabela th,
+.md-typeset .item-tabela th,
+.md-typeset .monstro-tabela th {
   vertical-align: top;
   white-space: nowrap;
 }
@@ -1186,7 +1202,8 @@ input,
 .md-typeset .lugar-tabela td:first-child,
 .md-typeset .jogador-tabela td:first-child,
 .md-typeset .dote-tabela td:first-child,
-.md-typeset .pericia-tabela td:first-child {
+.md-typeset .pericia-tabela td:first-child,
+.md-typeset .monstro-tabela td:first-child {
   white-space: nowrap;
   font-weight: 600;
 }

@@ -318,6 +318,10 @@ nav:
           - Prestidigitação: pericias/prestidigitacao.md
           - Religião: pericias/religiao.md
           - Sobrevivência: pericias/sobrevivencia.md
+      - Itens:
+          - itens/index.md
+      - Monstros:
+          - monstros/index.md
   - Compêndio:
       - compendio/index.md
       - História de Gallancourt (anotada): compendio/historia-de-gallancourt.md

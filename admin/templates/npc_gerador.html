@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block titulo %}Gerador de NPCs{% endblock %}
+{% block conteudo %}
+<h1>Gerador de NPCs</h1>
+<p class="ajuda">
+  Gera um NPC genérico (nome, raça, papel, equipamento e ficha de combate completa) a partir dos
+  filtros abaixo. Deixe um filtro em "Aleatório" para sortear; o campo de texto é opcional e só
+  serve para sugerir um filtro que você deixou em "Aleatório" (ele procura, no texto, uma raça,
+  um papel ou um nível de potência conhecidos — não é um gerador por IA, é só tabelas
+  aleatórias). O NPC entra em Personagens → Genéricos, já com a ficha de combate anexada.
+</p>
+
+{% if erro %}<p class="aviso aviso--erro">⚠️ {{ erro }}</p>{% endif %}
+
+<form method="post" action="/npc/gerador" class="form-sessao">
+  <fieldset>
+    <legend>Filtros</legend>
+    <div class="duas-colunas">
+      <label>Raça
+        <select name="raca">
+          {% for r in racas %}
+          <option value="{{ r }}" {{ 'selected' if raca == r else '' }}>{{ r }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>Papel
+        <select name="papel">
+          {% for p in papeis %}
+          <option value="{{ p }}" {{ 'selected' if papel == p else '' }}>{{ p }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>Nível de potência
+        <select name="nivel_potencia">
+          {% for n in niveis %}
+          <option value="{{ n }}" {{ 'selected' if nivel == n else '' }}>{{ n }}</option>
+          {% endfor %}
+        </select>
+      </label>
+    </div>
+    <label>Prompt (opcional)
+      <input type="text" name="prompt" value="{{ prompt or '' }}" placeholder="ex.: um comerciante anão desonesto">
+    </label>
+  </fieldset>
+
+  <button type="submit" class="botao-principal">Gerar NPC</button>
+</form>
+{% endblock %}

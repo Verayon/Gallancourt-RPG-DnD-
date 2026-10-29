@@ -22,6 +22,7 @@ import sessao_viva as sv
 import wiki_data as wd
 import roadmap
 import bugs
+import gerador_npc as gn
 
 ROOT = Path(os.environ.get("GALLANCOURT_ADMIN_ROOT", wd.DEFAULT_ROOT)).resolve()
 SITE_DIR = ROOT / "site"
@@ -970,6 +971,47 @@ def criar_jogador():
     return render_template(
         "resultado_criacao.html", r=r, titulo_pagina=f"Jogador criado: {valores['nome'].strip()}",
         voltar_url="/jogador/novo", voltar_rotulo="Adicionar outro jogador",
+    )
+
+
+# --------------------------------------------------------------------------
+# Gerador de NPCs — NPC genérico (nome, raça, papel, equipamento, ficha de combate completa) a
+# partir de filtros e/ou um prompt em texto livre. Ver admin/gerador_npc.py: é só tabelas
+# aleatórias locais, sem chamada a nenhuma IA/API.
+# --------------------------------------------------------------------------
+
+@app.get("/npc/gerador")
+def formulario_gerador_npc():
+    return render_template(
+        "npc_gerador.html", racas=[gn.ALEATORIO] + gn.RACAS,
+        papeis=[gn.ALEATORIO] + list(gn.PAPEIS.keys()), niveis=[gn.ALEATORIO] + gn.NIVEIS_POTENCIA,
+    )
+
+
+@app.post("/npc/gerador")
+def gerar_npc_rota():
+    raca = request.form.get("raca", gn.ALEATORIO)
+    papel = request.form.get("papel", gn.ALEATORIO)
+    nivel = request.form.get("nivel_potencia", gn.ALEATORIO)
+    prompt = request.form.get("prompt", "")
+    contexto_form = dict(
+        racas=[gn.ALEATORIO] + gn.RACAS, papeis=[gn.ALEATORIO] + list(gn.PAPEIS.keys()),
+        niveis=[gn.ALEATORIO] + gn.NIVEIS_POTENCIA, raca=raca, papel=papel, nivel=nivel, prompt=prompt,
+    )
+
+    gerado = gn.gerar_npc(raca, papel, nivel, prompt)
+    try:
+        r = wd.criar_npc(ROOT, gerado["npc"], imagem=None, generico=True, build=False)
+    except ValueError as exc:
+        return render_template("npc_gerador.html", erro=str(exc), **contexto_form)
+
+    wd.salvar_statblock(ROOT, r["rel_docs"], "", gerado["statblock"], "")
+    build_ok, build_saida = wd.publicar_build(ROOT)
+    r["build_ok"], r["build_saida"] = build_ok, build_saida
+
+    return render_template(
+        "resultado_criacao.html", r=r, titulo_pagina=f"NPC gerado: {gerado['npc']['nome']}",
+        voltar_url="/npc/gerador", voltar_rotulo="Gerar outro NPC",
     )
 
 

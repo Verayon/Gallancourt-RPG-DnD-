@@ -23,7 +23,12 @@ Registrado em `mkdocs.yml` (chave `hooks:`). Roda durante a geração do site e:
   ver `roadmap.py`), e a lista de bugs reportados (`docs/configuracoes/bugs.md`, marcador
   `<!-- bugs:lista -->`, ver `bugs.py`);
 - acrescenta, em toda página, o selo da versão atual (canto inferior esquerdo) e o botão de
-  "Reportar bug" (canto inferior direito).
+  "Reportar bug" (canto inferior direito);
+- gera a lista de monstros (`docs/monstros/index.md`, marcador `<!-- monstros:lista -->`), lendo
+  o bloco `monstro:` do front matter e o CR da ficha de combate embutida em cada página; e a
+  lista de itens (`docs/itens/index.md`, marcador `<!-- itens:lista -->`), com uma aba por
+  categoria (Armas, Armaduras, Equipamento de Aventura, Ferramentas, Montarias e Veículos, Itens
+  Mágicos), lendo o bloco `item:` do front matter de cada página em `docs/itens/*.md`.
 
 A tabela e a lista são lidas direto dos arquivos a cada geração: uma página nova de NPC ou de
 sessão aparece sozinha, sem editar nenhuma lista à mão.
@@ -628,6 +633,122 @@ def _lista_jogadores(docs: Path, config) -> str:
 
 
 # --------------------------------------------------------------------------
+# Monstros — índice (docs/monstros/index.md). Cada monstro é uma página com um bloco
+# `monstro:` (tamanho/tipo/alinhamento, só para esta tabela) e uma ficha de combate embutida
+# (mesmo sistema das fichas de NPC/jogador — ver admin/wiki_data.py), de onde vem o CR. Por não
+# ter front matter `npc:`/`jogador:`, a página não ganha abas; é só o cabeçalho H1 + a ficha.
+# --------------------------------------------------------------------------
+
+COLUNAS_MONSTRO = [("Tamanho", "tamanho"), ("Tipo", "tipo"), ("Alinhamento", "alinhamento")]
+
+
+def _lista_monstros(docs: Path, config) -> str:
+    linhas = []
+    pasta = docs / "monstros"
+    if pasta.is_dir():
+        for arquivo in sorted(pasta.glob("*.md")):
+            if arquivo.stem == "index":
+                continue
+            texto = arquivo.read_text(encoding="utf-8")
+            meta, corpo = _front_matter(texto)
+            monstro = meta.get("monstro")
+            if not isinstance(monstro, dict):
+                continue
+            monstro = dict(monstro)
+            monstro["cr"] = _resumo_statblock(texto).get("cr") or "—"
+            linhas.append((_titulo_h1(corpo, arquivo.stem), arquivo.name, monstro))
+    linhas.sort(key=lambda l: l[0].casefold())
+
+    if not linhas:
+        return "*Nenhum monstro cadastrado ainda.*"
+
+    cabecalho = "| Nome | " + " | ".join(r for r, _ in COLUNAS_MONSTRO) + " | CR |"
+    separador = "|" + "---|" * (len(COLUNAS_MONSTRO) + 2)
+    corpo_tabela = [
+        f"| [{_celula(nome)}]({arq}) | "
+        + " | ".join(_celula(monstro.get(chave)) for _, chave in COLUNAS_MONSTRO)
+        + f" | {_celula(monstro.get('cr'))} |"
+        for nome, arq, monstro in linhas
+    ]
+    partes = [
+        '<div class="monstro-ferramentas" markdown>',
+        "",
+        '<input type="search" class="monstro-busca" placeholder="Filtrar por nome…" '
+        'aria-label="Filtrar monstros">',
+        '<span class="monstro-contagem" aria-live="polite"></span>',
+        "",
+        "</div>",
+        "",
+        '<div class="monstro-tabela" markdown>',
+        "",
+        cabecalho,
+        separador,
+        *corpo_tabela,
+        "",
+        "</div>",
+    ]
+    return "\n".join(partes)
+
+
+# --------------------------------------------------------------------------
+# Itens — índice (docs/itens/index.md), com uma aba por categoria (Armas, Armaduras,
+# Equipamento de Aventura, Ferramentas, Montarias e Veículos, Itens Mágicos). Cada item é uma
+# página com um bloco `item:` — as colunas mostradas mudam por categoria.
+# --------------------------------------------------------------------------
+
+COLUNAS_ITEM_CATEGORIA: dict[str, list[tuple[str, str]]] = {
+    "Armas": [("Custo", "custo"), ("Dano", "dano"), ("Propriedades", "propriedades"), ("Peso", "peso")],
+    "Armaduras": [
+        ("Custo", "custo"), ("CA", "ca"), ("Força mínima", "forca_minima"),
+        ("Furtividade", "furtividade"), ("Peso", "peso"),
+    ],
+    "Equipamento de Aventura": [("Custo", "custo"), ("Peso", "peso")],
+    "Ferramentas": [("Custo", "custo"), ("Habilidade", "habilidade"), ("Peso", "peso")],
+    "Montarias e Veículos": [("Custo", "custo"), ("Velocidade", "velocidade"), ("Capacidade de carga", "capacidade_carga")],
+    "Itens Mágicos": [("Raridade", "raridade"), ("Sintonia", "sintonia"), ("Tipo", "tipo_item_magico")],
+}
+CATEGORIAS_ITEM = list(COLUNAS_ITEM_CATEGORIA.keys())
+
+
+def _tabela_itens_categoria(linhas: list[tuple[str, str, dict]], categoria: str) -> list[str]:
+    colunas = COLUNAS_ITEM_CATEGORIA[categoria]
+    filtradas = [l for l in linhas if (l[2].get("categoria") or "") == categoria]
+    if not filtradas:
+        return [f"*Nenhum item de {categoria} cadastrado ainda.*"]
+    cabecalho = "| Nome | " + " | ".join(r for r, _ in colunas) + " |"
+    separador = "|" + "---|" * (len(colunas) + 1)
+    corpo = [
+        f"| [{_celula(nome)}]({arq}) | " + " | ".join(_celula(dados.get(chave)) for _, chave in colunas) + " |"
+        for nome, arq, dados in filtradas
+    ]
+    return [cabecalho, separador, *corpo]
+
+
+def _lista_itens(docs: Path, config) -> str:
+    """Uma aba por categoria, cada uma com sua própria busca+contagem+tabela (as colunas mudam
+    por categoria, então não dá para compartilhar uma única busca entre todas, como as abas de
+    nível de Magias — ali a tabela "Todas" tem as mesmas colunas em qualquer aba)."""
+    linhas = _ler_entidades_da_pasta(docs, "itens", "item")
+    blocos: list[str] = []
+    for categoria in CATEGORIAS_ITEM:
+        blocos.append(f'=== "{categoria}"')
+        blocos.append("")
+        bloco_aba = [
+            '<div class="item-ferramentas" markdown>', "",
+            '<input type="search" class="item-busca" placeholder="Filtrar por nome…" aria-label="Filtrar itens">',
+            '<span class="item-contagem" aria-live="polite"></span>', "",
+            "</div>", "",
+            '<div class="item-tabela" markdown>', "",
+            *_tabela_itens_categoria(linhas, categoria),
+            "",
+            "</div>",
+        ]
+        blocos += ["    " + linha if linha else "" for linha in bloco_aba]
+        blocos.append("")
+    return "\n".join(blocos)
+
+
+# --------------------------------------------------------------------------
 # Página de NPC: cabeçalho e abas
 # --------------------------------------------------------------------------
 
@@ -852,6 +973,10 @@ def on_page_markdown(markdown: str, page, config, files):
         markdown = markdown.replace("<!-- roadmap:lista -->", roadmap.tabela(_ROADMAP))
     if src == "configuracoes/bugs.md" and "<!-- bugs:lista -->" in markdown:
         markdown = markdown.replace("<!-- bugs:lista -->", bugs.tabela(_BUGS))
+    if src == "monstros/index.md" and "<!-- monstros:lista -->" in markdown:
+        markdown = markdown.replace("<!-- monstros:lista -->", _lista_monstros(docs, config))
+    if src == "itens/index.md" and "<!-- itens:lista -->" in markdown:
+        markdown = markdown.replace("<!-- itens:lista -->", _lista_itens(docs, config))
     if src.startswith(("classes/", "racas/", "antecedentes/")) and not src.endswith("index.md"):
         markdown = _envolver_pagina_regra(markdown)
     if src.startswith("mestre/sessoes/sessao-") and "<!-- participantes:botao -->" in markdown:

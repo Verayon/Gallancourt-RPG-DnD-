@@ -361,7 +361,7 @@ def publicar_build(root: Path) -> tuple[bool, str]:
             cwd=str(root),
             capture_output=True,
             text=True,
-            timeout=120,
+            timeout=1200,  # o site cresceu bastante (Itens/Monstros); 600s já beirava o limite sob carga
         )
     except Exception as exc:  # noqa: BLE001 — queremos mostrar qualquer falha ao usuário
         shutil.rmtree(novo, ignore_errors=True)
@@ -555,6 +555,7 @@ CAMPOS_STATBLOCK_TEXTO = [
     ("foto", "Foto (caminho relativo — preenchido sozinho ao enviar uma imagem abaixo)", False),
     ("nivel", "Nível (personagens de jogador)", False),
     ("classe", "Classe (ex.: Guerreiro)", False),
+    ("cr", "Nível de Desafio / CR (ex.: 1/4, 5 — monstros)", False),
     ("ca", "Classe de Armadura", True),
     ("pv", "Pontos de Vida máximos (ex.: 11 (2d8+2))", True),
     ("pv_atual", "PV atual (em branco = igual ao máximo; atualize conforme leva dano)", False),
@@ -672,6 +673,9 @@ def renderizar_statblock(slug: str, v: dict) -> str:
         chips.append(f'<span><strong>Nível</strong> {nivel}</span>')
     if classe:
         chips.append(f'<span><strong>Classe</strong> {classe}</span>')
+    cr = (v.get("cr") or "").strip()
+    if cr:
+        chips.append(f'<span><strong>CR</strong> {cr}</span>')
     chips += [
         f'<span><strong>CA</strong> {(v.get("ca") or "").strip() or "—"}</span>',
         f'<span><strong>PV</strong> {f"{pv_atual}/{pv}" if pv_atual else pv}</span>',
@@ -1030,13 +1034,16 @@ def _retrato_relativo(destino_imagem: Path, root: Path, pagina_rel: str) -> str:
 
 def criar_npc(
     root: Path, valores: dict, imagem: tuple[str, bytes] | None = None, generico: bool = False,
+    build: bool = True,
 ) -> dict:
     """Cria docs/personagens/<slug>.md no padrão das páginas de NPC e o adiciona ao menu.
 
     `imagem`, se informada, é (nome_original, conteúdo) do retrato. Com `generico=True`, a
     página vai para docs/personagens/genericos/ (fora da tabela principal) e para um grupo
     "Genéricos" próprio no menu — é um NPC-modelo (guarda, camponês, nobre…), não alguém
-    específico; ver `listar_npcs_genericos`.
+    específico; ver `listar_npcs_genericos`. Com `build=False`, não builda o site ainda (sem
+    `build_ok`/`build_saida` no retorno) — para quem ainda vai escrever mais nesta página antes
+    de buildar (ex.: o gerador de NPCs, que anexa uma ficha de combate logo depois).
     """
     nome = (valores.get("nome") or "").strip()
     if not nome:
@@ -1092,8 +1099,11 @@ def criar_npc(
 
     grupo = "Genéricos" if generico else (campos["cidade"] or "Outros")
     nav_ok = _inserir_no_nav(root, CABECALHO_NAV_NPCS, f"- {_titulo_nav(nome)}: {rel}", subgrupo=grupo)
-    build_ok, build_saida = publicar_build(root)
-    return {"arquivo": f"docs/{rel}", "rel_docs": rel, "nav_ok": nav_ok, "build_ok": build_ok, "build_saida": build_saida}
+    resultado = {"arquivo": f"docs/{rel}", "rel_docs": rel, "nav_ok": nav_ok}
+    if build:
+        build_ok, build_saida = publicar_build(root)
+        resultado["build_ok"], resultado["build_saida"] = build_ok, build_saida
+    return resultado
 
 
 def definir_retrato(root: Path, npc_rel_docs: str, nome_original: str, conteudo: bytes) -> str:

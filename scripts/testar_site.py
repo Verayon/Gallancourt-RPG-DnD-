@@ -43,10 +43,10 @@ RAIZ = Path(__file__).resolve().parent.parent
 IGNORAR_NA_COPIA = shutil.ignore_patterns("site", "fontes", ".venv", "venv", "__pycache__", "*.pyc", ".cache")
 
 # Ordem do menu combinada com o autor
-MENU_TOPO = ["Início", "Lore", "Wiki", "Compêndio", "Mestre", "Configurações"]
+MENU_TOPO = ["Início", "Lore", "Wiki", "Compêndio", "Mestre", "Configurações", "Changelog", "Roadmap"]
 MENU_WIKI = [
     "Mundo", "Geografia", "Cidades", "Lugares", "Facções", "NPCs", "Eventos",
-    "Classes", "Raças", "Antecedentes", "Magias", "Dotes", "Perícias",
+    "Classes", "Raças", "Antecedentes", "Magias", "Dotes", "Perícias", "Itens", "Monstros",
 ]
 COLUNAS_NPC = ["Retrato", "Nome", "Título", "Raça", "Cidade", "Afiliação", "Situação", "Resumo"]
 
@@ -80,7 +80,7 @@ def verificacao(grupo: str, nome: str):
 # Utilidades
 # --------------------------------------------------------------------------
 
-def rodar(cmd: list[str], cwd: Path, timeout: int = 300) -> subprocess.CompletedProcess:
+def rodar(cmd: list[str], cwd: Path, timeout: int = 1200) -> subprocess.CompletedProcess:
     return subprocess.run(cmd, cwd=str(cwd), capture_output=True, text=True, timeout=timeout)
 
 
@@ -713,7 +713,12 @@ def main() -> int:
             shutil.rmtree(temporaria, ignore_errors=True)
 
     texto, falhas = relatorio()
-    print("\n" + texto)
+    try:
+        print("\n" + texto)
+    except UnicodeEncodeError:
+        saida = sys.stdout.buffer if hasattr(sys.stdout, "buffer") else sys.stdout
+        saida.write(("\n" + texto).encode("utf-8", errors="replace"))
+        saida.write(b"\n")
     resumo_github = os.environ.get("GITHUB_STEP_SUMMARY")
     if resumo_github:
         with open(resumo_github, "a", encoding="utf-8") as f:

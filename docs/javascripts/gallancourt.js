@@ -198,6 +198,37 @@
     });
   }
 
+  function montarTabelaMonstros(raiz) {
+    prepararTabelaFiltravel({
+      tabela: raiz.querySelector(".monstro-tabela table"),
+      busca: raiz.querySelector(".monstro-busca"),
+      contagem: raiz.querySelector(".monstro-contagem"),
+      colunasComFiltro: ["Tamanho", "Tipo", "Alinhamento"],
+      rotuloPlural: "monstros",
+    });
+  }
+
+  // Itens (docs/itens/index.md): uma aba por categoria, cada uma com sua própria
+  // busca+contagem+tabela (as colunas mudam por categoria) — por isso, ao contrário das outras
+  // tabelas, itera cada aba (.tabbed-block) em vez de pegar só a primeira busca/tabela da página.
+  function montarTabelaItens(raiz) {
+    raiz.querySelectorAll(".tabbed-block .item-tabela").forEach(function (bloco) {
+      var tabela = bloco.querySelector("table");
+      var aba = bloco.closest(".tabbed-block");
+      if (!tabela || !aba) return;
+      var cabecalhos = Array.prototype.map.call(tabela.tHead.rows[0].cells, function (th) {
+        return th.textContent.trim();
+      });
+      prepararTabelaFiltravel({
+        tabela: tabela,
+        busca: aba.querySelector(".item-busca"),
+        contagem: aba.querySelector(".item-contagem"),
+        colunasComFiltro: cabecalhos.filter(function (c) { return c !== "Nome"; }),
+        rotuloPlural: "itens",
+      });
+    });
+  }
+
   // Menu da esquerda: só uma categoria de topo aberta por vez. O Material usa um <input
   // type=checkbox> por item de menu com subcategorias (ver md-nav__toggle); ao marcar um,
   // desmarca os outros checkboxes do mesmo nível (irmãos na mesma <ul>) — funciona em qualquer
@@ -464,6 +495,8 @@
     montarTabelaPericias(document);
     montarTabelaRoadmap(document);
     montarTabelaBugs(document);
+    montarTabelaMonstros(document);
+    montarTabelaItens(document);
     montarFormulariosEntidade(document);
     montarPainelMagias(document);
     restringirAccordionNav();

@@ -199,7 +199,7 @@ out += ['## Relações com L\'Ordre de Célestien', '',
  '| Nouvelle-Montagne | O celeiro foi o primeiro grande alvo da Coroa durante a guerra |',
  '', 'Ver também: [Intrigas da nobreza](intrigas-da-nobreza.md) · [Teia política](teia-politica.md) ·',
  '[Economia política](economia.md).', '']
-open(f'{D}/mundo/relacoes-entre-cidades.md', 'w').write('\n'.join(out))
+open(f'{D}/mundo/relacoes-entre-cidades.md', 'w', encoding='utf-8').write('\n'.join(out))
 
 # ---------------- intrigas da nobreza
 out = ['---', 'tags:', '  - Mundo', '  - Política', '  - Personagens', '---', '',
@@ -251,19 +251,19 @@ out += ['', '## Relações entre as casas', '',
  '', '!!! question "Em aberto"',
  '    Cada `POSSIBILIDADE` acima é uma escolha do autor. Ao confirmar uma delas, troque a marca por',
  '    `CANON` aqui e na página do personagem.', '']
-open(f'{D}/mundo/intrigas-da-nobreza.md', 'w').write('\n'.join(out))
+open(f'{D}/mundo/intrigas-da-nobreza.md', 'w', encoding='utf-8').write('\n'.join(out))
 
 # ---------------- injeção
 def inserir(path, bloco):
     """Substitui o bloco gerado anterior ou o insere antes do último "Em aberto"."""
-    s = open(path).read()
+    s = open(path, encoding='utf-8').read()
     bloco = f'{INICIO}\n{bloco.rstrip()}\n{FIM}\n'
     if INICIO in s:
         s = re.sub(re.escape(INICIO) + r'.*?' + re.escape(FIM) + r'\n', lambda m: bloco, s, flags=re.S)
     else:
         i = s.rfind('\n!!! question "Em aberto"')
         s = s[:i] + '\n' + bloco + s[i:] if i != -1 else s.rstrip('\n') + '\n\n' + bloco
-    open(path, 'w').write(s)
+    open(path, 'w', encoding='utf-8').write(s)
 
 for c in CID:
     L = ['## Relações com outras cidades', '', '| Cidade | Estado | Como esta cidade a vê | Como ela vê esta cidade |', '|---|---|---|---|']

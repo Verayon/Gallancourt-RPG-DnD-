@@ -12,6 +12,10 @@ listas do cabeçalho para filtrar por título, raça, cidade ou afiliação, ou 
 busca para filtrar por qualquer texto. O formulário abaixo cadastra um NPC novo direto nesta
 página — precisa do [Painel do Mestre](../mestre/painel.md) rodando no seu computador.
 
+Precisa de um NPC rápido para a mesa (um guarda, um mercador, um bandido qualquer)? Use o
+[:material-dice-5-outline: Gerador de NPCs](/npc/gerador){ .md-button .botao-painel target=_blank title="Abre o Painel do Mestre — ele precisa estar rodando no seu computador" }
+— gera nome, raça, equipamento e ficha de combate completa a partir de filtros ou de um prompt.
+
 <!-- npcs:tabela -->
 
 ## NPCs sem página própria
