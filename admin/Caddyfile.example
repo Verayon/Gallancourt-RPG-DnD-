@@ -1,0 +1,11 @@
+# Copie este arquivo para "Caddyfile" (sem extensao, na mesma pasta) e troque o
+# dominio abaixo pelo seu (ex.: DDNS tipo No-IP, Duck DNS, etc). O Caddyfile real
+# fica fora do git (ver .gitignore) porque expoe o seu dominio/host publico.
+#
+# O Caddy cuida de pedir e renovar o certificado HTTPS automaticamente (Let's
+# Encrypt) assim que as portas 80 e 443 estiverem liberadas no roteador/firewall
+# apontando para esta maquina.
+
+seu-dominio.ddns.net {
+	reverse_proxy 127.0.0.1:5001
+}

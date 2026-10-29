@@ -392,7 +392,15 @@ CAMPOS_FICHA_CIDADE = [
 
 TITULO_SECAO_FICHA_CIDADE = "Ficha da cidade"
 
-CAMPOS_FICHA_NPC = [
+CAMPOS_FICHA_PERSONAGEM = [
+    ("genero", "Gênero", "texto"),
+    ("idade", "Idade", "texto"),
+    ("altura", "Altura", "texto"),
+    ("peso_corporal", "Peso", "texto"),
+    ("olhos", "Olhos", "texto"),
+    ("cabelo", "Cabelo", "texto"),
+    ("pele", "Pele", "texto"),
+    ("fe", "Fé", "texto"),
     ("aparencia", "Aparência física", "textarea"),
     ("personalidade", "Personalidade", "textarea"),
     ("traco", "Traço marcante", "texto"),
@@ -402,10 +410,11 @@ CAMPOS_FICHA_NPC = [
     ("proficiencias", "Proficiências e idiomas", "textarea"),
 ]
 
-TITULO_SECAO_FICHA = "Ficha de personagem"
+TITULO_SECAO_FICHA = "Biografia"
 
 TIPOS_FICHA = {
-    "npc": (listar_npcs, CAMPOS_FICHA_NPC, TITULO_SECAO_FICHA),
+    "npc": (listar_npcs, CAMPOS_FICHA_PERSONAGEM, TITULO_SECAO_FICHA),
+    "jogador": (listar_jogadores, CAMPOS_FICHA_PERSONAGEM, TITULO_SECAO_FICHA),
     "cidade": (listar_cidades, CAMPOS_FICHA_CIDADE, TITULO_SECAO_FICHA_CIDADE),
 }
 
@@ -561,11 +570,20 @@ CAMPOS_STATBLOCK_TEXTO = [
     ("pv_atual", "PV atual (em branco = igual ao máximo; atualize conforme leva dano)", False),
     ("deslocamento", "Deslocamento (ex.: 9 m)", True),
     ("carga", "Carga (peso atual / capacidade — ex.: 32 kg / 90 kg)", False),
+    ("moeda", "Moeda (ex.: 17 po, 3 pa)", False),
+    ("bonus_proficiencia", "Bônus de proficiência (ex.: 2 — para calcular perícias/salvaguardas abaixo)", False),
     ("slots_magia", "Espaços de magia (ex.: 1º: 2/4, 2º: 1/3 — atualize conforme usa)", False),
-    ("pericias", "Perícias (ex.: Furtividade +3, Intimidação +1)", False),
+    ("pericias", "Perícias — texto livre (ex.: Furtividade +3, Intimidação +1; ignorado se usar a grade de perícias abaixo)", False),
     ("sentidos", "Sentidos (ex.: Percepção passiva 10)", False),
     ("idiomas", "Idiomas", False),
-    ("equipamento", "Equipamento", False),
+    ("resistencias_dano", "Resistências a dano (ex.: Fogo, Contundente não mágico)", False),
+    ("imunidades_dano", "Imunidades a dano", False),
+    ("vulnerabilidades_dano", "Vulnerabilidades a dano", False),
+    ("imunidades_condicao", "Imunidades a condição (ex.: Amedrontado, Envenenado)", False),
+    ("proficiencia_armas", "Proficiência em armas (ex.: Simples, Marciais)", False),
+    ("proficiencia_armaduras", "Proficiência em armaduras (ex.: Leve, Pesada, Escudos)", False),
+    ("proficiencia_ferramentas", "Proficiência em ferramentas", False),
+    ("equipamento", "Equipamento — resumo curto em texto livre (o inventário detalhado abaixo é opcional e aparece numa aba própria)", False),
 ]
 
 CAMPOS_STATBLOCK_ATRIBUTOS = ["for", "des", "con", "int", "sab", "car"]
@@ -579,6 +597,72 @@ CAMPOS_STATBLOCK_LISTAS = [
     ("acoes", "Ações (um por linha: Nome: descrição)"),
     ("reacoes", "Reações (um por linha: Nome: descrição)"),
     ("magias", "Magias (texto livre)"),
+]
+
+# As 18 perícias do D&D 5e (chave, rótulo, atributo-base) — ficha completa (opcional). Se nenhuma
+# for marcada como treinada/especialista para um personagem, o cartão volta a mostrar o campo
+# livre `pericias` acima, sem perder compatibilidade com as fichas já existentes.
+PERICIAS_D20 = [
+    ("acrobacia", "Acrobacia", "des"),
+    ("adestrar_animais", "Adestrar Animais", "sab"),
+    ("arcanismo", "Arcanismo", "int"),
+    ("atletismo", "Atletismo", "for"),
+    ("enganacao", "Enganação", "car"),
+    ("historia", "História", "int"),
+    ("intuicao", "Intuição", "sab"),
+    ("intimidacao", "Intimidação", "car"),
+    ("investigacao", "Investigação", "int"),
+    ("medicina", "Medicina", "sab"),
+    ("natureza", "Natureza", "int"),
+    ("percepcao", "Percepção", "sab"),
+    ("atuacao", "Atuação", "car"),
+    ("persuasao", "Persuasão", "car"),
+    ("religiao", "Religião", "int"),
+    ("prestidigitacao", "Prestidigitação", "des"),
+    ("furtividade", "Furtividade", "des"),
+    ("sobrevivencia", "Sobrevivência", "sab"),
+]
+
+# As 6 salvaguardas (uma por atributo) — mesma lógica opcional de PERICIAS_D20.
+SALVAGUARDAS_D20 = [(a, f"Salvaguarda de {ROTULOS_ATRIBUTOS[a]}") for a in CAMPOS_STATBLOCK_ATRIBUTOS]
+
+# Os 4 grupos de linhas repetíveis da "ficha completa" (opcional): inventário, grimório detalhado,
+# características categorizadas e efeitos ativos. Cada item da lista é (chave, rótulo, tipo de
+# campo) — igual ao padrão de CAMPOS_FICHA_* — usado tanto para gerar o formulário quanto para
+# ler o POST (ver `_ler_grupo_do_form` em admin/app.py).
+CAMPOS_INVENTARIO_ITEM = [
+    ("nome", "Nome", "texto"),
+    ("categoria", "Categoria", "texto"),
+    ("peso", "Peso", "texto"),
+    ("quantidade", "Qtd.", "texto"),
+    ("equipado", "Equipado", "select"),
+    ("notas", "Notas", "texto"),
+]
+EQUIPADO_OPCOES = ["Não", "Sim"]
+CAMPOS_MAGIA_ITEM = [
+    ("nome", "Nome", "texto"),
+    ("nivel", "Nível", "texto"),
+    ("componentes", "Componentes", "texto"),
+    ("alcance", "Alcance", "texto"),
+    ("execucao", "Execução", "texto"),
+    ("notas", "Notas", "texto"),
+]
+CATEGORIAS_CARACTERISTICA = [
+    "Raça", "Antecedente", "Classe", "Subclasse", "Habilidade ativa", "Habilidade passiva",
+]
+CAMPOS_CARACTERISTICA_ITEM = [
+    ("nome", "Nome", "texto"),
+    ("categoria", "Categoria", "select"),
+    ("usos", "Usos", "texto"),
+    ("execucao", "Execução", "texto"),
+    ("descricao", "Descrição", "textarea"),
+]
+TIPOS_EFEITO = ["Temporário", "Passivo", "Inativo"]
+CAMPOS_EFEITO_ITEM = [
+    ("nome", "Nome", "texto"),
+    ("tipo", "Tipo", "select"),
+    ("origem", "Origem", "texto"),
+    ("duracao", "Duração", "texto"),
 ]
 
 _MARCADOR_INICIO = "<!-- inicio:statblock:{slug} -->"
@@ -631,8 +715,54 @@ def _renderizar_trechos(texto: str) -> str:
     return "\n\n".join(partes)
 
 
+def _mod_num(valor: str) -> int:
+    try:
+        return (int(str(valor).strip()) - 10) // 2
+    except (TypeError, ValueError):
+        return 0
+
+
+def _assinado(n: int) -> str:
+    return f"+{n}" if n >= 0 else str(n)
+
+
+def _tabela_pericias(v: dict) -> str:
+    """Tabela de perícias com total calculado (atributo + bônus de proficiência, x2 se
+    especialista) — só chamada quando há pelo menos uma perícia marcada; senão o cartão usa o
+    campo livre `pericias` (ver `linhas_extra`), mantendo compatibilidade com fichas antigas."""
+    try:
+        bonus = int(str(v.get("bonus_proficiencia") or "0").strip() or "0")
+    except ValueError:
+        bonus = 0
+    linhas = ["| Perícia | Total |", "|---|---|"]
+    for chave, rotulo, atributo in PERICIAS_D20:
+        estado = ((v.get("pericias_treino") or {}).get(chave) or "")
+        marca = {"especialista": "★", "treinado": "●"}.get(estado, "○")
+        extra = bonus * 2 if estado == "especialista" else (bonus if estado == "treinado" else 0)
+        total = _mod_num(v.get(atributo, "")) + extra
+        linhas.append(f"| {marca} {rotulo} ({ROTULOS_ATRIBUTOS[atributo]}) | {_assinado(total)} |")
+    return "\n".join(linhas)
+
+
+def _tabela_salvaguardas(v: dict) -> str:
+    try:
+        bonus = int(str(v.get("bonus_proficiencia") or "0").strip() or "0")
+    except ValueError:
+        bonus = 0
+    linhas = ["| Salvaguarda | Total |", "|---|---|"]
+    for atributo in CAMPOS_STATBLOCK_ATRIBUTOS:
+        treinado = bool((v.get("salvaguardas_treino") or {}).get(atributo))
+        total = _mod_num(v.get(atributo, "")) + (bonus if treinado else 0)
+        marca = "●" if treinado else "○"
+        linhas.append(f"| {marca} {ROTULOS_ATRIBUTOS[atributo]} | {_assinado(total)} |")
+    return "\n".join(linhas)
+
+
 def renderizar_statblock(slug: str, v: dict) -> str:
-    """Gera o markdown do cartão (com os dados embutidos) a partir dos valores da ficha."""
+    """Gera o markdown do cartão principal (atributos/CA/PV/perícias/equipamento) a partir dos
+    valores da ficha — devolve só o bloco `<div class="stat-block">`, sem os marcadores externos
+    nem o JSON (isso é responsabilidade de `salvar_statblock`, que monta o cartão junto com os
+    blocos opcionais de inventário/grimório/características/efeitos)."""
     rotulos_linha = " | ".join(ROTULOS_ATRIBUTOS[a] for a in CAMPOS_STATBLOCK_ATRIBUTOS)
     separador_linha = "|".join("---" for _ in CAMPOS_STATBLOCK_ATRIBUTOS)
     valores_linha = " | ".join(
@@ -641,9 +771,25 @@ def renderizar_statblock(slug: str, v: dict) -> str:
     )
 
     linhas_extra = []
+    pericias_treino = v.get("pericias_treino") or {}
+    if any(pericias_treino.values()):
+        linhas_extra.append(_tabela_pericias(v))
+    else:
+        valor = (v.get("pericias") or "").strip()
+        if valor:
+            linhas_extra.append(f"**Perícias** {valor}")
+    salvaguardas_treino = v.get("salvaguardas_treino") or {}
+    if any(salvaguardas_treino.values()):
+        linhas_extra.append(_tabela_salvaguardas(v))
     for chave, rotulo in (
-        ("pericias", "Perícias"), ("sentidos", "Sentidos"),
-        ("idiomas", "Idiomas"), ("equipamento", "Equipamento"),
+        ("sentidos", "Sentidos"), ("idiomas", "Idiomas"),
+        ("resistencias_dano", "Resistências a dano"), ("imunidades_dano", "Imunidades a dano"),
+        ("vulnerabilidades_dano", "Vulnerabilidades a dano"),
+        ("imunidades_condicao", "Imunidades a condição"),
+        ("proficiencia_armas", "Proficiência em armas"),
+        ("proficiencia_armaduras", "Proficiência em armaduras"),
+        ("proficiencia_ferramentas", "Proficiência em ferramentas"),
+        ("equipamento", "Equipamento"),
     ):
         valor = (v.get(chave) or "").strip()
         if valor:
@@ -656,10 +802,6 @@ def renderizar_statblock(slug: str, v: dict) -> str:
             continue
         corpo = valor if chave == "magias" else _renderizar_trechos(valor)
         blocos_texto.append(f"**{rotulo}**\n\n{corpo}" if rotulo else corpo)
-
-    dados_json = json.dumps(v, ensure_ascii=False)
-    if "-->" in dados_json:
-        raise ValueError("Um dos campos contém a sequência '-->', que não pode ser salva. Reescreva sem ela.")
 
     subtitulo = (v.get("subtitulo") or "").strip()
     foto = (v.get("foto") or "").strip()
@@ -684,13 +826,14 @@ def renderizar_statblock(slug: str, v: dict) -> str:
     carga = (v.get("carga") or "").strip()
     if carga:
         chips.append(f'<span><strong>Carga</strong> {carga}</span>')
+    moeda = (v.get("moeda") or "").strip()
+    if moeda:
+        chips.append(f'<span><strong>Moeda</strong> {moeda}</span>')
     slots_magia = (v.get("slots_magia") or "").strip()
     if slots_magia:
         chips.append(f'<span><strong>Espaços de magia</strong> {slots_magia}</span>')
 
     partes = [
-        _MARCADOR_INICIO.format(slug=slug),
-        f"<!-- dados:statblock {dados_json} -->",
         '<div class="stat-block" markdown>',
         "",
         f"### {(v.get('nome') or '').strip() or 'NPC sem nome'} {{: #{slug} }}",
@@ -716,12 +859,95 @@ def renderizar_statblock(slug: str, v: dict) -> str:
         f"| {valores_linha} |",
         "",
     ]
-    if linhas_extra:
-        partes += linhas_extra + [""]
+    for item in linhas_extra:
+        partes += [item, ""]
     if blocos_texto:
         partes += ["---", "", "\n\n".join(blocos_texto), ""]
-    partes += ["</div>", _MARCADOR_FIM.format(slug=slug)]
+    partes += ["</div>"]
     return "\n".join(partes)
+
+
+_NOMES_BLOCO = ("ficha", "inventario", "grimorio", "caracteristicas", "efeitos")
+
+
+def _envolver_bloco(nome: str, conteudo: str) -> str:
+    """Embrulha um pedaço do cartão num par de comentários `<!-- bloco:{nome} -->` — é por esses
+    marcadores que `hooks/gallancourt.py::_extrair_blocos_personagem` reconhece qual pedaço vai
+    para qual aba da página (Ficha/Inventário/Grimório/Características/Efeitos). Usar comentários
+    em vez de casar `<div class="...">...</div>` por regex evita o problema de divs aninhadas
+    (o próprio cartão de Ficha tem `<div>` dentro de `<div>`)."""
+    if not (conteudo or "").strip():
+        return ""
+    return f"<!-- bloco:{nome} -->\n{conteudo}\n<!-- /bloco:{nome} -->"
+
+
+def renderizar_inventario_personagem(v: dict) -> str:
+    itens = v.get("inventario") or []
+    if not itens:
+        return ""
+    linhas = ["| Nome | Categoria | Peso | Qtd. | Equipado | Notas |", "|---|---|---|---|---|---|"]
+    for item in itens:
+        nome = (item.get("nome") or "").strip()
+        if not nome:
+            continue
+        equipado = item.get("equipado") or "—"
+        linhas.append(
+            f"| {nome} | {item.get('categoria') or '—'} | {item.get('peso') or '—'} | "
+            f"{item.get('quantidade') or '—'} | {equipado} | {item.get('notas') or ''} |"
+        )
+    if len(linhas) == 2:
+        return ""
+    return '<div class="personagem-inventario" markdown>\n\n#### Inventário\n\n' + "\n".join(linhas) + "\n\n</div>"
+
+
+def renderizar_grimorio_personagem(v: dict) -> str:
+    magias = v.get("magias_detalhe") or []
+    if not magias:
+        return ""
+    linhas = ["| Magia | Nível | Componentes | Alcance | Execução | Notas |", "|---|---|---|---|---|---|"]
+    for m in magias:
+        nome = (m.get("nome") or "").strip()
+        if not nome:
+            continue
+        linhas.append(
+            f"| {nome} | {m.get('nivel') or '—'} | {m.get('componentes') or '—'} | "
+            f"{m.get('alcance') or '—'} | {m.get('execucao') or '—'} | {m.get('notas') or ''} |"
+        )
+    if len(linhas) == 2:
+        return ""
+    return '<div class="personagem-grimorio" markdown>\n\n#### Grimório\n\n' + "\n".join(linhas) + "\n\n</div>"
+
+
+def renderizar_caracteristicas_personagem(v: dict) -> str:
+    itens = [c for c in (v.get("caracteristicas") or []) if (c.get("nome") or "").strip()]
+    if not itens:
+        return ""
+    partes = ['<div class="personagem-caracteristicas" markdown>', "", "#### Características", ""]
+    for categoria in CATEGORIAS_CARACTERISTICA:
+        do_grupo = [c for c in itens if (c.get("categoria") or "") == categoria]
+        if not do_grupo:
+            continue
+        partes += [f"**{categoria}**", ""]
+        for c in do_grupo:
+            detalhe = " · ".join(x for x in (c.get("execucao"), c.get("usos")) if x)
+            cabeca = f"***{c['nome']}.***" + (f" *({detalhe})*" if detalhe else "")
+            descricao = (c.get("descricao") or "").strip()
+            partes.append(f"{cabeca} {descricao}".strip())
+        partes.append("")
+    partes.append("</div>")
+    return "\n".join(partes)
+
+
+def renderizar_efeitos_personagem(v: dict) -> str:
+    itens = [e for e in (v.get("efeitos") or []) if (e.get("nome") or "").strip()]
+    if not itens:
+        return ""
+    linhas = ["| Efeito | Tipo | Origem | Duração |", "|---|---|---|---|"]
+    for e in itens:
+        linhas.append(
+            f"| {e['nome']} | {e.get('tipo') or '—'} | {e.get('origem') or '—'} | {e.get('duracao') or '—'} |"
+        )
+    return '<div class="personagem-efeitos" markdown>\n\n#### Efeitos\n\n' + "\n".join(linhas) + "\n\n</div>"
 
 
 def ler_statblocks_da_pagina(path: Path) -> dict[str, dict]:
@@ -844,7 +1070,24 @@ def salvar_statblock(
     nome = (valores.get("nome") or "").strip() or "npc"
     slug_base = slug_statblock(nome)
     novo_slug = slug_base if slug_antigo else _slug_livre(texto, "statblock", slug_base)
-    bloco = renderizar_statblock(novo_slug, valores)
+
+    dados_json = json.dumps(valores, ensure_ascii=False)
+    if "-->" in dados_json:
+        raise ValueError("Um dos campos contém a sequência '-->', que não pode ser salva. Reescreva sem ela.")
+
+    blocos = [
+        _envolver_bloco("ficha", renderizar_statblock(novo_slug, valores)),
+        _envolver_bloco("inventario", renderizar_inventario_personagem(valores)),
+        _envolver_bloco("grimorio", renderizar_grimorio_personagem(valores)),
+        _envolver_bloco("caracteristicas", renderizar_caracteristicas_personagem(valores)),
+        _envolver_bloco("efeitos", renderizar_efeitos_personagem(valores)),
+    ]
+    bloco = "\n".join([
+        _MARCADOR_INICIO.format(slug=novo_slug),
+        f"<!-- dados:statblock {dados_json} -->",
+        *[b for b in blocos if b],
+        _MARCADOR_FIM.format(slug=novo_slug),
+    ])
     texto = _substituir_ou_inserir_cartao(texto, "statblock", slug_antigo, bloco, ancora)
     _escrever(caminho, texto)
     return novo_slug

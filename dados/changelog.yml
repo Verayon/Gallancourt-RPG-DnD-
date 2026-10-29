@@ -11,12 +11,23 @@
 #   mudancas  lista de textos, um por mudança
 
 versoes:
-  - id: 1
-    versao: '0.1'
-    data: '2026-10-28'
-    mudancas:
-      - Changelog do projeto, com selo da versão atual no canto inferior esquerdo do site.
-      - Roadmap com prioridade e funcionalidade por item, em docs/roadmap.
-      - Botão de "Reportar bug", visível em qualquer página, com acompanhamento de status
-        (Aguardando/Resolvido) pelo Painel do Mestre.
-      - Menu da esquerda passou a abrir só uma categoria por vez (accordion).
+- id: 1
+  versao: '0.1'
+  data: '2026-10-28'
+  mudancas:
+  - Changelog do projeto, com selo da versão atual no canto inferior esquerdo do site.
+  - Roadmap com prioridade e funcionalidade por item, em docs/roadmap.
+  - Botão de "Reportar bug", visível em qualquer página, com acompanhamento de status (Aguardando/Resolvido)
+    pelo Painel do Mestre.
+  - Menu da esquerda passou a abrir só uma categoria por vez (accordion).
+- id: 2
+  versao: '0.2'
+  data: '2026-10-29'
+  mudancas:
+  - 'Ficha completa de personagem (opcional): perícias e salvaguardas com total calculado, inventário,
+    grimório detalhado, características categorizadas e efeitos ativos — cada grupo vira sua própria aba
+    na página (Ficha/Inventário/Grimório/Características/Efeitos).'
+  - Biografia (antes só para NPC/cidade) agora também disponível para jogadores, com campos físicos novos
+    (gênero, idade, altura, peso, olhos, cabelo, pele, fé).
+  - Painel do Mestre ganhou login com senha, para acesso remoto seguro.
+  - Site acessível pela internet (fora da rede local), via túnel seguro.

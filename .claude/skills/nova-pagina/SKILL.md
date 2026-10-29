@@ -24,8 +24,9 @@ fatos. Antes de escrever, leia `.claude/contexto/conteudo.md` (convenções) e, 
   'afiliacao': '...', 'resumo': '...', 'descricao': '...'}))"
   ```
 
-- A tabela de NPCs se atualiza sozinha. Ficha de personagem (aba **Ficha**) e ficha de combate
-  (aba **Ficha de combate**) só se o autor pedir — ver `.claude/contexto/npcs.md`.
+- A tabela de NPCs se atualiza sozinha. Biografia (aba **Biografia**) e ficha de combate
+  (aba **Ficha de combate**, com a "ficha completa" opcional de inventário/grimório/
+  características/efeitos) só se o autor pedir — ver `.claude/contexto/npcs.md`.
 
 ## Cidade, evento, facção, lugar ou tema
 

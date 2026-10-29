@@ -18,7 +18,7 @@
     <a href="/lugar/novo">Adicionar lugar</a>
     <a href="/jogador/novo">Adicionar jogador</a>
     <a href="/linha-do-tempo">Linha do tempo</a>
-    <a href="/ficha">Ficha</a>
+    <a href="/ficha">Biografia</a>
     <a href="/ficha-combate">Ficha de combate</a>
     <a href="/ficha-item">Loot &amp; Pistas</a>
     <a href="/editar">Editar página</a>
@@ -26,6 +26,7 @@
     <a href="/roadmap">Roadmap</a>
     <a href="/bugs">Bugs</a>
     <a href="/" target="_blank" rel="noopener">Abrir o site ↗</a>
+    {% if autenticacao_ativa %}<a href="/logout">Sair</a>{% endif %}
   </nav>
 </header>
 <main class="conteudo">

@@ -60,19 +60,22 @@ mundo ajam de modo coerente sem determinar antecipadamente todas as consequênci
 ```
 
 Essa é a ficha de **planejamento** do Mestre (o que o NPC quer e esconde). Para a ficha de jogo
-completa de D&D 5e — nível, atributos, perícias, CA, PV, equipamento, magias, personalidade e
-aparência —, use a aba **Ficha de NPC** do [Painel do Mestre](painel.md). Para criaturas e
-figurantes sem página própria (bandidos de uma sessão, por exemplo), use a **Ficha de combate**
-(ver abaixo). Para cidades, a **Ficha da cidade**. Não edite à mão sem necessidade as seções que
-usam marcadores invisíveis (`<!-- campo:... -->` ou `<!-- dados:statblock ... -->`): o painel
-espera encontrá-los para reler os valores depois.
+completa de D&D 5e — atributos, CA, PV, perícias, inventário, grimório, características —, use a
+aba **Ficha de combate** (ver abaixo); para personalidade e aparência, a aba **Biografia**. Para
+criaturas e figurantes sem página própria (bandidos de uma sessão, por exemplo), use a **Ficha de
+combate** direto na página do roteiro. Para cidades, a **Ficha da cidade**. Não edite à mão sem
+necessidade as seções que usam marcadores invisíveis (`<!-- campo:... -->` ou
+`<!-- dados:statblock ... -->`): o painel espera encontrá-los para reler os valores depois.
 
 ## Ficha de combate
 
-Um cartão visual de NPC para rodar à mesa, no estilo de uma ficha oficial: nome, foto opcional, CA,
-PV, deslocamento, espaços de magia (se conjurador), os seis atributos com modificador calculado
-sozinho, perícias, sentidos, idiomas, equipamento, traços, ações, reações e magias. Preenchida pela
-aba **Ficha de combate** do
+Um cartão visual de NPC/jogador para rodar à mesa, no estilo de uma ficha oficial: nome, foto
+opcional, CA, PV, deslocamento, espaços de magia (se conjurador), os seis atributos com modificador
+calculado sozinho, perícias, sentidos, idiomas, equipamento, traços, ações, reações e magias — e,
+opcionalmente, uma "ficha completa" com perícias/salvaguardas com total calculado, inventário,
+grimório detalhado, características categorizadas e efeitos ativos, cada grupo virando sua própria
+aba na página (Inventário/Grimório/Características/Efeitos). Preenchida pela aba **Ficha de
+combate** do
 [Painel do Mestre](painel.md), que insere o cartão na página escolhida (qualquer uma — não precisa
 ser uma página de personagem) e guarda os valores num comentário invisível (`<!-- dados:statblock
 ... -->`) para poder reabrir e editar depois. Veja exemplos em
@@ -122,9 +125,10 @@ Uma aba é montada automaticamente:
   cronológica. Mudanças de situação, localização, afiliação ou título aparecem também na caixa do
   topo e na tabela de NPCs. Cidades e facções ganham a mesma seção no fim da página.
 
-As demais seções da página, incluindo uma **Ficha de personagem** (preenchida pela aba **Ficha** do
-[Painel do Mestre](painel.md)) ou uma **Ficha de combate** (veja abaixo), são `##` normais no corpo
-do texto — não há mágica especial além da divisão em abas.
+As demais seções da página, incluindo uma **Biografia** (preenchida pela aba **Biografia** do
+[Painel do Mestre](painel.md)) ou uma **Ficha de combate** (veja abaixo) — com sua "ficha completa"
+opcional de inventário/grimório/características/efeitos, cada um virando sua própria aba —, são
+`##` normais no corpo do texto — não há mágica especial além da divisão em abas.
 
 ## Relações e intrigas
 

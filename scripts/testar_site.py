@@ -40,7 +40,9 @@ import traceback
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
-IGNORAR_NA_COPIA = shutil.ignore_patterns("site", "fontes", ".venv", "venv", "__pycache__", "*.pyc", ".cache")
+IGNORAR_NA_COPIA = shutil.ignore_patterns(
+    "site", "fontes", ".venv", "venv", "__pycache__", "*.pyc", ".cache", "painel_local.env",
+)
 
 # Ordem do menu combinada com o autor
 MENU_TOPO = ["Início", "Lore", "Wiki", "Compêndio", "Mestre", "Configurações", "Changelog", "Roadmap"]

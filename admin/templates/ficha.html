@@ -1,18 +1,21 @@
 {% extends "base.html" %}
 {% block titulo %}Ficha{% endblock %}
 {% block conteudo %}
-<h1>Ficha de personagem ou cidade</h1>
+<h1>Biografia (NPC, jogador ou cidade)</h1>
 <p class="ajuda">Escolha o tipo e o nome, preencha os campos e clique em Salvar. A seção
-  "{{ titulo_secao }}" é criada (ou atualizada) sozinha no rodapé da página.</p>
+  "{{ titulo_secao }}" é criada (ou atualizada) sozinha no rodapé da página. Para atributos, CA,
+  PV, perícias, inventário, grimório e características, use a <strong>Ficha de combate</strong>
+  — as duas fichas são independentes e aparecem em abas separadas na página.</p>
 
 <div class="abas">
-  <a href="/ficha?tipo=npc" class="{{ 'aba-ativa' if tipo == 'npc' else '' }}">Personagem</a>
+  <a href="/ficha?tipo=npc" class="{{ 'aba-ativa' if tipo == 'npc' else '' }}">NPC</a>
+  <a href="/ficha?tipo=jogador" class="{{ 'aba-ativa' if tipo == 'jogador' else '' }}">Jogador</a>
   <a href="/ficha?tipo=cidade" class="{{ 'aba-ativa' if tipo == 'cidade' else '' }}">Cidade</a>
 </div>
 
 <form method="get" action="/ficha" class="form-escolher">
   <input type="hidden" name="tipo" value="{{ tipo }}">
-  <label>{{ "Personagem" if tipo == "npc" else "Cidade" }}
+  <label>{{ "Cidade" if tipo == "cidade" else ("Jogador" if tipo == "jogador" else "Personagem") }}
     <select name="item" onchange="this.form.submit()">
       <option value="">— escolha —</option>
       {% for it in itens %}

@@ -864,19 +864,39 @@ _RE_STATBLOCK = re.compile(
 )
 
 
-def _extrair_statblocks(texto: str) -> tuple[str, list[str]]:
-    """Tira do texto qualquer ficha de combate (cartão `.stat-block`, ver
-    admin/wiki_data.py::salvar_statblock) anexada à página, para reinserir dentro da aba
-    "Ficha" em vez de deixá-la solta onde o Painel a inseriu (normalmente no fim do arquivo)."""
-    fichas = _RE_STATBLOCK.findall(texto)
-    return _RE_STATBLOCK.sub("", texto), fichas
+_RE_BLOCO_PERSONAGEM = re.compile(
+    r"<!-- bloco:(ficha|inventario|grimorio|caracteristicas|efeitos) -->(.*?)<!-- /bloco:\1 -->",
+    re.DOTALL,
+)
+_NOMES_BLOCO_PERSONAGEM = ("ficha", "inventario", "grimorio", "caracteristicas", "efeitos")
+
+
+def _extrair_blocos_personagem(texto: str) -> tuple[str, dict[str, list[str]]]:
+    """Tira do texto qualquer ficha de combate (cartão `.stat-block` e os blocos opcionais de
+    inventário/grimório/características/efeitos da "ficha completa" — ver
+    admin/wiki_data.py::salvar_statblock) anexada à página, para reinserir cada pedaço na aba
+    certa em vez de deixá-la solta onde o Painel a inseriu (normalmente no fim do arquivo).
+    Cada ficha de combate é um único comentário `<!-- inicio:statblock:X -->...<!-- fim... -->`;
+    dentro dele, os blocos nomeados (`<!-- bloco:ficha -->`, `<!-- bloco:inventario -->`, …)
+    indicam para qual aba cada pedaço vai. Fichas salvas antes desses marcadores nomeados
+    existirem não têm nenhum `bloco:`, então o cartão inteiro cai em "ficha" — mantém as páginas
+    antigas funcionando sem precisar resalvá-las."""
+    buckets: dict[str, list[str]] = {nome: [] for nome in _NOMES_BLOCO_PERSONAGEM}
+    for chunk in _RE_STATBLOCK.findall(texto):
+        sub = _RE_BLOCO_PERSONAGEM.findall(chunk)
+        if sub:
+            for nome, conteudo in sub:
+                buckets[nome].append(conteudo)
+        else:
+            buckets["ficha"].append(chunk)
+    return _RE_STATBLOCK.sub("", texto), buckets
 
 
 def _paginar_npc(conteudo: str) -> str:
     if "<!-- npc-corpo -->" not in conteudo:
         return conteudo
     cabeca, corpo = conteudo.split("<!-- npc-corpo -->", 1)
-    corpo, fichas_combate = _extrair_statblocks(corpo)
+    corpo, blocos = _extrair_blocos_personagem(corpo)
     corpo, em_aberto = _separar_em_aberto(corpo)
 
     partes = re.split(r'<h2 id="([^"]+)"[^>]*>(.*?)</h2>', corpo, flags=re.S)
@@ -887,6 +907,8 @@ def _paginar_npc(conteudo: str) -> str:
         ancora, titulo_html, secao = partes[i], partes[i + 1], partes[i + 2]
         titulo = html.unescape(re.sub(r"<[^>]+>", "", titulo_html)).replace("¶", "").strip()
         abas.append((titulo, f'<span id="{ancora}" class="npc-ancora"></span>{secao}'))
+
+    fichas_combate = blocos["ficha"]
     indice_ficha = next((i for i, (titulo, _) in enumerate(abas) if titulo == "Ficha"), None)
     if indice_ficha is not None:
         if fichas_combate:
@@ -901,12 +923,26 @@ def _paginar_npc(conteudo: str) -> str:
             "Painel do Mestre, escolhendo esta página.</em></p>"
         )
         abas.append(("Ficha", conteudo_ficha))
+
+    # Abas opcionais da "ficha completa" — só aparecem se o Painel tiver salvo algo nelas.
+    for nome_bucket, titulo_aba in (
+        ("inventario", "Inventário"), ("grimorio", "Grimório"),
+        ("caracteristicas", "Características"), ("efeitos", "Efeitos"),
+    ):
+        if blocos[nome_bucket]:
+            abas.append((titulo_aba, "".join(blocos[nome_bucket])))
+
     if em_aberto:
         abas.append(("Em aberto", "".join(em_aberto)))
     if not abas:
         return cabeca
-    # Ordem: Visão geral, Linha do tempo, demais seções, Ficha, Em aberto.
-    prioridade = {"Visão geral": 0, "Linha do tempo": 1, "Ficha": 90, "Em aberto": 99}
+    # Ordem: Visão geral, Linha do tempo, Biografia, demais seções, Ficha + abas da ficha
+    # completa, Em aberto.
+    prioridade = {
+        "Visão geral": 0, "Linha do tempo": 1, "Biografia": 10,
+        "Ficha": 90, "Inventário": 91, "Grimório": 92, "Características": 93, "Efeitos": 94,
+        "Em aberto": 99,
+    }
     abas = [a for _, a in sorted(enumerate(abas), key=lambda x: (prioridade.get(x[1][0], 50), x[0]))]
     return cabeca + _abas(abas)
 

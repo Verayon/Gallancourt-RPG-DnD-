@@ -92,6 +92,145 @@
     {% endfor %}
   </fieldset>
 
+  <details class="bloco-ficha">
+    <summary>Ficha completa (opcional) — perícias, salvaguardas, inventário, grimório, características e efeitos</summary>
+    <p class="ajuda">Pensada para jogadores e NPCs importantes, não para monstros genéricos do
+      catálogo. Preenchendo a grade de perícias/salvaguardas abaixo, o cartão passa a mostrar o
+      total calculado (atributo + bônus de proficiência) em vez do campo de texto livre.</p>
+
+    {% set pericias_treino = valores.get("pericias_treino", {}) %}
+    <fieldset>
+      <legend>Perícias (opcional)</legend>
+      <div class="grade-pericias">
+        {% for chave, rotulo, atributo in pericias_d20 %}
+        <label>{{ rotulo }} ({{ rotulos_atributos[atributo] }})
+          <select name="pericia_{{ chave }}">
+            <option value="" {{ "selected" if not pericias_treino.get(chave) else "" }}>—</option>
+            <option value="treinado" {{ "selected" if pericias_treino.get(chave) == "treinado" else "" }}>Treinado</option>
+            <option value="especialista" {{ "selected" if pericias_treino.get(chave) == "especialista" else "" }}>Especialista</option>
+          </select>
+        </label>
+        {% endfor %}
+      </div>
+    </fieldset>
+
+    {% set salvaguardas_treino = valores.get("salvaguardas_treino", {}) %}
+    <fieldset>
+      <legend>Salvaguardas (opcional)</legend>
+      <div class="lista-marcar">
+        {% for a, rotulo in salvaguardas_d20 %}
+        <label><input type="checkbox" name="salva_{{ a }}" {{ "checked" if salvaguardas_treino.get(a) else "" }}> {{ rotulo }}</label>
+        {% endfor %}
+      </div>
+    </fieldset>
+
+    {% set inv = valores.get("inventario", []) %}
+    <fieldset>
+      <legend>Inventário (opcional — até 12 itens; deixe o Nome em branco para ignorar a linha)</legend>
+      <table class="tabela-eventos">
+        <thead><tr>{% for _, rotulo, _ in campos_inventario_item %}<th>{{ rotulo }}</th>{% endfor %}</tr></thead>
+        <tbody>
+          {% for i in range(12) %}
+          {% set linha = inv[i] if i < inv|length else {} %}
+          <tr>
+            {% for chave, _, tipo_campo in campos_inventario_item %}
+            <td>
+              {% if chave == "equipado" %}
+              <select name="inv_equipado[]">
+                {% for opcao in equipado_opcoes %}
+                <option value="{{ opcao }}" {{ "selected" if (linha.get('equipado') or equipado_opcoes[0]) == opcao else "" }}>{{ opcao }}</option>
+                {% endfor %}
+              </select>
+              {% else %}
+              <input type="text" name="inv_{{ chave }}[]" value="{{ linha.get(chave, '') }}">
+              {% endif %}
+            </td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </fieldset>
+
+    {% set magias_detalhe = valores.get("magias_detalhe", []) %}
+    <fieldset>
+      <legend>Grimório (opcional — até 12 magias preparadas; complementa os campos de magia acima)</legend>
+      <table class="tabela-eventos">
+        <thead><tr>{% for _, rotulo, _ in campos_magia_item %}<th>{{ rotulo }}</th>{% endfor %}</tr></thead>
+        <tbody>
+          {% for i in range(12) %}
+          {% set linha = magias_detalhe[i] if i < magias_detalhe|length else {} %}
+          <tr>
+            {% for chave, _, _ in campos_magia_item %}
+            <td><input type="text" name="magia_{{ chave }}[]" value="{{ linha.get(chave, '') }}"></td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </fieldset>
+
+    {% set caracteristicas = valores.get("caracteristicas", []) %}
+    <fieldset>
+      <legend>Características (opcional — até 12; raça, antecedente, classe, habilidades ativas e passivas)</legend>
+      <table class="tabela-eventos">
+        <thead><tr>{% for _, rotulo, _ in campos_caracteristica_item %}<th>{{ rotulo }}</th>{% endfor %}</tr></thead>
+        <tbody>
+          {% for i in range(12) %}
+          {% set linha = caracteristicas[i] if i < caracteristicas|length else {} %}
+          <tr>
+            {% for chave, _, tipo_campo in campos_caracteristica_item %}
+            <td>
+              {% if chave == "categoria" %}
+              <select name="carac_categoria[]">
+                <option value="" {{ "selected" if not linha.get('categoria') else "" }}>—</option>
+                {% for opcao in categorias_caracteristica %}
+                <option value="{{ opcao }}" {{ "selected" if linha.get('categoria') == opcao else "" }}>{{ opcao }}</option>
+                {% endfor %}
+              </select>
+              {% elif tipo_campo == "textarea" %}
+              <textarea name="carac_{{ chave }}[]" rows="2">{{ linha.get(chave, '') }}</textarea>
+              {% else %}
+              <input type="text" name="carac_{{ chave }}[]" value="{{ linha.get(chave, '') }}">
+              {% endif %}
+            </td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </fieldset>
+
+    {% set efeitos = valores.get("efeitos", []) %}
+    <fieldset>
+      <legend>Efeitos ativos (opcional — até 6; só lista, não altera CA/PV/perícias automaticamente)</legend>
+      <table class="tabela-eventos">
+        <thead><tr>{% for _, rotulo, _ in campos_efeito_item %}<th>{{ rotulo }}</th>{% endfor %}</tr></thead>
+        <tbody>
+          {% for i in range(6) %}
+          {% set linha = efeitos[i] if i < efeitos|length else {} %}
+          <tr>
+            {% for chave, _, _ in campos_efeito_item %}
+            <td>
+              {% if chave == "tipo" %}
+              <select name="efeito_tipo[]">
+                <option value="" {{ "selected" if not linha.get('tipo') else "" }}>—</option>
+                {% for opcao in tipos_efeito %}
+                <option value="{{ opcao }}" {{ "selected" if linha.get('tipo') == opcao else "" }}>{{ opcao }}</option>
+                {% endfor %}
+              </select>
+              {% else %}
+              <input type="text" name="efeito_{{ chave }}[]" value="{{ linha.get(chave, '') }}">
+              {% endif %}
+            </td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </fieldset>
+  </details>
+
   {% if not slug_escolhido %}
   <label>Inserir depois deste trecho da página (opcional)
     <input type="text" name="ancora" placeholder="ex.: ## Aliados">

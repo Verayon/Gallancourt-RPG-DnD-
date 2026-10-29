@@ -45,10 +45,17 @@ que o painel depende de encontrar, e que **não podem ser removidas** das págin
 - a linha `- diario/index.md` no `nav:` do `mkdocs.yml` (é a âncora onde novas sessões são
   inseridas);
 - os marcadores `<!-- campo:<chave> -->`/`<!-- /campo:<chave> -->` dentro de `## Ficha da cidade`
-  ou `## Ficha de personagem` — um par por campo, invisíveis no site. A aba **Ficha** do painel lê
+  ou `## Biografia` — um par por campo, invisíveis no site. A aba **Biografia** do painel lê
   e regrava a seção inteira a partir desses marcadores; os campos estão em `admin/wiki_data.py`
-  (`CAMPOS_FICHA_CIDADE`, `CAMPOS_FICHA_NPC`, via `TIPOS_FICHA`);
-- o bloco `npc:` no front matter das páginas de NPC;
+  (`CAMPOS_FICHA_CIDADE`, `CAMPOS_FICHA_PERSONAGEM`, via `TIPOS_FICHA` — tipos `"npc"`/`"jogador"`/
+  `"cidade"`);
+- dentro de uma ficha de combate (`<!-- inicio:statblock:<slug> -->...<!-- fim:... -->`), os
+  marcadores internos `<!-- bloco:ficha -->`/`<!-- bloco:inventario -->`/`<!-- bloco:grimorio -->`/
+  `<!-- bloco:caracteristicas -->`/`<!-- bloco:efeitos -->` (cada um com seu par de fechamento) —
+  é por eles que `hooks/gallancourt.py::_extrair_blocos_personagem` decide em qual aba cada pedaço
+  da "ficha completa" opcional entra. Fichas salvas antes desses marcadores existirem não os têm;
+  nesse caso o cartão inteiro cai na aba **Ficha** (compatibilidade mantida de propósito);
+- o bloco `npc:` (ou `jogador:`) no front matter das páginas de NPC/jogador;
 - `dados/linha-do-tempo.yml` — edite pelo Painel ou mantendo o formato descrito no cabeçalho dele.
 
 Ao testar mudanças no painel, use uma cópia em `GALLANCOURT_ADMIN_ROOT` — nunca aplique uma sessão

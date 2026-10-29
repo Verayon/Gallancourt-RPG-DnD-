@@ -4,3 +4,7 @@ site.antigo/
 __pycache__/
 .venv/
 admin/dados/
+admin/painel_local.env
+admin/Caddyfile
+admin/Caddyfile.auto.json
+

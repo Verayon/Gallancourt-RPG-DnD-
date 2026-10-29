@@ -11,8 +11,9 @@
 
 itens:
 - id: 1
-  item: Preencher a ficha de combate completa dos 7 jogadores (atributos, PV, CA, equipamento, espaços
-    de magia e magias do nível atual).
+  item: Preencher a ficha completa dos 7 jogadores (atributos, perícias/salvaguardas, CA, PV, inventário,
+    grimório e características) — a ferramenta já existe no Painel (Ficha de combate → Ficha completa),
+    falta só os dados de cada personagem.
   prioridade: Alta
   tipo: Conteúdo
   status: Planejado
@@ -50,4 +51,18 @@ itens:
   item: em Raças, alterar os valores da coluna "Livro" de 2014 e 2024 para "PBH 2014" e "PBH 2024" respectivamente
   prioridade: Baixa
   tipo: Conteúdo
+  status: Planejado
+- id: 8
+  item: 'Hospedagem pública ainda é provisória: link do Cloudflare Tunnel muda toda vez que o túnel reinicia.
+    Para um link fixo, falta registrar um domínio próprio e configurar um túnel nomeado (ou IP passthrough/bridge
+    no modem, se a operadora permitir).'
+  prioridade: Média
+  tipo: Infra
+  status: Planejado
+- id: 9
+  item: 'Commitar o trabalho pendente: Sessão 1 ("O Fio da Corrente"), sistema de autenticação/hospedagem
+    do Painel e a nova ficha completa de personagem — tudo ainda está só no diretório de trabalho, sem
+    commit.'
+  prioridade: Alta
+  tipo: Infra
   status: Planejado

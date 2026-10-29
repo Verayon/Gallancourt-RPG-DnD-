@@ -12,11 +12,14 @@ Depois abra http://127.0.0.1:5001/ — é o site inteiro (wiki + ferramentas do 
 from __future__ import annotations
 
 import datetime
+import hmac
 import os
 import re
+import secrets
+import time
 from pathlib import Path
 
-from flask import Flask, abort, jsonify, redirect, render_template, request, send_file, url_for
+from flask import Flask, abort, jsonify, redirect, render_template, request, send_file, session, url_for
 
 import sessao_viva as sv
 import wiki_data as wd
@@ -27,13 +30,100 @@ import gerador_npc as gn
 ROOT = Path(os.environ.get("GALLANCOURT_ADMIN_ROOT", wd.DEFAULT_ROOT)).resolve()
 SITE_DIR = ROOT / "site"
 
+
+def _carregar_env_local(root: Path) -> None:
+    """Lê admin/painel_local.env (ignorado pelo git, nunca commitado) e preenche variáveis de
+    ambiente que ainda não estejam definidas — assim PAINEL_SENHA não precisa ser digitada nem
+    aparecer em nenhum arquivo versionado. Formato simples, uma linha `CHAVE=valor` por vez."""
+    caminho = root / "admin" / "painel_local.env"
+    if not caminho.is_file():
+        return
+    for linha in caminho.read_text(encoding="utf-8").splitlines():
+        linha = linha.strip()
+        if not linha or linha.startswith("#") or "=" not in linha:
+            continue
+        chave, valor = linha.split("=", 1)
+        os.environ.setdefault(chave.strip(), valor.strip())
+
+
+_carregar_env_local(ROOT)
+
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024  # 10 MB por envio
+app.secret_key = os.environ.get("PAINEL_SECRET_KEY") or secrets.token_hex(32)
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+app.config["SESSION_COOKIE_SECURE"] = os.environ.get("PAINEL_HTTPS", "") == "1"
+app.permanent_session_lifetime = datetime.timedelta(days=30)
+
+SENHA_PAINEL = os.environ.get("PAINEL_SENHA", "").strip()
+_ROTAS_LIVRES = {"tela_login", "fazer_login", "static"}
+_tentativas_falhas: dict[str, list[float]] = {}
+_JANELA_BLOQUEIO_SEGUNDOS = 300
+_MAX_TENTATIVAS = 5
+
+
+def _ip_cliente() -> str:
+    return (request.remote_addr or "desconhecido").strip()
+
+
+def _bloqueado(ip: str) -> bool:
+    agora = time.time()
+    tentativas = [t for t in _tentativas_falhas.get(ip, []) if agora - t < _JANELA_BLOQUEIO_SEGUNDOS]
+    _tentativas_falhas[ip] = tentativas
+    return len(tentativas) >= _MAX_TENTATIVAS
+
+
+def _registrar_falha(ip: str) -> None:
+    _tentativas_falhas.setdefault(ip, []).append(time.time())
+
+
+@app.get("/login")
+def tela_login():
+    if not SENHA_PAINEL or session.get("autenticado"):
+        return redirect(request.args.get("next") or url_for("servir_site", caminho=""))
+    return render_template("login.html", proximo=request.args.get("next", ""), erro=None)
+
+
+@app.post("/login")
+def fazer_login():
+    ip = _ip_cliente()
+    proximo = request.form.get("proximo") or url_for("servir_site", caminho="")
+    if _bloqueado(ip):
+        return render_template(
+            "login.html", proximo=proximo,
+            erro="Muitas tentativas erradas. Espere alguns minutos antes de tentar de novo.",
+        ), 429
+    senha = request.form.get("senha", "")
+    if SENHA_PAINEL and hmac.compare_digest(senha, SENHA_PAINEL):
+        session.clear()
+        session["autenticado"] = True
+        session.permanent = True
+        return redirect(proximo)
+    _registrar_falha(ip)
+    return render_template("login.html", proximo=proximo, erro="Senha incorreta."), 401
+
+
+@app.get("/logout")
+def fazer_logout():
+    session.clear()
+    return redirect(url_for("tela_login"))
+
+
+@app.before_request
+def _exigir_login():
+    if not SENHA_PAINEL:
+        return None  # sem PAINEL_SENHA configurada: autenticação desligada (uso só local)
+    if request.endpoint in _ROTAS_LIVRES:
+        return None
+    if session.get("autenticado"):
+        return None
+    destino = request.full_path if request.query_string else request.path
+    return redirect(url_for("tela_login", next=destino))
 
 
 @app.context_processor
 def _globais_template():
-    return {"pastas_imagens": wd.PASTAS_IMAGENS}
+    return {"pastas_imagens": wd.PASTAS_IMAGENS, "autenticacao_ativa": bool(SENHA_PAINEL)}
 
 
 def _entidade_por_slug(lista: list[wd.Entidade], slug: str) -> wd.Entidade | None:
@@ -266,9 +356,36 @@ def escolher_ficha_combate():
         campos_atributos=wd.CAMPOS_STATBLOCK_ATRIBUTOS,
         rotulos_atributos=wd.ROTULOS_ATRIBUTOS,
         campos_listas=wd.CAMPOS_STATBLOCK_LISTAS,
+        pericias_d20=wd.PERICIAS_D20,
+        salvaguardas_d20=wd.SALVAGUARDAS_D20,
+        campos_inventario_item=wd.CAMPOS_INVENTARIO_ITEM,
+        equipado_opcoes=wd.EQUIPADO_OPCOES,
+        campos_magia_item=wd.CAMPOS_MAGIA_ITEM,
+        campos_caracteristica_item=wd.CAMPOS_CARACTERISTICA_ITEM,
+        categorias_caracteristica=wd.CATEGORIAS_CARACTERISTICA,
+        campos_efeito_item=wd.CAMPOS_EFEITO_ITEM,
+        tipos_efeito=wd.TIPOS_EFEITO,
         copiar_de=request.args.get("copiar_de", ""),
         salvo=False,
     )
+
+
+def _ler_grupo_do_form(form, prefixo: str, campos: list[tuple]) -> list[dict]:
+    """Lê um grupo de linhas repetíveis do formulário (inventário/grimório/características/
+    efeitos da ficha completa, ver admin/templates/ficha_combate.html) — cada campo chega como
+    uma lista paralela `{prefixo}_{chave}[]`; zipa as listas numa linha por índice e descarta
+    linhas sem `nome` preenchido."""
+    listas = {chave: form.getlist(f"{prefixo}_{chave}[]") for chave, _, _ in campos}
+    tamanho = max((len(v) for v in listas.values()), default=0)
+    linhas = []
+    for i in range(tamanho):
+        linha = {}
+        for chave, _, _ in campos:
+            valores_campo = listas[chave]
+            linha[chave] = (valores_campo[i] if i < len(valores_campo) else "").strip()
+        if linha.get("nome"):
+            linhas.append(linha)
+    return linhas
 
 
 @app.post("/ficha-combate")
@@ -288,6 +405,17 @@ def salvar_ficha_combate():
     for chave, _ in wd.CAMPOS_STATBLOCK_LISTAS:
         valores[chave] = request.form.get(f"campo_{chave}", "")
 
+    valores["pericias_treino"] = {
+        chave: request.form.get(f"pericia_{chave}", "") for chave, _, _ in wd.PERICIAS_D20
+    }
+    valores["salvaguardas_treino"] = {
+        a: bool(request.form.get(f"salva_{a}")) for a, _ in wd.SALVAGUARDAS_D20
+    }
+    valores["inventario"] = _ler_grupo_do_form(request.form, "inv", wd.CAMPOS_INVENTARIO_ITEM)
+    valores["magias_detalhe"] = _ler_grupo_do_form(request.form, "magia", wd.CAMPOS_MAGIA_ITEM)
+    valores["caracteristicas"] = _ler_grupo_do_form(request.form, "carac", wd.CAMPOS_CARACTERISTICA_ITEM)
+    valores["efeitos"] = _ler_grupo_do_form(request.form, "efeito", wd.CAMPOS_EFEITO_ITEM)
+
     arquivo_foto = request.files.get("arquivo_foto")
     if arquivo_foto and arquivo_foto.filename:
         valores["foto"] = wd.salvar_foto_statblock(
@@ -299,6 +427,12 @@ def salvar_ficha_combate():
         valores=valores, campos_texto=wd.CAMPOS_STATBLOCK_TEXTO,
         campos_atributos=wd.CAMPOS_STATBLOCK_ATRIBUTOS, rotulos_atributos=wd.ROTULOS_ATRIBUTOS,
         campos_listas=wd.CAMPOS_STATBLOCK_LISTAS,
+        pericias_d20=wd.PERICIAS_D20, salvaguardas_d20=wd.SALVAGUARDAS_D20,
+        campos_inventario_item=wd.CAMPOS_INVENTARIO_ITEM, equipado_opcoes=wd.EQUIPADO_OPCOES,
+        campos_magia_item=wd.CAMPOS_MAGIA_ITEM,
+        campos_caracteristica_item=wd.CAMPOS_CARACTERISTICA_ITEM,
+        categorias_caracteristica=wd.CATEGORIAS_CARACTERISTICA,
+        campos_efeito_item=wd.CAMPOS_EFEITO_ITEM, tipos_efeito=wd.TIPOS_EFEITO,
     )
 
     try:
@@ -1293,12 +1427,18 @@ def servir_site(caminho):
 
 
 if __name__ == "__main__":
-    # Por padrão só escuta 127.0.0.1 (ninguém mais na rede alcança o painel). Para acessar de
-    # outro aparelho seu pela Tailscale (ver docs/mestre/painel.md), rode com
-    # PAINEL_HOST=0.0.0.0 .venv\Scripts\python admin\app.py — isso ainda deixa o painel visível
-    # pra rede local também, não só pela Tailscale.
+    # Por padrão só escuta 127.0.0.1 (ninguém mais na rede alcança o painel). Para expor numa
+    # rede maior (Tailscale, rede local, ou internet via port forward/Cloudflare Tunnel), rode com
+    # PAINEL_HOST=0.0.0.0 — e, nesse caso, defina também PAINEL_SENHA (direto ou em
+    # admin/painel_local.env, nunca commitado) para exigir login. Sem PAINEL_SENHA, o login fica
+    # desligado — ok para uso só em 127.0.0.1, arriscado para qualquer coisa mais aberta que isso.
     if not (SITE_DIR / "index.html").is_file():
         print("Construindo o site por baixo dos panos (primeira vez)...")
         wd.publicar_build(ROOT)
     host = os.environ.get("PAINEL_HOST", "127.0.0.1")
+    if host != "127.0.0.1" and not SENHA_PAINEL:
+        print(
+            "AVISO: PAINEL_HOST != 127.0.0.1 mas PAINEL_SENHA não está definida — "
+            "o Painel vai ficar acessível SEM LOGIN para quem alcançar esse endereço."
+        )
     app.run(host=host, port=5001, debug=False)

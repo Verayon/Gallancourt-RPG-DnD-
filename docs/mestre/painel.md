@@ -256,17 +256,19 @@ campo muda mais de uma vez, vale a mudança mais recente na cronologia.
 Na lista abaixo do formulário dá para **editar** ou **apagar** qualquer acontecimento. Os dados
 ficam em `dados/linha-do-tempo.yml`.
 
-## Preencher a ficha de um personagem ou cidade
+## Preencher a biografia de um personagem ou cidade
 
-Na aba **Ficha**, escolha "Personagem" ou "Cidade", escolha o nome numa lista e preencha os
-campos. Ao salvar, o painel cria (ou substitui) a seção **Ficha de personagem** — ou **Ficha da
-cidade** — no rodapé daquela página, com exatamente os campos preenchidos.
+Na aba **Biografia**, escolha "NPC", "Jogador" ou "Cidade", escolha o nome numa lista e preencha
+os campos. Ao salvar, o painel cria (ou substitui) a seção **Biografia** — ou **Ficha da cidade**
+— no rodapé daquela página, com exatamente os campos preenchidos. Essa ficha é independente da
+Ficha de combate (atributos/CA/PV/inventário — ver abaixo); as duas aparecem em abas separadas.
 
-Personagens:
+Personagens (NPC ou jogador):
 
 | Campo | O que colocar |
 |---|---|
-| Aparência física | Altura, porte, marcas, roupas, o que chama atenção à primeira vista |
+| Gênero, idade, altura, peso, olhos, cabelo, pele, fé | Descrição física rápida, campo a campo |
+| Aparência física | Porte, marcas, roupas, o que chama atenção à primeira vista |
 | Personalidade | Como a pessoa age, fala, o que a move |
 | Traço marcante | Um hábito ou trejeito reconhecível |
 | Ideal | O que essa pessoa defende |
@@ -300,9 +302,10 @@ Preencha:
 
 | Grupo | Campos |
 |---|---|
-| Identidade | Nome, tipo/papel, foto, CA, PV, deslocamento, espaços de magia, perícias, sentidos, idiomas, equipamento |
+| Identidade | Nome, tipo/papel, foto, nível, classe, CR, CA, PV, deslocamento, carga, moeda, bônus de proficiência, espaços de magia, perícias (texto livre), sentidos, idiomas, resistências/imunidades/vulnerabilidades a dano, imunidade a condição, proficiência em armas/armaduras/ferramentas, equipamento (resumo em texto livre) |
 | Atributos | FOR, DES, CON, INT, SAB, CAR — só o valor; o modificador é calculado sozinho |
 | Traços, ações e magias | Uma caixa de texto para cada, um traço/ação por linha no formato `Nome: descrição` |
+| Ficha completa (opcional) | Grade de perícias/salvaguardas (com total calculado), inventário, grimório detalhado, características categorizadas e efeitos ativos — ver abaixo |
 
 A **foto** é opcional: envie um arquivo pelo campo "Enviar uma foto" (PNG, JPG, WEBP, GIF ou SVG) e
 o caminho é preenchido sozinho; sem foto, o cartão aparece só com CA, PV, deslocamento e (se
@@ -312,6 +315,23 @@ livre (ex.: `1º: 4, 2º: 3`) — para NPCs que não conjuram, deixe em branco.
 Ao salvar, o painel insere (ou atualiza) o cartão visual na página, com os atributos já com
 modificador, e roda `mkdocs build --strict` para confirmar que nada quebrou. Se você mudar o nome
 de uma ficha existente, o cartão é atualizado no lugar — não duplica.
+
+### Ficha completa (opcional): perícias, inventário, grimório, características, efeitos
+
+Pensada para jogadores e NPCs importantes — não vale a pena preencher isso num monstro genérico do
+catálogo, que continua bem servido só com CA/PV/ações. Abra a seção recolhível **"Ficha completa
+(opcional)"**, abaixo de Traços/ações/magias:
+
+| Grupo | O que faz |
+|---|---|
+| Perícias / Salvaguardas | Marque "Treinado"/"Especialista" (perícias) ou o checkbox (salvaguardas) para cada uma. Preenchendo pelo menos uma, o cartão passa a mostrar uma tabela com o **total já calculado** (atributo + Bônus de proficiência, x2 se especialista) em vez do campo de texto livre "Perícias". Sem nada marcado, nada muda — o campo livre continua valendo. |
+| Inventário | Até 12 linhas (nome, categoria, peso, quantidade, equipado, notas). Vira a aba **Inventário** na página; linhas com Nome em branco são ignoradas. |
+| Grimório | Até 12 magias (nome, nível, componentes, alcance, execução, notas) — complementa, não substitui, os campos "Espaços de magia" e "Magias". Vira a aba **Grimório**. |
+| Características | Até 12 linhas (nome, categoria — Raça/Antecedente/Classe/Subclasse/Habilidade ativa/Habilidade passiva —, usos, execução, descrição). Vira a aba **Características**, agrupada por categoria. |
+| Efeitos ativos | Até 6 linhas (nome, tipo — Temporário/Passivo/Inativo —, origem, duração). Vira a aba **Efeitos**. É só uma lista visível: não altera CA/PV/perícias sozinho. |
+
+Cada uma dessas abas só aparece na página se tiver algo preenchido — uma ficha simples de monstro
+continua só com a aba **Ficha**, sem abas vazias.
 
 !!! warning "Salvar substitui o cartão inteiro"
     Assim como a ficha de personagem, cada vez que você salva pelo painel, o cartão inteiro é

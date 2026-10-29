@@ -17,6 +17,11 @@ mkdocs serve                          # opcional: só recarga automática ao edi
 `MANUTENCAO.md` é o manual do autor (comandos, rotina, problemas); ao mudar como o projeto é
 operado, atualize-o junto.
 
+O Painel pode ficar acessível fora de `127.0.0.1` (ver `PAINEL_HOST`/`PAINEL_HTTPS` em
+`admin/app.py`) — quando `PAINEL_SENHA` está definida, login é obrigatório. Hoje o site também
+fica acessível publicamente via Cloudflare Tunnel (link temporário, muda a cada reinício do
+túnel — ver item de Roadmap sobre domínio fixo).
+
 ## Onde está cada coisa
 
 | Caminho | O quê |
@@ -24,6 +29,7 @@ operado, atualize-o junto.
 | `docs/` | O site. Menu: Início, Lore, Wiki (Mundo, Geografia, Cidades, Lugares, Facções, NPCs=`personagens/`, Eventos), Compêndio, Mestre (sessões, jogadores, diário, linha do tempo), Configurações |
 | `hooks/` | Código que roda no build: `gallancourt.py` (NPCs, tabelas, abas), `linha_tempo.py` |
 | `admin/` | Painel do Mestre (Flask local) — cria NPCs, sessões, fichas, acontecimentos |
+| `admin/painel_local.env` | Segredos locais do Painel (`PAINEL_SENHA` de login) — gitignorado, nunca commitado; sem ele o login fica desligado (uso só local) |
 | `dados/linha-do-tempo.yml` | Acontecimentos da campanha (fonte única) |
 | `scripts/` | `gerar_relacoes.py` (fonte única das relações), `testar_site.py` (teste fixo) |
 | `fontes/` | Acervo do autor — **não editar**; guia em `fontes/README.md` |

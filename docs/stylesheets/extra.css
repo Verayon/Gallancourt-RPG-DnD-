@@ -1025,6 +1025,80 @@ input,
   }
 }
 
+/* Abas opcionais da "ficha completa" (Inventário/Grimório/Características/Efeitos — ver
+   admin/wiki_data.py::renderizar_inventario_personagem e afins). Mesmo chrome de cartão e de
+   tabela do .stat-block, só que com um h4 em vez de h3 (não têm título de personagem repetido). */
+.md-typeset .personagem-inventario,
+.md-typeset .personagem-grimorio,
+.md-typeset .personagem-caracteristicas,
+.md-typeset .personagem-efeitos {
+  background: var(--gc-panel);
+  border: 1px solid var(--gc-panel-border);
+  border-top: 3px solid var(--gc-red);
+  border-radius: 8px;
+  padding: 1rem 1.3rem 1.2rem;
+  margin: 1.3rem 0;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, .16);
+}
+
+.md-typeset .personagem-inventario h4,
+.md-typeset .personagem-grimorio h4,
+.md-typeset .personagem-caracteristicas h4,
+.md-typeset .personagem-efeitos h4 {
+  margin: 0 0 .6rem;
+  color: var(--gc-gold-soft);
+  font-size: 1.05em;
+}
+
+.md-typeset .personagem-inventario table,
+.md-typeset .personagem-grimorio table,
+.md-typeset .personagem-efeitos table {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  font-size: .85rem;
+  width: 100%;
+}
+
+.md-typeset .personagem-inventario table th,
+.md-typeset .personagem-grimorio table th,
+.md-typeset .personagem-efeitos table th,
+.md-typeset .personagem-inventario table td,
+.md-typeset .personagem-grimorio table td,
+.md-typeset .personagem-efeitos table td {
+  text-align: left;
+  padding: .3rem .5rem;
+  border: none;
+  border-bottom: 1px solid var(--gc-panel-border);
+  background: transparent !important;
+}
+
+.md-typeset .personagem-inventario table th,
+.md-typeset .personagem-grimorio table th,
+.md-typeset .personagem-efeitos table th {
+  color: var(--gc-gold-soft);
+  font-weight: 700;
+  font-size: .78rem;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+/* Características agrupadas usam o mesmo "***Nome.*** descrição" do .stat-block. */
+.md-typeset .personagem-caracteristicas strong em,
+.md-typeset .personagem-caracteristicas em strong {
+  color: var(--gc-gold-soft);
+  font-style: normal;
+}
+
+.md-typeset .personagem-caracteristicas p > strong:only-child {
+  display: block;
+  margin-top: .5rem;
+  color: var(--gc-gold-soft);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  font-size: .78rem;
+}
+
 /* Páginas de Classes/Raças/Antecedentes (hooks/gallancourt.py::_envolver_pagina_regra) empilham
    várias tabelas densas (características por nível, traços) dentro de abas 2014/2024 — fonte e
    espaçamento menores para caber mais sem rolar tanto. */
