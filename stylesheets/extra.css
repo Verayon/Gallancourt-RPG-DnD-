@@ -11,7 +11,10 @@
    O tema vem travado em max-width:61rem (header, conteúdo e rodapé usam a
    mesma classe .md-grid). As barras laterais têm largura própria fixa
    (12.1rem cada), então alargar só o grid dá mais espaço ao conteúdo sem
-   mudar o header nem o painel de navegação.
+   mudar o header nem o painel de navegação. Em vez de um segundo teto fixo
+   (ex.: 74rem), o grid usa a largura da janela menos uma margem pequena —
+   acompanha a resolução da tela em vez de parar de crescer num monitor
+   grande.
    -------------------------------------------------------------------------- */
 
 /* Só alarga a partir do ponto em que as barras laterais aparecem (mesmo
@@ -19,7 +22,7 @@
    para aproveitar, e encolher o grid lá só atrapalharia o cabeçalho. */
 @media screen and (min-width: 76.25em) {
   .md-grid {
-    max-width: min(92%, 74rem);
+    max-width: calc(100% - 2.4rem);
   }
 }
 
@@ -273,49 +276,120 @@ input,
   filter: none;
 }
 
-/* Cada item do menu dentro de uma caixinha própria, em vez de uma lista de
-   links soltos. Só altera o preenchimento vertical e a cor de fundo — o
-   recuo por profundidade (padding-left/right) continua sendo o do tema,
-   então a hierarquia de seções aninhadas não muda. */
+/* Cada item do menu é uma barra fina, só com contorno. Quando a seção tem
+   página própria (Lore, Wiki, NPCs…), o link e a seta de abrir/fechar ficam
+   dentro da MESMA barra (.md-nav__container), em vez de duas caixas. */
 .md-nav--primary .md-nav__item {
-  margin: .2rem .5rem;
+  margin: .14rem 0;
+  padding-right: .4rem;
 }
 
 .md-nav--primary .md-nav__link {
   display: flex;
   align-items: center;
-  padding-top: .5rem;
-  padding-bottom: .5rem;
-  border-radius: 6px;
+  margin: 0;
+  padding: .26rem .5rem;
+  min-height: 0;
+  font-size: .74rem;
+  line-height: 1.25;
   border: 1px solid var(--gc-panel-border);
-  background: var(--gc-bg-alt);
-  transition: color .15s ease, background-color .15s ease, border-color .15s ease;
+  border-radius: 4px;
+  background: transparent;
+  transition: color .15s ease, border-color .15s ease, background-color .15s ease;
 }
 
+/* Barra única: o contêiner leva o contorno; link e seta perdem o próprio. */
+.md-nav--primary .md-nav__container,
+.md-nav--primary .md-nav__link.md-nav__container {
+  display: flex;
+  align-items: stretch;
+  padding: 0;
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 4px;
+  transition: border-color .15s ease, background-color .15s ease;
+}
+
+.md-nav--primary .md-nav__container > .md-nav__link {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.md-nav--primary .md-nav__container > a.md-nav__link {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.md-nav--primary .md-nav__container > label.md-nav__link {
+  flex: 0 0 auto;
+  padding: .26rem .4rem;
+}
+
+.md-nav--primary .md-nav__icon {
+  width: .9rem;
+  height: .9rem;
+  margin-left: auto;
+}
+
+.md-nav--primary .md-nav__icon::after {
+  width: .9rem;
+  height: .9rem;
+  -webkit-mask-size: .9rem;
+  mask-size: .9rem;
+}
+
+/* Hover: contorno dourado na barra inteira */
 .md-nav--primary .md-nav__link:hover,
-.md-nav--primary .md-nav__link:focus {
+.md-nav--primary .md-nav__link:focus-visible,
+.md-nav--primary .md-nav__container:hover {
   color: var(--gc-gold-soft);
   border-color: var(--gc-gold);
-  background: var(--md-accent-fg-color--transparent);
 }
 
+.md-nav--primary .md-nav__container .md-nav__link:hover {
+  border-color: transparent;
+}
+
+/* Página atual e seções que a contêm */
 .md-nav--primary .md-nav__link--active,
-.md-nav--primary .md-nav__link[aria-expanded="true"] {
+.md-nav--primary .md-nav__item--active > .md-nav__link,
+.md-nav--primary .md-nav__item--active > .md-nav__container,
+.md-nav--primary .md-nav__item--active > .md-nav__container > .md-nav__link {
   color: var(--gc-gold-soft) !important;
-  font-weight: 600;
   border-color: var(--gc-gold);
+}
+
+.md-nav--primary .md-nav__link--active {
+  font-weight: 600;
   background: var(--md-accent-fg-color--transparent);
 }
 
-/* Os três grandes portais: Início / Lore / Wiki, com um pouco mais de peso */
-.md-nav--primary > .md-nav__list > .md-nav__item > .md-nav__link {
-  font-size: .85rem;
+/* Itens de topo (Início, Lore, Wiki, Compêndio, Mestre, Configurações) */
+.md-nav--primary > .md-nav__list > .md-nav__item > .md-nav__link,
+.md-nav--primary > .md-nav__list > .md-nav__item > .md-nav__container > .md-nav__link {
+  font-size: .78rem;
   font-weight: 600;
 }
 
-/* Pequeno losango como marcador de item, no lugar do ponto padrão */
+/* Recuo discreto para os níveis internos */
+.md-nav--primary .md-nav__item--nested > .md-nav > .md-nav__list {
+  margin-left: .55rem;
+}
+
 .md-nav__item .md-nav__link::before {
   content: none;
+}
+
+/* No celular o tema desenha uma linha entre os itens; as barras já separam. */
+@media screen and (max-width: 76.2344em) {
+  .md-nav--primary .md-nav__item {
+    border-top: 0;
+    padding: 0 .6rem;
+  }
+
+  .md-nav--primary .md-nav__item--nested > .md-nav > .md-nav__list {
+    margin-left: 0;
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -354,6 +428,9 @@ input,
   border-left: 4px solid var(--gc-gold);
   border-radius: 6px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, .14);
+  /* O tema por padrão usa margin:1.5625em 0 (~25px) — reduzido para não
+     empilhar tanto respiro entre uma admonição e o texto ao redor. */
+  margin: 1em 0;
 }
 
 .md-typeset .admonition-title,
@@ -388,6 +465,11 @@ input,
   border-radius: 6px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, .1);
+}
+
+.md-typeset table:not([class]) td,
+.md-typeset table:not([class]) th {
+  padding: .5rem .75rem;
 }
 
 .md-typeset table:not([class]) th {
@@ -693,15 +775,15 @@ input,
 .bar-list > ul,
 .bar-list > ol {
   list-style: none;
-  margin: 1.2rem 0;
+  margin: 1rem 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: .5rem;
+  gap: .4rem;
 }
 
 .bar-list li {
-  padding: .65rem 1rem;
+  padding: .5rem .8rem;
   background: var(--gc-panel);
   border: 1px solid var(--gc-panel-border);
   border-left: 3px solid var(--gc-gold);
@@ -731,10 +813,73 @@ input,
 }
 
 /* --------------------------------------------------------------------------
+   15. Lista de sessões (Mestre → Sessões) — um cartão por sessão: título e
+   data na mesma linha, separador sutil, e um resumo breve abaixo. Gerado por
+   hooks/gallancourt.py (_lista_sessoes).
+   -------------------------------------------------------------------------- */
+
+.sessao-lista {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  margin: 1rem 0;
+}
+
+.sessao-card {
+  padding: .6rem .9rem;
+  background: var(--gc-panel);
+  border: 1px solid var(--gc-panel-border);
+  border-left: 3px solid var(--gc-gold);
+  border-radius: 6px;
+  transition: border-color .15s ease, background-color .15s ease;
+}
+
+.sessao-card:hover {
+  border-color: var(--gc-gold);
+  background: var(--md-accent-fg-color--transparent);
+}
+
+.sessao-card__cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: .6rem 1rem;
+}
+
+.sessao-card__cabecalho p {
+  margin: 0;
+  font-family: 'EB Garamond', serif;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.sessao-card__cabecalho p + p {
+  color: var(--gc-ink-dim);
+  font-weight: 600;
+  font-size: .8rem;
+  letter-spacing: .02em;
+  white-space: nowrap;
+}
+
+.sessao-card hr {
+  border: none;
+  border-top: 1px solid var(--gc-panel-border);
+  margin: .5rem 0;
+}
+
+.sessao-card > p {
+  margin: 0;
+  color: var(--gc-ink-dim);
+  font-size: .86rem;
+}
+
+/* --------------------------------------------------------------------------
    16. Fichas de combate (stat blocks) — cartão no estilo das fichas oficiais:
-   nome, CA/PV/deslocamento, atributos com modificador, perícias e a lista de
-   ações. Gerado (e editável) pela aba "Ficha de combate" do Painel do
-   Mestre; ver docs/mestre/manutencao-do-canone.md.
+   nome, foto opcional, CA/PV/deslocamento/espaços de magia em destaque,
+   atributos com modificador, perícias e a lista de ações. Gerado (e
+   editável) pela aba "Ficha de combate" do Painel do Mestre; ver
+   docs/mestre/manutencao-do-canone.md.
    -------------------------------------------------------------------------- */
 
 .md-typeset .stat-block {
@@ -758,6 +903,53 @@ input,
   color: var(--gc-ink-dim);
   font-style: italic;
   font-size: .85rem;
+}
+
+.stat-block__topo {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin: .3rem 0 .7rem;
+}
+
+.stat-block__foto {
+  flex: 0 0 5.5rem;
+}
+
+.md-typeset .stat-block__foto img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border: 1px solid var(--gc-gold);
+  border-radius: 6px;
+}
+
+.stat-block__chips {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  align-content: flex-start;
+}
+
+.md-typeset .stat-block__chips span {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .3rem .6rem;
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 999px;
+  background: var(--gc-bg-alt);
+  font-size: .82rem;
+}
+
+.md-typeset .stat-block__chips strong {
+  color: var(--gc-gold-soft);
+  text-transform: uppercase;
+  font-size: .68rem;
+  letter-spacing: .03em;
 }
 
 .md-typeset .stat-block hr {
@@ -789,24 +981,8 @@ input,
   border-bottom: none;
 }
 
-/* Primeira tabela: CA / PV / Deslocamento — rótulo e valor alinhados à esquerda */
-.md-typeset .stat-block table:first-of-type td:first-child {
-  text-align: left;
-  width: 45%;
-  color: var(--gc-ink-dim);
-  font-weight: 700;
-  text-transform: uppercase;
-  font-size: .72rem;
-  letter-spacing: .03em;
-}
-
-.md-typeset .stat-block table:first-of-type td:last-child {
-  text-align: left;
-  font-weight: 600;
-}
-
-/* Segunda tabela: a grade de atributos (FOR/DES/CON/INT/SAB/CAR) */
-.md-typeset .stat-block table:nth-of-type(2) th {
+/* A grade de atributos (FOR/DES/CON/INT/SAB/CAR) */
+.md-typeset .stat-block table th {
   color: var(--gc-gold-soft);
   font-weight: 700;
   font-size: .78rem;
@@ -814,7 +990,7 @@ input,
   text-transform: uppercase;
 }
 
-.md-typeset .stat-block table:nth-of-type(2) td {
+.md-typeset .stat-block table td {
   font-weight: 600;
 }
 
@@ -838,11 +1014,53 @@ input,
 }
 
 @media screen and (max-width: 30em) {
-  .md-typeset .stat-block table:nth-of-type(2) th,
-  .md-typeset .stat-block table:nth-of-type(2) td {
+  .md-typeset .stat-block table th,
+  .md-typeset .stat-block table td {
     padding: .25rem .2rem;
     font-size: .75rem;
   }
+
+  .stat-block__foto {
+    flex-basis: 4.2rem;
+  }
+}
+
+/* Páginas de Classes/Raças/Antecedentes (hooks/gallancourt.py::_envolver_pagina_regra) empilham
+   várias tabelas densas (características por nível, traços) dentro de abas 2014/2024 — fonte e
+   espaçamento menores para caber mais sem rolar tanto. */
+.md-typeset .pagina-regra table:not([class]) {
+  font-size: .78rem;
+}
+
+.md-typeset .pagina-regra table:not([class]) th,
+.md-typeset .pagina-regra table:not([class]) td {
+  padding: .35rem .5rem;
+}
+
+.md-typeset .pagina-regra .tabbed-content {
+  padding-top: .3rem;
+}
+
+/* Loot & Pistas — cartão mais simples que o stat-block: nome, chips opcionais
+   (onde está / quem tem / situação) e uma descrição. */
+.md-typeset .item-loot {
+  background: var(--gc-panel);
+  border: 1px solid var(--gc-panel-border);
+  border-top: 3px solid var(--gc-gold);
+  border-radius: 8px;
+  padding: .7rem 1.1rem .9rem;
+  margin: 1rem 0;
+}
+
+.md-typeset .item-loot h4 {
+  margin: 0 0 .4rem;
+  color: var(--gc-gold-soft);
+  font-size: 1.05em;
+}
+
+.md-typeset .item-loot .stat-block__topo,
+.md-typeset .item-loot .stat-block__chips {
+  margin: 0 0 .5rem;
 }
 
 /* --------------------------------------------------------------------------
@@ -857,5 +1075,884 @@ input,
   @keyframes gc-fade-in {
     from { opacity: 0; transform: translateY(.4rem); }
     to   { opacity: 1; transform: translateY(0); }
+  }
+}
+
+/* --------------------------------------------------------------------------
+   NPCs — tabela filtrável (personagens/index.md)
+   -------------------------------------------------------------------------- */
+
+.npc-ferramentas > p,
+.lugar-ferramentas > p,
+.jogador-ferramentas > p,
+.dote-ferramentas > p,
+.pericia-ferramentas > p,
+.roadmap-ferramentas > p,
+.bug-ferramentas > p,
+.item-ferramentas > p,
+.monstro-ferramentas > p {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .6rem;
+  margin: 0 0 .8rem;
+}
+
+.md-typeset .botao-painel {
+  margin: 0;
+  padding: .45em 1.1em;
+  font-size: .74rem;
+}
+
+.npc-busca,
+.lugar-busca,
+.jogador-busca,
+.dote-busca,
+.pericia-busca,
+.roadmap-busca,
+.bug-busca,
+.item-busca,
+.monstro-busca {
+  flex: 1 1 14rem;
+  min-width: 0;
+  padding: .45rem .7rem;
+  font: inherit;
+  font-size: .8rem;
+  color: var(--gc-ink);
+  background: var(--gc-panel);
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 6px;
+}
+
+.npc-busca:focus,
+.lugar-busca:focus,
+.jogador-busca:focus,
+.dote-busca:focus,
+.pericia-busca:focus,
+.roadmap-busca:focus,
+.bug-busca:focus,
+.item-busca:focus,
+.monstro-busca:focus {
+  outline: none;
+  border-color: var(--gc-gold);
+}
+
+.npc-contagem,
+.lugar-contagem,
+.jogador-contagem,
+.dote-contagem,
+.pericia-contagem,
+.roadmap-contagem,
+.bug-contagem,
+.item-contagem,
+.monstro-contagem {
+  font-size: .75rem;
+  color: var(--gc-ink-dim);
+  font-style: italic;
+}
+
+.md-typeset .npc-tabela table:not([class]),
+.md-typeset .lugar-tabela table:not([class]),
+.md-typeset .jogador-tabela table:not([class]),
+.md-typeset .dote-tabela table:not([class]),
+.md-typeset .pericia-tabela table:not([class]),
+.md-typeset .roadmap-tabela table:not([class]),
+.md-typeset .bug-tabela table:not([class]),
+.md-typeset .item-tabela table:not([class]),
+.md-typeset .monstro-tabela table:not([class]) {
+  font-size: .76rem;
+}
+
+.md-typeset .npc-tabela th,
+.md-typeset .npc-tabela td,
+.md-typeset .lugar-tabela th,
+.md-typeset .lugar-tabela td,
+.md-typeset .jogador-tabela th,
+.md-typeset .jogador-tabela td,
+.md-typeset .dote-tabela th,
+.md-typeset .dote-tabela td,
+.md-typeset .pericia-tabela th,
+.md-typeset .pericia-tabela td,
+.md-typeset .roadmap-tabela th,
+.md-typeset .roadmap-tabela td,
+.md-typeset .bug-tabela th,
+.md-typeset .bug-tabela td,
+.md-typeset .item-tabela th,
+.md-typeset .item-tabela td,
+.md-typeset .monstro-tabela th,
+.md-typeset .monstro-tabela td {
+  padding: .45em .7em;
+  vertical-align: middle;
+}
+
+.md-typeset .npc-tabela th,
+.md-typeset .lugar-tabela th,
+.md-typeset .jogador-tabela th,
+.md-typeset .dote-tabela th,
+.md-typeset .pericia-tabela th,
+.md-typeset .roadmap-tabela th,
+.md-typeset .bug-tabela th,
+.md-typeset .item-tabela th,
+.md-typeset .monstro-tabela th {
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+.md-typeset .npc-tabela td:nth-child(2),
+.md-typeset .lugar-tabela td:first-child,
+.md-typeset .jogador-tabela td:first-child,
+.md-typeset .dote-tabela td:first-child,
+.md-typeset .pericia-tabela td:first-child,
+.md-typeset .monstro-tabela td:first-child {
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.md-typeset .npc-tabela td:last-child,
+.md-typeset .lugar-tabela td:last-child,
+.md-typeset .jogador-tabela td:last-child {
+  min-width: 16rem;
+  color: var(--gc-ink-dim);
+}
+
+.md-typeset .npc-mini {
+  display: block;
+  width: 2.3rem;
+  height: 2.3rem;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 1px solid var(--gc-gold);
+}
+
+.tabela-ordenar {
+  padding: 0;
+  font: inherit;
+  font-weight: 700;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.tabela-ordenar::after {
+  content: " ⇅";
+  opacity: .45;
+  font-size: .85em;
+}
+
+th[aria-sort="ascending"] .tabela-ordenar::after { content: " ▲"; opacity: 1; }
+th[aria-sort="descending"] .tabela-ordenar::after { content: " ▼"; opacity: 1; }
+
+.tabela-filtro {
+  display: block;
+  width: 100%;
+  min-width: 6.5rem;
+  margin-top: .3rem;
+  padding: .1rem .2rem;
+  font: inherit;
+  font-size: .7rem;
+  font-weight: 400;
+  color: var(--gc-ink);
+  background: var(--gc-panel);
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   Formulário embutido "Adicionar NPC/Lugar/Jogador" (.criar-entidade) — ver
+   docs/javascripts/gallancourt.js::montarFormularioEntidade e painel-fetch.js
+   -------------------------------------------------------------------------- */
+
+.criar-entidade {
+  margin: 0 0 1.2rem;
+  padding: .9rem 1.1rem;
+  background: var(--gc-panel);
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 8px;
+}
+
+.entidade-formulario__form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: .6rem .8rem;
+}
+
+.entidade-formulario__form label {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  font-size: .78rem;
+  color: var(--gc-ink-dim);
+}
+
+.entidade-formulario__form label.check {
+  flex-direction: row;
+  align-items: center;
+  grid-column: 1 / -1;
+}
+
+.entidade-formulario__form input[type="text"],
+.entidade-formulario__form input[type="file"],
+.entidade-formulario__form textarea {
+  padding: .4rem .6rem;
+  font: inherit;
+  font-size: .8rem;
+  color: var(--gc-ink);
+  background: var(--md-default-bg-color);
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 6px;
+}
+
+.entidade-formulario__form textarea {
+  grid-column: 1 / -1;
+  resize: vertical;
+}
+
+.entidade-formulario__form button {
+  grid-column: 1 / -1;
+  justify-self: start;
+}
+
+.entidade-formulario__resultado {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: .8rem;
+}
+
+.entidade-formulario__resultado--ok { color: var(--gc-ink); }
+.entidade-formulario__resultado--erro { color: #b4413c; }
+
+/* --------------------------------------------------------------------------
+   Criador de sessão embutido (.criar-sessao, mestre/sessoes/index.md) — ver
+   docs/javascripts/criar-sessao.js. As tabelas de seleção dentro dele reaproveitam as classes
+   .npc-tabela/.lugar-tabela/.jogador-tabela já estilizadas acima.
+   -------------------------------------------------------------------------- */
+
+.criar-sessao {
+  margin: 0 0 1.2rem;
+  padding: 1rem 1.2rem;
+  background: var(--gc-panel);
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 8px;
+}
+
+.criar-sessao__carregando {
+  font-style: italic;
+  color: var(--gc-ink-dim);
+}
+
+.criar-sessao__form > label {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  margin: 0 0 .7rem;
+  font-size: .78rem;
+  color: var(--gc-ink-dim);
+}
+
+.criar-sessao__form input[type="text"],
+.criar-sessao__form input[type="number"],
+.criar-sessao__form textarea {
+  padding: .4rem .6rem;
+  font: inherit;
+  font-size: .8rem;
+  color: var(--gc-ink);
+  background: var(--md-default-bg-color);
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 6px;
+}
+
+.criar-sessao__form textarea {
+  resize: vertical;
+}
+
+.criar-sessao__basicos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: .3rem .8rem;
+}
+
+.criar-sessao__secao {
+  margin: 0 0 1rem;
+}
+
+.criar-sessao__secao table {
+  font-size: .76rem;
+}
+
+.criar-sessao__aviso {
+  font-size: .75rem;
+  color: var(--gc-ink-dim);
+  font-style: italic;
+  margin: 0 0 .8rem;
+}
+
+.criar-sessao__resultado {
+  margin: .6rem 0 0;
+  font-size: .82rem;
+}
+
+.criar-sessao__resultado--ok { color: var(--gc-ink); }
+.criar-sessao__resultado--erro { color: #b4413c; }
+
+/* --------------------------------------------------------------------------
+   Magias — tabela filtrável por nível (magias/index.md) e por classe
+   (magias/por-classe/*.md)
+   -------------------------------------------------------------------------- */
+
+.magia-ferramentas > p {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem;
+  margin: 0 0 .9rem;
+}
+
+.magia-busca {
+  flex: 1 1 12rem;
+  min-width: 0;
+  padding: .45rem .7rem;
+  font: inherit;
+  font-size: .8rem;
+  color: var(--gc-ink);
+  background: var(--gc-panel);
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 6px;
+}
+
+.magia-busca:focus {
+  outline: none;
+  border-color: var(--gc-gold);
+}
+
+.magia-filtro {
+  flex: 0 1 auto;
+  padding: .4rem .55rem;
+  font: inherit;
+  font-size: .72rem;
+  color: var(--gc-ink);
+  background: var(--gc-panel);
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 6px;
+}
+
+.magia-contagem {
+  flex-basis: 100%;
+  font-size: .75rem;
+  color: var(--gc-ink-dim);
+  font-style: italic;
+}
+
+.md-typeset .magia-tabela table:not([class]) {
+  font-size: .76rem;
+}
+
+.md-typeset .magia-tabela th,
+.md-typeset .magia-tabela td {
+  padding: .45em .7em;
+  vertical-align: middle;
+}
+
+.md-typeset .magia-tabela th {
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+.md-typeset .magia-tabela td:first-child {
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+/* Colunas de classificação (Ritual, Concentração, Categoria, Tipo de Dano, Tipo de Alcance) —
+   sempre as 5 últimas, não importa quantas colunas visíveis vêm antes (Nível/Classes são
+   opcionais) — ficam só para os filtros lerem, não aparecem na tela. nth-last-child conta a
+   partir do fim, por isso não se confunde com o número de colunas visíveis. */
+.md-typeset .magia-tabela th:nth-last-child(-n+5),
+.md-typeset .magia-tabela td:nth-last-child(-n+5) {
+  display: none;
+}
+
+.magia-nome-en,
+.magia-duracao-max {
+  font-size: .68rem;
+  color: var(--gc-ink-dim);
+  font-weight: 400;
+  display: block;
+}
+
+.magia-icone-tempo {
+  display: inline-block;
+  margin-right: .35em;
+  vertical-align: middle;
+}
+
+.magia-icone-tempo--acao {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4caf7a;
+}
+
+.magia-icone-tempo--bonus {
+  width: 8px;
+  height: 8px;
+  background: #d98c3a;
+}
+
+.magia-icone-tempo--reacao {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 8px solid #4a90d9;
+}
+
+.magia-ordenar {
+  padding: 0;
+  font: inherit;
+  font-weight: 700;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.magia-ordenar::after {
+  content: " ⇅";
+  opacity: .45;
+  font-size: .85em;
+}
+
+th[aria-sort="ascending"] .magia-ordenar::after { content: " ▲"; opacity: 1; }
+th[aria-sort="descending"] .magia-ordenar::after { content: " ▼"; opacity: 1; }
+
+/* --------------------------------------------------------------------------
+   NPCs — página do personagem: cabeçalho (retrato + dados) e abas
+   -------------------------------------------------------------------------- */
+
+.npc-cabecalho {
+  display: flex;
+  gap: 1.2rem;
+  margin: .4rem 0 1.4rem;
+  padding: 1rem;
+  background: var(--gc-panel);
+  border: 1px solid var(--gc-panel-border);
+  border-top: 3px solid var(--gc-gold);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .12);
+}
+
+.npc-retrato {
+  flex: 0 0 10.5rem;
+}
+
+.md-typeset .npc-retrato p {
+  margin: 0;
+}
+
+.md-typeset .npc-retrato img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border: 1px solid var(--gc-gold);
+  border-radius: 6px;
+}
+
+.npc-dados {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.md-typeset .npc-dados > p:first-child {
+  margin: 0 0 .6rem;
+  color: var(--gc-ink-dim);
+}
+
+.md-typeset .npc-dados .md-typeset__table {
+  display: block;
+  margin: 0;
+}
+
+.md-typeset .npc-dados table:not([class]) {
+  display: table;
+  width: 100%;
+  margin: 0;
+  font-size: .76rem;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.md-typeset .npc-dados thead {
+  display: none;
+}
+
+.md-typeset .npc-dados td {
+  padding: .3em .6em;
+  border-top: 1px solid var(--gc-panel-border);
+  vertical-align: top;
+}
+
+.md-typeset .npc-dados tr:first-child td {
+  border-top: 0;
+}
+
+.md-typeset .npc-dados td:first-child {
+  width: 9.5rem;
+  white-space: nowrap;
+  color: var(--gc-ink-dim);
+  font-size: .9em;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.md-typeset .npc-dados td:first-child strong {
+  font-weight: 600;
+}
+
+.md-typeset .npc-abas {
+  margin: 0 0 1rem;
+  padding: 0 1rem .6rem;
+  background: var(--gc-panel);
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 8px;
+}
+
+.md-typeset .npc-abas > .tabbed-labels > label {
+  font-family: 'Cinzel', serif;
+  font-size: .72rem;
+  letter-spacing: .03em;
+}
+
+.md-typeset .npc-abas .tabbed-block > :first-child,
+.md-typeset .npc-abas .tabbed-block > .npc-ancora + * {
+  margin-top: .8rem;
+}
+
+@media screen and (max-width: 44.9375em) {
+  .npc-cabecalho {
+    flex-direction: column;
+    gap: .8rem;
+  }
+
+  .npc-retrato {
+    flex-basis: auto;
+    width: 9rem;
+    margin: 0 auto;
+  }
+
+  .md-typeset .npc-dados td:first-child {
+    width: 7rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Linha do tempo (NPCs, cidades, facções e Mestre → Linha do tempo)
+   -------------------------------------------------------------------------- */
+
+.md-typeset .linha-tempo > ul {
+  margin-left: .4rem;
+  padding-left: 1rem;
+  list-style: none;
+  border-left: 2px solid var(--gc-gold);
+}
+
+.md-typeset .linha-tempo > ul > li {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.md-typeset .linha-tempo > ul > li::before {
+  content: "";
+  position: absolute;
+  left: -1.42rem;
+  top: .45rem;
+  width: .6rem;
+  height: .6rem;
+  border-radius: 50%;
+  background: var(--gc-gold);
+  border: 2px solid var(--gc-bg);
+}
+
+.md-typeset .linha-tempo > ul > li > p {
+  margin: .2rem 0;
+}
+
+/* --------------------------------------------------------------------------
+   Painel de Iniciativa embutido (aba "Painel de Iniciativa" de uma sessão) —
+   widget em docs/javascripts/painel-iniciativa.js, falando com a API do
+   Painel do Mestre local. Estilo próprio porque é a primeira vez que o site
+   público precisa de formulários/tabelas interativas de verdade.
+   -------------------------------------------------------------------------- */
+
+.md-typeset .painel-iniciativa {
+  font-family: 'EB Garamond', serif;
+}
+
+.md-typeset .painel-iniciativa:not(.painel-iniciativa--pronto)::before {
+  content: "Carregando o Painel de Iniciativa…";
+  display: block;
+  color: var(--gc-ink-dim);
+  font-style: italic;
+  padding: .6rem 0;
+}
+
+.md-typeset .painel-iniciativa__erro {
+  background: var(--gc-panel);
+  border: 1px solid var(--gc-red);
+  border-radius: 6px;
+  padding: .7rem 1rem;
+}
+
+.md-typeset .pi-secao {
+  background: var(--gc-panel);
+  border: 1px solid var(--gc-panel-border);
+  border-top: 3px solid var(--gc-gold);
+  border-radius: 8px;
+  padding: .8rem 1.1rem 1rem;
+  margin: 0 0 1rem;
+}
+
+.md-typeset .pi-secao h3 {
+  margin-top: 0;
+  color: var(--gc-gold-soft);
+}
+
+.md-typeset .pi-secao h4,
+.md-typeset .pi-secao h5 {
+  color: var(--gc-gold-soft);
+  margin: .8rem 0 .3rem;
+}
+
+.md-typeset .pi-zona-perigo {
+  border-top-color: var(--gc-red);
+}
+
+/* Formulários — o site público não tinha nenhum até agora, então os campos
+   ganham um estilo básico próprio (o Painel admin tem o dele, em
+   admin/static/estilo.css, que não se aplica aqui). */
+.md-typeset .painel-iniciativa form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: .6rem 1rem;
+  margin: 0 0 .7rem;
+}
+
+.md-typeset .painel-iniciativa form.pi-form-inline {
+  display: inline-flex;
+  margin: 0;
+  vertical-align: middle;
+}
+
+.md-typeset .painel-iniciativa label {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  font-size: .82rem;
+  color: var(--gc-ink-dim);
+}
+
+.md-typeset .painel-iniciativa label .opcional {
+  font-weight: 400;
+  font-style: italic;
+}
+
+.md-typeset .painel-iniciativa input,
+.md-typeset .painel-iniciativa select,
+.md-typeset .painel-iniciativa textarea {
+  font-family: 'EB Garamond', serif;
+  font-size: .9rem;
+  background: var(--gc-bg-alt);
+  color: var(--gc-ink);
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 4px;
+  padding: .35rem .5rem;
+}
+
+.md-typeset .painel-iniciativa input.input-pequeno { width: 4.5rem; }
+.md-typeset .painel-iniciativa input.input-medio { width: 9rem; }
+.md-typeset .painel-iniciativa textarea { width: 100%; resize: vertical; }
+
+.md-typeset .painel-iniciativa button {
+  font-family: 'EB Garamond', serif;
+  font-weight: 700;
+  font-size: .85rem;
+  border-radius: 4px;
+  border: 1px solid var(--gc-gold);
+  color: var(--gc-gold-soft);
+  background: transparent;
+  padding: .4rem .8rem;
+  cursor: pointer;
+}
+
+.md-typeset .painel-iniciativa button:hover {
+  background-color: var(--gc-gold);
+  color: var(--md-primary-fg-color--dark);
+}
+
+.md-typeset .painel-iniciativa .botao-principal {
+  background-color: var(--gc-gold);
+  color: var(--md-primary-fg-color--dark);
+}
+
+.md-typeset .painel-iniciativa .botao-remover {
+  padding: .2rem .5rem;
+  font-size: .78rem;
+}
+
+.md-typeset .pi-lista-notas {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 .7rem;
+}
+
+.md-typeset .pi-lista-notas li {
+  padding: .3rem 0;
+  border-bottom: 1px solid var(--gc-panel-border);
+}
+
+.pi-nota-hora {
+  color: var(--gc-gold-soft);
+  font-weight: 700;
+  margin-right: .3rem;
+}
+
+.md-typeset .pi-turno-atual {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .6rem;
+  background: var(--gc-bg-alt);
+  border-radius: 6px;
+  padding: .5rem .8rem;
+  margin: .6rem 0;
+}
+
+.md-typeset .pi-ficha-da-vez {
+  border: 1px solid var(--gc-gold);
+  border-radius: 8px;
+  padding: .7rem 1rem;
+  margin: .6rem 0;
+}
+
+.md-typeset .pi-ficha-da-vez h4 { margin: 0; }
+
+.md-typeset .pi-ficha-da-vez__atributos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem .8rem;
+  margin: .5rem 0;
+  font-size: .85rem;
+}
+
+.md-typeset .tabela-combate {
+  width: 100%;
+  font-size: .82rem;
+  margin: .6rem 0;
+}
+
+.md-typeset .tabela-combate th { text-align: left; }
+
+.pi-combatente--atual { outline: 2px solid var(--gc-gold); outline-offset: -1px; }
+.pi-combatente--caido { opacity: .7; }
+.pi-combatente--morto { opacity: .5; text-decoration: line-through; }
+
+.etiqueta {
+  display: inline-block;
+  font-size: .68rem;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  padding: .05rem .4rem;
+  border-radius: 999px;
+  margin-left: .3rem;
+}
+
+.etiqueta--caido { background: var(--gc-bg-alt); color: var(--gc-ink-dim); }
+.etiqueta--morto { background: var(--gc-red); color: #fff; }
+
+.md-typeset .pi-grade-resumo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: .8rem;
+}
+
+.md-typeset .lista-ranking {
+  margin: 0;
+  padding-left: 1.2rem;
+  font-size: .85rem;
+}
+
+/* --------------------------------------------------------------------------
+   Selos de prioridade/status — Roadmap (docs/roadmap/index.md) e Bugs
+   (docs/configuracoes/bugs.md)
+   -------------------------------------------------------------------------- */
+
+.md-typeset .selo {
+  display: inline-block;
+  font-size: .68rem;
+  font-weight: 700;
+  color: #fff;
+  padding: .1rem .55rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.md-typeset .selo--alta,
+.md-typeset .selo--aguardando { background: #c0392b; }
+.md-typeset .selo--media,
+.md-typeset .selo--andamento { background: #d98c3a; }
+.md-typeset .selo--baixa,
+.md-typeset .selo--concluido,
+.md-typeset .selo--resolvido { background: #4caf7a; }
+.md-typeset .selo--planejado { background: #4a90d9; }
+.md-typeset .selo--neutro { background: var(--gc-bg-alt); color: var(--gc-ink-dim); }
+
+/* --------------------------------------------------------------------------
+   Selo de versão (canto inferior esquerdo) e botão de report de bug (canto
+   inferior direito) — presentes em toda página, ver hooks/gallancourt.py::_rodape_global.
+   -------------------------------------------------------------------------- */
+
+.md-typeset .selo-versao,
+.md-typeset .botao-reportar-bug {
+  position: fixed;
+  bottom: .6rem;
+  z-index: 10;
+  padding: .3rem .8rem;
+  font-size: .7rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 999px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, .3);
+}
+
+.md-typeset .selo-versao {
+  left: .6rem;
+  color: var(--gc-ink-dim);
+  background: var(--gc-panel);
+  border: 1px solid var(--gc-panel-border);
+}
+
+.md-typeset .selo-versao:hover {
+  color: var(--gc-gold);
+  border-color: var(--gc-gold);
+}
+
+.md-typeset .botao-reportar-bug {
+  right: .6rem;
+  color: #fff;
+  background: #c0392b;
+}
+
+.md-typeset .botao-reportar-bug:hover {
+  background: #a53125;
+  color: #fff;
+}
+
+@media (max-width: 44.9375em) {
+  .md-typeset .selo-versao,
+  .md-typeset .botao-reportar-bug {
+    bottom: 3.6rem; /* acima da barra de busca/navegação inferior do Material no celular */
   }
 }
