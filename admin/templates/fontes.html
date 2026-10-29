@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block titulo %}Fontes{% endblock %}
+{% block conteudo %}
+<h1>Fontes</h1>
+<p class="ajuda">
+  Livros de referência (PHB, DMG, SRD…) usados pelos catálogos de Itens e Monstros. Primeiro dado
+  do projeto que vive num banco de verdade em vez de Markdown/YAML — salvar aqui não reconstrói o
+  site.
+</p>
+
+<form method="post" action="/fontes" class="form-sessao">
+  <fieldset>
+    <legend>Nova fonte</legend>
+    <div class="duas-colunas">
+      <label>Nome
+        <input type="text" name="nome" placeholder="Player's Handbook" required>
+      </label>
+      <label>Abreviação
+        <input type="text" name="abreviacao" placeholder="PHB" required>
+      </label>
+      <label>Edição
+        <select name="edicao">
+          <option value="2014">2014</option>
+          <option value="2024">2024</option>
+        </select>
+      </label>
+    </div>
+  </fieldset>
+  <button type="submit" class="botao-principal">Adicionar fonte</button>
+</form>
+
+<h2>Fontes cadastradas</h2>
+{% if not fontes %}
+<p class="ajuda">Nenhuma fonte cadastrada ainda.</p>
+{% else %}
+<table class="tabela-eventos">
+  <thead><tr><th>Nome</th><th>Abreviação</th><th>Edição</th><th></th></tr></thead>
+  <tbody>
+  {% for f in fontes %}
+  <tr>
+    <td>{{ f.nome }}</td>
+    <td>{{ f.abreviacao }}</td>
+    <td>{{ f.edicao }}</td>
+    <td class="acoes">
+      <form method="post" action="/fontes/apagar" onsubmit="return confirm('Apagar esta fonte?');">
+        <input type="hidden" name="id" value="{{ f.id }}">
+        <button type="submit" class="botao-link">Apagar</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+{% endblock %}

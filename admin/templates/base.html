@@ -8,7 +8,9 @@
 </head>
 <body>
 <header class="topo">
-  <div class="topo__marca">⚔️ Painel do Mestre <span>— Crônicas de Gallancourt</span></div>
+  <div class="topo__marca">⚔️ Painel do Mestre
+    <span>— {{ campanha.nome if campanha else "Crônicas de Gallancourt" }}{% if campanha %} · D&amp;D {{ campanha.sistema_regras }}{% endif %}</span>
+  </div>
   <nav class="topo__nav">
     <a href="/sessao-ao-vivo">Sessão ao vivo</a>
     <a href="/sessoes/nova">Nova sessão</a>
@@ -25,6 +27,7 @@
     <a href="/changelog">Changelog</a>
     <a href="/roadmap">Roadmap</a>
     <a href="/bugs">Bugs</a>
+    <a href="/fontes">Fontes</a>
     <a href="/" target="_blank" rel="noopener">Abrir o site ↗</a>
     {% if autenticacao_ativa %}<a href="/logout">Sair</a>{% endif %}
   </nav>

@@ -42,6 +42,7 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parent.parent
 IGNORAR_NA_COPIA = shutil.ignore_patterns(
     "site", "fontes", ".venv", "venv", "__pycache__", "*.pyc", ".cache", "painel_local.env",
+    "gallancourt.db", "gallancourt.db-journal",
 )
 
 # Ordem do menu combinada com o autor
@@ -626,7 +627,7 @@ def teste_nav_filtro(copia: Path):
     pagina.select_option("th:has-text('Cidade') select", "Valynesse")
     filtrados = _visiveis(pagina)
     cidades = pagina.eval_on_selector_all(
-        ".npc-tabela tbody tr:not([hidden]) td:nth-child(6)", "cs => [...new Set(cs.map(c => c.textContent.trim()))]")
+        ".npc-tabela tbody tr:not([hidden]) td:nth-child(5)", "cs => [...new Set(cs.map(c => c.textContent.trim()))]")
     assert 0 < filtrados < total and cidades == ["Valynesse"], f"{filtrados} visíveis, cidades {cidades}"
     pagina.close()
 

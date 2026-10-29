@@ -7,4 +7,7 @@ admin/dados/
 admin/painel_local.env
 admin/Caddyfile
 admin/Caddyfile.auto.json
+dados/gallancourt.db
+dados/gallancourt.db-journal
+.pytest_cache/
 

@@ -12,6 +12,8 @@ python scripts/testar_site.py         # teste completo e fixo — ou o comando /
 python scripts/gerar_relacoes.py      # regenera relações entre cidades e intrigas
 python admin/app.py                   # site + Painel do Mestre juntos, :5001 (um servidor só)
 mkdocs serve                          # opcional: só recarga automática ao editar .md, :8000
+pytest                                # testes do banco de dados (tests/) — ver ARQUITETURA.md
+alembic upgrade head                  # cria/atualiza dados/gallancourt.db (rodar uma vez após clonar)
 ```
 
 `MANUTENCAO.md` é o manual do autor (comandos, rotina, problemas); ao mudar como o projeto é
@@ -30,6 +32,8 @@ túnel — ver item de Roadmap sobre domínio fixo).
 | `hooks/` | Código que roda no build: `gallancourt.py` (NPCs, tabelas, abas), `linha_tempo.py` |
 | `admin/` | Painel do Mestre (Flask local) — cria NPCs, sessões, fichas, acontecimentos |
 | `admin/painel_local.env` | Segredos locais do Painel (`PAINEL_SENHA` de login) — gitignorado, nunca commitado; sem ele o login fica desligado (uso só local) |
+| `admin/banco.py` + `alembic/` | Banco SQLite (`dados/gallancourt.db`, gitignorado) para dados operacionais novos — ver `ARQUITETURA.md` e `.claude/contexto/banco-de-dados.md` antes de usar ou estender |
+| `tests/` | Testes `pytest` do banco de dados (único teste de "regra"/estado hoje; `scripts/testar_site.py` é integração de site) |
 | `dados/linha-do-tempo.yml` | Acontecimentos da campanha (fonte única) |
 | `scripts/` | `gerar_relacoes.py` (fonte única das relações), `testar_site.py` (teste fixo) |
 | `fontes/` | Acervo do autor — **não editar**; guia em `fontes/README.md` |
@@ -42,6 +46,7 @@ túnel — ver item de Roadmap sobre domínio fixo).
 | NPCs, tabela de NPCs, ficha 5e, linha do tempo, `hooks/` | `.claude/contexto/npcs.md` |
 | Painel, Diário, sessões, calendário | `.claude/contexto/sessoes-e-painel.md` |
 | Páginas de conteúdo, relações/intrigas, Compêndio | `.claude/contexto/conteudo.md` |
+| Banco de dados (`admin/banco.py`, Alembic, o que migrar ou não) | `.claude/contexto/banco-de-dados.md` |
 
 ## Regras do projeto (decididas pelo autor)
 
@@ -79,6 +84,9 @@ Valois: idealista disfarçado · títulos dos rascunhos antigos não adotados. P
   NPC, sessão e acontecimento → funções de `admin/wiki_data.py`.
 - **Validação:** `mkdocs build --strict` durante o trabalho; o teste completo só quando o autor
   pedir (`/testar-site`). Da saída, leia só o resumo e as linhas ❌.
+- **Markdown/YAML continuam sendo a fonte de verdade de tudo que já existe** (lore, fichas, NPCs,
+  Changelog/Roadmap/linha do tempo) — não migre nada disso pro banco (`admin/banco.py`) sem o
+  autor pedir explicitamente; ver `ARQUITETURA.md` pro porquê.
 - **Respostas curtas** ao autor: o que mudou, onde, e o que ele precisa decidir.
 
 ## Comandos do projeto (skills em `.claude/skills/`)

@@ -27,14 +27,18 @@ docs/
 ├── configuracoes/  Entrada de Configurações (Painel, cânone, lacunas, fontes)
 └── assets/         Imagens do site e o repositório de arte da campanha (assets/imagens/)
 admin/              Painel do Mestre (app Flask local) — ver docs/mestre/painel.md
+admin/banco.py      Banco SQLite (dados/gallancourt.db, fora do git) — ver ARQUITETURA.md
+alembic/            Migrações versionadas do banco (alembic upgrade head)
+tests/              Testes pytest do banco de dados
 hooks/              Código que monta partes do site: NPCs, ficha de D&D 5e, linha do tempo
-dados/              linha-do-tempo.yml — acontecimentos da campanha
+dados/              linha-do-tempo.yml, changelog.yml, roadmap.yml — acontecimentos/estado da campanha
 fontes/             Acervo do autor (textos/, imagens/, videos/) — ver fontes/README.md
 scripts/            gerar_relacoes.py (relações e intrigas) e testar_site.py (teste fixo do site)
 .claude/            Comandos do projeto (/testar-site, /incorporar-documento, /nova-pagina) e contexto do Claude
 .github/workflows/  Botão "Testar o site" no GitHub (só roda quando acionado)
 CLAUDE.md           Regras e decisões do projeto, lidas pelo Claude Code em cada sessão
 MANUTENCAO.md       Guia técnico: comandos, rotina do dia a dia, solução de problemas
+ARQUITETURA.md      Diagnóstico da arquitetura e decisões de evolução (banco de dados, etc.)
 ```
 
 ## Trabalhando no computador com o Claude Code

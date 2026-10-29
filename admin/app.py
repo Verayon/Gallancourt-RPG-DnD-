@@ -26,9 +26,12 @@ import wiki_data as wd
 import roadmap
 import bugs
 import gerador_npc as gn
+import banco
 
 ROOT = Path(os.environ.get("GALLANCOURT_ADMIN_ROOT", wd.DEFAULT_ROOT)).resolve()
 SITE_DIR = ROOT / "site"
+ENGINE_BANCO = banco.criar_engine(ROOT)
+SessaoBanco = banco.fabrica_sessao(ENGINE_BANCO)
 
 
 def _carregar_env_local(root: Path) -> None:
@@ -121,9 +124,23 @@ def _exigir_login():
     return redirect(url_for("tela_login", next=destino))
 
 
+def _campanha_atual():
+    """Lê a campanha do banco (ver admin/banco.py) pra mostrar no cabeçalho do Painel. Se o banco
+    ainda não foi migrado (`alembic upgrade head` nunca rodou), devolve None em vez de quebrar o
+    Painel inteiro — é uma fundação nova, opcional, não uma dependência obrigatória ainda."""
+    try:
+        with SessaoBanco() as sessao:
+            return sessao.query(banco.Campanha).first()
+    except Exception:
+        return None
+
+
 @app.context_processor
 def _globais_template():
-    return {"pastas_imagens": wd.PASTAS_IMAGENS, "autenticacao_ativa": bool(SENHA_PAINEL)}
+    return {
+        "pastas_imagens": wd.PASTAS_IMAGENS, "autenticacao_ativa": bool(SENHA_PAINEL),
+        "campanha": _campanha_atual(),
+    }
 
 
 def _entidade_por_slug(lista: list[wd.Entidade], slug: str) -> wd.Entidade | None:
@@ -1346,6 +1363,39 @@ def apagar_roadmap():
         wd.apagar_item_roadmap(ROOT, id_item)
         wd.publicar_build(ROOT)
     return redirect(url_for("formulario_roadmap"))
+
+
+# --------------------------------------------------------------------------
+# Fontes (livros de referência) — primeiro dado operacional do projeto que mora no banco
+# (admin/banco.py) em vez de Markdown/YAML. Ao contrário de Changelog/Roadmap, salvar aqui NÃO
+# chama publicar_build(): não mexe em docs/, não precisa reconstruir o site. Ver ARQUITETURA.md.
+# --------------------------------------------------------------------------
+
+@app.get("/fontes")
+def formulario_fontes():
+    with SessaoBanco() as sessao:
+        fontes = banco.listar_fontes(sessao)
+    return render_template("fontes.html", fontes=fontes)
+
+
+@app.post("/fontes")
+def salvar_fonte():
+    nome = request.form.get("nome", "").strip()
+    abreviacao = request.form.get("abreviacao", "").strip()
+    edicao = request.form.get("edicao", "").strip()
+    if nome and abreviacao and edicao:
+        with SessaoBanco() as sessao:
+            banco.adicionar_fonte(sessao, nome, abreviacao, edicao)
+    return redirect(url_for("formulario_fontes"))
+
+
+@app.post("/fontes/apagar")
+def apagar_fonte():
+    id_fonte = request.form.get("id", type=int)
+    if id_fonte:
+        with SessaoBanco() as sessao:
+            banco.apagar_fonte(sessao, id_fonte)
+    return redirect(url_for("formulario_fontes"))
 
 
 # --------------------------------------------------------------------------
