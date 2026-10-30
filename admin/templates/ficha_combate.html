@@ -40,6 +40,16 @@
   {% endif %}
 </form>
 
+{% if pagina_escolhida and slug_escolhido %}
+<p class="ajuda">
+  <a class="botao-secundario" href="/ficha-combate?pagina={{ pagina_escolhida }}&copiar_de={{ pagina_escolhida }}::{{ slug_escolhido }}">
+    Criar variante a partir desta ficha
+  </a>
+  — copia todos os valores para uma ficha nova nesta mesma página (ex.: "Goblin" → "Goblin Arqueiro").
+  Preencha o "Nome curto da variante" para ela ganhar uma aba própria ao lado da base.
+</p>
+{% endif %}
+
 {% if pagina_escolhida %}
 {% if salvo %}
   {% if build_ok %}

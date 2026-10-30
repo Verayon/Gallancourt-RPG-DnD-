@@ -19,6 +19,8 @@ participantes:
 
 # Sessão 1 — O Fio da Corrente
 
+<!-- mestre:alternancia -->
+
 === "Resumo"
 
     <div class="ficha" markdown>
@@ -308,6 +310,7 @@ participantes:
 
     <!-- inicio:statblock:o-intermediario -->
     <!-- dados:statblock {"nome": "O Intermediário", "subtitulo": "Humanoide médio, qualquer alinhamento — relaia as ordens de \"o Correntes\" no Posto Cinzento", "ca": "14", "pv": "33 (6d8+6)", "deslocamento": "9 m", "for": "12", "des": "15", "con": "12", "int": "13", "sab": "12", "car": "14", "pericias": "Enganação +4, Furtividade +4, Intuição +3", "sentidos": "Percepção passiva 11", "idiomas": "Comum, mais um idioma regional", "equipamento": "Adaga envenenada, besta de mão, um sinete de cera sem brasão (ver Loot & Pistas)", "tracos": "Fuga sombria: como ação bônus, o Intermediário pode usar Desengajar ou Esconder-se.\nSem rosto a entregar: se capturado e interrogado, não conhece a identidade de \"o Correntes\" — só recebe ordens por um contato que nunca mostra o rosto, sempre nas docas de Dodixie.", "acoes": "Ação Múltipla: o Intermediário faz dois ataques com a adaga.\nAdaga: Ataque corpo a corpo ou à distância: +4 para acertar, alcance 1,5 m ou alcance 6/18 m, um alvo. Acerto: 4 (1d4+2) de dano perfurante, mais 2d6 de dano de veneno.\nBesta de mão: Ataque à distância: +4 para acertar, alcance 9/36 m, um alvo. Acerto: 5 (1d6+2) de dano perfurante.", "reacoes": "", "magias": ""} -->
+    <!-- bloco:ficha -->
     <div class="stat-block" markdown>
 
     ### O Intermediário {: #o-intermediario }
@@ -325,16 +328,25 @@ participantes:
 
     ---
 
+    <div class="stat-block__corpo" markdown>
+
+    <div class="stat-block__coluna stat-block__coluna--stats" markdown>
+
     | FOR | DES | CON | INT | SAB | CAR |
     |---|---|---|---|---|---|
     | 12 (+1) | 15 (+2) | 12 (+1) | 13 (+1) | 12 (+1) | 14 (+2) |
 
     **Perícias** Enganação +4, Furtividade +4, Intuição +3
+
     **Sentidos** Percepção passiva 11
+
     **Idiomas** Comum, mais um idioma regional
+
     **Equipamento** Adaga envenenada, besta de mão, um sinete de cera sem brasão (ver Loot & Pistas)
 
-    ---
+    </div>
+
+    <div class="stat-block__coluna stat-block__coluna--acoes" markdown>
 
     ***Fuga sombria.*** como ação bônus, o Intermediário pode usar Desengajar ou Esconder-se.
 
@@ -349,6 +361,11 @@ participantes:
     ***Besta de mão.*** Ataque à distância: +4 para acertar, alcance 9/36 m, um alvo. Acerto: 5 (1d6+2) de dano perfurante.
 
     </div>
+
+    </div>
+
+    </div>
+    <!-- /bloco:ficha -->
     <!-- fim:statblock:o-intermediario -->
 
     ## Figurantes
@@ -453,14 +470,14 @@ participantes:
     compras, viagem e talvez o Posto Cinzento). Não force tudo numa noite só — está previsto e
     está tudo bem se a sessão terminar na estrada ou na chegada ao posto, continuando na Sessão 2.
 
-=== "Painel de Iniciativa"
+<div class="painel-iniciativa" data-pagina="mestre/sessoes/sessao-1-o-fio-da-corrente.md" markdown>
 
-    <div class="painel-iniciativa" data-pagina="mestre/sessoes/sessao-1-o-fio-da-corrente.md" markdown>
+*(o painel aparece aqui quando a página carrega — precisa do [Painel do Mestre](../painel.md)
+rodando no seu computador)*
 
-    *(o painel aparece aqui quando a página carrega — precisa do [Painel do Mestre](../painel.md)
-    rodando no seu computador)*
+</div>
 
-    </div>
+<!-- /mestre:alternancia -->
 
 ## Depois da sessão
 

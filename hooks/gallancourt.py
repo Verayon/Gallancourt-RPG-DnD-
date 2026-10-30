@@ -66,6 +66,47 @@ RETRATO_PADRAO = "../assets/placeholders/personagem.svg"
 DICA_PAINEL = "Abre o Painel do Mestre — ele precisa estar rodando no seu computador"
 DICA_BUG = "Reportar um problema — abre um formulário (precisa do Painel rodando no seu computador)"
 
+# Alternador Normal/Mestre no topo de cada página de sessão (ver admin/wiki_data.py::_modelo_sessao
+# e docs/javascripts/alternancia-mestre.js) — "Normal" mostra as abas de preparo de sempre,
+# "Mestre" mostra só o Painel de Iniciativa, pra rodar o combate sem o resto da página no meio.
+# O JS troca o atributo `data-modo` da raiz; o CSS (ver extra.css) decide o que fica visível.
+#
+# Implementado em on_page_content (HTML já renderizado), não em on_page_markdown: embrulhar o
+# conteúdo das abas — que já aninha `=== "..."` + cartões `.stat-block` + `{: #slug }` — numa
+# outra `<div markdown>` na fonte Markdown quebra o parser em páginas de sessão mais longas (o
+# aninhamento extra faz o Markdown parar de reconhecer cabeçalhos no meio do caminho). Fazendo a
+# divisão depois, em HTML já pronto, é só recorte de string — sem reprocessar nada.
+_RE_PAINEL_INICIATIVA_DIV = re.compile(r'<div class="painel-iniciativa".*?</div>', re.DOTALL)
+
+
+def _alternancia_mestre(conteudo: str) -> str:
+    inicio = conteudo.find("<!-- mestre:alternancia -->")
+    fim = conteudo.find("<!-- /mestre:alternancia -->")
+    if inicio == -1 or fim == -1 or fim < inicio:
+        return conteudo
+    fim += len("<!-- /mestre:alternancia -->")
+    miolo = conteudo[inicio + len("<!-- mestre:alternancia -->"): fim - len("<!-- /mestre:alternancia -->")]
+
+    m = _RE_PAINEL_INICIATIVA_DIV.search(miolo)
+    if not m:
+        return conteudo
+    painel_html = m.group(0)
+    normal_html = miolo[: m.start()] + miolo[m.end():]
+
+    substituto = (
+        '<div class="alternancia-mestre" data-modo="normal">'
+        '<div class="alternancia-mestre__opcoes">'
+        '<button type="button" class="alternancia-mestre__botao alternancia-mestre__botao--ativo" '
+        'data-alvo="normal">📖 Página normal</button>'
+        '<button type="button" class="alternancia-mestre__botao" data-alvo="mestre">'
+        '🛡️ Modo Mestre — Combate</button>'
+        "</div>"
+        f'<div class="alternancia-mestre__painel alternancia-mestre__painel--normal">{normal_html}</div>'
+        f'<div class="alternancia-mestre__painel alternancia-mestre__painel--mestre">{painel_html}</div>'
+        "</div>"
+    )
+    return conteudo[:inicio] + substituto + conteudo[fim:]
+
 # Colunas da tabela de NPCs: (rótulo, chave no bloco npc:)
 COLUNAS_NPC = [
     ("Título", "titulo"), ("Raça", "raca"), ("Cidade", "cidade"),
@@ -947,6 +988,36 @@ def _paginar_npc(conteudo: str) -> str:
     return cabeca + _abas(abas)
 
 
+_RE_STATBLOCK_DADOS_BLOCO = re.compile(r"<!-- dados:statblock (.*?) -->", re.DOTALL)
+
+
+def _paginar_variantes(conteudo: str) -> str:
+    """Quando uma página de monstro tem mais de uma ficha de combate — a base e as variantes
+    criadas pelo Painel (botão "Criar variante a partir desta ficha" em /ficha-combate, ex.:
+    Goblin → Arqueiro, Lanceiro) — agrupa todas numa aba por ficha, rotulada pelo campo
+    `rotulo_variante` (ou "Base" para a primeira sem rótulo). Com uma ficha só, não mexe em
+    nada — é o caso comum hoje."""
+    fichas = _RE_STATBLOCK.findall(conteudo)
+    if len(fichas) <= 1:
+        return conteudo
+    abas = []
+    usou_base = False
+    for chunk in fichas:
+        m = _RE_STATBLOCK_DADOS_BLOCO.search(chunk)
+        rotulo = ""
+        if m:
+            try:
+                rotulo = (json.loads(m.group(1)).get("rotulo_variante") or "").strip()
+            except json.JSONDecodeError:
+                pass
+        if not rotulo:
+            rotulo = "Base" if not usou_base else "Variante"
+            usou_base = True
+        abas.append((rotulo, chunk))
+    resto = _RE_STATBLOCK.sub("", conteudo).rstrip()
+    return resto + "\n\n" + _abas(abas)
+
+
 # --------------------------------------------------------------------------
 # Eventos do MkDocs
 # --------------------------------------------------------------------------
@@ -1061,5 +1132,8 @@ def _rodape_global() -> str:
 def on_page_content(conteudo: str, page, config, files):
     if isinstance(page.meta.get("npc"), dict) or isinstance(page.meta.get("jogador"), dict):
         conteudo = _paginar_npc(conteudo)
+    elif isinstance(page.meta.get("monstro"), dict):
+        conteudo = _paginar_variantes(conteudo)
+    if "<!-- mestre:alternancia -->" in conteudo:
+        conteudo = _alternancia_mestre(conteudo)
     return conteudo + _rodape_global()
-    return conteudo

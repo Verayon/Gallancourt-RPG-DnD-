@@ -47,6 +47,7 @@ extra_javascript:
   - javascripts/gallancourt.js
   - javascripts/criar-sessao.js
   - javascripts/painel-iniciativa.js
+  - javascripts/alternancia-mestre.js
 
 hooks:
   - hooks/gallancourt.py

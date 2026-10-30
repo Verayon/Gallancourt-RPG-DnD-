@@ -11,6 +11,7 @@ monstro:
 
 <!-- inicio:statblock:garra-rastejante -->
 <!-- dados:statblock {"nome": "Garra Rastejante", "subtitulo": "Construto minúsculo, caótico e maligno", "cr": "0 (10 PE)", "ca": "12", "pv": "2 (1d4)", "deslocamento": "6 m, escalar 6 m", "for": "13", "des": "14", "con": "10", "int": "5", "sab": "10", "car": "4", "pericias": "—", "sentidos": "Visão no escuro 18 m, Percepção passiva 10", "idiomas": "—", "tracos": "Resistências e imunidades: imune a dano de veneno e psíquico; imune às condições cego, enfeitiçado, surdo, exausto, apavorado, paralisado, petrificado, envenenado e caído.", "acoes": "Garra: Ataque corpo a corpo com arma: +4 para acertar, alcance 1,5 m, uma criatura. Acerto: 1 de dano cortante, e o alvo fica agarrado (CD de fuga 11) se não estiver já agarrado por outra garra rastejante."} -->
+<!-- bloco:ficha -->
 <div class="stat-block" markdown>
 
 ### Garra Rastejante {: #garra-rastejante }
@@ -28,15 +29,23 @@ monstro:
 
 ---
 
+<div class="stat-block__corpo" markdown>
+
+<div class="stat-block__coluna stat-block__coluna--stats" markdown>
+
 | FOR | DES | CON | INT | SAB | CAR |
 |---|---|---|---|---|---|
 | 13 (+1) | 14 (+2) | 10 (+0) | 5 (-3) | 10 (+0) | 4 (-3) |
 
 **Perícias** —
+
 **Sentidos** Visão no escuro 18 m, Percepção passiva 10
+
 **Idiomas** —
 
----
+</div>
+
+<div class="stat-block__coluna stat-block__coluna--acoes" markdown>
 
 ***Resistências e imunidades.*** imune a dano de veneno e psíquico; imune às condições cego, enfeitiçado, surdo, exausto, apavorado, paralisado, petrificado, envenenado e caído.
 
@@ -45,4 +54,9 @@ monstro:
 ***Garra.*** Ataque corpo a corpo com arma: +4 para acertar, alcance 1,5 m, uma criatura. Acerto: 1 de dano cortante, e o alvo fica agarrado (CD de fuga 11) se não estiver já agarrado por outra garra rastejante.
 
 </div>
+
+</div>
+
+</div>
+<!-- /bloco:ficha -->
 <!-- fim:statblock:garra-rastejante -->

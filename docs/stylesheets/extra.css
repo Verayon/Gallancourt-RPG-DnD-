@@ -959,6 +959,35 @@ input,
   margin: .7rem 0;
 }
 
+/* Corpo em duas colunas (estatísticas | traços e ações), só quando há conteúdo pros dois
+   lados — ver admin/wiki_data.py::renderizar_statblock. Com uma coluna só, o grid nem entra
+   (fica no fluxo normal de cima pra baixo). */
+.stat-block__corpo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  gap: 0 1.5rem;
+  align-items: start;
+}
+
+.stat-block__coluna--stats {
+  border-right: 1px solid var(--gc-panel-border);
+  padding-right: 1.3rem;
+}
+
+@media screen and (max-width: 40em) {
+  .stat-block__corpo {
+    display: block;
+  }
+
+  .stat-block__coluna--stats {
+    border-right: none;
+    border-bottom: 1px solid var(--gc-panel-border);
+    padding-right: 0;
+    padding-bottom: .8rem;
+    margin-bottom: .8rem;
+  }
+}
+
 .md-typeset .stat-block table {
   border: none;
   border-radius: 0;
@@ -1006,11 +1035,17 @@ input,
    dentro do cartão, quando aparecem sós num parágrafo. */
 .md-typeset .stat-block p > strong:only-child {
   display: block;
-  margin-top: .5rem;
+  margin-top: .6rem;
+  padding-bottom: .3rem;
+  border-bottom: 1px solid var(--gc-red);
   color: var(--gc-gold-soft);
   text-transform: uppercase;
-  letter-spacing: .04em;
-  font-size: .78rem;
+  letter-spacing: .05em;
+  font-size: .88rem;
+}
+
+.md-typeset .stat-block__coluna--acoes > p:first-child > strong:only-child {
+  margin-top: 0;
 }
 
 @media screen and (max-width: 30em) {
@@ -1956,6 +1991,56 @@ th[aria-sort="descending"] .magia-ordenar::after { content: " ▼"; opacity: 1; 
   margin: 0;
   padding-left: 1.2rem;
   font-size: .85rem;
+}
+
+/* --------------------------------------------------------------------------
+   Alternador Normal/Mestre (topo de toda página de sessão) — JS em
+   docs/javascripts/alternancia-mestre.js. "Normal" (padrão) mostra as abas de
+   preparo de sempre; "Mestre" mostra só o Painel de Iniciativa, em largura
+   cheia, pra rodar o combate sem o resto da página no meio.
+   -------------------------------------------------------------------------- */
+
+.md-typeset .alternancia-mestre__opcoes {
+  display: flex;
+  gap: .6rem;
+  margin: 0 0 1.2rem;
+}
+
+.md-typeset .alternancia-mestre__botao {
+  flex: 1 1 auto;
+  padding: .6rem 1rem;
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 999px;
+  background: var(--gc-panel);
+  color: var(--gc-ink-dim);
+  font-family: 'EB Garamond', serif;
+  font-size: .95rem;
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+}
+
+.md-typeset .alternancia-mestre__botao:hover {
+  border-color: var(--gc-gold);
+  color: var(--gc-gold-soft);
+}
+
+.md-typeset .alternancia-mestre__botao--ativo,
+.md-typeset .alternancia-mestre__botao--ativo:hover {
+  background: var(--gc-red);
+  border-color: var(--gc-red);
+  color: #fff;
+}
+
+.md-typeset .alternancia-mestre__painel--mestre {
+  display: none;
+}
+
+.md-typeset .alternancia-mestre[data-modo="mestre"] .alternancia-mestre__painel--normal {
+  display: none;
+}
+
+.md-typeset .alternancia-mestre[data-modo="mestre"] .alternancia-mestre__painel--mestre {
+  display: block;
 }
 
 /* --------------------------------------------------------------------------

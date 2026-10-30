@@ -560,6 +560,8 @@ def salvar_imagem(
 # (chave, rótulo, obrigatório)
 CAMPOS_STATBLOCK_TEXTO = [
     ("nome", "Nome", True),
+    ("rotulo_variante", "Nome curto da variante (ex.: Arqueiro — deixe em branco se for a versão "
+     "base da criatura; com mais de uma ficha na mesma página, elas viram abas)", False),
     ("subtitulo", "Tipo / papel (ex.: Humanoide médio, qualquer alinhamento)", False),
     ("foto", "Foto (caminho relativo — preenchido sozinho ao enviar uma imagem abaixo)", False),
     ("nivel", "Nível (personagens de jogador)", False),
@@ -854,15 +856,35 @@ def renderizar_statblock(slug: str, v: dict) -> str:
         "</div>", "",
         "---",
         "",
+    ]
+
+    coluna_stats = [
         f"| {rotulos_linha} |",
         f"|{separador_linha}|",
         f"| {valores_linha} |",
         "",
     ]
     for item in linhas_extra:
-        partes += [item, ""]
+        coluna_stats += [item, ""]
+
+    # Com traços/ações/reações/magias, a ficha vira duas colunas (estatísticas | traços e
+    # ações — ver imagem de referência do Goblin no padrão Foundry). Sem isso (ficha só com
+    # atributos), mantém uma coluna só — não há nada pra pôr ao lado.
     if blocos_texto:
-        partes += ["---", "", "\n\n".join(blocos_texto), ""]
+        partes += [
+            '<div class="stat-block__corpo" markdown>', "",
+            '<div class="stat-block__coluna stat-block__coluna--stats" markdown>', "",
+        ]
+        partes += coluna_stats
+        partes += [
+            "</div>", "",
+            '<div class="stat-block__coluna stat-block__coluna--acoes" markdown>', "",
+            "\n\n".join(blocos_texto), "",
+            "</div>", "",
+            "</div>", "",
+        ]
+    else:
+        partes += coluna_stats
     partes += ["</div>"]
     return "\n".join(partes)
 
@@ -1539,8 +1561,10 @@ def _modelo_sessao(
     numero: int, titulo: str, valores: dict, rel_docs: str,
     links_npcs: list[str] | None = None, links_lugares: list[str] | None = None, prompt: str = "",
 ) -> str:
-    """Página de sessão com o mesmo layout da Sessão 0: abas logo após o título, ficha dentro de
-    Resumo, e o Painel de Iniciativa embutido por último.
+    """Página de sessão com o mesmo layout da Sessão 0: alternador Normal/Mestre logo após o
+    título (ver hooks/gallancourt.py, marcador `<!-- mestre:alternancia -->`) — "Normal" traz as
+    abas de preparo de sempre (ficha dentro de Resumo, Cenas, NPCs…), "Mestre" traz só o Painel
+    de Iniciativa, para rodar o combate sem o resto da página no meio.
 
     `links_npcs`/`links_lugares` (já resolvidos como `[Nome](caminho)` por `criar_sessao_preparo`)
     pré-preenchem as abas NPCs → Aliados e Lugares, em vez de deixá-las "(a preencher)". `prompt`
@@ -1572,6 +1596,8 @@ sessao:
 ---
 
 # Sessão {numero} — {titulo}
+
+<!-- mestre:alternancia -->
 
 === "Resumo"
 
@@ -1646,14 +1672,14 @@ sessao:
 
 {vazio}
 
-=== "Painel de Iniciativa"
+<div class="painel-iniciativa" data-pagina="{rel_docs}" markdown>
 
-    <div class="painel-iniciativa" data-pagina="{rel_docs}" markdown>
+*(o painel aparece aqui quando a página carrega — precisa do [Painel do Mestre](../painel.md)
+rodando no seu computador)*
 
-    *(o painel aparece aqui quando a página carrega — precisa do [Painel do Mestre](../painel.md)
-    rodando no seu computador)*
+</div>
 
-    </div>
+<!-- /mestre:alternancia -->
 
 ## Depois da sessão
 

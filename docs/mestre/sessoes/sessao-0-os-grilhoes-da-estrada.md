@@ -8,6 +8,8 @@ sessao:
 
 # Sessão 0 — Os Grilhões da Estrada
 
+<!-- mestre:alternancia -->
+
 === "Resumo"
 
     <div class="ficha" markdown>
@@ -258,6 +260,7 @@ sessao:
 
     <!-- inicio:statblock:capita-odette-brune -->
     <!-- dados:statblock {"nome": "Capitã Odette Brune", "subtitulo": "Humanoide médio, leal e boa — batedora da patrulha de Duvant", "ca": "13", "pv": "16 (3d8+3)", "deslocamento": "9 m", "for": "11", "des": "15", "con": "12", "int": "10", "sab": "13", "car": "11", "pericias": "Percepção +3, Sobrevivência +3", "sentidos": "Percepção passiva 13", "idiomas": "Comum", "equipamento": "Armadura de couro batido, arco longo, 20 flechas, apito de sinalização", "tracos": "", "acoes": "Ação Múltipla: Odette faz dois ataques com o arco longo.\nArco longo: Ataque à distância: +4 para acertar, alcance 45/180 m, um alvo. Acerto: 6 (1d8+2) de dano perfurante.", "reacoes": "", "magias": ""} -->
+    <!-- bloco:ficha -->
     <div class="stat-block" markdown>
 
     ### Capitã Odette Brune {: #capita-odette-brune }
@@ -275,16 +278,25 @@ sessao:
 
     ---
 
+    <div class="stat-block__corpo" markdown>
+
+    <div class="stat-block__coluna stat-block__coluna--stats" markdown>
+
     | FOR | DES | CON | INT | SAB | CAR |
     |---|---|---|---|---|---|
     | 11 (+0) | 15 (+2) | 12 (+1) | 10 (+0) | 13 (+1) | 11 (+0) |
 
     **Perícias** Percepção +3, Sobrevivência +3
+
     **Sentidos** Percepção passiva 13
+
     **Idiomas** Comum
+
     **Equipamento** Armadura de couro batido, arco longo, 20 flechas, apito de sinalização
 
-    ---
+    </div>
+
+    <div class="stat-block__coluna stat-block__coluna--acoes" markdown>
 
     **Ações**
 
@@ -293,10 +305,16 @@ sessao:
     ***Arco longo.*** Ataque à distância: +4 para acertar, alcance 45/180 m, um alvo. Acerto: 6 (1d8+2) de dano perfurante.
 
     </div>
+
+    </div>
+
+    </div>
+    <!-- /bloco:ficha -->
     <!-- fim:statblock:capita-odette-brune -->
 
     <!-- inicio:statblock:miliciano-costeiro -->
     <!-- dados:statblock {"nome": "Miliciano costeiro", "subtitulo": "Humanoide médio, leal e boa — soldado de Dodixie", "ca": "16", "pv": "11 (2d8+2)", "deslocamento": "9 m", "for": "13", "des": "11", "con": "12", "int": "10", "sab": "10", "car": "10", "pericias": "", "sentidos": "Percepção passiva 10", "idiomas": "Comum", "equipamento": "Cota de malha, escudo, lança", "tracos": "", "acoes": "Lança: Ataque corpo a corpo ou à distância: +3 para acertar, alcance 1,5 m ou alcance 9/36 m, um alvo. Acerto: 4 (1d6+1) de dano perfurante.", "reacoes": "", "magias": ""} -->
+    <!-- bloco:ficha -->
     <div class="stat-block" markdown>
 
     ### Miliciano costeiro {: #miliciano-costeiro }
@@ -314,25 +332,39 @@ sessao:
 
     ---
 
+    <div class="stat-block__corpo" markdown>
+
+    <div class="stat-block__coluna stat-block__coluna--stats" markdown>
+
     | FOR | DES | CON | INT | SAB | CAR |
     |---|---|---|---|---|---|
     | 13 (+1) | 11 (+0) | 12 (+1) | 10 (+0) | 10 (+0) | 10 (+0) |
 
     **Sentidos** Percepção passiva 10
+
     **Idiomas** Comum
+
     **Equipamento** Cota de malha, escudo, lança
 
-    ---
+    </div>
+
+    <div class="stat-block__coluna stat-block__coluna--acoes" markdown>
 
     **Ações**
 
     ***Lança.*** Ataque corpo a corpo ou à distância: +3 para acertar, alcance 1,5 m ou alcance 9/36 m, um alvo. Acerto: 4 (1d6+1) de dano perfurante.
 
     </div>
+
+    </div>
+
+    </div>
+    <!-- /bloco:ficha -->
     <!-- fim:statblock:miliciano-costeiro -->
 
     <!-- inicio:statblock:marques-alaric-duvant -->
     <!-- dados:statblock {"nome": "Marquês Alaric Duvant", "subtitulo": "Humanoide médio, leal e bom — nobre de Dodixie, patrono da missão", "ca": "15", "pv": "9 (2d8)", "deslocamento": "9 m (12 m montado)", "for": "11", "des": "14", "con": "10", "int": "13", "sab": "12", "car": "16", "pericias": "Persuasão +5, Intuição +3, História +3", "sentidos": "Percepção passiva 11", "idiomas": "Comum, Alto-Celestiano", "equipamento": "Rapieira, armadura de couro batido com o brasão da Casa Duvant, cavalo, bolsa de moedas", "tracos": "Nobre patrono: Alaric prefere negociar e liderar pelo exemplo, não pela força bruta — chega à cena já na Onda 2, depois de Odette abrir caminho.", "acoes": "Rapieira: Ataque corpo a corpo: +3 para acertar, alcance 1,5 m, um alvo. Acerto: 5 (1d8+1) de dano perfurante.", "reacoes": "", "magias": ""} -->
+    <!-- bloco:ficha -->
     <div class="stat-block" markdown>
 
     ### Marquês Alaric Duvant {: #marques-alaric-duvant }
@@ -350,16 +382,25 @@ sessao:
 
     ---
 
+    <div class="stat-block__corpo" markdown>
+
+    <div class="stat-block__coluna stat-block__coluna--stats" markdown>
+
     | FOR | DES | CON | INT | SAB | CAR |
     |---|---|---|---|---|---|
     | 11 (+0) | 14 (+2) | 10 (+0) | 13 (+1) | 12 (+1) | 16 (+3) |
 
     **Perícias** Persuasão +5, Intuição +3, História +3
+
     **Sentidos** Percepção passiva 11
+
     **Idiomas** Comum, Alto-Celestiano
+
     **Equipamento** Rapieira, armadura de couro batido com o brasão da Casa Duvant, cavalo, bolsa de moedas
 
-    ---
+    </div>
+
+    <div class="stat-block__coluna stat-block__coluna--acoes" markdown>
 
     ***Nobre patrono.*** Alaric prefere negociar e liderar pelo exemplo, não pela força bruta — chega à cena já na Onda 2, depois de Odette abrir caminho.
 
@@ -368,6 +409,11 @@ sessao:
     ***Rapieira.*** Ataque corpo a corpo: +3 para acertar, alcance 1,5 m, um alvo. Acerto: 5 (1d8+1) de dano perfurante.
 
     </div>
+
+    </div>
+
+    </div>
+    <!-- /bloco:ficha -->
     <!-- fim:statblock:marques-alaric-duvant -->
 
     **Inimigos**
@@ -377,6 +423,7 @@ sessao:
 
     <!-- inicio:statblock:bandido-comum -->
     <!-- dados:statblock {"nome": "Bandido comum", "subtitulo": "Humanoide médio, qualquer alinhamento", "ca": "12", "pv": "11 (2d8+2)", "deslocamento": "9 m", "for": "11", "des": "12", "con": "12", "int": "10", "sab": "10", "car": "10", "pericias": "Furtividade +3", "sentidos": "Percepção passiva 10", "idiomas": "Comum", "equipamento": "Cimitarra, besta leve com 20 virotes, roupas de couro", "tracos": "", "acoes": "Cimitarra: Ataque corpo a corpo: +3 para acertar, alcance 1,5 m, um alvo. Acerto: 5 (1d6+2) de dano cortante.\nBesta leve: Ataque à distância: +3 para acertar, alcance 24/96 m, um alvo. Acerto: 6 (1d8+2) de dano perfurante.", "reacoes": "", "magias": ""} -->
+    <!-- bloco:ficha -->
     <div class="stat-block" markdown>
 
     ### Bandido comum {: #bandido-comum }
@@ -394,16 +441,25 @@ sessao:
 
     ---
 
+    <div class="stat-block__corpo" markdown>
+
+    <div class="stat-block__coluna stat-block__coluna--stats" markdown>
+
     | FOR | DES | CON | INT | SAB | CAR |
     |---|---|---|---|---|---|
     | 11 (+0) | 12 (+1) | 12 (+1) | 10 (+0) | 10 (+0) | 10 (+0) |
 
     **Perícias** Furtividade +3
+
     **Sentidos** Percepção passiva 10
+
     **Idiomas** Comum
+
     **Equipamento** Cimitarra, besta leve com 20 virotes, roupas de couro
 
-    ---
+    </div>
+
+    <div class="stat-block__coluna stat-block__coluna--acoes" markdown>
 
     **Ações**
 
@@ -412,10 +468,16 @@ sessao:
     ***Besta leve.*** Ataque à distância: +3 para acertar, alcance 24/96 m, um alvo. Acerto: 6 (1d8+2) de dano perfurante.
 
     </div>
+
+    </div>
+
+    </div>
+    <!-- /bloco:ficha -->
     <!-- fim:statblock:bandido-comum -->
 
     <!-- inicio:statblock:sargento-grum -->
     <!-- dados:statblock {"nome": "Sargento Grum", "subtitulo": "Humanoide médio, qualquer alinhamento — comanda o acampamento", "ca": "13", "pv": "32 (5d8+10)", "deslocamento": "9 m", "for": "14", "des": "12", "con": "14", "int": "10", "sab": "11", "car": "10", "pericias": "Intimidação +2, Percepção +2", "sentidos": "Percepção passiva 12", "idiomas": "Comum", "equipamento": "Armadura de couro batido, escudo pequeno, dois machados de batalha", "tracos": "Vigilante: Grum é o primeiro a notar qualquer fuga ou traição no acampamento — é ele quem dá o alarme contra Olim na Cena 2.", "acoes": "Ação Múltipla: Grum faz dois ataques corpo a corpo.\nMachado de batalha: Ataque corpo a corpo: +4 para acertar, alcance 1,5 m, um alvo. Acerto: 6 (1d8+2) de dano cortante.", "reacoes": "", "magias": ""} -->
+    <!-- bloco:ficha -->
     <div class="stat-block" markdown>
 
     ### Sargento Grum {: #sargento-grum }
@@ -433,16 +495,25 @@ sessao:
 
     ---
 
+    <div class="stat-block__corpo" markdown>
+
+    <div class="stat-block__coluna stat-block__coluna--stats" markdown>
+
     | FOR | DES | CON | INT | SAB | CAR |
     |---|---|---|---|---|---|
     | 14 (+2) | 12 (+1) | 14 (+2) | 10 (+0) | 11 (+0) | 10 (+0) |
 
     **Perícias** Intimidação +2, Percepção +2
+
     **Sentidos** Percepção passiva 12
+
     **Idiomas** Comum
+
     **Equipamento** Armadura de couro batido, escudo pequeno, dois machados de batalha
 
-    ---
+    </div>
+
+    <div class="stat-block__coluna stat-block__coluna--acoes" markdown>
 
     ***Vigilante.*** Grum é o primeiro a notar qualquer fuga ou traição no acampamento — é ele quem dá o alarme contra Olim na Cena 2.
 
@@ -453,10 +524,16 @@ sessao:
     ***Machado de batalha.*** Ataque corpo a corpo: +4 para acertar, alcance 1,5 m, um alvo. Acerto: 6 (1d8+2) de dano cortante.
 
     </div>
+
+    </div>
+
+    </div>
+    <!-- /bloco:ficha -->
     <!-- fim:statblock:sargento-grum -->
 
     <!-- inicio:statblock:capitao-jonas-harker -->
     <!-- dados:statblock {"nome": "Capitão Jonas Harker", "subtitulo": "Humanoide médio, qualquer alinhamento — líder do bando", "ca": "15", "pv": "65 (10d8+20)", "deslocamento": "9 m (12 m montado)", "for": "16", "des": "14", "con": "14", "int": "11", "sab": "12", "car": "14", "pericias": "Intimidação +4, Enganação +4, Percepção +3", "sentidos": "Percepção passiva 13", "idiomas": "Comum, mais um idioma regional", "equipamento": "Armadura de couro batido reforçada, duas cimitarras, cavalo, bolsa de couro com um livro-caixa cifrado", "tracos": "Fuga calculada: quando perde cerca de metade dos seus bandidos, ou fica com menos da metade do PV, Harker monta a cavalo e tenta fugir pela estrada com o livro-caixa.", "acoes": "Ação Múltipla: Harker faz dois ataques com cimitarra.\nCimitarra: Ataque corpo a corpo: +5 para acertar, alcance 1,5 m, um alvo. Acerto: 6 (1d6+3) de dano cortante.", "reacoes": "Parar: quando atingido por um ataque corpo a corpo, Harker pode usar a reação para ganhar +2 na CA contra aquele ataque — podendo fazê-lo errar.", "magias": ""} -->
+    <!-- bloco:ficha -->
     <div class="stat-block" markdown>
 
     ### Capitão Jonas Harker {: #capitao-jonas-harker }
@@ -474,16 +551,25 @@ sessao:
 
     ---
 
+    <div class="stat-block__corpo" markdown>
+
+    <div class="stat-block__coluna stat-block__coluna--stats" markdown>
+
     | FOR | DES | CON | INT | SAB | CAR |
     |---|---|---|---|---|---|
     | 16 (+3) | 14 (+2) | 14 (+2) | 11 (+0) | 12 (+1) | 14 (+2) |
 
     **Perícias** Intimidação +4, Enganação +4, Percepção +3
+
     **Sentidos** Percepção passiva 13
+
     **Idiomas** Comum, mais um idioma regional
+
     **Equipamento** Armadura de couro batido reforçada, duas cimitarras, cavalo, bolsa de couro com um livro-caixa cifrado
 
-    ---
+    </div>
+
+    <div class="stat-block__coluna stat-block__coluna--acoes" markdown>
 
     ***Fuga calculada.*** quando perde cerca de metade dos seus bandidos, ou fica com menos da metade do PV, Harker monta a cavalo e tenta fugir pela estrada com o livro-caixa.
 
@@ -498,6 +584,11 @@ sessao:
     ***Parar.*** quando atingido por um ataque corpo a corpo, Harker pode usar a reação para ganhar +2 na CA contra aquele ataque — podendo fazê-lo errar.
 
     </div>
+
+    </div>
+
+    </div>
+    <!-- /bloco:ficha -->
     <!-- fim:statblock:capitao-jonas-harker -->
 
     ## Figurantes
@@ -600,15 +691,14 @@ sessao:
     - Olim, se sobreviveu, sabe o nome "o Correntes" e que a entrega é feita numa torre nas
       colinas — foi até lá antes de se infiltrar no grupo de Harker —, mas também não conhece
       Castellane; só recebia instruções por um contato intermediário em Dodixie.
-=== "Painel de Iniciativa"
+<div class="painel-iniciativa" data-pagina="mestre/sessoes/sessao-0-os-grilhoes-da-estrada.md" markdown>
 
-    <div class="painel-iniciativa" data-pagina="mestre/sessoes/sessao-0-os-grilhoes-da-estrada.md" markdown>
+*(o painel aparece aqui quando a página carrega — precisa do [Painel do Mestre](../painel.md)
+rodando no seu computador)*
 
-    *(o painel aparece aqui quando a página carrega — precisa do [Painel do Mestre](../painel.md)
-    rodando no seu computador)*
+</div>
 
-    </div>
-
+<!-- /mestre:alternancia -->
 
 ## Depois da sessão
 

@@ -11,6 +11,7 @@ monstro:
 
 <!-- inicio:statblock:javali -->
 <!-- dados:statblock {"nome": "Javali", "subtitulo": "Fera média, sem alinhamento", "cr": "1/4 (50 PE)", "ca": "11 (armadura natural)", "pv": "11 (2d8 + 2)", "deslocamento": "12 m", "for": "13", "des": "11", "con": "12", "int": "2", "sab": "9", "car": "5", "sentidos": "Percepção passiva 9", "idiomas": "—", "tracos": "Implacável (recarrega após um descanso curto ou longo): se o javali sofrer dano que o reduziria a 0 pontos de vida mas não o matar instantaneamente, ele fica com 1 ponto de vida em vez disso.", "acoes": "Presas: Ataque corpo a corpo: +3 para acertar, alcance 1,5 m, um alvo. Acerto: 4 (1d6 + 1) de dano cortante."} -->
+<!-- bloco:ficha -->
 <div class="stat-block" markdown>
 
 ### Javali {: #javali }
@@ -28,14 +29,21 @@ monstro:
 
 ---
 
+<div class="stat-block__corpo" markdown>
+
+<div class="stat-block__coluna stat-block__coluna--stats" markdown>
+
 | FOR | DES | CON | INT | SAB | CAR |
 |---|---|---|---|---|---|
 | 13 (+1) | 11 (+0) | 12 (+1) | 2 (-4) | 9 (-1) | 5 (-3) |
 
 **Sentidos** Percepção passiva 9
+
 **Idiomas** —
 
----
+</div>
+
+<div class="stat-block__coluna stat-block__coluna--acoes" markdown>
 
 ***Implacável (recarrega após um descanso curto ou longo).*** se o javali sofrer dano que o reduziria a 0 pontos de vida mas não o matar instantaneamente, ele fica com 1 ponto de vida em vez disso.
 
@@ -44,4 +52,9 @@ monstro:
 ***Presas.*** Ataque corpo a corpo: +3 para acertar, alcance 1,5 m, um alvo. Acerto: 4 (1d6 + 1) de dano cortante.
 
 </div>
+
+</div>
+
+</div>
+<!-- /bloco:ficha -->
 <!-- fim:statblock:javali -->

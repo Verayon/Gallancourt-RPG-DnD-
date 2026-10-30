@@ -11,6 +11,7 @@ monstro:
 
 <!-- inicio:statblock:troll -->
 <!-- dados:statblock {"nome": "Troll", "subtitulo": "Gigante grande, caótico e maligno", "cr": "5 (1800 PE)", "ca": "15 (armadura natural)", "pv": "84 (8d10 + 40)", "deslocamento": "9 m", "for": "18", "des": "13", "con": "20", "int": "7", "sab": "9", "car": "7", "pericias": "Percepção +2", "sentidos": "Visão no escuro 18 m, Percepção passiva 12", "idiomas": "Gigante", "tracos": "Olfato Agudo: o troll tem vantagem em testes de Sabedoria (Percepção) que dependam do olfato.\nRegeneração: o troll recupera 10 pontos de vida no início do seu turno, desde que tenha pelo menos 1 PV. Se o troll sofreu dano de ácido ou fogo desde o fim do seu último turno, essa regeneração não ocorre nesse turno. O troll só morre de verdade se ficar com 0 PV e não regenerar no início do seu turno seguinte.", "acoes": "Multiataque: o troll ataca uma vez com a mordida e duas vezes com as garras.\nMordida: Ataque corpo a corpo com arma: +7 para acertar, alcance 1,5 m, um alvo. Acerto: 7 (1d6 + 4) de dano perfurante.\nGarra: Ataque corpo a corpo com arma: +7 para acertar, alcance 1,5 m, um alvo. Acerto: 11 (2d6 + 4) de dano cortante."} -->
+<!-- bloco:ficha -->
 <div class="stat-block" markdown>
 
 ### Troll {: #troll }
@@ -28,15 +29,23 @@ monstro:
 
 ---
 
+<div class="stat-block__corpo" markdown>
+
+<div class="stat-block__coluna stat-block__coluna--stats" markdown>
+
 | FOR | DES | CON | INT | SAB | CAR |
 |---|---|---|---|---|---|
 | 18 (+4) | 13 (+1) | 20 (+5) | 7 (-2) | 9 (-1) | 7 (-2) |
 
 **Perícias** Percepção +2
+
 **Sentidos** Visão no escuro 18 m, Percepção passiva 12
+
 **Idiomas** Gigante
 
----
+</div>
+
+<div class="stat-block__coluna stat-block__coluna--acoes" markdown>
 
 ***Olfato Agudo.*** o troll tem vantagem em testes de Sabedoria (Percepção) que dependam do olfato.
 
@@ -51,4 +60,9 @@ monstro:
 ***Garra.*** Ataque corpo a corpo com arma: +7 para acertar, alcance 1,5 m, um alvo. Acerto: 11 (2d6 + 4) de dano cortante.
 
 </div>
+
+</div>
+
+</div>
+<!-- /bloco:ficha -->
 <!-- fim:statblock:troll -->

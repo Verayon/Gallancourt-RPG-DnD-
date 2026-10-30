@@ -11,6 +11,7 @@ monstro:
 
 <!-- inicio:statblock:centopeia-gigante -->
 <!-- dados:statblock {"nome": "Centopeia gigante", "subtitulo": "Fera pequena, sem alinhamento", "cr": "1/4 (50 PE)", "ca": "13 (armadura natural)", "pv": "4 (1d6 + 1)", "deslocamento": "9 m, escalar 9 m", "for": "5", "des": "14", "con": "12", "int": "1", "sab": "7", "car": "3", "sentidos": "Visão no escuro 9 m, Percepção passiva 8", "idiomas": "—", "acoes": "Mordida: Ataque corpo a corpo: +4 para acertar, alcance 1,5 m, uma criatura. Acerto: 4 (1d4 + 2) de dano perfurante, e o alvo deve ser bem-sucedido em um teste de resistência de Constituição CD 11, sofrendo 10 (3d6) de dano de veneno em caso de falha, ou metade desse dano em caso de sucesso. Se o dano de veneno reduzir o alvo a 0 pontos de vida, o alvo fica estável, mas envenenado por 1 hora, mesmo após recuperar pontos de vida, e fica paralisado enquanto estiver envenenado dessa forma."} -->
+<!-- bloco:ficha -->
 <div class="stat-block" markdown>
 
 ### Centopeia gigante {: #centopeia-gigante }
@@ -28,18 +29,30 @@ monstro:
 
 ---
 
+<div class="stat-block__corpo" markdown>
+
+<div class="stat-block__coluna stat-block__coluna--stats" markdown>
+
 | FOR | DES | CON | INT | SAB | CAR |
 |---|---|---|---|---|---|
 | 5 (-3) | 14 (+2) | 12 (+1) | 1 (-5) | 7 (-2) | 3 (-4) |
 
 **Sentidos** Visão no escuro 9 m, Percepção passiva 8
+
 **Idiomas** —
 
----
+</div>
+
+<div class="stat-block__coluna stat-block__coluna--acoes" markdown>
 
 **Ações**
 
 ***Mordida.*** Ataque corpo a corpo: +4 para acertar, alcance 1,5 m, uma criatura. Acerto: 4 (1d4 + 2) de dano perfurante, e o alvo deve ser bem-sucedido em um teste de resistência de Constituição CD 11, sofrendo 10 (3d6) de dano de veneno em caso de falha, ou metade desse dano em caso de sucesso. Se o dano de veneno reduzir o alvo a 0 pontos de vida, o alvo fica estável, mas envenenado por 1 hora, mesmo após recuperar pontos de vida, e fica paralisado enquanto estiver envenenado dessa forma.
 
 </div>
+
+</div>
+
+</div>
+<!-- /bloco:ficha -->
 <!-- fim:statblock:centopeia-gigante -->

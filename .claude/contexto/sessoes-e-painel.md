@@ -55,7 +55,17 @@ que o painel depende de encontrar, e que **não podem ser removidas** das págin
   é por eles que `hooks/gallancourt.py::_extrair_blocos_personagem` decide em qual aba cada pedaço
   da "ficha completa" opcional entra. Fichas salvas antes desses marcadores existirem não os têm;
   nesse caso o cartão inteiro cai na aba **Ficha** (compatibilidade mantida de propósito);
+- numa página de monstro (front matter `monstro:`) com mais de uma ficha de combate — a base e
+  variantes criadas pelo botão **Criar variante a partir desta ficha** em `/ficha-combate` (ex.:
+  Goblin → Arqueiro, Lanceiro) —, `hooks/gallancourt.py::_paginar_variantes` agrupa todas numa aba
+  por ficha, rotulada pelo campo `rotulo_variante` de cada uma (`admin/wiki_data.py`,
+  `CAMPOS_STATBLOCK_TEXTO`). Com uma ficha só, não mexe em nada;
 - o bloco `npc:` (ou `jogador:`) no front matter das páginas de NPC/jogador;
+- em `docs/mestre/sessoes/sessao-<n>-*.md`, os marcadores `<!-- mestre:alternancia -->`/
+  `<!-- /mestre:alternancia -->` logo após o H1 e no fim das abas, e o `<div class="painel-
+  iniciativa" data-pagina="...">` entre eles — é por eles que `hooks/gallancourt.py::
+  _alternancia_mestre` monta o alternador **Página normal / Modo Mestre** no topo da página (ver
+  `docs/javascripts/alternancia-mestre.js`);
 - `dados/linha-do-tempo.yml` — edite pelo Painel ou mantendo o formato descrito no cabeçalho dele.
 
 Ao testar mudanças no painel, use uma cópia em `GALLANCOURT_ADMIN_ROOT` — nunca aplique uma sessão
@@ -63,10 +73,13 @@ de teste direto no `docs/diario/` real.
 
 # Sessões (Mestre → Sessões)
 
-Uma página por sessão em `docs/mestre/sessoes/sessao-<n>-<slug>.md`, no layout da Sessão 0: ficha
-(`<div class="ficha">`) + abas `=== "Resumo"`, `"NPCs"`, `"Cenas"`, `"Loot & Pistas"`,
-`"Lugares"`, `"Segredo do Mestre"`. O front matter tem `sessao: {numero: N}`. A lista em
-`mestre/sessoes/index.md` é gerada pelo hook no lugar de `<!-- sessoes:lista -->`.
+Uma página por sessão em `docs/mestre/sessoes/sessao-<n>-<slug>.md`, no layout da Sessão 0: um
+alternador **Página normal / Modo Mestre** logo após o H1 (ver bullet do `mestre:alternancia`
+acima); do lado "Normal", ficha (`<div class="ficha">`) + abas `=== "Resumo"`, `"Cenas"`, `"NPCs"`,
+`"Lugares"`, `"Loot & Pistas"`, `"Segredos do Mestre"`; do lado "Mestre", só o Painel de
+Iniciativa (`admin/sessao_viva.py` + `docs/javascripts/painel-iniciativa.js`), em largura cheia. O
+front matter tem `sessao: {numero: N}`. A lista em `mestre/sessoes/index.md` é gerada pelo hook no
+lugar de `<!-- sessoes:lista -->`.
 
 Os botões **Adicionar NPC** e **Nova sessão** apontam para o Painel (`extra.painel_url` no
 `mkdocs.yml`, rotas `/npc/novo` e `/sessoes/nova`), que cria a página e a insere no `nav` abaixo das

@@ -11,6 +11,7 @@ monstro:
 
 <!-- inicio:statblock:gigante-do-gelo -->
 <!-- dados:statblock {"nome": "Gigante do gelo", "subtitulo": "Gigante enorme, neutro e maligno", "cr": "8 (3900 PE)", "ca": "15 (armadura improvisada)", "pv": "138 (12d12 + 60)", "deslocamento": "12 m", "for": "23", "des": "9", "con": "21", "int": "9", "sab": "10", "car": "12", "pericias": "Percepção +3", "sentidos": "Percepção passiva 13", "idiomas": "Gigante", "tracos": "Imunidade a Dano: o gigante é imune a dano de frio.", "acoes": "Multiataque: o gigante faz dois ataques com o machado grande.\nMachado grande: Ataque corpo a corpo com arma: +9 para acertar, alcance 3 m, um alvo. Acerto: 25 (3d12 + 6) de dano cortante.\nPedra (arremessada): Ataque à distância com arma: +9 para acertar, alcance 18/72 m, um alvo. Acerto: 28 (4d10 + 6) de dano contundente."} -->
+<!-- bloco:ficha -->
 <div class="stat-block" markdown>
 
 ### Gigante do gelo {: #gigante-do-gelo }
@@ -28,15 +29,23 @@ monstro:
 
 ---
 
+<div class="stat-block__corpo" markdown>
+
+<div class="stat-block__coluna stat-block__coluna--stats" markdown>
+
 | FOR | DES | CON | INT | SAB | CAR |
 |---|---|---|---|---|---|
 | 23 (+6) | 9 (-1) | 21 (+5) | 9 (-1) | 10 (+0) | 12 (+1) |
 
 **Perícias** Percepção +3
+
 **Sentidos** Percepção passiva 13
+
 **Idiomas** Gigante
 
----
+</div>
+
+<div class="stat-block__coluna stat-block__coluna--acoes" markdown>
 
 ***Imunidade a Dano.*** o gigante é imune a dano de frio.
 
@@ -49,4 +58,9 @@ monstro:
 ***Pedra (arremessada).*** Ataque à distância com arma: +9 para acertar, alcance 18/72 m, um alvo. Acerto: 28 (4d10 + 6) de dano contundente.
 
 </div>
+
+</div>
+
+</div>
+<!-- /bloco:ficha -->
 <!-- fim:statblock:gigante-do-gelo -->

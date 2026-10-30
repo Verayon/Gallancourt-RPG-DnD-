@@ -11,6 +11,7 @@ monstro:
 
 <!-- inicio:statblock:nobre -->
 <!-- dados:statblock {"nome": "Nobre", "subtitulo": "Humanoide médio (qualquer raça), qualquer alinhamento", "cr": "1/8 (25 PE)", "ca": "15 (peitoral)", "pv": "9 (2d8)", "deslocamento": "9 m", "for": "11", "des": "12", "con": "11", "int": "12", "sab": "14", "car": "16", "pericias": "Enganação +5, Intuição +4, Persuasão +5", "sentidos": "Percepção passiva 12", "idiomas": "um idioma (normalmente o Comum)", "acoes": "Rapieira: Ataque corpo a corpo com arma: +3 para acertar, alcance 1,5 m, um alvo. Acerto: 5 (1d8 + 1) de dano perfurante.", "reacoes": "Aparar: o nobre adiciona 2 à sua CA contra um ataque corpo a corpo que o acertaria, desde que esteja empunhando uma arma corpo a corpo e possa ver o atacante."} -->
+<!-- bloco:ficha -->
 <div class="stat-block" markdown>
 
 ### Nobre {: #nobre }
@@ -28,15 +29,23 @@ monstro:
 
 ---
 
+<div class="stat-block__corpo" markdown>
+
+<div class="stat-block__coluna stat-block__coluna--stats" markdown>
+
 | FOR | DES | CON | INT | SAB | CAR |
 |---|---|---|---|---|---|
 | 11 (+0) | 12 (+1) | 11 (+0) | 12 (+1) | 14 (+2) | 16 (+3) |
 
 **Perícias** Enganação +5, Intuição +4, Persuasão +5
+
 **Sentidos** Percepção passiva 12
+
 **Idiomas** um idioma (normalmente o Comum)
 
----
+</div>
+
+<div class="stat-block__coluna stat-block__coluna--acoes" markdown>
 
 **Ações**
 
@@ -47,4 +56,9 @@ monstro:
 ***Aparar.*** o nobre adiciona 2 à sua CA contra um ataque corpo a corpo que o acertaria, desde que esteja empunhando uma arma corpo a corpo e possa ver o atacante.
 
 </div>
+
+</div>
+
+</div>
+<!-- /bloco:ficha -->
 <!-- fim:statblock:nobre -->

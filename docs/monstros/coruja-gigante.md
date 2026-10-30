@@ -11,6 +11,7 @@ monstro:
 
 <!-- inicio:statblock:coruja-gigante -->
 <!-- dados:statblock {"nome": "Coruja gigante", "subtitulo": "Fera grande, neutra", "cr": "1/4 (50 PE)", "ca": "12", "pv": "19 (3d10 + 3)", "deslocamento": "1,5 m, voar 18 m", "for": "13", "des": "15", "con": "12", "int": "8", "sab": "13", "car": "10", "pericias": "Percepção +5, Furtividade +5", "sentidos": "Visão no escuro 36 m, Percepção passiva 15", "idiomas": "Linguagem das corujas gigantes, entende Comum, Élfico e Silvestre mas não consegue falar", "tracos": "Voo Raso: a coruja não provoca ataques de oportunidade quando voa para fora do alcance de uma criatura hostil.\nAudição e Visão Aguçadas: a coruja tem vantagem em testes de Sabedoria (Percepção) que dependam de audição ou visão.", "acoes": "Garras: Ataque corpo a corpo: +5 para acertar, alcance 1,5 m, um alvo. Acerto: 9 (2d6 + 2) de dano cortante."} -->
+<!-- bloco:ficha -->
 <div class="stat-block" markdown>
 
 ### Coruja gigante {: #coruja-gigante }
@@ -28,15 +29,23 @@ monstro:
 
 ---
 
+<div class="stat-block__corpo" markdown>
+
+<div class="stat-block__coluna stat-block__coluna--stats" markdown>
+
 | FOR | DES | CON | INT | SAB | CAR |
 |---|---|---|---|---|---|
 | 13 (+1) | 15 (+2) | 12 (+1) | 8 (-1) | 13 (+1) | 10 (+0) |
 
 **Perícias** Percepção +5, Furtividade +5
+
 **Sentidos** Visão no escuro 36 m, Percepção passiva 15
+
 **Idiomas** Linguagem das corujas gigantes, entende Comum, Élfico e Silvestre mas não consegue falar
 
----
+</div>
+
+<div class="stat-block__coluna stat-block__coluna--acoes" markdown>
 
 ***Voo Raso.*** a coruja não provoca ataques de oportunidade quando voa para fora do alcance de uma criatura hostil.
 
@@ -47,4 +56,9 @@ monstro:
 ***Garras.*** Ataque corpo a corpo: +5 para acertar, alcance 1,5 m, um alvo. Acerto: 9 (2d6 + 2) de dano cortante.
 
 </div>
+
+</div>
+
+</div>
+<!-- /bloco:ficha -->
 <!-- fim:statblock:coruja-gigante -->

@@ -11,6 +11,7 @@ monstro:
 
 <!-- inicio:statblock:plebeu -->
 <!-- dados:statblock {"nome": "Plebeu", "subtitulo": "Humanoide médio (qualquer raça), qualquer alinhamento", "cr": "0 (10 PE)", "ca": "10", "pv": "4 (1d8)", "deslocamento": "9 m", "for": "10", "des": "10", "con": "10", "int": "10", "sab": "10", "car": "10", "sentidos": "Percepção passiva 10", "idiomas": "um idioma (normalmente o Comum)", "acoes": "Clava: Ataque corpo a corpo com arma: +2 para acertar, alcance 1,5 m, um alvo. Acerto: 2 (1d4) de dano contundente."} -->
+<!-- bloco:ficha -->
 <div class="stat-block" markdown>
 
 ### Plebeu {: #plebeu }
@@ -28,18 +29,30 @@ monstro:
 
 ---
 
+<div class="stat-block__corpo" markdown>
+
+<div class="stat-block__coluna stat-block__coluna--stats" markdown>
+
 | FOR | DES | CON | INT | SAB | CAR |
 |---|---|---|---|---|---|
 | 10 (+0) | 10 (+0) | 10 (+0) | 10 (+0) | 10 (+0) | 10 (+0) |
 
 **Sentidos** Percepção passiva 10
+
 **Idiomas** um idioma (normalmente o Comum)
 
----
+</div>
+
+<div class="stat-block__coluna stat-block__coluna--acoes" markdown>
 
 **Ações**
 
 ***Clava.*** Ataque corpo a corpo com arma: +2 para acertar, alcance 1,5 m, um alvo. Acerto: 2 (1d4) de dano contundente.
 
 </div>
+
+</div>
+
+</div>
+<!-- /bloco:ficha -->
 <!-- fim:statblock:plebeu -->

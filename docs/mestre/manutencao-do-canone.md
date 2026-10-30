@@ -81,6 +81,14 @@ ser uma página de personagem) e guarda os valores num comentário invisível (`
 ... -->`) para poder reabrir e editar depois. Veja exemplos em
 [Sessão 0 — Fichas de combate](sessoes/sessao-0-os-grilhoes-da-estrada.md#fichas-de-combate).
 
+**Variantes** (ex.: Goblin base → Goblin Arqueiro, Goblin Lanceiro): numa ficha já salva, o botão
+**Criar variante a partir desta ficha** (na aba Ficha de combate do Painel) copia todos os valores
+para uma ficha nova na mesma página — edite só o que muda (arma, perícias, traços…) e preencha o
+campo **Nome curto da variante**. Com mais de uma ficha na mesma página, elas viram abas
+automaticamente (a primeira sem rótulo vira "Base"). Cada variante é uma ficha de combate normal,
+então aparece sozinha no seletor de fichas ao montar um encontro na Mesa do Mestre — dá pra deixar
+presets prontos (Base/Arqueiro/Lanceiro) e escolher qual usar na hora do encontro.
+
 ## Como adicionar uma página
 
 **NPCs e sessões:** use os botões **Adicionar NPC** (na página [NPCs](../personagens/index.md)) e

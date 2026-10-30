@@ -11,6 +11,7 @@ monstro:
 
 <!-- inicio:statblock:carnical -->
 <!-- dados:statblock {"nome": "Carniçal", "subtitulo": "Morto-vivo médio, caótico e maligno", "cr": "1 (200 PE)", "ca": "12", "pv": "22 (5d8)", "deslocamento": "9 m", "for": "13", "des": "15", "con": "10", "int": "7", "sab": "10", "car": "6", "pericias": "—", "sentidos": "Visão no escuro 18 m, Percepção passiva 10", "idiomas": "Comum", "tracos": "Resistências e imunidades: imune a dano de veneno; imune às condições enfeitiçado, exaustão e envenenado.", "acoes": "Mordida: Ataque corpo a corpo com arma: +2 para acertar, alcance 1,5 m, um alvo. Acerto: 9 (2d6 + 2) de dano perfurante.\nGarras: Ataque corpo a corpo com arma: +2 para acertar, alcance 1,5 m, um alvo. Acerto: 7 (2d4 + 2) de dano cortante. Se o alvo não for um morto-vivo, deve ser sucedido em um teste de resistência de Constituição (CD 10) ou ficará paralisado por 1 minuto, podendo repetir o teste ao final de cada um dos seus turnos."} -->
+<!-- bloco:ficha -->
 <div class="stat-block" markdown>
 
 ### Carniçal {: #carnical }
@@ -28,15 +29,23 @@ monstro:
 
 ---
 
+<div class="stat-block__corpo" markdown>
+
+<div class="stat-block__coluna stat-block__coluna--stats" markdown>
+
 | FOR | DES | CON | INT | SAB | CAR |
 |---|---|---|---|---|---|
 | 13 (+1) | 15 (+2) | 10 (+0) | 7 (-2) | 10 (+0) | 6 (-2) |
 
 **Perícias** —
+
 **Sentidos** Visão no escuro 18 m, Percepção passiva 10
+
 **Idiomas** Comum
 
----
+</div>
+
+<div class="stat-block__coluna stat-block__coluna--acoes" markdown>
 
 ***Resistências e imunidades.*** imune a dano de veneno; imune às condições enfeitiçado, exaustão e envenenado.
 
@@ -47,4 +56,9 @@ monstro:
 ***Garras.*** Ataque corpo a corpo com arma: +2 para acertar, alcance 1,5 m, um alvo. Acerto: 7 (2d4 + 2) de dano cortante. Se o alvo não for um morto-vivo, deve ser sucedido em um teste de resistência de Constituição (CD 10) ou ficará paralisado por 1 minuto, podendo repetir o teste ao final de cada um dos seus turnos.
 
 </div>
+
+</div>
+
+</div>
+<!-- /bloco:ficha -->
 <!-- fim:statblock:carnical -->

@@ -110,9 +110,10 @@ de sessões), resumo rápido, nível, duração, tom, missão e recompensa. Marq
 Lugares envolvidos nas tabelas (cada uma com busca e filtro por coluna) e, se quiser, escreva no
 campo **Como você quer que esta sessão seja organizada**. Ao clicar em **Criar sessão**, o painel:
 
-1. cria a página de preparação com o mesmo layout da Sessão 0 — abas **Resumo** (com a ficha da
-   sessão), **Cenas**, **NPCs**, **Lugares**, **Loot & Pistas**, **Segredos do Mestre** e
-   **Painel de Iniciativa**, nessa ordem;
+1. cria a página de preparação com o mesmo layout da Sessão 0 — um alternador **Página normal /
+   Modo Mestre** no topo (ver "Tocar uma sessão ao vivo" abaixo); do lado "Normal", as abas
+   **Resumo** (com a ficha da sessão), **Cenas**, **NPCs**, **Lugares**, **Loot & Pistas** e
+   **Segredos do Mestre**, nessa ordem;
 2. já preenche a aba **NPCs → Aliados** e a aba **Lugares** com links reais para quem/o que foi
    marcado, em vez de "a preencher", e já salva essa lista como participantes da sessão — sem
    precisar passar pela tela separada de Participantes;
@@ -132,13 +133,15 @@ Essa é a página de **preparação**. Depois de jogar, registre o que aconteceu
 
 ## Tocar uma sessão ao vivo
 
-A aba **Painel de Iniciativa**, no final de cada página de sessão, é um bloco de notas e um
-rastreador de combate pra usar durante a mesa — embutido na própria página do site, sem precisar
-abrir outra aba do navegador nem outro site: ele busca os dados do Painel do Mestre (que precisa
-estar rodando no seu computador) por baixo dos panos, e redesenha a tela a cada ação, sem
-recarregar a página. É **preso à página da sessão**: a Sessão 0 tem o seu próprio combate, a
-Sessão 3 do Diário teria o dela, e por aí vai, sem se misturar. Diferente do resto do painel, nada
-aqui mexe em `docs/` nem no conteúdo do site — o estado fica só em `admin/dados/` (de fora do
+No topo de toda página de sessão há dois botões: **📖 Página normal** (as abas de preparo de
+sempre, o padrão ao abrir a página) e **🛡️ Modo Mestre — Combate**. Clicar em "Modo Mestre" troca
+a página inteira pelo Painel de Iniciativa — sem recarregar, sem abrir outra aba do navegador nem
+outro site — pra rodar o combate sem o resto da página (Cenas, NPCs…) no meio; clicar de volta em
+"Página normal" volta pro preparo. É um bloco de notas e um rastreador de combate: ele busca os
+dados do Painel do Mestre (que precisa estar rodando no seu computador) por baixo dos panos, e
+redesenha a tela a cada ação. É **preso à página da sessão**: a Sessão 0 tem o seu próprio combate,
+a Sessão 3 do Diário teria o dela, e por aí vai, sem se misturar. Diferente do resto do painel,
+nada aqui mexe em `docs/` nem no conteúdo do site — o estado fica só em `admin/dados/` (de fora do
 git), porque é rascunho de sessão, não cânone nem conteúdo da wiki.
 
 Se preferir usar o Painel direto, sem o site aberto, a mesma coisa continua disponível na aba

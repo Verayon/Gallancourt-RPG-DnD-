@@ -11,6 +11,7 @@ monstro:
 
 <!-- inicio:statblock:morcego -->
 <!-- dados:statblock {"nome": "Morcego", "subtitulo": "Fera minúscula, sem alinhamento", "cr": "0 (10 PE)", "ca": "12", "pv": "1 (1d4 - 1)", "deslocamento": "1,5 m, voar 9 m", "for": "2", "des": "15", "con": "8", "int": "2", "sab": "12", "car": "4", "sentidos": "Visão cega 18 m, Percepção passiva 11", "idiomas": "—", "tracos": "Ecolocalização: o morcego não pode usar sua visão enquanto cego, mas compensa isso com a visão cega.\nAudição Aguçada: o morcego tem vantagem em testes de Sabedoria (Percepção) que dependam de audição.", "acoes": "Mordida: Ataque corpo a corpo: +0 para acertar, alcance 1,5 m, uma criatura. Acerto: 1 de dano perfurante."} -->
+<!-- bloco:ficha -->
 <div class="stat-block" markdown>
 
 ### Morcego {: #morcego }
@@ -28,14 +29,21 @@ monstro:
 
 ---
 
+<div class="stat-block__corpo" markdown>
+
+<div class="stat-block__coluna stat-block__coluna--stats" markdown>
+
 | FOR | DES | CON | INT | SAB | CAR |
 |---|---|---|---|---|---|
 | 2 (-4) | 15 (+2) | 8 (-1) | 2 (-4) | 12 (+1) | 4 (-3) |
 
 **Sentidos** Visão cega 18 m, Percepção passiva 11
+
 **Idiomas** —
 
----
+</div>
+
+<div class="stat-block__coluna stat-block__coluna--acoes" markdown>
 
 ***Ecolocalização.*** o morcego não pode usar sua visão enquanto cego, mas compensa isso com a visão cega.
 
@@ -46,4 +54,9 @@ monstro:
 ***Mordida.*** Ataque corpo a corpo: +0 para acertar, alcance 1,5 m, uma criatura. Acerto: 1 de dano perfurante.
 
 </div>
+
+</div>
+
+</div>
+<!-- /bloco:ficha -->
 <!-- fim:statblock:morcego -->
