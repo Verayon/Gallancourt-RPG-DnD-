@@ -13,3 +13,7 @@ jogador:
 # Faeris Thalendar
 
 *(Descrição a preencher.)*
+
+## Ficha de combate
+
+<!-- personagem:ficha-dinamica -->

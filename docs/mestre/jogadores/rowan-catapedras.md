@@ -13,3 +13,7 @@ jogador:
 # Rowan CataPedras
 
 *(Descrição a preencher.)*
+
+## Ficha de combate
+
+<!-- personagem:ficha-dinamica -->

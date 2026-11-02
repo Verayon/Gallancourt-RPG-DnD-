@@ -37,3 +37,7 @@ Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
 !!! question "Em aberto"
     - Thalin é um sobrevivente da família Enry?
     - Qual é o seu destino?
+
+## Ficha de combate
+
+<!-- personagem:ficha-dinamica -->

@@ -18,16 +18,13 @@ Cada `docs/personagens/<slug>.md` tem um bloco `npc:` no front matter (`titulo`,
   filtros); links vão só em `ficha`. Valor desconhecido = `—`. As colunas Cidade, Afiliação, Título
   e Situação mostram o **estado atual** (com as mudanças da linha do tempo aplicadas).
 
-A biografia simples (gênero/idade/altura/peso/olhos/cabelo/pele/fé, aparência, personalidade,
-traço, ideal, vínculo, defeito, proficiências) é escrita pela aba **Biografia** do Painel
-(`CAMPOS_FICHA_PERSONAGEM`/`TIPOS_FICHA` em `admin/wiki_data.py`, tipos `"npc"` e `"jogador"`)
-como uma seção `## Biografia` normal no corpo da página — não é um bloco de front matter nem uma
-aba gerada automaticamente (vira aba sozinha porque o motor de abas transforma qualquer `##` numa
-aba). Para NPCs/jogadores de combate, veja a **ficha de combate** (`.stat-block`, marcador
-`<!-- dados:statblock ... -->`) em `docs/mestre/manutencao-do-canone.md` — a partir dela também dá
-para preencher uma "ficha completa" opcional (perícias/salvaguardas com total calculado,
-inventário, grimório, características, efeitos), que vira abas extras (Inventário/Grimório/
-Características/Efeitos) na página.
+Desde 2026-10-31, a Biografia de NPC/jogador **não** é mais escrita pelo Painel — é uma aba do
+widget de ficha de combate (`docs/javascripts/ficha.js`), com os dados no banco (`Personagem` em
+`admin/banco.py`), editável direto na página em Modo Mestre, junto com Atributos/Inventário/
+Grimório/Características/Efeitos/Diário na mesma ficha. `CAMPOS_FICHA_PERSONAGEM`
+(`admin/wiki_data.py`) continua existindo só como referência (é o que as colunas de `Personagem`
+espelham); `TIPOS_FICHA` não tem mais `"npc"`/`"jogador"`. Ver `.claude/contexto/personagens.md`
+antes de mexer em qualquer coisa relacionada à ficha de combate de NPC/jogador.
 
 ## Linha do tempo (`dados/linha-do-tempo.yml`)
 

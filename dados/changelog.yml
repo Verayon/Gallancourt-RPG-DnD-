@@ -31,3 +31,40 @@ versoes:
     (gênero, idade, altura, peso, olhos, cabelo, pele, fé).
   - Painel do Mestre ganhou login com senha, para acesso remoto seguro.
   - Site acessível pela internet (fora da rede local), via túnel seguro.
+- id: 3
+  versao: '0.3'
+  data: '2026-10-30'
+  mudancas:
+  - 'Monstros saíram do Markdown e passaram a viver num banco de dados: agora é possível criar
+    variantes de uma criatura (ex.: Goblin → Goblin Arqueiro) direto na própria página pública,
+    trocando equipamento, traços/ações/reações e magias — tudo editável ao vivo, sem precisar
+    reconstruir o site.'
+  - 'Equipamento, Traços/Ações/Reações, Magias, Idiomas e Sentidos de monstros viraram catálogos
+    compartilhados entre criaturas, com busca e filtro completos (as mesmas colunas das páginas de
+    Itens/Magias) ao adicionar.'
+  - 'Modo Mestre: a senha do Painel agora também libera edição direto nas páginas do site (botão no
+    cabeçalho, ao lado do alternador claro/escuro — um popup simples, sem navegar para outra
+    página). A leitura do site passou a ser livre para qualquer um; só criar/editar/excluir continua
+    exigindo a senha.'
+  - CA, CR, PV máximo e Deslocamento de monstros agora são editados com setas (incremento/decremento)
+    direto onde aparecem na ficha, sem campo de edição separado no fim da página; movimento sobe ou
+    desce em passos de 1,5 m.
+  - 'Validação: campos numéricos de fichas de monstro e do catálogo não aceitam mais valores negativos
+    onde não faz sentido.'
+  - Roadmap agora é editável (adicionar, editar, excluir) direto na página pública em Modo Mestre,
+    com um campo opcional de responsável por item — sem precisar abrir o Painel.
+  - 'Menu da esquerda simplificado: só as categorias principais (Lore, Wiki, Compêndio, Mestre,
+    Configurações) aparecem ali agora; as subcategorias (Mundo, Cidades, NPCs, Monstros...) são
+    acessadas pelo corpo da página de cada categoria, como já funcionava para Monstros.'
+- id: 4
+  versao: '0.4'
+  data: '2026-10-30'
+  mudancas:
+  - 'Perícias de monstro deixaram de ser texto livre: agora é um catálogo (as mesmas 18 perícias
+    do D&D 5e) com um bônus numérico por criatura, pronto para uma futura rolagem automatizada
+    (d20 + bônus), editável em Modo Mestre com busca/adicionar igual a equipamento e magias.'
+  - 'Sentidos especiais (Visão no escuro, Visão cega...) agora guardam o alcance como número em
+    metros, não texto — e duas entradas duplicadas do catálogo (criadas por uma divisão imperfeita
+    do texto original) foram unificadas em "Visão cega".'
+  - Percepção passiva agora é um campo numérico próprio da ficha (com seta de +/-, como CA e PV),
+    em vez de aparecer misturada na lista de Sentidos.

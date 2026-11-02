@@ -178,16 +178,6 @@
     });
   }
 
-  function montarTabelaRoadmap(raiz) {
-    prepararTabelaFiltravel({
-      tabela: raiz.querySelector(".roadmap-tabela table"),
-      busca: raiz.querySelector(".roadmap-busca"),
-      contagem: raiz.querySelector(".roadmap-contagem"),
-      colunasComFiltro: ["Prioridade", "Funcionalidade", "Status"],
-      rotuloPlural: "itens",
-    });
-  }
-
   function montarTabelaBugs(raiz) {
     prepararTabelaFiltravel({
       tabela: raiz.querySelector(".bug-tabela table"),
@@ -493,7 +483,6 @@
     montarTabelaJogadores(document);
     montarTabelaDotes(document);
     montarTabelaPericias(document);
-    montarTabelaRoadmap(document);
     montarTabelaBugs(document);
     montarTabelaMonstros(document);
     montarTabelaItens(document);

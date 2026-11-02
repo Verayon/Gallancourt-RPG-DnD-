@@ -13,3 +13,7 @@ jogador:
 # Vivien Elaris
 
 *(Descrição a preencher.)*
+
+## Ficha de combate
+
+<!-- personagem:ficha-dinamica -->

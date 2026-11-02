@@ -28,6 +28,7 @@ docs/
 └── assets/         Imagens do site e o repositório de arte da campanha (assets/imagens/)
 admin/              Painel do Mestre (app Flask local) — ver docs/mestre/painel.md
 admin/banco.py      Banco SQLite (dados/gallancourt.db, fora do git) — ver ARQUITETURA.md
+admin/monstros_api.py  Leitura/escrita das fichas de monstro no banco — ver .claude/contexto/monstros.md
 alembic/            Migrações versionadas do banco (alembic upgrade head)
 tests/              Testes pytest do banco de dados
 hooks/              Código que monta partes do site: NPCs, ficha de D&D 5e, linha do tempo

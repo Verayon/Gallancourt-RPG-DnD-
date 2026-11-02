@@ -413,8 +413,10 @@ CAMPOS_FICHA_PERSONAGEM = [
 TITULO_SECAO_FICHA = "Biografia"
 
 TIPOS_FICHA = {
-    "npc": (listar_npcs, CAMPOS_FICHA_PERSONAGEM, TITULO_SECAO_FICHA),
-    "jogador": (listar_jogadores, CAMPOS_FICHA_PERSONAGEM, TITULO_SECAO_FICHA),
+    # "npc"/"jogador" saíram daqui em 2026-10-31: Biografia agora é uma aba do widget de ficha
+    # (docs/javascripts/ficha.js, dados em admin/personagens_api.py), não mais um formulário do
+    # Painel — ver .claude/contexto/personagens.md. CAMPOS_FICHA_PERSONAGEM continua existindo
+    # como referência (é o que as colunas novas de Personagem espelham).
     "cidade": (listar_cidades, CAMPOS_FICHA_CIDADE, TITULO_SECAO_FICHA_CIDADE),
 }
 
@@ -560,8 +562,6 @@ def salvar_imagem(
 # (chave, rótulo, obrigatório)
 CAMPOS_STATBLOCK_TEXTO = [
     ("nome", "Nome", True),
-    ("rotulo_variante", "Nome curto da variante (ex.: Arqueiro — deixe em branco se for a versão "
-     "base da criatura; com mais de uma ficha na mesma página, elas viram abas)", False),
     ("subtitulo", "Tipo / papel (ex.: Humanoide médio, qualquer alinhamento)", False),
     ("foto", "Foto (caminho relativo — preenchido sozinho ao enviar uma imagem abaixo)", False),
     ("nivel", "Nível (personagens de jogador)", False),
@@ -1831,6 +1831,7 @@ def salvar_item_roadmap(root: Path, dados: dict, id_item: int | None = None) -> 
         "prioridade": dados.get("prioridade") or roadmap.PRIORIDADES[-1],
         "tipo": dados.get("tipo") or roadmap.TIPOS[0],
         "status": dados.get("status") or roadmap.STATUS[0],
+        "responsavel": (dados.get("responsavel") or "").strip(),
     }
     if id_item:
         if not any(int(i.get("id") or 0) == id_item for i in itens):

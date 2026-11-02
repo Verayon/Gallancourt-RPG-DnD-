@@ -67,3 +67,7 @@ Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
     - Quem são, exatamente, os "aristocratas da capital" que traíram seu pai? Alguns deles ainda
       têm poder em Valynesse?
     - Quando ocorreram a prisão e a execução do pai?
+
+## Ficha de combate
+
+<!-- personagem:ficha-dinamica -->

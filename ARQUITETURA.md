@@ -156,10 +156,17 @@ completo — prova, em produção, que dado operacional não precisa mais dispar
 site. Nada do que já funcionava foi tocado. Detalhes de uso em
 `.claude/contexto/banco-de-dados.md`.
 
-**Próxima fatia candidata** (não iniciada, decisão do autor quando for a hora): migrar fichas de
-combate (Actor/CharacterBuild) para o banco — maior ganho real (reuso de um monstro/NPC em vários
-encontros, hoje só possível copiando dados), mas também a mudança mais arriscada (toca
-`hooks/gallancourt.py`, `ficha_combate.html`, `sessao_viva.py`/`sessao_ao_vivo.html`). Só depois
-disso faz sentido parar de disparar rebuild nas escritas que hoje disparam, e só depois de ter
-Actor estruturado no banco faz sentido começar o motor de regras (`calcular_ataque`,
-`aplicar_dano`…).
+**Etapa C — monstros no banco: implementada (2026-10-30).** `docs/monstros/` migrou de
+Markdown/JSON-embutido pro banco (`Monstro`/`FichaMonstro` + catálogos compartilhados
+`Equipamento`/`Magia`/`Habilidade`, ver `.claude/contexto/monstros.md`). Primeira fatia real de
+"Actor estruturado": atributos viraram inteiro (modificador calculado, não digitado), CA/PV/dano
+viraram campos numéricos/estruturados em vez de texto livre — exatamente o formato que um motor
+de combate (`calcular_ataque`, `aplicar_dano`…) vai precisar ler, embora esse motor em si ainda
+não exista. Edição acontece direto na página pública (widget JS + API, sem `mkdocs build` por
+edição — só na criação de uma criatura nova). Efeito colateral importante: o site deixou de ficar
+inteiro atrás de `PAINEL_SENHA` — leitura é pública agora, só escrita exige login ("Modo Mestre").
+
+**Próxima fatia candidata** (não iniciada, decisão do autor quando for a hora): o mesmo tratamento
+para fichas de NPC/jogador (hoje ainda Markdown/JSON-embutido, `hooks/gallancourt.py::_paginar_npc`,
+`ficha_combate.html`) — ganho real seria unificar o modelo de Actor entre monstro/NPC/jogador
+antes de começar o motor de regras de verdade, hoje ainda inexistente mesmo para monstros.

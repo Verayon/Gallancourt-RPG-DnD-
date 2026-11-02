@@ -27,6 +27,7 @@ import roadmap
 import bugs
 import gerador_npc as gn
 import banco
+import personagens_api as ma
 
 ROOT = Path(os.environ.get("GALLANCOURT_ADMIN_ROOT", wd.DEFAULT_ROOT)).resolve()
 SITE_DIR = ROOT / "site"
@@ -112,14 +113,58 @@ def fazer_logout():
     return redirect(url_for("tela_login"))
 
 
+@app.get("/api/auth/estado")
+def api_auth_estado():
+    """Usado por docs/javascripts/modo-mestre.js em toda página do site, pra saber se mostra o
+    botão 'Entrar' ou o indicador de Modo Mestre ativo — e por monstro-ficha.js, pra decidir se
+    desenha os controles de edição."""
+    return jsonify(autenticado=bool(session.get("autenticado")))
+
+
+@app.post("/api/auth/entrar")
+def api_auth_entrar():
+    """Versão em JSON do /login (mesma senha, mesma sessão) — usada pelo popup de Modo Mestre
+    (docs/javascripts/modo-mestre.js), que não navega pra outra página."""
+    ip = _ip_cliente()
+    if _bloqueado(ip):
+        return jsonify(autenticado=False, erro="Muitas tentativas erradas. Espere alguns minutos."), 429
+    dados = request.get_json(silent=True) or {}
+    senha = dados.get("senha", "")
+    if SENHA_PAINEL and hmac.compare_digest(senha, SENHA_PAINEL):
+        session.clear()
+        session["autenticado"] = True
+        session.permanent = True
+        return jsonify(autenticado=True)
+    _registrar_falha(ip)
+    return jsonify(autenticado=False, erro="Senha incorreta."), 401
+
+
+@app.post("/api/auth/sair")
+def api_auth_sair():
+    session.clear()
+    return jsonify(autenticado=False)
+
+
+# Prefixos de API que ficam de leitura livre mesmo com PAINEL_SENHA definida (ver
+# "Mudança de acesso" — o site passou a ser consulta pública; só criar/editar/excluir exige
+# login). Checado só em GET: POST/PUT/DELETE nesses mesmos prefixos continuam exigindo login.
+_PREFIXOS_API_LEITURA_LIVRE = ("/api/personagens", "/api/catalogo", "/api/auth/", "/api/roadmap")
+
+
 @app.before_request
 def _exigir_login():
     if not SENHA_PAINEL:
         return None  # sem PAINEL_SENHA configurada: autenticação desligada (uso só local)
-    if request.endpoint in _ROTAS_LIVRES:
+    if request.endpoint in _ROTAS_LIVRES or request.endpoint == "api_auth_entrar":
         return None
+    if request.method == "GET" and (
+        request.endpoint == "servir_site" or request.path.startswith(_PREFIXOS_API_LEITURA_LIVRE)
+    ):
+        return None  # o site e as APIs de leitura são públicos — só a edição exige senha
     if session.get("autenticado"):
         return None
+    if request.path.startswith("/api/"):
+        return jsonify(erro="Faça login (Modo Mestre) para isso."), 401
     destino = request.full_path if request.query_string else request.path
     return redirect(url_for("tela_login", next=destino))
 
@@ -340,9 +385,18 @@ def enviar_imagem():
     )
 
 
+def _paginas_ficha_combate():
+    return [p for p in wd.listar_todas_paginas(ROOT) if p.rel_docs.startswith("mestre/sessoes/")]
+
+
 @app.get("/ficha-combate")
 def escolher_ficha_combate():
-    paginas = wd.listar_todas_paginas(ROOT)
+    # Desde 2026-10-31, monstro/NPC nomeado/jogador têm ficha de combate de verdade no banco
+    # (editável ao vivo na própria página, em Modo Mestre — ver docs/javascripts/ficha.js). Este
+    # formulário (texto em Markdown/JSON embutido) continua existindo só para o uso que sobrou:
+    # figurantes de sessão sem página própria (ver docs/mestre/manutencao-do-canone.md) — por
+    # isso o seletor de página só oferece páginas de sessão.
+    paginas = _paginas_ficha_combate()
     fichas = wd.listar_statblocks(ROOT)
     pagina_escolhida = request.args.get("pagina", "")
     slug_escolhido = request.args.get("ficha", "")
@@ -407,7 +461,7 @@ def _ler_grupo_do_form(form, prefixo: str, campos: list[tuple]) -> list[dict]:
 
 @app.post("/ficha-combate")
 def salvar_ficha_combate():
-    paginas = wd.listar_todas_paginas(ROOT)
+    paginas = _paginas_ficha_combate()
     pagina_escolhida = request.form.get("pagina", "")
     slug_antigo = request.form.get("slug_antigo", "")
     ancora = request.form.get("ancora", "").strip()
@@ -940,6 +994,340 @@ def api_arquivar(pagina):
 
 
 # --------------------------------------------------------------------------
+# API JSON de personagens — monstro, NPC nomeado e jogador, unificados desde 2026-10-31 (ver
+# admin/banco.py e admin/personagens_api.py; NPCs genéricos, figurantes de sessão e a ficha de
+# cidade continuam em Markdown de propósito, ver .claude/contexto/personagens.md). GET é público
+# (leitura livre do site); toda escrita exige Modo Mestre (ver _exigir_login acima). Usada pelo
+# widget embutido na própria página do personagem (docs/javascripts/ficha.js) — nenhuma dessas
+# rotas dispara `mkdocs build`, é por isso que a edição aparece na hora.
+# --------------------------------------------------------------------------
+
+_TIPOS_CATALOGO_VALIDOS = {"equipamentos", "habilidades", "magias", "idiomas", "sentidos", "pericias"}
+
+
+def _tipo_catalogo_valido(tipo: str) -> bool:
+    return tipo in _TIPOS_CATALOGO_VALIDOS
+
+
+def _tipo_ator_valido(tipo: str) -> bool:
+    return tipo in banco.TIPOS_ATOR
+
+
+@app.get("/api/personagens/<tipo>/<slug>")
+def api_ver_personagem(tipo, slug):
+    if not _tipo_ator_valido(tipo):
+        return _erro_json("Tipo de personagem desconhecido.")
+    with SessaoBanco() as sessao:
+        personagem = ma.obter_personagem(sessao, tipo, slug)
+        if personagem is None:
+            return _erro_json("Personagem não encontrado.")
+        return jsonify(ma.serializar_personagem(personagem))
+
+
+@app.put("/api/personagens/<tipo>/<slug>")
+def api_atualizar_personagem(tipo, slug):
+    if not _tipo_ator_valido(tipo):
+        return _erro_json("Tipo de personagem desconhecido.")
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        personagem = ma.obter_personagem(sessao, tipo, slug)
+        if personagem is None:
+            return _erro_json("Personagem não encontrado.")
+        ma.atualizar_personagem(sessao, personagem, dados)
+        return jsonify(ma.serializar_personagem(personagem))
+
+
+@app.get("/api/catalogo/<tipo>")
+def api_listar_catalogo(tipo):
+    if not _tipo_catalogo_valido(tipo):
+        return _erro_json("Catálogo desconhecido.")
+    with SessaoBanco() as sessao:
+        itens = ma.listar_catalogo(
+            sessao, tipo,
+            busca=request.args.get("busca", ""), categoria=request.args.get("categoria", ""),
+            origem_personagem=request.args.get("origem_personagem", ""),
+        )
+        return jsonify(itens=itens)
+
+
+@app.post("/api/catalogo/<tipo>")
+def api_criar_item_catalogo(tipo):
+    if not _tipo_catalogo_valido(tipo):
+        return _erro_json("Catálogo desconhecido.")
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        try:
+            item = ma.criar_item_catalogo(sessao, tipo, dados)
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        return jsonify(item)
+
+
+@app.post("/api/personagens/<tipo>/<slug>/fichas")
+def api_criar_variante(tipo, slug):
+    if not _tipo_ator_valido(tipo):
+        return _erro_json("Tipo de personagem desconhecido.")
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        personagem = ma.obter_personagem(sessao, tipo, slug)
+        if personagem is None:
+            return _erro_json("Personagem não encontrado.")
+        try:
+            ma.criar_variante(sessao, personagem, dados.get("rotulo", ""))
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        return jsonify(ma.serializar_personagem(ma.obter_personagem(sessao, tipo, slug)))
+
+
+@app.put("/api/personagens/<tipo>/<slug>/fichas/<int:ficha_id>")
+def api_salvar_ficha(tipo, slug, ficha_id):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        ficha = ma.obter_ficha(sessao, ficha_id)
+        if ficha is None or ficha.personagem.slug != slug or ficha.personagem.tipo != tipo:
+            return _erro_json("Ficha não encontrada.")
+        ma.atualizar_ficha(sessao, ficha, dados)
+        return jsonify(ma.serializar_personagem(ma.obter_personagem(sessao, tipo, slug)))
+
+
+@app.delete("/api/personagens/<tipo>/<slug>/fichas/<int:ficha_id>")
+def api_excluir_ficha(tipo, slug, ficha_id):
+    with SessaoBanco() as sessao:
+        ficha = ma.obter_ficha(sessao, ficha_id)
+        if ficha is None or ficha.personagem.slug != slug or ficha.personagem.tipo != tipo:
+            return _erro_json("Ficha não encontrada.")
+        try:
+            ma.excluir_ficha(sessao, ficha)
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        return jsonify(ma.serializar_personagem(ma.obter_personagem(sessao, tipo, slug)))
+
+
+@app.post("/api/fichas/<int:ficha_id>/<tipo>")
+def api_adicionar_vinculo(ficha_id, tipo):
+    if not _tipo_catalogo_valido(tipo):
+        return _erro_json("Catálogo desconhecido.")
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        ficha = ma.obter_ficha(sessao, ficha_id)
+        if ficha is None:
+            return _erro_json("Ficha não encontrada.")
+        item_id = dados.get("item_id")
+        if not item_id:
+            return _erro_json("Informe item_id.", 400)
+        try:
+            ma.adicionar_vinculo(sessao, ficha, tipo, int(item_id), dados)
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        return jsonify(ma.serializar_personagem(ficha.personagem))
+
+
+@app.delete("/api/fichas/<int:ficha_id>/<tipo>/<int:vinculo_id>")
+def api_remover_vinculo(ficha_id, tipo, vinculo_id):
+    if not _tipo_catalogo_valido(tipo):
+        return _erro_json("Catálogo desconhecido.")
+    with SessaoBanco() as sessao:
+        ficha = ma.obter_ficha(sessao, ficha_id)
+        if ficha is None:
+            return _erro_json("Ficha não encontrada.")
+        personagem = ficha.personagem
+        ma.remover_vinculo(sessao, tipo, vinculo_id)
+        return jsonify(ma.serializar_personagem(personagem))
+
+
+@app.put("/api/fichas/<int:ficha_id>/sentidos/<int:vinculo_id>")
+def api_atualizar_valor_sentido(ficha_id, vinculo_id):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        ficha = ma.obter_ficha(sessao, ficha_id)
+        if ficha is None:
+            return _erro_json("Ficha não encontrada.")
+        try:
+            ma.atualizar_valor_sentido(sessao, vinculo_id, dados.get("valor", ""))
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        return jsonify(ma.serializar_personagem(ficha.personagem))
+
+
+@app.put("/api/fichas/<int:ficha_id>/pericias/<int:vinculo_id>")
+def api_atualizar_bonus_pericia(ficha_id, vinculo_id):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        ficha = ma.obter_ficha(sessao, ficha_id)
+        if ficha is None:
+            return _erro_json("Ficha não encontrada.")
+        try:
+            ma.atualizar_bonus_pericia(sessao, vinculo_id, dados.get("bonus", 0))
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        return jsonify(ma.serializar_personagem(ficha.personagem))
+
+
+@app.post("/api/fichas/<int:ficha_id>/espacos-magia")
+def api_criar_espaco_magia(ficha_id):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        ficha = ma.obter_ficha(sessao, ficha_id)
+        if ficha is None:
+            return _erro_json("Ficha não encontrada.")
+        ma.criar_espaco_magia(sessao, ficha, dados)
+        return jsonify(ma.serializar_personagem(ficha.personagem))
+
+
+@app.put("/api/fichas/<int:ficha_id>/espacos-magia/<int:vinculo_id>")
+def api_atualizar_espaco_magia(ficha_id, vinculo_id):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        ficha = ma.obter_ficha(sessao, ficha_id)
+        if ficha is None:
+            return _erro_json("Ficha não encontrada.")
+        try:
+            ma.atualizar_espaco_magia(sessao, vinculo_id, dados)
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        return jsonify(ma.serializar_personagem(ficha.personagem))
+
+
+@app.delete("/api/fichas/<int:ficha_id>/espacos-magia/<int:vinculo_id>")
+def api_remover_espaco_magia(ficha_id, vinculo_id):
+    with SessaoBanco() as sessao:
+        ficha = ma.obter_ficha(sessao, ficha_id)
+        if ficha is None:
+            return _erro_json("Ficha não encontrada.")
+        ma.remover_espaco_magia(sessao, vinculo_id)
+        return jsonify(ma.serializar_personagem(ficha.personagem))
+
+
+@app.post("/api/fichas/<int:ficha_id>/condicoes")
+def api_adicionar_condicao(ficha_id):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        ficha = ma.obter_ficha(sessao, ficha_id)
+        if ficha is None:
+            return _erro_json("Ficha não encontrada.")
+        try:
+            ma.adicionar_condicao(sessao, ficha, dados.get("nome", ""))
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        return jsonify(ma.serializar_personagem(ficha.personagem))
+
+
+@app.delete("/api/fichas/<int:ficha_id>/condicoes/<int:vinculo_id>")
+def api_remover_condicao(ficha_id, vinculo_id):
+    with SessaoBanco() as sessao:
+        ficha = ma.obter_ficha(sessao, ficha_id)
+        if ficha is None:
+            return _erro_json("Ficha não encontrada.")
+        ma.remover_condicao(sessao, vinculo_id)
+        return jsonify(ma.serializar_personagem(ficha.personagem))
+
+
+@app.post("/api/fichas/<int:ficha_id>/efeitos")
+def api_criar_efeito(ficha_id):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        ficha = ma.obter_ficha(sessao, ficha_id)
+        if ficha is None:
+            return _erro_json("Ficha não encontrada.")
+        try:
+            ma.criar_efeito(sessao, ficha, dados)
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        return jsonify(ma.serializar_personagem(ficha.personagem))
+
+
+@app.put("/api/fichas/<int:ficha_id>/efeitos/<int:vinculo_id>")
+def api_atualizar_efeito(ficha_id, vinculo_id):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        ficha = ma.obter_ficha(sessao, ficha_id)
+        if ficha is None:
+            return _erro_json("Ficha não encontrada.")
+        try:
+            ma.atualizar_efeito(sessao, vinculo_id, dados)
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        return jsonify(ma.serializar_personagem(ficha.personagem))
+
+
+@app.delete("/api/fichas/<int:ficha_id>/efeitos/<int:vinculo_id>")
+def api_remover_efeito(ficha_id, vinculo_id):
+    with SessaoBanco() as sessao:
+        ficha = ma.obter_ficha(sessao, ficha_id)
+        if ficha is None:
+            return _erro_json("Ficha não encontrada.")
+        ma.remover_efeito(sessao, vinculo_id)
+        return jsonify(ma.serializar_personagem(ficha.personagem))
+
+
+@app.post("/api/personagens/<tipo>/<slug>/diario")
+def api_criar_entrada_diario(tipo, slug):
+    if not _tipo_ator_valido(tipo):
+        return _erro_json("Tipo de personagem desconhecido.")
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        personagem = ma.obter_personagem(sessao, tipo, slug)
+        if personagem is None:
+            return _erro_json("Personagem não encontrado.")
+        ma.criar_entrada_diario(sessao, personagem, dados)
+        return jsonify(ma.serializar_personagem(personagem))
+
+
+@app.put("/api/personagens/<tipo>/<slug>/diario/<int:vinculo_id>")
+def api_atualizar_entrada_diario(tipo, slug, vinculo_id):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        personagem = ma.obter_personagem(sessao, tipo, slug)
+        if personagem is None:
+            return _erro_json("Personagem não encontrado.")
+        try:
+            ma.atualizar_entrada_diario(sessao, vinculo_id, dados)
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        return jsonify(ma.serializar_personagem(personagem))
+
+
+@app.delete("/api/personagens/<tipo>/<slug>/diario/<int:vinculo_id>")
+def api_remover_entrada_diario(tipo, slug, vinculo_id):
+    with SessaoBanco() as sessao:
+        personagem = ma.obter_personagem(sessao, tipo, slug)
+        if personagem is None:
+            return _erro_json("Personagem não encontrado.")
+        ma.remover_entrada_diario(sessao, vinculo_id)
+        return jsonify(ma.serializar_personagem(personagem))
+
+
+@app.post("/api/personagens/<tipo>/<slug>/foto")
+def api_salvar_foto_personagem(tipo, slug):
+    if not _tipo_ator_valido(tipo):
+        return _erro_json("Tipo de personagem desconhecido.")
+    arquivo = request.files.get("foto")
+    if not arquivo or not arquivo.filename:
+        return _erro_json("Envie um arquivo de imagem.", 400)
+    with SessaoBanco() as sessao:
+        personagem = ma.obter_personagem(sessao, tipo, slug)
+        if personagem is None:
+            return _erro_json("Personagem não encontrado.")
+        try:
+            ma.salvar_foto_personagem(ROOT, sessao, personagem, arquivo.filename, arquivo.read())
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        return jsonify(ma.serializar_personagem(personagem))
+
+
+@app.delete("/api/personagens/<tipo>/<slug>/foto")
+def api_apagar_foto_personagem(tipo, slug):
+    if not _tipo_ator_valido(tipo):
+        return _erro_json("Tipo de personagem desconhecido.")
+    with SessaoBanco() as sessao:
+        personagem = ma.obter_personagem(sessao, tipo, slug)
+        if personagem is None:
+            return _erro_json("Personagem não encontrado.")
+        ma.apagar_foto_personagem(ROOT, sessao, personagem)
+        return jsonify(ma.serializar_personagem(personagem))
+
+
+# --------------------------------------------------------------------------
 # API JSON de criação/listagem de entidades — usada pelos widgets embutidos direto nas páginas
 # do site (docs/personagens/index.md, docs/lugares/index.md, docs/mestre/jogadores/index.md),
 # para não precisar mais abrir o Painel em outra aba. As rotas HTML abaixo (/npc/novo etc.)
@@ -1320,7 +1708,52 @@ def apagar_changelog():
 
 
 # --------------------------------------------------------------------------
-# Roadmap
+# Roadmap — API JSON (leitura livre; criar/editar/excluir exige Modo Mestre, ver
+# _exigir_login/_PREFIXOS_API_LEITURA_LIVRE acima). Usada pelo widget embutido na própria página
+# pública do Roadmap (docs/javascripts/roadmap.js) — o formulário HTML abaixo (/roadmap) continua
+# funcionando em paralelo, lendo/escrevendo o mesmo dados/roadmap.yml.
+# --------------------------------------------------------------------------
+
+@app.get("/api/roadmap")
+def api_listar_roadmap():
+    return jsonify(
+        itens=wd.listar_roadmap(ROOT),
+        prioridades=roadmap.PRIORIDADES, tipos=roadmap.TIPOS, status_opcoes=roadmap.STATUS,
+    )
+
+
+@app.post("/api/roadmap")
+def api_criar_item_roadmap():
+    dados = request.get_json(silent=True) or {}
+    try:
+        novo_id = wd.salvar_item_roadmap(ROOT, dados)
+    except ValueError as exc:
+        return _erro_json(str(exc), 400)
+    return jsonify(itens=wd.listar_roadmap(ROOT), id=novo_id)
+
+
+@app.put("/api/roadmap/<int:id_item>")
+def api_editar_item_roadmap(id_item):
+    dados = request.get_json(silent=True) or {}
+    if not any(int(i.get("id") or 0) == id_item for i in wd.listar_roadmap(ROOT)):
+        return _erro_json("Item não encontrado.")
+    try:
+        wd.salvar_item_roadmap(ROOT, dados, id_item)
+    except ValueError as exc:
+        return _erro_json(str(exc), 400)
+    return jsonify(itens=wd.listar_roadmap(ROOT))
+
+
+@app.delete("/api/roadmap/<int:id_item>")
+def api_apagar_item_roadmap(id_item):
+    if not any(int(i.get("id") or 0) == id_item for i in wd.listar_roadmap(ROOT)):
+        return _erro_json("Item não encontrado.")
+    wd.apagar_item_roadmap(ROOT, id_item)
+    return jsonify(itens=wd.listar_roadmap(ROOT))
+
+
+# --------------------------------------------------------------------------
+# Roadmap — formulário HTML (Painel do Mestre)
 # --------------------------------------------------------------------------
 
 def _contexto_roadmap(**extra):
@@ -1345,15 +1778,15 @@ def salvar_roadmap():
         "prioridade": request.form.get("prioridade", ""),
         "tipo": request.form.get("tipo", ""),
         "status": request.form.get("status", ""),
+        "responsavel": request.form.get("responsavel", "").strip(),
     }
     try:
         novo_id = wd.salvar_item_roadmap(ROOT, dados, id_item)
     except ValueError as exc:
         return render_template("roadmap.html", **_contexto_roadmap(item={**dados, "id": id_item}, erro=str(exc)))
-    build_ok, build_saida = wd.publicar_build(ROOT)
-    return render_template(
-        "roadmap.html", **_contexto_roadmap(item={}, salvo=novo_id, build_ok=build_ok, build_saida=build_saida),
-    )
+    # Sem rebuild: a página pública do Roadmap lê os itens em runtime pela API (ver
+    # docs/javascripts/roadmap.js), não mais de uma tabela gerada no build.
+    return render_template("roadmap.html", **_contexto_roadmap(item={}, salvo=novo_id, build_ok=True))
 
 
 @app.post("/roadmap/apagar")
@@ -1361,7 +1794,6 @@ def apagar_roadmap():
     id_item = request.form.get("id", type=int)
     if id_item:
         wd.apagar_item_roadmap(ROOT, id_item)
-        wd.publicar_build(ROOT)
     return redirect(url_for("formulario_roadmap"))
 
 

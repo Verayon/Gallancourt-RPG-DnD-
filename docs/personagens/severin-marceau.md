@@ -59,3 +59,7 @@ Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
 
 !!! question "Em aberto"
     Sucessão de L'Ordre; hierarquia clerical abaixo do Primat.
+
+## Ficha de combate
+
+<!-- personagem:ficha-dinamica -->

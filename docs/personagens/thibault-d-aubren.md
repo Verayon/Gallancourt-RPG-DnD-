@@ -39,3 +39,7 @@ responsáveis diretos por sua morte.
 !!! tip "Não confundir"
     Com o [Capitão-General Thibault de la Rivière](thibault-de-la-riviere.md), traidor de
     Saint-Armand.
+
+## Ficha de combate
+
+<!-- personagem:ficha-dinamica -->

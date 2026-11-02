@@ -94,9 +94,10 @@ também continua disponível.
 ## Adicionar um jogador
 
 Em [Mestre → Jogadores](jogadores/index.md), o formulário acima da tabela cadastra o personagem
-direto ali — nome, quem joga, raça e classe, um resumo. A ficha de combate dele (CA, PV, ações…) é
-criada depois, como a de qualquer NPC, pela aba **Ficha de combate**, escolhendo a página do
-jogador. O formulário clássico (`http://127.0.0.1:5001/jogador/novo`) também continua disponível.
+direto ali — nome, quem joga, raça e classe, um resumo. A ficha de combate dele (CA, PV, ações…)
+já existe (vazia) a partir daí; preencha abrindo a página do jogador e entrando em
+**🔑 Modo Mestre**. O formulário clássico (`http://127.0.0.1:5001/jogador/novo`) também continua
+disponível.
 
 ## Criar uma sessão nova
 
@@ -159,7 +160,7 @@ texto preenchido no campo "O que aconteceu".
 ### Iniciativa
 
 Adicione cada jogador ou NPC com o nome, o tipo e o valor da rolagem de iniciativa. Se o NPC já
-tem uma [ficha de combate](manutencao-do-canone.md#ficha-de-combate) nesta própria página ou na
+tem uma [ficha de combate](manutencao-do-canone.md#ficha-de-combate-npcs-e-jogadores) nesta própria página ou na
 página de um jogador/NPC marcado em **Participantes da sessão** (ver "Criar uma sessão nova",
 acima), selecione-a em **Ficha vinculada** — o nome e o PV são preenchidos sozinhos (se deixados
 em branco), e a ficha completa dele passa a aparecer na tela quando for a vez dele. O menu só
@@ -259,32 +260,23 @@ campo muda mais de uma vez, vale a mudança mais recente na cronologia.
 Na lista abaixo do formulário dá para **editar** ou **apagar** qualquer acontecimento. Os dados
 ficam em `dados/linha-do-tempo.yml`.
 
-## Preencher a biografia de um personagem ou cidade
+## Ficha de combate de monstro, NPC nomeado ou jogador
 
-Na aba **Biografia**, escolha "NPC", "Jogador" ou "Cidade", escolha o nome numa lista e preencha
-os campos. Ao salvar, o painel cria (ou substitui) a seção **Biografia** — ou **Ficha da cidade**
-— no rodapé daquela página, com exatamente os campos preenchidos. Essa ficha é independente da
-Ficha de combate (atributos/CA/PV/inventário — ver abaixo); as duas aparecem em abas separadas.
+Desde 2026-10-31, a ficha de combate (atributos, CA, PV, inventário, grimório, características,
+efeitos, **e** a Biografia) de monstro, NPC nomeado e jogador **não passa mais pelo Painel** —
+abra a página do personagem no site e entre em **🔑 Modo Mestre** (botão no cabeçalho, ao lado do
+alternador claro/escuro): a ficha aparece direto ali, editável na hora, sem precisar de
+`mkdocs build`. Veja o que cada aba faz em
+[Manutenção do cânone → Ficha de combate](manutencao-do-canone.md#ficha-de-combate-monstros-npcs-nomeados-e-jogadores).
+As abas antigas **Biografia** e **Ficha de combate** deste Painel não têm mais esses três tipos
+pra escolher — ficaram só para **Cidade** (Biografia) e **figurantes de sessão** (Ficha de
+combate), descritos abaixo.
 
-Personagens (NPC ou jogador):
+## Preencher a biografia de uma cidade
 
-| Campo | O que colocar |
-|---|---|
-| Gênero, idade, altura, peso, olhos, cabelo, pele, fé | Descrição física rápida, campo a campo |
-| Aparência física | Porte, marcas, roupas, o que chama atenção à primeira vista |
-| Personalidade | Como a pessoa age, fala, o que a move |
-| Traço marcante | Um hábito ou trejeito reconhecível |
-| Ideal | O que essa pessoa defende |
-| Vínculo | O que ou quem ela protege ou persegue |
-| Defeito | O que pode ser sua ruína |
-| Proficiências e idiomas | Perícias, ferramentas, armas, idiomas que fazem sentido para ela |
-
-Cidades:
-
-| Campo | O que colocar |
-|---|---|
-| População | Uma estimativa, mesmo que aproximada |
-| Defesas e guarnição | Muralhas, guarda, frota, o que protege o lugar |
+Na aba **Biografia**, escolha o nome da cidade numa lista e preencha os campos (população,
+defesas e guarnição). Ao salvar, o painel cria (ou substitui) a seção **Ficha da cidade** no
+rodapé daquela página, com exatamente os campos preenchidos.
 
 !!! warning "Salvar substitui a seção inteira"
     Cada vez que você salva a ficha de uma página, o painel **reescreve a seção inteira** com os
@@ -292,14 +284,15 @@ Cidades:
     fora desses campos, aquele texto some na próxima vez que salvar a ficha por aqui — para
     conteúdo que não se encaixa nos campos, coloque em outra seção da página.
 
-## Criar ou editar uma ficha de combate
+## Criar ou editar uma ficha de combate de figurante de sessão
 
-Na aba **Ficha de combate**, escolha a página onde o NPC deve aparecer (qualquer página da wiki,
-não precisa ser uma de personagem — a Sessão 0, por exemplo, guarda as dela na própria página do
-roteiro) e, se já existir uma ficha ali, escolha-a no segundo menu para editar; deixe em "— nova
-ficha —" para criar uma. Criando uma ficha nova, o terceiro menu, **Começar a partir de um NPC
-genérico**, preenche o formulário com os valores de um NPC-modelo já cadastrado (guarda, camponês,
-bandido…) — é só ajustar o que for diferente e salvar; o modelo original não é alterado.
+Esta aba agora é só para **figurantes sem página própria** (bandidos de uma sessão, por exemplo)
+— pra monstro, NPC nomeado ou jogador, use a ficha direto na página deles (ver acima). Escolha a
+página de sessão onde o figurante deve aparecer e, se já existir uma ficha ali, escolha-a no
+segundo menu para editar; deixe em "— nova ficha —" para criar uma. Criando uma ficha nova, o
+terceiro menu, **Começar a partir de um NPC genérico**, preenche o formulário com os valores de um
+NPC-modelo já cadastrado (guarda, camponês, bandido…) — é só ajustar o que for diferente e salvar;
+o modelo original não é alterado.
 
 Preencha:
 
@@ -313,17 +306,16 @@ Preencha:
 A **foto** é opcional: envie um arquivo pelo campo "Enviar uma foto" (PNG, JPG, WEBP, GIF ou SVG) e
 o caminho é preenchido sozinho; sem foto, o cartão aparece só com CA, PV, deslocamento e (se
 preenchido) espaços de magia, sem moldura vazia. **Espaços de magia** também é opcional e de texto
-livre (ex.: `1º: 4, 2º: 3`) — para NPCs que não conjuram, deixe em branco.
+livre (ex.: `1º: 4, 2º: 3`) — para figurantes que não conjuram, deixe em branco.
 
-Ao salvar, o painel insere (ou atualiza) o cartão visual na página, com os atributos já com
-modificador, e roda `mkdocs build --strict` para confirmar que nada quebrou. Se você mudar o nome
-de uma ficha existente, o cartão é atualizado no lugar — não duplica.
+Ao salvar, o painel insere (ou atualiza) o cartão visual na página de sessão, com os atributos já
+com modificador, e roda `mkdocs build --strict` para confirmar que nada quebrou. Se você mudar o
+nome de uma ficha existente, o cartão é atualizado no lugar — não duplica.
 
 ### Ficha completa (opcional): perícias, inventário, grimório, características, efeitos
 
-Pensada para jogadores e NPCs importantes — não vale a pena preencher isso num monstro genérico do
-catálogo, que continua bem servido só com CA/PV/ações. Abra a seção recolhível **"Ficha completa
-(opcional)"**, abaixo de Traços/ações/magias:
+Útil quando um figurante ganha mais destaque do que o esperado. Abra a seção recolhível
+**"Ficha completa (opcional)"**, abaixo de Traços/ações/magias:
 
 | Grupo | O que faz |
 |---|---|
@@ -333,8 +325,8 @@ catálogo, que continua bem servido só com CA/PV/ações. Abra a seção recolh
 | Características | Até 12 linhas (nome, categoria — Raça/Antecedente/Classe/Subclasse/Habilidade ativa/Habilidade passiva —, usos, execução, descrição). Vira a aba **Características**, agrupada por categoria. |
 | Efeitos ativos | Até 6 linhas (nome, tipo — Temporário/Passivo/Inativo —, origem, duração). Vira a aba **Efeitos**. É só uma lista visível: não altera CA/PV/perícias sozinho. |
 
-Cada uma dessas abas só aparece na página se tiver algo preenchido — uma ficha simples de monstro
-continua só com a aba **Ficha**, sem abas vazias.
+Cada uma dessas abas só aparece na página se tiver algo preenchido — uma ficha simples continua
+só com a aba **Ficha**, sem abas vazias.
 
 !!! warning "Salvar substitui o cartão inteiro"
     Assim como a ficha de personagem, cada vez que você salva pelo painel, o cartão inteiro é

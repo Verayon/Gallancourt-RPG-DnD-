@@ -54,10 +54,14 @@ fundação: a cópia de teste não deve herdar segredos nem estado do autor).
 ## O que NÃO está migrado (de propósito — ver `ARQUITETURA.md` §"Fora de escopo")
 
 - Changelog, Roadmap, linha do tempo (`dados/*.yml`) — continuam YAML, versionados em git.
-- Fichas de combate, NPCs, jogadores (JSON embutido em Markdown) — maior ganho real (reuso de
-  monstro em vários encontros), mas é a próxima fatia grande, não esta fundação.
+- A ficha de **planejamento** de NPC, NPCs genéricos, figurantes de sessão e a ficha de cidade —
+  continuam em Markdown/JSON embutido, de propósito; ver `.claude/contexto/personagens.md`.
 - Qualquer motor de regras (`calcular_ataque`, `aplicar_dano`…) — não existe ainda; só faz sentido
-  depois de ter Actor estruturado no banco.
+  agora que já existe um Actor estruturado no banco (ver abaixo).
+
+**Já migrado**, ao contrário do que diziam versões antigas deste arquivo: a **ficha de combate**
+de monstro (2026-10-30), depois unificada com NPC nomeado e jogador (2026-10-31) — `Personagem`/
+`Ficha` em `admin/banco.py`, ver `.claude/contexto/personagens.md` antes de mexer ali.
 
 Antes de propor migrar algo pra cá, confira se o ganho (consulta relacional, sem duplicação) supera
 o custo de perder o versionamento em git que o arquivo atual já tem — e pergunte ao autor.

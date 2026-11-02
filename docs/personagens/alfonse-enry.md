@@ -58,3 +58,7 @@ Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
 !!! question "Em aberto"
     - Extensão dos poderes de Alfonse.
     - Nome do irmão assassinado e quem sobreviveu ao massacre.
+
+## Ficha de combate
+
+<!-- personagem:ficha-dinamica -->

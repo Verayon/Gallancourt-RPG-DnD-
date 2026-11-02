@@ -1,13 +1,17 @@
 """Roadmap do projeto: o que falta implementar no site.
 
 Fonte única: `dados/roadmap.yml` (fora de `docs/`, não é publicado como arquivo). Cada item tem
-uma descrição, uma prioridade e uma funcionalidade (área do site que ele afeta) — lista aberta,
-dá para acrescentar itens à vontade pelo Painel.
+uma descrição, uma prioridade, uma funcionalidade (área do site que ele afeta) e, opcionalmente,
+um responsável — lista aberta, dá para acrescentar itens à vontade.
 
-Usado em dois lugares:
+Usado em três lugares:
 
-- `hooks/gallancourt.py` (geração do site) monta a tabela em `docs/roadmap/index.md`;
-- `admin/wiki_data.py` (Painel do Mestre) acrescenta, edita e apaga itens.
+- `admin/app.py` (API `/api/roadmap`, ver `docs/javascripts/roadmap.js`) lê/escreve os itens
+  direto na página pública, em Modo Mestre — sem passar por `mkdocs build`;
+- `admin/wiki_data.py` (Painel do Mestre, formulário próprio) também acrescenta, edita e apaga
+  itens, pelas mesmas funções;
+- `hooks/gallancourt.py` (geração do site) só troca o marcador de `docs/roadmap/index.md` por
+  uma raiz vazia que o widget JS preenche — não lê mais os itens no build.
 """
 from __future__ import annotations
 
@@ -20,14 +24,16 @@ ARQUIVO = Path("dados") / "roadmap.yml"
 CABECALHO_ARQUIVO = """\
 # Roadmap de Crônicas de Gallancourt — o que falta implementar.
 #
-# Edite pelo Painel do Mestre (aba "Roadmap"). Lista aberta: acrescente itens à vontade.
+# Edite em Modo Mestre direto na página do Roadmap, ou pelo Painel do Mestre (aba "Roadmap").
+# Lista aberta: acrescente itens à vontade.
 #
 # Campos de cada item:
-#   id          número único (o Painel preenche)
+#   id          número único (preenchido automaticamente)
 #   item        descrição do que falta fazer
 #   prioridade  Alta, Média ou Baixa
 #   tipo        UI, Engine, Conteúdo, Infra ou Dados
 #   status      Planejado, Em andamento ou Concluído
+#   responsavel quem está cuidando do item (texto livre; pode ficar em branco)
 """
 
 PRIORIDADES = ["Alta", "Média", "Baixa"]
@@ -62,48 +68,3 @@ def ordenar(itens: list[dict]) -> list[dict]:
     def chave(i):
         return (_RANK_PRIORIDADE.get(i.get("prioridade"), len(PRIORIDADES)), int(i.get("id") or 0))
     return sorted(itens, key=chave)
-
-
-def _celula(valor) -> str:
-    return str(valor if valor not in (None, "") else "—").replace("|", "\\|").replace("\n", " ")
-
-
-_CLASSE_PRIORIDADE = {"Alta": "alta", "Média": "media", "Baixa": "baixa"}
-_CLASSE_STATUS = {"Planejado": "planejado", "Em andamento": "andamento", "Concluído": "concluido"}
-
-
-def _selo(texto: str | None, classes: dict) -> str:
-    if not texto:
-        return "—"
-    classe = classes.get(texto, "neutro")
-    return f'<span class="selo selo--{classe}">{texto}</span>'
-
-
-def tabela(itens: list[dict]) -> str:
-    if not itens:
-        return "*Nada no roadmap por enquanto.*"
-    linhas = ordenar(itens)
-    cabecalho = "| Item | Prioridade | Funcionalidade | Status |"
-    separador = "|---|---|---|---|"
-    corpo = [
-        f"| {_celula(i.get('item'))} | {_selo(i.get('prioridade'), _CLASSE_PRIORIDADE)} | "
-        f"{_celula(i.get('tipo'))} | {_selo(i.get('status'), _CLASSE_STATUS)} |"
-        for i in linhas
-    ]
-    partes = [
-        '<div class="roadmap-ferramentas" markdown>',
-        "",
-        '<input type="search" class="roadmap-busca" placeholder="Filtrar por texto…" aria-label="Filtrar">',
-        '<span class="roadmap-contagem" aria-live="polite"></span>',
-        "",
-        "</div>",
-        "",
-        '<div class="roadmap-tabela" markdown>',
-        "",
-        cabecalho,
-        separador,
-        *corpo,
-        "",
-        "</div>",
-    ]
-    return "\n".join(partes)

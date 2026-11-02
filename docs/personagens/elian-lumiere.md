@@ -49,3 +49,7 @@ Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
 
 !!! question "Em aberto"
     Qual é o parentesco entre Elian e o Duque Jeanesse Lumière?
+
+## Ficha de combate
+
+<!-- personagem:ficha-dinamica -->

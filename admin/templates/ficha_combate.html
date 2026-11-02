@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 {% block titulo %}Ficha de combate{% endblock %}
 {% block conteudo %}
-<h1>Ficha de combate (NPC)</h1>
-<p class="ajuda">Crie ou edite uma ficha de combate completa — atributos, perícias, equipamento,
-  ações e magias — parecida com uma ficha oficial, com só o que importa para rodar o NPC à mesa.
-  Ela entra na página escolhida como um cartão visual.</p>
+<h1>Ficha de combate (figurante de sessão)</h1>
+<p class="ajuda">Para um NPC nomeado, um jogador ou um monstro, a ficha de combate agora é editada
+  direto na própria página, em Modo Mestre (sem precisar deste formulário). Este formulário é só
+  para figurantes sem página própria (bandidos de uma sessão etc.) — crie ou edite uma ficha de
+  combate completa — atributos, perícias, equipamento, ações e magias — e ela entra na página de
+  sessão escolhida como um cartão visual.</p>
 
 <form method="get" action="/ficha-combate" class="form-escolher">
   <label>Página
@@ -40,15 +42,6 @@
   {% endif %}
 </form>
 
-{% if pagina_escolhida and slug_escolhido %}
-<p class="ajuda">
-  <a class="botao-secundario" href="/ficha-combate?pagina={{ pagina_escolhida }}&copiar_de={{ pagina_escolhida }}::{{ slug_escolhido }}">
-    Criar variante a partir desta ficha
-  </a>
-  — copia todos os valores para uma ficha nova nesta mesma página (ex.: "Goblin" → "Goblin Arqueiro").
-  Preencha o "Nome curto da variante" para ela ganhar uma aba própria ao lado da base.
-</p>
-{% endif %}
 
 {% if pagina_escolhida %}
 {% if salvo %}
@@ -104,9 +97,9 @@
 
   <details class="bloco-ficha">
     <summary>Ficha completa (opcional) — perícias, salvaguardas, inventário, grimório, características e efeitos</summary>
-    <p class="ajuda">Pensada para jogadores e NPCs importantes, não para monstros genéricos do
-      catálogo. Preenchendo a grade de perícias/salvaguardas abaixo, o cartão passa a mostrar o
-      total calculado (atributo + bônus de proficiência) em vez do campo de texto livre.</p>
+    <p class="ajuda">Útil quando um figurante de sessão ganha mais destaque do que o esperado.
+      Preenchendo a grade de perícias/salvaguardas abaixo, o cartão passa a mostrar o total
+      calculado (atributo + bônus de proficiência) em vez do campo de texto livre.</p>
 
     {% set pericias_treino = valores.get("pericias_treino", {}) %}
     <fieldset>

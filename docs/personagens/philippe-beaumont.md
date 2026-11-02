@@ -45,3 +45,7 @@ Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
 
 !!! question "Em aberto"
     Relação formal de Beaumont com a Casa Magnetér.
+
+## Ficha de combate
+
+<!-- personagem:ficha-dinamica -->

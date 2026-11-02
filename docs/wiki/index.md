@@ -34,6 +34,13 @@ mundo de Gallancourt, organizado para consulta rápida durante a mesa.
 
     As cinco cidades de Gallancourt e as três cidades de L'Ordre.
 
+-   [![](../assets/placeholders/cidade.svg){ .card-portrait }](../lugares/index.md)
+
+    **[Lugares](../lugares/index.md)**
+
+    Tabernas, torres, clareiras e outros lugares de sessão, junto com todas as cidades, numa
+    tabela filtrável.
+
 -   [![](../assets/placeholders/casa.svg){ .card-portrait }](../faccoes/index.md)
 
     **[Facções](../faccoes/index.md)**
@@ -76,6 +83,30 @@ mundo de Gallancourt, organizado para consulta rápida durante a mesa.
     **[Magias](../magias/index.md)**
 
     Lista de magias por nível e por classe, filtrável.
+
+-   [![](../assets/placeholders/tema.svg){ .card-portrait }](../dotes/index.md)
+
+    **[Dotes](../dotes/index.md)**
+
+    Pré-requisito, fonte e efeito completo de cada dote (*Feat*).
+
+-   [![](../assets/placeholders/tema.svg){ .card-portrait }](../pericias/index.md)
+
+    **[Perícias](../pericias/index.md)**
+
+    As 18 perícias, cada uma associada a um atributo.
+
+-   [![](../assets/placeholders/tema.svg){ .card-portrait }](../itens/index.md)
+
+    **[Itens](../itens/index.md)**
+
+    Equipamento e itens mágicos por categoria, filtrável.
+
+-   [![](../assets/placeholders/tema.svg){ .card-portrait }](../monstros/index.md)
+
+    **[Monstros](../monstros/index.md)**
+
+    Catálogo de criaturas com ficha de combate completa, editável em Modo Mestre.
 
 </div>
 

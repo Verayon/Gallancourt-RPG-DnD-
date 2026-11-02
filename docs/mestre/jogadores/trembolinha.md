@@ -13,3 +13,7 @@ jogador:
 # Trembolinha
 
 *(Descrição a preencher.)*
+
+## Ficha de combate
+
+<!-- personagem:ficha-dinamica -->

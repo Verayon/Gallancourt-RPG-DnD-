@@ -1324,6 +1324,67 @@ input,
   color: var(--gc-ink-dim);
 }
 
+/* Roadmap embutido (docs/javascripts/roadmap.js) — a raiz também leva a classe .ficha-personagem
+   (ver hooks/gallancourt.py::on_page_markdown) só pra reaproveitar os estilos de botão/input/
+   select já definidos ali; o que falta é específico da lista de itens. */
+.md-typeset .roadmap-form {
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+  margin: .6rem 0 1rem;
+  padding: .7rem .9rem;
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 6px;
+  background: var(--gc-bg-alt);
+}
+
+.md-typeset .roadmap-form label {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  font-size: .72rem;
+  color: var(--gc-gold-soft);
+  text-transform: uppercase;
+}
+
+.md-typeset .roadmap-form textarea {
+  font-family: 'EB Garamond', serif;
+  background: var(--gc-bg-alt);
+  color: var(--md-typeset-color, inherit);
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 4px;
+  padding: .4rem .5rem;
+  resize: vertical;
+}
+
+.md-typeset .roadmap-form .duas-colunas {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .6rem;
+}
+
+@media (max-width: 40rem) {
+  .md-typeset .roadmap-form .duas-colunas {
+    grid-template-columns: 1fr;
+  }
+}
+
+.md-typeset .roadmap-tabela .botao-link {
+  background: transparent;
+  color: var(--gc-ink-dim);
+  padding: .1rem .3rem;
+  text-decoration: underline;
+  font-size: .8rem;
+}
+
+.md-typeset .roadmap-tabela .botao-link.botao-remover {
+  color: var(--gc-red);
+}
+
+.md-typeset .roadmap-tabela td.acoes {
+  white-space: nowrap;
+}
+
 .md-typeset .npc-mini {
   display: block;
   width: 2.3rem;
@@ -2044,6 +2105,483 @@ th[aria-sort="descending"] .magia-ordenar::after { content: " ▼"; opacity: 1; 
 }
 
 /* --------------------------------------------------------------------------
+   Ficha de personagem embutida (docs/javascripts/ficha.js) — monstro, NPC nomeado ou jogador,
+   dados vêm do banco (ver admin/personagens_api.py), não mais de Markdown. Reaproveita
+   .stat-block/.stat-block__chips pro cabeçalho; os elementos abaixo são o resto do widget: as
+   duas faixas de abas (variante, depois Atributos/Inventário/Grimório/Características/Efeitos/
+   Biografia/Diário), campos editáveis, seletor de catálogo.
+   -------------------------------------------------------------------------- */
+
+.md-typeset .ficha-personagem__abas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin-bottom: .8rem;
+}
+
+.md-typeset .ficha-personagem__aba {
+  padding: .35rem .9rem;
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 999px;
+  background: var(--gc-panel);
+  color: var(--gc-ink-dim);
+  font-family: 'EB Garamond', serif;
+  cursor: pointer;
+}
+
+.md-typeset .ficha-personagem__aba:hover {
+  border-color: var(--gc-gold);
+  color: var(--gc-gold-soft);
+}
+
+.md-typeset .ficha-personagem__aba--ativa,
+.md-typeset .ficha-personagem__aba--ativa:hover {
+  background: var(--gc-gold);
+  border-color: var(--gc-gold);
+  color: #1a1711;
+}
+
+.md-typeset .ficha-personagem__aba--nova {
+  font-weight: 700;
+  color: var(--gc-gold-soft);
+}
+
+.md-typeset .ficha-personagem__atributos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(4.2rem, 1fr));
+  gap: .5rem;
+  margin: .4rem 0 .7rem;
+}
+
+.md-typeset .ficha-personagem__atributo {
+  text-align: center;
+  padding: .3rem;
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 6px;
+}
+
+.md-typeset .ficha-personagem__atributo label {
+  display: block;
+  font-size: .72rem;
+  color: var(--gc-gold-soft);
+  text-transform: uppercase;
+}
+
+.md-typeset .ficha-personagem__atributo input {
+  width: 3.2rem;
+  text-align: center;
+}
+
+.md-typeset .ficha-personagem__modificador {
+  display: block;
+  font-size: .8rem;
+  color: var(--gc-ink-dim);
+}
+
+.md-typeset .ficha-personagem__grupo {
+  margin-top: .7rem;
+}
+
+.md-typeset .ficha-personagem__grupo ul {
+  margin: .2rem 0;
+  padding-left: 1.1rem;
+}
+
+.md-typeset .ficha-personagem__ferramentas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  margin-top: 1rem;
+  padding-top: .8rem;
+  border-top: 1px dashed var(--gc-panel-border);
+}
+
+.md-typeset .ficha-personagem__ferramentas label {
+  display: flex;
+  flex-direction: column;
+  font-size: .72rem;
+  color: var(--gc-gold-soft);
+  text-transform: uppercase;
+  gap: .2rem;
+}
+
+.md-typeset .ficha-personagem__acoes-rodape {
+  display: flex;
+  gap: .6rem;
+  margin-top: .8rem;
+}
+
+.md-typeset .ficha-personagem__picker {
+  margin-top: .5rem;
+  padding: .6rem .8rem;
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 6px;
+  background: var(--gc-bg-alt);
+}
+
+.md-typeset .ficha-personagem__picker ul {
+  list-style: none;
+  margin: .4rem 0;
+  padding: 0;
+}
+
+.md-typeset .ficha-personagem__picker li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .25rem 0;
+  border-bottom: 1px solid var(--gc-panel-border);
+}
+
+.md-typeset .ficha-personagem__picker-novo-campos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin: .5rem 0;
+}
+
+.md-typeset .ficha-personagem__picker-novo-campos label {
+  display: flex;
+  flex-direction: column;
+  font-size: .72rem;
+  gap: .2rem;
+}
+
+/* Controles de formulário dentro do widget — mesmo visual do Painel do Mestre (ver
+   admin/static/estilo.css), reaproveitado aqui pra não ficar com o estilo padrão do navegador. */
+.md-typeset .ficha-personagem input,
+.md-typeset .ficha-personagem select {
+  font-family: 'EB Garamond', serif;
+  background: var(--gc-bg-alt);
+  color: var(--md-typeset-color, inherit);
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 4px;
+  padding: .25rem .4rem;
+}
+
+.md-typeset .ficha-personagem .input-pequeno { width: 4.5rem; }
+.md-typeset .ficha-personagem .input-medio { width: 9rem; }
+
+.md-typeset .ficha-personagem button {
+  font-family: 'EB Garamond', serif;
+  border: none;
+  border-radius: 6px;
+  padding: .35rem .8rem;
+  cursor: pointer;
+}
+
+.md-typeset .ficha-personagem .botao-principal {
+  background: var(--gc-gold);
+  color: #1a1711;
+  font-weight: 700;
+}
+
+.md-typeset .ficha-personagem .botao-secundario {
+  background: var(--gc-panel);
+  border: 1px solid var(--gc-panel-border);
+  color: var(--gc-ink-dim);
+}
+
+.md-typeset .ficha-personagem .botao-remover {
+  background: transparent;
+  color: var(--gc-red);
+  padding: .1rem .4rem;
+}
+
+.md-typeset .ficha-personagem .ajuda {
+  color: var(--gc-ink-dim);
+  font-style: italic;
+  font-size: .85rem;
+}
+
+.md-typeset .ficha-personagem__lista-simples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  list-style: none;
+  margin: .3rem 0;
+  padding: 0;
+}
+
+.md-typeset .ficha-personagem__lista-simples li {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .2rem .5rem;
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 999px;
+  background: var(--gc-bg-alt);
+  font-size: .85rem;
+}
+
+/* Chips editáveis no topo do cartão (CR/CA/PV máximo/Deslocamento, ver req. 5) — mesmo visual
+   do .stat-block__chips de leitura, só que com controles dentro. */
+.md-typeset .stat-block__chips .chip-editavel {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .25rem .6rem;
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 999px;
+  background: var(--gc-bg-alt);
+  font-size: .82rem;
+}
+
+.md-typeset .stat-block__chips .chip-editavel strong {
+  color: var(--gc-gold-soft);
+  text-transform: uppercase;
+  font-size: .68rem;
+  letter-spacing: .03em;
+}
+
+.md-typeset .stat-block__chips .chip-editavel input[type="number"],
+.md-typeset .stat-block__chips .chip-editavel select {
+  width: 3.4rem;
+  text-align: center;
+  padding: .1rem .2rem;
+}
+
+.md-typeset .stat-block__chips .chip-editavel select {
+  width: auto;
+}
+
+.md-typeset .chip-passo {
+  width: 1.4rem;
+  height: 1.4rem;
+  line-height: 1;
+  padding: 0 !important;
+  font-weight: 700;
+}
+
+.md-typeset .ficha-personagem__foto-bloco {
+  margin-bottom: .8rem;
+}
+
+.md-typeset .ficha-personagem__foto {
+  display: block;
+  max-width: 10rem;
+  max-height: 10rem;
+  border: 1px solid var(--gc-gold);
+  border-radius: 6px;
+  object-fit: cover;
+  margin-bottom: .4rem;
+}
+
+.md-typeset .ficha-personagem__foto-upload {
+  display: inline-block;
+}
+
+.md-typeset .ficha-personagem__picker-topo {
+  display: flex;
+  gap: .5rem;
+  align-items: center;
+}
+
+.md-typeset .ficha-personagem__picker-topo input[type="search"] {
+  flex: 1 1 auto;
+}
+
+.md-typeset .ficha-personagem__picker-fechar {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.md-typeset .ficha-personagem__picker-tabela {
+  width: 100%;
+  font-size: .82rem;
+  margin: .5rem 0;
+}
+
+.md-typeset .ficha-personagem__picker-tabela th,
+.md-typeset .ficha-personagem__picker-tabela td {
+  text-align: left;
+  padding: .25rem .4rem;
+  border-bottom: 1px solid var(--gc-panel-border);
+}
+
+.md-typeset .ficha-personagem textarea {
+  font-family: 'EB Garamond', serif;
+  background: var(--gc-bg-alt);
+  color: var(--md-typeset-color, inherit);
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 4px;
+  padding: .3rem .5rem;
+  width: 100%;
+  resize: vertical;
+}
+
+/* Segunda faixa de abas (Atributos/Inventário/Grimório/Características/Efeitos/Biografia/
+   Diário) — visual de sublinhado, pra não se confundir com as abas de variante (pílulas douradas
+   acima, Base/Arqueiro...). */
+.md-typeset .ficha-personagem__abas2 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .2rem;
+  margin: .8rem 0 .6rem;
+  border-bottom: 1px solid var(--gc-panel-border);
+}
+
+.md-typeset .ficha-personagem__aba2 {
+  padding: .35rem .8rem;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--gc-ink-dim);
+  font-family: 'EB Garamond', serif;
+  cursor: pointer;
+  margin-bottom: -1px;
+}
+
+.md-typeset .ficha-personagem__aba2:hover {
+  color: var(--gc-gold-soft);
+}
+
+.md-typeset .ficha-personagem__aba2--ativa,
+.md-typeset .ficha-personagem__aba2--ativa:hover {
+  color: var(--gc-gold-soft);
+  border-bottom-color: var(--gc-gold);
+  font-weight: 600;
+}
+
+.md-typeset .ficha-personagem__painel-aba {
+  padding-top: .2rem;
+}
+
+.md-typeset .ficha-personagem__moedas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  align-items: flex-end;
+  margin-top: .4rem;
+}
+
+.md-typeset .ficha-personagem__moeda {
+  display: flex;
+  flex-direction: column;
+  font-size: .72rem;
+  color: var(--gc-gold-soft);
+  text-transform: uppercase;
+  gap: .2rem;
+}
+
+.md-typeset .ficha-personagem__bio-fisicos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  margin-bottom: .8rem;
+}
+
+.md-typeset .ficha-personagem__bio-textos {
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+}
+
+.md-typeset .ficha-personagem__campo-bio {
+  display: flex;
+  flex-direction: column;
+  font-size: .72rem;
+  color: var(--gc-gold-soft);
+  text-transform: uppercase;
+  gap: .2rem;
+}
+
+.md-typeset .ficha-personagem__campo-bio input {
+  width: 10rem;
+}
+
+.md-typeset .ficha-personagem__diario-novo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  align-items: flex-start;
+  margin-bottom: .8rem;
+  padding-bottom: .8rem;
+  border-bottom: 1px dashed var(--gc-panel-border);
+}
+
+.md-typeset .ficha-personagem__diario-novo textarea {
+  flex: 1 1 100%;
+}
+
+.md-typeset .ficha-personagem__diario-entrada {
+  padding: .4rem 0;
+  border-bottom: 1px solid var(--gc-panel-border);
+}
+
+.md-typeset .ficha-personagem__diario-cabeca {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.md-typeset .ficha-personagem__condicoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin-top: .4rem;
+}
+
+.md-typeset .ficha-personagem__espaco-magia,
+.md-typeset .ficha-personagem__efeito {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  align-items: center;
+}
+
+.md-typeset .ficha-personagem__espaco-magia label,
+.md-typeset .ficha-personagem__efeito label {
+  display: inline-flex;
+  align-items: center;
+  gap: .2rem;
+  font-size: .78rem;
+  color: var(--gc-ink-dim);
+}
+
+.md-typeset .ficha-personagem__lista-simples--coluna {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.md-typeset .ficha-personagem__lista-simples--coluna li {
+  border-radius: 6px;
+}
+
+.md-typeset .ficha-personagem__efeito-novo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  align-items: center;
+  margin: .4rem 0 .6rem;
+}
+
+/* Pílulas de condição (Efeitos) e de moeda em modo leitura — estado "ativa" em vermelho pra
+   destacar que a condição está afetando a criatura agora. */
+.md-typeset .ficha-personagem .pilula {
+  display: inline-flex;
+  align-items: center;
+  padding: .2rem .6rem;
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 999px;
+  background: var(--gc-bg-alt);
+  color: var(--gc-ink-dim);
+  font-size: .78rem;
+}
+
+.md-typeset .ficha-personagem button.pilula {
+  font-family: 'EB Garamond', serif;
+  cursor: pointer;
+}
+
+.md-typeset .ficha-personagem .pilula--ativa {
+  background: var(--gc-red);
+  border-color: var(--gc-red);
+  color: #fff;
+}
+
+/* --------------------------------------------------------------------------
    Selos de prioridade/status — Roadmap (docs/roadmap/index.md) e Bugs
    (docs/configuracoes/bugs.md)
    -------------------------------------------------------------------------- */
@@ -2114,4 +2652,90 @@ th[aria-sort="descending"] .magia-ordenar::after { content: " ▼"; opacity: 1; 
   .md-typeset .botao-reportar-bug {
     bottom: 3.6rem; /* acima da barra de busca/navegação inferior do Material no celular */
   }
+}
+
+/* --------------------------------------------------------------------------
+   Botão de Modo Mestre no cabeçalho (injetado por docs/javascripts/modo-mestre.js, ao lado do
+   alternador claro/escuro) e o popup de login — fora de .md-typeset porque ficam no cabeçalho/
+   sobrepostos à página, não no conteúdo.
+   -------------------------------------------------------------------------- */
+
+.modo-mestre-botao {
+  font-size: .95rem;
+}
+
+.modo-mestre-botao--ativo {
+  color: var(--gc-gold) !important;
+}
+
+.modo-mestre-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, .55);
+}
+
+.modo-mestre-popup__caixa {
+  position: relative;
+  width: min(22rem, 90vw);
+  padding: 1.5rem;
+  border-radius: 10px;
+  background: var(--gc-panel, #28241e);
+  border: 1px solid var(--gc-panel-border, #453f34);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, .4);
+  color: var(--gc-ink, #e8dfc8);
+  font-family: 'EB Garamond', serif;
+}
+
+.modo-mestre-popup__caixa h3 {
+  margin-top: 0;
+}
+
+.modo-mestre-popup__caixa form {
+  display: flex;
+  gap: .5rem;
+}
+
+.modo-mestre-popup__caixa input[type="password"] {
+  flex: 1 1 auto;
+  padding: .4rem .6rem;
+  border-radius: 4px;
+  border: 1px solid var(--gc-panel-border, #453f34);
+  background: var(--gc-bg-alt, #221e19);
+  color: inherit;
+}
+
+.modo-mestre-popup__fechar {
+  position: absolute;
+  top: .6rem;
+  right: .6rem;
+}
+
+.modo-mestre-popup__erro {
+  color: #e57373;
+  margin-bottom: 0;
+}
+
+/* Botões dentro do popup — fora de .md-typeset, então não herdam o estilo de botão do tema
+   nem o de .ficha-personagem; precisam do próprio. */
+.modo-mestre-popup button {
+  font-family: 'EB Garamond', serif;
+  border: none;
+  border-radius: 6px;
+  padding: .4rem .9rem;
+  cursor: pointer;
+}
+
+.modo-mestre-popup .botao-principal {
+  background: var(--gc-gold, #b7914f);
+  color: #1a1711;
+  font-weight: 700;
+}
+
+.modo-mestre-popup .botao-remover {
+  background: transparent;
+  color: var(--gc-red, #9c5347);
 }

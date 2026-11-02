@@ -40,3 +40,7 @@ coração econômico do reino e usa essa influência para pressionar o Conseil d
 
 Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
 <!-- fim:gerado -->
+
+## Ficha de combate
+
+<!-- personagem:ficha-dinamica -->

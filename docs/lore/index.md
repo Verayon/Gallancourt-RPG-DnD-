@@ -5,6 +5,11 @@ tags:
 
 # A Crônica de Gallancourt
 
+!!! tip "Outras formas de ler"
+    Prefere o resumo? Veja **[Gallancourt em uma página](../visao-geral.md)**. Prefere ler por
+    capítulos separados, com período e resumo de cada um? Veja
+    **[Crônica em capítulos](../historia/index.md)**.
+
 <div class="lore-scroll" markdown>
 
 > *Não com paz. Mas com uma fronteira.*

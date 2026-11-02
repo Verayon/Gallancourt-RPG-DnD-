@@ -46,3 +46,7 @@ Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
 
 !!! question "Em aberto"
     Quem comanda a frota pirata rival?
+
+## Ficha de combate
+
+<!-- personagem:ficha-dinamica -->

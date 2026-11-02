@@ -13,3 +13,7 @@ jogador:
 # Elariel Fogo do Sol
 
 *(Descrição a preencher.)*
+
+## Ficha de combate
+
+<!-- personagem:ficha-dinamica -->

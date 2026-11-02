@@ -48,3 +48,7 @@ Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
     - Constituição do cargo de Doge e como é feita a eleição.
     - O Doge é primeiro entre iguais no Conseil des Seigneurs, chefe executivo ou título regional?
     - Qual foi, exatamente, seu papel na morte do rei?
+
+## Ficha de combate
+
+<!-- personagem:ficha-dinamica -->

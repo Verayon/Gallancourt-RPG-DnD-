@@ -42,3 +42,7 @@ Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
 
 !!! question "Em aberto"
     Quais movimentos rebeldes Henri financia, e quem recebe suas informações?
+
+## Ficha de combate
+
+<!-- personagem:ficha-dinamica -->

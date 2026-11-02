@@ -171,18 +171,15 @@ def teste_menu_topo(copia: Path):
     assert topo == MENU_TOPO, f"esperado {MENU_TOPO}, obtido {topo}"
 
 
-@verificacao("2. Menu", "Subcategorias da Wiki, na ordem combinada")
+@verificacao("2. Menu", "Subcategorias da Wiki, no corpo da página (na ordem combinada)")
 def teste_menu_wiki(copia: Path):
-    wiki = next(i["Wiki"] for i in _nav(copia) if isinstance(i, dict) and "Wiki" in i)
-    sub = _titulos(wiki)
-    assert sub == MENU_WIKI, f"esperado {MENU_WIKI}, obtido {sub}"
-
-
-@verificacao("2. Menu", "Todo NPC está no menu (Wiki → NPCs)")
-def teste_menu_npcs(copia: Path):
-    texto = ler(copia / "mkdocs.yml")
-    faltando = [p.name for p in paginas_npc(copia) if f"personagens/{p.name}" not in texto]
-    assert not faltando, "fora do menu: " + ", ".join(faltando)
+    # Desde o menu flat (só categorias de topo), as subcategorias da Wiki não vivem mais no nav:
+    # moraram para cards no corpo de docs/wiki/index.md — ver docs/mestre/manutencao-do-canone.md.
+    texto = ler(copia / "docs" / "wiki" / "index.md")
+    grade = re.search(r'<div class="grid cards" markdown>(.*?)</div>', texto, re.S)
+    assert grade, "bloco de cards da Wiki não encontrado"
+    titulos = re.findall(r"\*\*\[([^\]]+)\]\([^)]+/index\.md\)\*\*", grade.group(1))
+    assert titulos == MENU_WIKI, f"esperado {MENU_WIKI}, obtido {titulos}"
 
 
 # --------------------------------------------------------------------------
@@ -687,7 +684,6 @@ def main() -> int:
         teste_linha_tempo(copia)
         teste_menu_topo(copia)
         teste_menu_wiki(copia)
-        teste_menu_npcs(copia)
         teste_relacoes(copia)
         teste_build(copia)
         teste_tabela_npcs(copia)

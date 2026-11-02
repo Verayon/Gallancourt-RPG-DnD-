@@ -20,9 +20,19 @@ alembic upgrade head                  # cria/atualiza dados/gallancourt.db (roda
 operado, atualize-o junto.
 
 O Painel pode ficar acessível fora de `127.0.0.1` (ver `PAINEL_HOST`/`PAINEL_HTTPS` em
-`admin/app.py`) — quando `PAINEL_SENHA` está definida, login é obrigatório. Hoje o site também
-fica acessível publicamente via Cloudflare Tunnel (link temporário, muda a cada reinício do
-túnel — ver item de Roadmap sobre domínio fixo).
+`admin/app.py`) — hoje o site também fica acessível publicamente via Cloudflare Tunnel (link
+temporário, muda a cada reinício do túnel — ver item de Roadmap sobre domínio fixo). **O site é
+público para leitura** mesmo com `PAINEL_SENHA` definida — só escrita (Painel inteiro, e qualquer
+`POST`/`PUT`/`DELETE` de API) exige login. "Modo Mestre" (botão no cabeçalho, popup de senha) usa essa
+mesma sessão/senha — ver `.claude/contexto/personagens.md`. O Roadmap (`docs/roadmap/index.md`) também é
+editável (adicionar/editar/excluir, com responsável opcional) direto na página em Modo Mestre, sem
+precisar do Painel nem de `mkdocs build` — a API é `/api/roadmap` (`admin/app.py`), lendo/escrevendo
+`dados/roadmap.yml` (`hooks/roadmap.py`); o menu da esquerda só mostra as categorias principais —
+subcategorias se acessam clicando no corpo da página da categoria (padrão já usado por Monstros).
+
+**Changelog sempre atualizado:** ao final de qualquer sessão que mude algo visível ao autor/jogadores
+(feature nova, mudança de comportamento, correção notável), acrescente uma versão em
+`dados/changelog.yml` antes de concluir — é a única forma de quem acompanha o site saber o que mudou.
 
 ## Onde está cada coisa
 
@@ -32,7 +42,8 @@ túnel — ver item de Roadmap sobre domínio fixo).
 | `hooks/` | Código que roda no build: `gallancourt.py` (NPCs, tabelas, abas), `linha_tempo.py` |
 | `admin/` | Painel do Mestre (Flask local) — cria NPCs, sessões, fichas, acontecimentos |
 | `admin/painel_local.env` | Segredos locais do Painel (`PAINEL_SENHA` de login) — gitignorado, nunca commitado; sem ele o login fica desligado (uso só local) |
-| `admin/banco.py` + `alembic/` | Banco SQLite (`dados/gallancourt.db`, gitignorado) para dados operacionais novos — ver `ARQUITETURA.md` e `.claude/contexto/banco-de-dados.md` antes de usar ou estender |
+| `admin/banco.py` + `alembic/` | Banco SQLite (`dados/gallancourt.db`, gitignorado) — Campanha/Fontes e, desde 2026-10-31, a ficha de combate de monstros, NPCs nomeados e jogadores (ver `.claude/contexto/personagens.md`) |
+| `admin/personagens_api.py` | Leitura/escrita das fichas de personagem no banco — isolado do Flask, como `wiki_data.py` |
 | `tests/` | Testes `pytest` do banco de dados (único teste de "regra"/estado hoje; `scripts/testar_site.py` é integração de site) |
 | `dados/linha-do-tempo.yml` | Acontecimentos da campanha (fonte única) |
 | `scripts/` | `gerar_relacoes.py` (fonte única das relações), `testar_site.py` (teste fixo) |
@@ -47,6 +58,7 @@ túnel — ver item de Roadmap sobre domínio fixo).
 | Painel, Diário, sessões, calendário | `.claude/contexto/sessoes-e-painel.md` |
 | Páginas de conteúdo, relações/intrigas, Compêndio | `.claude/contexto/conteudo.md` |
 | Banco de dados (`admin/banco.py`, Alembic, o que migrar ou não) | `.claude/contexto/banco-de-dados.md` |
+| Fichas de personagem (monstro/NPC/jogador), variantes, Modo Mestre, catálogos compartilhados | `.claude/contexto/personagens.md` |
 
 ## Regras do projeto (decididas pelo autor)
 
@@ -84,9 +96,13 @@ Valois: idealista disfarçado · títulos dos rascunhos antigos não adotados. P
   NPC, sessão e acontecimento → funções de `admin/wiki_data.py`.
 - **Validação:** `mkdocs build --strict` durante o trabalho; o teste completo só quando o autor
   pedir (`/testar-site`). Da saída, leia só o resumo e as linhas ❌.
-- **Markdown/YAML continuam sendo a fonte de verdade de tudo que já existe** (lore, fichas, NPCs,
-  Changelog/Roadmap/linha do tempo) — não migre nada disso pro banco (`admin/banco.py`) sem o
-  autor pedir explicitamente; ver `ARQUITETURA.md` pro porquê.
+- **Markdown/YAML continuam sendo a fonte de verdade de tudo que já existe** (lore, ficha de
+  planejamento de NPC, Changelog/Roadmap/linha do tempo) — não migre nada disso pro banco
+  (`admin/banco.py`) sem o autor pedir explicitamente; ver `ARQUITETURA.md` pro porquê. **Exceção:
+  a ficha de combate** de monstro/NPC nomeado/jogador (`Personagem`/`Ficha` em `admin/banco.py`) —
+  essa já vive no banco desde 2026-10-31, de propósito; ver `.claude/contexto/personagens.md`
+  antes de mexer ali. NPCs genéricos, figurantes de sessão e a ficha de cidade continuam no
+  sistema antigo (Markdown/JSON embutido), também de propósito.
 - **Respostas curtas** ao autor: o que mudou, onde, e o que ele precisa decidir.
 
 ## Comandos do projeto (skills em `.claude/skills/`)

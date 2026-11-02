@@ -45,21 +45,20 @@ que o painel depende de encontrar, e que **não podem ser removidas** das págin
 - a linha `- diario/index.md` no `nav:` do `mkdocs.yml` (é a âncora onde novas sessões são
   inseridas);
 - os marcadores `<!-- campo:<chave> -->`/`<!-- /campo:<chave> -->` dentro de `## Ficha da cidade`
-  ou `## Biografia` — um par por campo, invisíveis no site. A aba **Biografia** do painel lê
-  e regrava a seção inteira a partir desses marcadores; os campos estão em `admin/wiki_data.py`
-  (`CAMPOS_FICHA_CIDADE`, `CAMPOS_FICHA_PERSONAGEM`, via `TIPOS_FICHA` — tipos `"npc"`/`"jogador"`/
-  `"cidade"`);
-- dentro de uma ficha de combate (`<!-- inicio:statblock:<slug> -->...<!-- fim:... -->`), os
-  marcadores internos `<!-- bloco:ficha -->`/`<!-- bloco:inventario -->`/`<!-- bloco:grimorio -->`/
-  `<!-- bloco:caracteristicas -->`/`<!-- bloco:efeitos -->` (cada um com seu par de fechamento) —
-  é por eles que `hooks/gallancourt.py::_extrair_blocos_personagem` decide em qual aba cada pedaço
-  da "ficha completa" opcional entra. Fichas salvas antes desses marcadores existirem não os têm;
-  nesse caso o cartão inteiro cai na aba **Ficha** (compatibilidade mantida de propósito);
-- numa página de monstro (front matter `monstro:`) com mais de uma ficha de combate — a base e
-  variantes criadas pelo botão **Criar variante a partir desta ficha** em `/ficha-combate` (ex.:
-  Goblin → Arqueiro, Lanceiro) —, `hooks/gallancourt.py::_paginar_variantes` agrupa todas numa aba
-  por ficha, rotulada pelo campo `rotulo_variante` de cada uma (`admin/wiki_data.py`,
-  `CAMPOS_STATBLOCK_TEXTO`). Com uma ficha só, não mexe em nada;
+  — um par por campo, invisíveis no site. A aba **Biografia** do painel lê e regrava a seção
+  inteira a partir desses marcadores; os campos estão em `admin/wiki_data.py`
+  (`CAMPOS_FICHA_CIDADE`, via `TIPOS_FICHA` — hoje só o tipo `"cidade"`: NPC/jogador saíram desse
+  sistema em 2026-10-31, Biografia virou uma aba do widget de ficha de combate — ver
+  `.claude/contexto/personagens.md`);
+- dentro de uma ficha de combate de **figurante de sessão** (`<!-- inicio:statblock:<slug>
+  -->...<!-- fim:... -->`, sistema que só sobrou pra isso — ver "Figurantes de sessão" em
+  `docs/mestre/manutencao-do-canone.md`), os marcadores internos `<!-- bloco:ficha -->`/
+  `<!-- bloco:inventario -->`/etc. continuam sendo escritos por `wiki_data.py::salvar_statblock`,
+  mas nada mais os lê de volta pra bucketing de abas (isso só existia pra NPC/jogador, removido
+  junto com a migração deles pro banco);
+- monstro, NPC nomeado e jogador **não usam mais** este sistema de statblock em Markdown — a
+  ficha de combate deles vive no banco (`Personagem`/`Ficha`), editável direto na página em Modo
+  Mestre; ver `.claude/contexto/personagens.md`;
 - o bloco `npc:` (ou `jogador:`) no front matter das páginas de NPC/jogador;
 - em `docs/mestre/sessoes/sessao-<n>-*.md`, os marcadores `<!-- mestre:alternancia -->`/
   `<!-- /mestre:alternancia -->` logo após o H1 e no fim das abas, e o `<div class="painel-

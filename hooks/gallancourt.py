@@ -4,7 +4,8 @@ Registrado em `mkdocs.yml` (chave `hooks:`). Roda durante a geração do site e:
 
 - monta o cabeçalho de cada página de NPC (retrato + dados rápidos) a partir do bloco `npc:`
   do front matter;
-- transforma as seções `##` das páginas de NPC em abas;
+- transforma as seções `##` das páginas de NPC/jogador em abas (`_paginar_npc`) — "Ficha de
+  combate" é só mais uma dessas seções, com o widget dinâmico descrito abaixo dentro dela;
 - gera a tabela de NPCs em `personagens/index.md` (marcador `<!-- npcs:tabela -->`);
 - gera a lista de sessões em `mestre/sessoes/index.md` (marcador `<!-- sessoes:lista -->`);
 - gera a lista de lugares em `lugares/index.md` (marcador `<!-- lugares:lista -->`) e a de
@@ -19,16 +20,26 @@ Registrado em `mkdocs.yml` (chave `hooks:`). Roda durante a geração do site e:
   página envolvida e aplica as mudanças de estado (situação, localização…) aos NPCs;
 - gera a página geral da linha do tempo (marcador `<!-- linha-do-tempo:geral -->`);
 - gera a página do changelog (`docs/changelog/index.md`, marcador `<!-- changelog:lista -->`,
-  ver `changelog.py`) e a do roadmap (`docs/roadmap/index.md`, marcador `<!-- roadmap:lista -->`,
-  ver `roadmap.py`), e a lista de bugs reportados (`docs/configuracoes/bugs.md`, marcador
+  ver `changelog.py`) e a lista de bugs reportados (`docs/configuracoes/bugs.md`, marcador
   `<!-- bugs:lista -->`, ver `bugs.py`);
+- troca o marcador `<!-- roadmap:lista -->` (`docs/roadmap/index.md`) por uma raiz vazia — igual
+  ao padrão de `<!-- personagem:ficha-dinamica -->` abaixo: o roadmap agora é editável em Modo
+  Mestre direto na página, via `docs/javascripts/roadmap.js` + API (`/api/roadmap`, ver
+  `admin/app.py`), lendo/escrevendo `dados/roadmap.yml` (`roadmap.py`) sem precisar de `mkdocs
+  build` por edição;
 - acrescenta, em toda página, o selo da versão atual (canto inferior esquerdo) e o botão de
   "Reportar bug" (canto inferior direito);
+- troca o marcador `<!-- personagem:ficha-dinamica -->` por uma raiz vazia em páginas de monstro,
+  NPC nomeado ou jogador (`_ficha_dinamica_personagem`) — a ficha de combate (atributos,
+  inventário, grimório, características, efeitos, biografia, diário) vive no banco desde
+  2026-10-31 e é desenhada em runtime por `docs/javascripts/ficha.js`, consultando
+  `/api/personagens/<tipo>/<slug>`; nenhuma edição passa por aqui nem dispara `mkdocs build`
+  (ver `.claude/contexto/personagens.md`);
 - gera a lista de monstros (`docs/monstros/index.md`, marcador `<!-- monstros:lista -->`), lendo
-  o bloco `monstro:` do front matter e o CR da ficha de combate embutida em cada página; e a
-  lista de itens (`docs/itens/index.md`, marcador `<!-- itens:lista -->`), com uma aba por
-  categoria (Armas, Armaduras, Equipamento de Aventura, Ferramentas, Montarias e Veículos, Itens
-  Mágicos), lendo o bloco `item:` do front matter de cada página em `docs/itens/*.md`.
+  o bloco `monstro:` do front matter e o CR da ficha Base no banco; e a lista de itens
+  (`docs/itens/index.md`, marcador `<!-- itens:lista -->`), com uma aba por categoria (Armas,
+  Armaduras, Equipamento de Aventura, Ferramentas, Montarias e Veículos, Itens Mágicos), lendo o
+  bloco `item:` do front matter de cada página em `docs/itens/*.md`.
 
 A tabela e a lista são lidas direto dos arquivos a cada geração: uma página nova de NPC ou de
 sessão aparece sozinha, sem editar nenhuma lista à mão.
@@ -36,7 +47,6 @@ sessão aparece sozinha, sem editar nenhuma lista à mão.
 from __future__ import annotations
 
 import html
-import json
 import re
 import sys
 from pathlib import Path
@@ -46,8 +56,28 @@ import yaml
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import linha_tempo  # noqa: E402
 import changelog  # noqa: E402
-import roadmap  # noqa: E402
 import bugs  # noqa: E402
+
+# Monstros, NPCs nomeados e jogadores vivem no banco desde 2026-10-31 (ver admin/banco.py,
+# admin/personagens_api.py e scripts/migrar_*_para_banco.py) — só o build-time precisa ler (pro
+# catálogo/tabela de cada um); a leitura em runtime é toda do widget JS (docs/javascripts/ficha.js)
+# via API. NPCs genéricos, figurantes de sessão e a ficha de cidade continuam em Markdown.
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "admin"))
+import banco  # noqa: E402
+import personagens_api as personagens_bd  # noqa: E402
+
+
+def _resumo_personagens_bd(docs: Path, tipo: str | None = None) -> dict[str, dict]:
+    """Slug -> resumo da ficha Base de cada personagem, lido do banco — ver
+    personagens_api.listar_personagens_resumo. Se o banco ainda não foi migrado (tabela ausente),
+    devolve vazio em vez de quebrar o build inteiro."""
+    try:
+        engine = banco.criar_engine(docs.parent)
+        Sessao = banco.fabrica_sessao(engine)
+        with Sessao() as sessao:
+            return personagens_bd.listar_personagens_resumo(sessao, tipo=tipo)
+    except Exception:
+        return {}
 
 # Linha do tempo carregada uma vez por geração do site (on_pre_build)
 _EVENTOS: list[dict] = []
@@ -57,9 +87,9 @@ _EVENTOS: list[dict] = []
 # os arquivos de docs/magias/ do zero, multiplicando a leitura de disco por ~10.
 _MAGIAS: list[dict] = []
 
-# Changelog/Roadmap/Bugs carregados uma vez por geração do site (on_pre_build)
+# Changelog/Bugs carregados uma vez por geração do site (on_pre_build) — Roadmap não entra mais
+# aqui: desde a edição em Modo Mestre direto na página, ele é lido em runtime pela API, não no build.
 _CHANGELOG: list[dict] = []
-_ROADMAP: list[dict] = []
 _BUGS: list[dict] = []
 
 RETRATO_PADRAO = "../assets/placeholders/personagem.svg"
@@ -469,21 +499,6 @@ COLUNAS_JOGADOR = [
     ("Jogador", "jogador"), ("Classe", "classe"), ("Nível", "nivel"), ("CA", "ca"), ("PV", "pv"),
 ]
 
-_RE_STATBLOCK_DADOS = re.compile(r"<!-- dados:statblock (.*?) -->", re.DOTALL)
-
-
-def _resumo_statblock(texto: str) -> dict:
-    """Primeira ficha de combate (ver admin/wiki_data.py) anexada à página, só para ler alguns
-    valores de resumo (classe/nível/CA/PV) — não precisa renderizar nada."""
-    m = _RE_STATBLOCK_DADOS.search(texto)
-    if not m:
-        return {}
-    try:
-        return json.loads(m.group(1))
-    except json.JSONDecodeError:
-        return {}
-
-
 def _criar_entidade_div(tipo: str, caminho_painel_doc: str) -> list[str]:
     """Div-mount do formulário embutido "Adicionar NPC/Lugar/Jogador" (ver
     docs/javascripts/gallancourt.js::montarFormularioEntidade e painel-fetch.js). Site e Painel
@@ -623,6 +638,7 @@ def _lista_jogadores(docs: Path, config) -> str:
     linhas = []
     pasta = docs / "mestre" / "jogadores"
     if pasta.is_dir():
+        resumo_bd = _resumo_personagens_bd(docs, tipo="jogador")
         for arquivo in sorted(pasta.glob("*.md")):
             if arquivo.stem == "index":
                 continue
@@ -631,13 +647,12 @@ def _lista_jogadores(docs: Path, config) -> str:
             jogador = meta.get("jogador")
             if not isinstance(jogador, dict):
                 continue
-            ficha = _resumo_statblock(texto)
+            ficha = resumo_bd.get(arquivo.stem) or {}
             jogador = dict(jogador)
             jogador["classe"] = ficha.get("classe") or jogador.get("raca_classe") or "—"
             jogador["nivel"] = ficha.get("nivel") or "—"
             jogador["ca"] = ficha.get("ca") or "—"
-            pv, pv_atual = ficha.get("pv"), ficha.get("pv_atual")
-            jogador["pv"] = (f"{pv_atual}/{pv}" if pv_atual else pv) or "—"
+            jogador["pv"] = ficha.get("pv") or "—"
             linhas.append((_titulo_h1(corpo, arquivo.stem), arquivo.name, jogador))
     linhas.sort(key=lambda l: l[0].casefold())
 
@@ -687,6 +702,7 @@ def _lista_monstros(docs: Path, config) -> str:
     linhas = []
     pasta = docs / "monstros"
     if pasta.is_dir():
+        resumo_bd = _resumo_personagens_bd(docs, tipo="monstro")
         for arquivo in sorted(pasta.glob("*.md")):
             if arquivo.stem == "index":
                 continue
@@ -696,7 +712,7 @@ def _lista_monstros(docs: Path, config) -> str:
             if not isinstance(monstro, dict):
                 continue
             monstro = dict(monstro)
-            monstro["cr"] = _resumo_statblock(texto).get("cr") or "—"
+            monstro["cr"] = (resumo_bd.get(arquivo.stem) or {}).get("cr") or "—"
             linhas.append((_titulo_h1(corpo, arquivo.stem), arquivo.name, monstro))
     linhas.sort(key=lambda l: l[0].casefold())
 
@@ -900,44 +916,14 @@ def _abas(abas: list[tuple[str, str]]) -> str:
     )
 
 
-_RE_STATBLOCK = re.compile(
-    r"<!-- inicio:statblock:[a-z0-9-]+ -->.*?<!-- fim:statblock:[a-z0-9-]+ -->", re.DOTALL,
-)
-
-
-_RE_BLOCO_PERSONAGEM = re.compile(
-    r"<!-- bloco:(ficha|inventario|grimorio|caracteristicas|efeitos) -->(.*?)<!-- /bloco:\1 -->",
-    re.DOTALL,
-)
-_NOMES_BLOCO_PERSONAGEM = ("ficha", "inventario", "grimorio", "caracteristicas", "efeitos")
-
-
-def _extrair_blocos_personagem(texto: str) -> tuple[str, dict[str, list[str]]]:
-    """Tira do texto qualquer ficha de combate (cartão `.stat-block` e os blocos opcionais de
-    inventário/grimório/características/efeitos da "ficha completa" — ver
-    admin/wiki_data.py::salvar_statblock) anexada à página, para reinserir cada pedaço na aba
-    certa em vez de deixá-la solta onde o Painel a inseriu (normalmente no fim do arquivo).
-    Cada ficha de combate é um único comentário `<!-- inicio:statblock:X -->...<!-- fim... -->`;
-    dentro dele, os blocos nomeados (`<!-- bloco:ficha -->`, `<!-- bloco:inventario -->`, …)
-    indicam para qual aba cada pedaço vai. Fichas salvas antes desses marcadores nomeados
-    existirem não têm nenhum `bloco:`, então o cartão inteiro cai em "ficha" — mantém as páginas
-    antigas funcionando sem precisar resalvá-las."""
-    buckets: dict[str, list[str]] = {nome: [] for nome in _NOMES_BLOCO_PERSONAGEM}
-    for chunk in _RE_STATBLOCK.findall(texto):
-        sub = _RE_BLOCO_PERSONAGEM.findall(chunk)
-        if sub:
-            for nome, conteudo in sub:
-                buckets[nome].append(conteudo)
-        else:
-            buckets["ficha"].append(chunk)
-    return _RE_STATBLOCK.sub("", texto), buckets
-
-
 def _paginar_npc(conteudo: str) -> str:
+    """Divide o corpo da página em abas, uma por `##` (mais "Visão geral" pro texto antes do
+    primeiro `##`) — "Ficha de combate" é só mais uma dessas seções: desde 2026-10-31 ela contém
+    o widget dinâmico (`_ficha_dinamica_personagem`), não mais um cartão de texto estático
+    montado aqui; não há nada pra extrair/juntar nesta função além da divisão em abas em si."""
     if "<!-- npc-corpo -->" not in conteudo:
         return conteudo
     cabeca, corpo = conteudo.split("<!-- npc-corpo -->", 1)
-    corpo, blocos = _extrair_blocos_personagem(corpo)
     corpo, em_aberto = _separar_em_aberto(corpo)
 
     partes = re.split(r'<h2 id="([^"]+)"[^>]*>(.*?)</h2>', corpo, flags=re.S)
@@ -949,73 +935,28 @@ def _paginar_npc(conteudo: str) -> str:
         titulo = html.unescape(re.sub(r"<[^>]+>", "", titulo_html)).replace("¶", "").strip()
         abas.append((titulo, f'<span id="{ancora}" class="npc-ancora"></span>{secao}'))
 
-    fichas_combate = blocos["ficha"]
-    indice_ficha = next((i for i, (titulo, _) in enumerate(abas) if titulo == "Ficha"), None)
-    if indice_ficha is not None:
-        if fichas_combate:
-            titulo, conteudo_ficha = abas[indice_ficha]
-            abas[indice_ficha] = (titulo, conteudo_ficha + "".join(fichas_combate))
-    else:
-        # Sem ficha de combate anexada ainda, reserva o espaço com um aviso — o Painel do
-        # Mestre preenche isso pela aba "Ficha de combate" (atributos, perícias, CA, PV,
-        # equipamento), escolhendo esta página; o cartão então aparece aqui automaticamente.
-        conteudo_ficha = "".join(fichas_combate) if fichas_combate else (
-            "<p><em>Ficha ainda não preenchida — crie uma pela aba \"Ficha de combate\" do "
-            "Painel do Mestre, escolhendo esta página.</em></p>"
-        )
-        abas.append(("Ficha", conteudo_ficha))
-
-    # Abas opcionais da "ficha completa" — só aparecem se o Painel tiver salvo algo nelas.
-    for nome_bucket, titulo_aba in (
-        ("inventario", "Inventário"), ("grimorio", "Grimório"),
-        ("caracteristicas", "Características"), ("efeitos", "Efeitos"),
-    ):
-        if blocos[nome_bucket]:
-            abas.append((titulo_aba, "".join(blocos[nome_bucket])))
-
     if em_aberto:
         abas.append(("Em aberto", "".join(em_aberto)))
     if not abas:
         return cabeca
-    # Ordem: Visão geral, Linha do tempo, Biografia, demais seções, Ficha + abas da ficha
-    # completa, Em aberto.
-    prioridade = {
-        "Visão geral": 0, "Linha do tempo": 1, "Biografia": 10,
-        "Ficha": 90, "Inventário": 91, "Grimório": 92, "Características": 93, "Efeitos": 94,
-        "Em aberto": 99,
-    }
+    # Ordem: Visão geral, Linha do tempo, demais seções, Ficha de combate, Em aberto.
+    prioridade = {"Visão geral": 0, "Linha do tempo": 1, "Ficha de combate": 90, "Em aberto": 99}
     abas = [a for _, a in sorted(enumerate(abas), key=lambda x: (prioridade.get(x[1][0], 50), x[0]))]
     return cabeca + _abas(abas)
 
 
-_RE_STATBLOCK_DADOS_BLOCO = re.compile(r"<!-- dados:statblock (.*?) -->", re.DOTALL)
-
-
-def _paginar_variantes(conteudo: str) -> str:
-    """Quando uma página de monstro tem mais de uma ficha de combate — a base e as variantes
-    criadas pelo Painel (botão "Criar variante a partir desta ficha" em /ficha-combate, ex.:
-    Goblin → Arqueiro, Lanceiro) — agrupa todas numa aba por ficha, rotulada pelo campo
-    `rotulo_variante` (ou "Base" para a primeira sem rótulo). Com uma ficha só, não mexe em
-    nada — é o caso comum hoje."""
-    fichas = _RE_STATBLOCK.findall(conteudo)
-    if len(fichas) <= 1:
-        return conteudo
-    abas = []
-    usou_base = False
-    for chunk in fichas:
-        m = _RE_STATBLOCK_DADOS_BLOCO.search(chunk)
-        rotulo = ""
-        if m:
-            try:
-                rotulo = (json.loads(m.group(1)).get("rotulo_variante") or "").strip()
-            except json.JSONDecodeError:
-                pass
-        if not rotulo:
-            rotulo = "Base" if not usou_base else "Variante"
-            usou_base = True
-        abas.append((rotulo, chunk))
-    resto = _RE_STATBLOCK.sub("", conteudo).rstrip()
-    return resto + "\n\n" + _abas(abas)
+def _ficha_dinamica_personagem(conteudo: str, tipo: str, slug: str) -> str:
+    """Troca o marcador `<!-- personagem:ficha-dinamica -->` (monstro, npc ou jogador — ver
+    admin/personagens_api.py) por uma raiz vazia — mesmo padrão já comprovado em
+    `.painel-iniciativa`: docs/javascripts/ficha.js busca `/api/personagens/<tipo>/<slug>` ao
+    carregar e desenha as abas (Base + variantes, cada uma com Atributos/Inventário/Grimório/
+    Características/Efeitos/Biografia/Diário) ali. Sem JS, fica vazia; com JS, aparece na hora —
+    nenhuma edição de ficha passa por aqui nem dispara `mkdocs build`."""
+    raiz = (
+        f'<div class="ficha-personagem" data-tipo="{html.escape(tipo)}" data-slug="{html.escape(slug)}">'
+        '<p class="ajuda"><em>Carregando ficha…</em></p></div>'
+    )
+    return conteudo.replace("<!-- personagem:ficha-dinamica -->", raiz)
 
 
 # --------------------------------------------------------------------------
@@ -1023,12 +964,11 @@ def _paginar_variantes(conteudo: str) -> str:
 # --------------------------------------------------------------------------
 
 def on_pre_build(config):
-    global _EVENTOS, _MAGIAS, _CHANGELOG, _ROADMAP, _BUGS
+    global _EVENTOS, _MAGIAS, _CHANGELOG, _BUGS
     raiz = Path(config["config_file_path"]).parent
     _EVENTOS = linha_tempo.carregar(raiz)
     _MAGIAS = _ler_magias(Path(config["docs_dir"]))
     _CHANGELOG = changelog.carregar(raiz)
-    _ROADMAP = roadmap.carregar(raiz)
     _BUGS = bugs.carregar(raiz)
 
 
@@ -1077,7 +1017,11 @@ def on_page_markdown(markdown: str, page, config, files):
     if src == "changelog/index.md" and "<!-- changelog:lista -->" in markdown:
         markdown = markdown.replace("<!-- changelog:lista -->", changelog.pagina_geral(_CHANGELOG))
     if src == "roadmap/index.md" and "<!-- roadmap:lista -->" in markdown:
-        markdown = markdown.replace("<!-- roadmap:lista -->", roadmap.tabela(_ROADMAP))
+        raiz_roadmap = (
+            '<div class="roadmap-painel monstro-ficha" data-roadmap>'
+            '<p class="ajuda"><em>Carregando roadmap…</em></p></div>'
+        )
+        markdown = markdown.replace("<!-- roadmap:lista -->", raiz_roadmap)
     if src == "configuracoes/bugs.md" and "<!-- bugs:lista -->" in markdown:
         markdown = markdown.replace("<!-- bugs:lista -->", bugs.tabela(_BUGS))
     if src == "monstros/index.md" and "<!-- monstros:lista -->" in markdown:
@@ -1118,7 +1062,10 @@ def _rodape_global() -> str:
     """Selo da versão atual (canto inferior esquerdo) e botão de report de bug (canto inferior
     direito) — presentes em toda página do site, por isso ficam fora do fluxo de conteúdo
     (position: fixed, ver extra.css) e usam caminho absoluto (o site sempre é servido da raiz
-    pelo Painel, nunca aberto como arquivo solto)."""
+    pelo Painel, nunca aberto como arquivo solto). O botão de Modo Mestre NÃO fica aqui — ele é
+    injetado no cabeçalho, ao lado do alternador claro/escuro, por docs/javascripts/
+    modo-mestre.js (não dá pra colocá-lo ali via Markdown/hook, o cabeçalho é todo gerado pelo
+    tema Material)."""
     atual = changelog.versao_atual(_CHANGELOG)
     rotulo = f"v{atual['versao']}" if atual and atual.get("versao") else "v0 — pré-lançamento"
     selo = f'<a class="selo-versao" href="/changelog/" title="Ver o changelog">{html.escape(rotulo)}</a>'
@@ -1130,10 +1077,17 @@ def _rodape_global() -> str:
 
 
 def on_page_content(conteudo: str, page, config, files):
-    if isinstance(page.meta.get("npc"), dict) or isinstance(page.meta.get("jogador"), dict):
+    slug = Path(page.file.src_uri).stem
+    if isinstance(page.meta.get("npc"), dict):
+        if "<!-- personagem:ficha-dinamica -->" in conteudo:
+            conteudo = _ficha_dinamica_personagem(conteudo, "npc", slug)
         conteudo = _paginar_npc(conteudo)
-    elif isinstance(page.meta.get("monstro"), dict):
-        conteudo = _paginar_variantes(conteudo)
+    elif isinstance(page.meta.get("jogador"), dict):
+        if "<!-- personagem:ficha-dinamica -->" in conteudo:
+            conteudo = _ficha_dinamica_personagem(conteudo, "jogador", slug)
+        conteudo = _paginar_npc(conteudo)
+    elif isinstance(page.meta.get("monstro"), dict) and "<!-- personagem:ficha-dinamica -->" in conteudo:
+        conteudo = _ficha_dinamica_personagem(conteudo, "monstro", slug)
     if "<!-- mestre:alternancia -->" in conteudo:
         conteudo = _alternancia_mestre(conteudo)
     return conteudo + _rodape_global()

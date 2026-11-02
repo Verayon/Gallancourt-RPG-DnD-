@@ -38,3 +38,7 @@ Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
 !!! question "Em aberto"
     - Quais são os objetivos de Zepharion e de La Voile Noire?
     - Relações formais com as casas de Dodixie.
+
+## Ficha de combate
+
+<!-- personagem:ficha-dinamica -->

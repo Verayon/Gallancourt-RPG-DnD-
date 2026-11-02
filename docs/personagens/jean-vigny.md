@@ -44,3 +44,7 @@ Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
 
 !!! question "Em aberto"
     Autoridade formal de Vigny no governo da cidade.
+
+## Ficha de combate
+
+<!-- personagem:ficha-dinamica -->

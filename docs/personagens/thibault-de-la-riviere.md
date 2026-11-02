@@ -49,3 +49,7 @@ Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
 
 !!! question "Em aberto"
     Quando foi capturado e convertido, e o que mais já entregou a L'Ordre?
+
+## Ficha de combate
+
+<!-- personagem:ficha-dinamica -->

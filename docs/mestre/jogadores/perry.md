@@ -13,3 +13,7 @@ jogador:
 # Perry
 
 Amigo de Rowan CataPedras.
+
+## Ficha de combate
+
+<!-- personagem:ficha-dinamica -->

@@ -1,13 +1,15 @@
 # Roadmap de Crônicas de Gallancourt — o que falta implementar.
 #
-# Edite pelo Painel do Mestre (aba "Roadmap"). Lista aberta: acrescente itens à vontade.
+# Edite em Modo Mestre direto na página do Roadmap, ou pelo Painel do Mestre (aba "Roadmap").
+# Lista aberta: acrescente itens à vontade.
 #
 # Campos de cada item:
-#   id          número único (o Painel preenche)
+#   id          número único (preenchido automaticamente)
 #   item        descrição do que falta fazer
 #   prioridade  Alta, Média ou Baixa
 #   tipo        UI, Engine, Conteúdo, Infra ou Dados
 #   status      Planejado, Em andamento ou Concluído
+#   responsavel quem está cuidando do item (texto livre; pode ficar em branco)
 
 itens:
 - id: 1
@@ -66,3 +68,9 @@ itens:
   prioridade: Alta
   tipo: Infra
   status: Planejado
+- id: 10
+  item: Fazer o combat tracker
+  prioridade: Alta
+  tipo: UI
+  status: Planejado
+  responsavel: ''

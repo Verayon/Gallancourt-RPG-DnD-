@@ -59,35 +59,67 @@ mundo ajam de modo coerente sem determinar antecipadamente todas as consequênci
 | **Gatilhos de mudança** | O que faria este NPC mudar de lado ou de plano |
 ```
 
-Essa é a ficha de **planejamento** do Mestre (o que o NPC quer e esconde). Para a ficha de jogo
-completa de D&D 5e — atributos, CA, PV, perícias, inventário, grimório, características —, use a
-aba **Ficha de combate** (ver abaixo); para personalidade e aparência, a aba **Biografia**. Para
-criaturas e figurantes sem página própria (bandidos de uma sessão, por exemplo), use a **Ficha de
-combate** direto na página do roteiro. Para cidades, a **Ficha da cidade**. Não edite à mão sem
-necessidade as seções que usam marcadores invisíveis (`<!-- campo:... -->` ou
-`<!-- dados:statblock ... -->`): o painel espera encontrá-los para reler os valores depois.
+Essa é a ficha de **planejamento** do Mestre (o que o NPC quer e esconde) — continua em Markdown,
+editada pelo formulário de NPC do Painel. Para a ficha de jogo completa de D&D 5e — atributos, CA,
+PV, perícias, inventário, grimório, características, biografia, diário — use a **Ficha de
+combate** descrita abaixo, direto na página pública do personagem. Para criaturas e figurantes
+**sem página própria** (bandidos de uma sessão, por exemplo), use a **Ficha de combate** do Painel
+direto na página do roteiro (ver "Figurantes de sessão" abaixo). Para cidades, a **Ficha da
+cidade** (Painel → Biografia). Não edite à mão sem necessidade as seções que usam marcadores
+invisíveis (`<!-- campo:... -->`, `<!-- dados:statblock ... -->` ou
+`<!-- personagem:ficha-dinamica -->`): o site/painel esperam encontrá-los para reler os valores
+depois.
 
-## Ficha de combate
+## Ficha de combate (monstros, NPCs nomeados e jogadores)
 
-Um cartão visual de NPC/jogador para rodar à mesa, no estilo de uma ficha oficial: nome, foto
-opcional, CA, PV, deslocamento, espaços de magia (se conjurador), os seis atributos com modificador
-calculado sozinho, perícias, sentidos, idiomas, equipamento, traços, ações, reações e magias — e,
-opcionalmente, uma "ficha completa" com perícias/salvaguardas com total calculado, inventário,
-grimório detalhado, características categorizadas e efeitos ativos, cada grupo virando sua própria
-aba na página (Inventário/Grimório/Características/Efeitos). Preenchida pela aba **Ficha de
-combate** do
-[Painel do Mestre](painel.md), que insere o cartão na página escolhida (qualquer uma — não precisa
-ser uma página de personagem) e guarda os valores num comentário invisível (`<!-- dados:statblock
-... -->`) para poder reabrir e editar depois. Veja exemplos em
+Desde 2026-10-31, monstro, NPC nomeado e jogador compartilham o **mesmo modelo de ficha**, com os
+dados no **banco de dados** (`dados/gallancourt.db`, ver `admin/banco.py`/
+`admin/personagens_api.py`), não em Markdown — a página só tem um marcador
+(`<!-- personagem:ficha-dinamica -->`, dentro de `## Ficha de combate` para NPC/jogador; a página
+inteira, no caso de monstro) que um widget (`docs/javascripts/ficha.js`) preenche na hora, puxando
+a ficha pela API (`/api/personagens/<tipo>/<slug>`). A leitura é pública para qualquer um; editar
+exige entrar em **🔑 Modo Mestre** (botão no cabeçalho, ao lado do alternador claro/escuro — abre
+um popup de senha, mesma senha do Painel; não navega pra outra página).
+
+A ficha tem um cabeçalho (CR — monstro — ou Nível/XP/Classe/Antecedente — NPC/jogador —, CA, PV
+máximo/temporário, dados de vida, deslocamento, percepção passiva, iniciativa extra, os seis
+atributos com modificador calculado sozinho) e sete abas:
+
+- **Atributos** — perícias (bônus próprio, não calculado), sentidos (alcance em metros), idiomas.
+- **Inventário** — equipamento (catálogo compartilhado), moeda (PC/PP/PE/PO/PL) e carga máxima.
+- **Grimório** — magias (catálogo compartilhado) e pools de espaços de magia (nível, usados/
+  máximo, com rótulo pra separar espaços normais de Magia de Pacto).
+- **Características** — traços, ações e reações (catálogo compartilhado).
+- **Efeitos** — condições (as 15 do 5e, liga/desliga) e efeitos aplicados (temporário/passivo/
+  inativo, com origem e duração).
+- **Biografia** — aparência, personalidade, traço marcante, ideal, vínculo, defeito, dados físicos,
+  pessoas/lugares de interesse — pertence ao **personagem**, não a uma variante específica.
+- **Diário** — lista de entradas (data, título, texto), uma por acontecimento.
+
+Todo personagem tem sempre uma ficha **Base** (nunca removível). Em Modo Mestre, o botão **+** ao
+lado das abas de ficha cria uma **variante** (ex.: Goblin → Arqueiro) — cópia independente e
+totalmente editável da ficha atual (atributos, inventário, grimório etc.; Biografia/Diário
+continuam compartilhados, por serem do personagem), com seu próprio botão **Excluir ficha**.
+Equipamento, Traços/Ações/Reações, Magias, Idiomas, Sentidos e Perícias são catálogos
+compartilhados entre personagens (botão **+ adicionar**, que abre uma busca no catálogo
+correspondente, com opção de criar uma entrada nova quando não existir ainda).
+
+A migração inicial (`scripts/migrar_monstros_para_banco.py` e
+`scripts/migrar_npcs_jogadores_para_banco.py`, uso único, já rodadas) também espelhou
+`docs/itens/*.md`/`docs/magias/*.md`/`docs/pericias/*.md` nos catálogos correspondentes — essas
+páginas continuam existindo e sendo a fonte de leitura/lore; o banco é só um espelho consultável
+delas para o seletor "+ adicionar".
+
+## Figurantes de sessão
+
+Para uma criatura sem página própria (bandidos de uma sessão, por exemplo) ou pra começar a partir
+de um [NPC genérico](../personagens/genericos/index.md) (guarda, camponês...), continue usando a
+aba **Ficha de combate** do [Painel do Mestre](painel.md) — ela insere o cartão direto na página
+de sessão escolhida e guarda os valores num comentário invisível (`<!-- dados:statblock ... -->`).
+Esse sistema mais simples (texto em Markdown, não banco de dados) é de propósito: um figurante
+raramente precisa virar um personagem reutilizável de verdade — se precisar, crie uma página de
+NPC pra ele normalmente. Veja exemplos em
 [Sessão 0 — Fichas de combate](sessoes/sessao-0-os-grilhoes-da-estrada.md#fichas-de-combate).
-
-**Variantes** (ex.: Goblin base → Goblin Arqueiro, Goblin Lanceiro): numa ficha já salva, o botão
-**Criar variante a partir desta ficha** (na aba Ficha de combate do Painel) copia todos os valores
-para uma ficha nova na mesma página — edite só o que muda (arma, perícias, traços…) e preencha o
-campo **Nome curto da variante**. Com mais de uma ficha na mesma página, elas viram abas
-automaticamente (a primeira sem rótulo vira "Base"). Cada variante é uma ficha de combate normal,
-então aparece sozinha no seletor de fichas ao montar um encontro na Mesa do Mestre — dá pra deixar
-presets prontos (Base/Arqueiro/Lanceiro) e escolher qual usar na hora do encontro.
 
 ## Como adicionar uma página
 
@@ -101,7 +133,12 @@ presets prontos (Base/Arqueiro/Lanceiro) e escolher qual usar na hora do encontr
    usando nomes em minúsculas, sem acentos e com hífens (ex.: `nova-cidade.md`).
 2. Copie a estrutura de uma página existente da mesma categoria: *front matter* com `tags`,
    título, ficha lateral (`<div class="ficha" markdown>`), descrição, relações e "Em aberto".
-3. Adicione a página ao `nav` em `mkdocs.yml`.
+3. Acrescente um link para ela no corpo da página-índice da categoria (`docs/cidades/index.md`,
+   `docs/eventos/index.md`...) — um card no `<div class="grid cards" markdown>` ou uma linha na
+   tabela, conforme o padrão já usado ali. **Não** edite o `nav` do `mkdocs.yml`: o menu da
+   esquerda só lista as seis categorias principais (Lore, Wiki, Compêndio, Mestre,
+   Configurações, Changelog, Roadmap); toda subcategoria se acessa clicando no corpo da página,
+   não pelo menu.
 4. Crie links a partir das páginas relacionadas (cidade, casa, eventos).
 5. Rode `mkdocs build --strict` para verificar links quebrados.
 

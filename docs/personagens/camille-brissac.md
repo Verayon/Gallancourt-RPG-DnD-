@@ -38,3 +38,7 @@ Nouvelle-Montagne.
 
 Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
 <!-- fim:gerado -->
+
+## Ficha de combate
+
+<!-- personagem:ficha-dinamica -->

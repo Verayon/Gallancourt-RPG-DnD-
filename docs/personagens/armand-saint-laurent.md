@@ -50,3 +50,7 @@ Ver o mapa completo em [Intrigas da nobreza](../mundo/intrigas-da-nobreza.md).
 !!! question "Em aberto"
     - Quantos oficiais já aderiram, e qual é a extensão dos planos de golpe?
     - Relação de Armand com as demais casas.
+
+## Ficha de combate
+
+<!-- personagem:ficha-dinamica -->
