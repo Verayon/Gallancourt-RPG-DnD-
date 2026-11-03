@@ -49,6 +49,13 @@
   ];
   var TIPOS_EFEITO = ["Temporário", "Passivo", "Inativo"];
 
+  // Mesma lista fixa do servidor (admin/banco.py::TIPOS_DANO) — os 13 tipos de dano do 5e.
+  var TIPOS_DANO = [
+    "Ácido", "Contundente", "Cortante", "Elétrico", "Fogo", "Força", "Frio", "Necrótico",
+    "Perfurante", "Psíquico", "Radiante", "Sônico", "Veneno",
+  ];
+  var MODOS_RESISTENCIA_DANO = [["imune", "Imune"], ["resistente", "Resistente"], ["vulneravel", "Vulnerável"]];
+
   // Colunas extras (além de Nome) mostradas na tabela do seletor "+ adicionar", por tipo —
   // mesmas informações da página de cada catálogo (itens/magias), não só o nome.
   var COLUNAS_PICKER = {
@@ -90,6 +97,11 @@
     if (isNaN(n)) return "+0";
     var mod = Math.floor((n - 10) / 2);
     return mod >= 0 ? "+" + mod : String(mod);
+  }
+
+  function assinado(valor) {
+    var n = parseInt(valor, 10);
+    return isNaN(n) ? "" : (n >= 0 ? "+" + n : String(n));
   }
 
   function arredondarPasso(valor) {
@@ -228,6 +240,8 @@
         '<input type="number" min="0" class="input-medio" data-campo="xp" value="' + (f.xp != null ? f.xp : "") + '"></span>' +
         '<span class="chip-editavel"><strong>Classe</strong>' +
         '<input type="text" class="input-medio" data-campo="classe" value="' + escapeHtml(f.classe || "") + '"></span>' +
+        '<span class="chip-editavel"><strong>Subclasse</strong>' +
+        '<input type="text" class="input-medio" data-campo="subclasse" value="' + escapeHtml(f.subclasse || "") + '"></span>' +
         '<span class="chip-editavel"><strong>Antecedente</strong>' +
         '<input type="text" class="input-medio" data-campo="antecedente" value="' + escapeHtml(f.antecedente || "") + '"></span>'
       );
@@ -268,6 +282,16 @@
       '<input type="number" min="0" data-campo="percepcao_passiva" value="' + f.percepcao_passiva + '">' +
       '<button type="button" class="chip-passo" data-campo="percepcao_passiva" data-passo="1">+</button></span>' +
 
+      '<span class="chip-editavel"><strong>Investigação passiva</strong>' +
+      '<button type="button" class="chip-passo" data-campo="investigacao_passiva" data-passo="-1">−</button>' +
+      '<input type="number" min="0" data-campo="investigacao_passiva" value="' + f.investigacao_passiva + '">' +
+      '<button type="button" class="chip-passo" data-campo="investigacao_passiva" data-passo="1">+</button></span>' +
+
+      '<span class="chip-editavel"><strong>Intuição passiva</strong>' +
+      '<button type="button" class="chip-passo" data-campo="intuicao_passiva" data-passo="-1">−</button>' +
+      '<input type="number" min="0" data-campo="intuicao_passiva" value="' + f.intuicao_passiva + '">' +
+      '<button type="button" class="chip-passo" data-campo="intuicao_passiva" data-passo="1">+</button></span>' +
+
       '<span class="chip-editavel"><strong>Iniciativa extra</strong>' +
       '<button type="button" class="chip-passo" data-campo="iniciativa_extra" data-passo="-1">−</button>' +
       '<input type="number" data-campo="iniciativa_extra" value="' + f.iniciativa_extra + '">' +
@@ -284,7 +308,7 @@
       if (f.cr) partes.push(this._chipTexto("CR", f.cr + xp));
     } else {
       if (f.nivel != null) partes.push(this._chipTexto("Nível", f.nivel));
-      if (f.classe) partes.push(this._chipTexto("Classe", f.classe));
+      if (f.classe) partes.push(this._chipTexto("Classe", f.classe + (f.subclasse ? " (" + f.subclasse + ")" : "")));
       if (f.antecedente) partes.push(this._chipTexto("Antecedente", f.antecedente));
     }
     partes.push(this._chipTexto("CA", f.ca_total));
@@ -293,6 +317,8 @@
     partes.push(this._chipTexto("PV", pv));
     partes.push(this._chipTexto("Deslocamento", desloc));
     partes.push(this._chipTexto("Percepção passiva", f.percepcao_passiva));
+    partes.push(this._chipTexto("Investigação passiva", f.investigacao_passiva));
+    partes.push(this._chipTexto("Intuição passiva", f.intuicao_passiva));
     return partes.join("");
   };
 
@@ -346,7 +372,37 @@
       this._atributosGrid(f, editavel) +
       this._listaPericias(f, editavel) +
       this._listaIdiomas(f, editavel) + this._listaSentidos(f, editavel) +
+      this._listaResistenciasDano(f, editavel) +
       "</div>"
+    );
+  };
+
+  Widget.prototype._listaResistenciasDano = function (f, editavel) {
+    var ativos = {};
+    (f.resistencias_dano || []).forEach(function (r) { ativos[r.nome] = r; });
+    if (!editavel) {
+      var pilulas = TIPOS_DANO.filter(function (t) { return ativos[t]; }).map(function (t) {
+        var rotuloModo = MODOS_RESISTENCIA_DANO.filter(function (m) { return m[0] === ativos[t].modo; })[0][1];
+        return '<span class="pilula pilula--ativa">' + escapeHtml(t) + " (" + rotuloModo + ")</span>";
+      }).join("");
+      return pilulas
+        ? '<div class="ficha-personagem__grupo"><p><strong>Resistências a dano</strong></p>' +
+          '<div class="ficha-personagem__condicoes">' + pilulas + "</div></div>"
+        : "";
+    }
+    var linhas = TIPOS_DANO.map(function (tipo) {
+      var ativo = ativos[tipo];
+      var botoes = MODOS_RESISTENCIA_DANO.map(function (m) {
+        var ligado = ativo && ativo.modo === m[0];
+        return '<button type="button" class="pilula' + (ligado ? " pilula--ativa" : "") + '" ' +
+          'data-acao="alternar-resistencia-dano" data-nome="' + escapeHtml(tipo) + '" data-modo="' + m[0] + '">' +
+          m[1] + "</button>";
+      }).join("");
+      return '<div class="ficha-personagem__resistencia-linha"><span>' + escapeHtml(tipo) + "</span>" + botoes + "</div>";
+    }).join("");
+    return (
+      '<div class="ficha-personagem__grupo"><p><strong>Imunidades / Resistências / Vulnerabilidades a dano</strong></p>' +
+      linhas + "</div>"
     );
   };
 
@@ -362,8 +418,17 @@
       ? '<label class="ficha-personagem__moeda">Carga máx. (kg)' +
         '<input type="number" min="0" class="input-pequeno" data-campo="carga_maxima" value="' + (f.carga_maxima != null ? f.carga_maxima : "") + '" placeholder="padrão SRD"></label>'
       : (f.carga_maxima != null ? this._chipTexto("Carga máxima", f.carga_maxima + " kg") : "");
+    var pesoTotal = (f.equipamentos || []).reduce(function (soma, e) {
+      return soma + (e.peso_kg || 0) * (e.quantidade || 1);
+    }, 0);
+    var cargaMaxima = f.carga_maxima != null ? f.carga_maxima : f.atributos.for.valor * 2;
+    var estourou = pesoTotal > cargaMaxima;
+    var resumoCarga = '<span class="ficha-personagem__carga-total' + (estourou ? " ficha-personagem__carga-total--estourada" : "") + '">' +
+      "Carga atual: " + arredondarPasso(pesoTotal) + "/" + arredondarPasso(cargaMaxima) + " kg" +
+      (estourou ? " — sobrecarregado!" : "") + "</span>";
     return (
       '<div class="ficha-personagem__painel-aba">' +
+      resumoCarga +
       this._listaCatalogo(f, editavel, "equipamentos", f.equipamentos) +
       '<div class="ficha-personagem__grupo"><p><strong>Moeda e carga</strong></p>' +
       '<div class="ficha-personagem__moedas">' + moedas + carga + "</div></div>" +
@@ -371,9 +436,31 @@
     );
   };
 
+  Widget.prototype._cabecalhoGrimorio = function (f, editavel) {
+    if (editavel) {
+      return (
+        '<div class="ficha-personagem__grupo">' +
+        '<span class="chip-editavel"><strong>CD de conjuração</strong>' +
+        '<button type="button" class="chip-passo" data-campo="cd_conjuracao" data-passo="-1">−</button>' +
+        '<input type="number" min="0" data-campo="cd_conjuracao" value="' + (f.cd_conjuracao != null ? f.cd_conjuracao : "") + '">' +
+        '<button type="button" class="chip-passo" data-campo="cd_conjuracao" data-passo="1">+</button></span>' +
+        '<span class="chip-editavel"><strong>Bônus de ataque mágico</strong>' +
+        '<button type="button" class="chip-passo" data-campo="bonus_ataque_magico" data-passo="-1">−</button>' +
+        '<input type="number" data-campo="bonus_ataque_magico" value="' + (f.bonus_ataque_magico != null ? f.bonus_ataque_magico : "") + '">' +
+        '<button type="button" class="chip-passo" data-campo="bonus_ataque_magico" data-passo="1">+</button></span>' +
+        "</div>"
+      );
+    }
+    var partes = [];
+    if (f.cd_conjuracao != null) partes.push(this._chipTexto("CD de conjuração", f.cd_conjuracao));
+    if (f.bonus_ataque_magico != null) partes.push(this._chipTexto("Bônus de ataque mágico", assinado(f.bonus_ataque_magico)));
+    return partes.length ? '<div class="ficha-personagem__grupo stat-block__chips">' + partes.join("") + "</div>" : "";
+  };
+
   Widget.prototype._abaGrimorio = function (f, editavel) {
     return (
       '<div class="ficha-personagem__painel-aba">' +
+      this._cabecalhoGrimorio(f, editavel) +
       this._listaCatalogo(f, editavel, "magias", f.magias) +
       this._listaEspacosMagia(f, editavel) +
       "</div>"
@@ -526,7 +613,14 @@
         detalhe = [e.nivel != null ? "nível " + e.nivel : null, e.escola, e.alcance];
       }
       detalhe = detalhe.filter(Boolean).join(" · ");
-      return "<li><strong>" + escapeHtml(e.nome) + "</strong>" + (detalhe ? " — " + escapeHtml(detalhe) : "") + remover + "</li>";
+      var favorito = "";
+      if (tipo === "magias") {
+        favorito = editavel
+          ? '<button type="button" class="botao-favorito' + (e.favorito ? " botao-favorito--ativo" : "") +
+            '" data-acao="alternar-favorito" data-tipo="magias" data-vinculo="' + e.vinculo_id + '" title="Favoritar">★</button> '
+          : (e.favorito ? "★ " : "");
+      }
+      return "<li>" + favorito + "<strong>" + escapeHtml(e.nome) + "</strong>" + (detalhe ? " — " + escapeHtml(detalhe) : "") + remover + "</li>";
     }).join("");
     var titulo = tipo === "equipamentos" ? "Equipamento" : "Magias";
     var botaoAdicionar = editavel
@@ -549,11 +643,30 @@
         var sufixo = [];
         if (h.bonus_acerto != null) sufixo.push((h.bonus_acerto >= 0 ? "+" : "") + h.bonus_acerto + " para acertar");
         if (h.dano_formula) sufixo.push(h.dano_formula + (h.dano_tipo ? " " + h.dano_tipo : ""));
+        var favorito = editavel
+          ? '<button type="button" class="botao-favorito' + (h.favorito ? " botao-favorito--ativo" : "") +
+            '" data-acao="alternar-favorito" data-tipo="habilidades" data-vinculo="' + h.vinculo_id + '" title="Favoritar">★</button> '
+          : (h.favorito ? "★ " : "");
+        var usos = "";
+        if (editavel) {
+          usos = ' <span class="ajuda">usos/descanso ' +
+            '<input type="number" min="0" class="input-pequeno" data-habilidade-usos-maximo data-vinculo="' + h.vinculo_id + '" value="' + (h.usos_maximo != null ? h.usos_maximo : "") + '" placeholder="—">' +
+            '<select data-habilidade-tipo-descanso data-vinculo="' + h.vinculo_id + '">' +
+            '<option value="">(nenhum)</option>' +
+            ["curto", "longo"].map(function (t) { return '<option value="' + t + '"' + (h.tipo_descanso === t ? " selected" : "") + ">" + t + "</option>"; }).join("") +
+            "</select></span>";
+          if (h.usos_maximo != null) {
+            usos += ' <button type="button" class="botao-secundario" data-acao="usar-habilidade" data-vinculo="' + h.vinculo_id + '"' +
+              (h.usos_restantes <= 0 ? " disabled" : "") + ">usar (" + h.usos_restantes + "/" + h.usos_maximo + ")</button>";
+          }
+        } else if (h.usos_maximo != null) {
+          usos = ' <span class="ajuda">(' + h.usos_restantes + "/" + h.usos_maximo + " usos)</span>";
+        }
         var remover = editavel
           ? ' <button type="button" class="botao-remover" data-acao="remover-vinculo" data-tipo="habilidades" data-vinculo="' + h.vinculo_id + '" title="Remover">×</button>'
           : "";
-        corpo += "<li><strong>" + escapeHtml(h.nome) + ".</strong> " + escapeHtml(h.descricao || "") +
-          (sufixo.length ? ' <span class="ajuda">(' + escapeHtml(sufixo.join(", ")) + ")</span>" : "") + remover + "</li>";
+        corpo += "<li>" + favorito + "<strong>" + escapeHtml(h.nome) + ".</strong> " + escapeHtml(h.descricao || "") +
+          (sufixo.length ? ' <span class="ajuda">(' + escapeHtml(sufixo.join(", ")) + ")</span>" : "") + usos + remover + "</li>";
       });
       corpo += "</ul>";
     });
@@ -683,6 +796,12 @@
     return (
       '<div class="ficha-personagem__acoes-rodape">' +
       '<button type="button" class="botao-principal" data-acao="salvar-ficha" data-ficha="' + f.id + '">Salvar</button>' +
+      (this.tipo !== "monstro"
+        ? '<button type="button" class="botao-secundario" data-acao="descanso-curto" data-ficha="' + f.id +
+          '" title="Repõe os usos de habilidade marcados como descanso curto">Descanso curto</button>' +
+          '<button type="button" class="botao-secundario" data-acao="descanso-longo" data-ficha="' + f.id +
+          '" title="PV volta ao máximo, espaços de magia zeram, dados de vida recuperam pela metade">Descanso longo</button>'
+        : "") +
       (f.is_base ? "" : '<button type="button" class="botao-remover" data-acao="excluir-ficha" data-ficha="' + f.id + '">Excluir esta ficha</button>') +
       "</div>"
     );
@@ -738,6 +857,16 @@
       if (ev.target.matches && ev.target.matches('[data-acao="enviar-foto"]')) {
         self.enviarFoto(ev.target.files && ev.target.files[0]);
       }
+      var ficha = self.fichaAtual();
+      if (ev.target.matches && ev.target.matches("[data-habilidade-usos-maximo]")) {
+        var valor = ev.target.value;
+        self.chamar("PUT", "/api/fichas/" + ficha.id + "/habilidades/" + ev.target.getAttribute("data-vinculo") + "/usos",
+          { usos_maximo: valor === "" ? null : valor });
+      }
+      if (ev.target.matches && ev.target.matches("[data-habilidade-tipo-descanso]")) {
+        self.chamar("PUT", "/api/fichas/" + ficha.id + "/habilidades/" + ev.target.getAttribute("data-vinculo") + "/usos",
+          { tipo_descanso: ev.target.value || null });
+      }
     });
 
     this.raiz.addEventListener("click", function (ev) {
@@ -774,6 +903,12 @@
       } else if (acao === "excluir-ficha") {
         if (!window.confirm("Excluir esta ficha? Não dá pra desfazer.")) return;
         self.chamar("DELETE", self._base() + "/fichas/" + botao.getAttribute("data-ficha"));
+      } else if (acao === "descanso-curto") {
+        if (!window.confirm("Aplicar um descanso curto? Repõe os usos de habilidade marcados como descanso curto.")) return;
+        self.chamar("POST", self._base() + "/fichas/" + botao.getAttribute("data-ficha") + "/descanso-curto");
+      } else if (acao === "descanso-longo") {
+        if (!window.confirm("Aplicar um descanso longo? PV volta ao máximo, espaços de magia zeram e dados de vida recuperam pela metade.")) return;
+        self.chamar("POST", self._base() + "/fichas/" + botao.getAttribute("data-ficha") + "/descanso-longo");
       } else if (acao === "salvar-ficha") {
         self.salvarFicha(botao.getAttribute("data-ficha"));
       } else if (acao === "remover-vinculo") {
@@ -802,6 +937,14 @@
         } else {
           self.chamar("POST", "/api/fichas/" + ficha.id + "/condicoes", { nome: botao.getAttribute("data-nome") });
         }
+      } else if (acao === "alternar-resistencia-dano") {
+        self.chamar("POST", "/api/fichas/" + ficha.id + "/resistencias-dano", {
+          nome: botao.getAttribute("data-nome"), modo: botao.getAttribute("data-modo"),
+        });
+      } else if (acao === "alternar-favorito") {
+        self.chamar("PUT", "/api/fichas/" + ficha.id + "/" + botao.getAttribute("data-tipo") + "/" + botao.getAttribute("data-vinculo") + "/favorito");
+      } else if (acao === "usar-habilidade") {
+        self.chamar("POST", "/api/fichas/" + ficha.id + "/habilidades/" + botao.getAttribute("data-vinculo") + "/usar");
       } else if (acao === "novo-efeito") {
         self.novoEfeito(ficha, botao.closest(".ficha-personagem__efeito-novo"));
       } else if (acao === "remover-efeito") {

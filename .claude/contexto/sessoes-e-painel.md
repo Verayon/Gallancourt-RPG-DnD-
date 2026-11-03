@@ -60,11 +60,11 @@ que o painel depende de encontrar, e que **não podem ser removidas** das págin
   ficha de combate deles vive no banco (`Personagem`/`Ficha`), editável direto na página em Modo
   Mestre; ver `.claude/contexto/personagens.md`;
 - o bloco `npc:` (ou `jogador:`) no front matter das páginas de NPC/jogador;
-- em `docs/mestre/sessoes/sessao-<n>-*.md`, os marcadores `<!-- mestre:alternancia -->`/
-  `<!-- /mestre:alternancia -->` logo após o H1 e no fim das abas, e o `<div class="painel-
-  iniciativa" data-pagina="...">` entre eles — é por eles que `hooks/gallancourt.py::
-  _alternancia_mestre` monta o alternador **Página normal / Modo Mestre** no topo da página (ver
-  `docs/javascripts/alternancia-mestre.js`);
+- em `docs/mestre/sessoes/sessao-<n>-*.md`, o marcador `<!-- combate:painel -->` dentro da aba
+  **Combat Tracker** (última da lista) — é por ele que `hooks/gallancourt.py::_combate_dinamico`
+  monta a raiz vazia que `docs/javascripts/combate.js` preenche; ver `.claude/contexto/combate.md`
+  antes de mexer no Combat Tracker (substituiu por completo o antigo alternador Página normal/
+  Modo Mestre + Painel de Iniciativa — `admin/sessao_viva.py`, retirado);
 - `dados/linha-do-tempo.yml` — edite pelo Painel ou mantendo o formato descrito no cabeçalho dele.
 
 Ao testar mudanças no painel, use uma cópia em `GALLANCOURT_ADMIN_ROOT` — nunca aplique uma sessão
@@ -72,13 +72,12 @@ de teste direto no `docs/diario/` real.
 
 # Sessões (Mestre → Sessões)
 
-Uma página por sessão em `docs/mestre/sessoes/sessao-<n>-<slug>.md`, no layout da Sessão 0: um
-alternador **Página normal / Modo Mestre** logo após o H1 (ver bullet do `mestre:alternancia`
-acima); do lado "Normal", ficha (`<div class="ficha">`) + abas `=== "Resumo"`, `"Cenas"`, `"NPCs"`,
-`"Lugares"`, `"Loot & Pistas"`, `"Segredos do Mestre"`; do lado "Mestre", só o Painel de
-Iniciativa (`admin/sessao_viva.py` + `docs/javascripts/painel-iniciativa.js`), em largura cheia. O
-front matter tem `sessao: {numero: N}`. A lista em `mestre/sessoes/index.md` é gerada pelo hook no
-lugar de `<!-- sessoes:lista -->`.
+Uma página por sessão em `docs/mestre/sessoes/sessao-<n>-<slug>.md`, no layout da Sessão 0: ficha
+(`<div class="ficha">`) + abas `=== "Resumo"`, `"Cenas"`, `"NPCs"`, `"Lugares"`, `"Loot & Pistas"`,
+`"Segredos do Mestre"` e, por último, `"Combat Tracker"` (ver bullet do `combate:painel` acima e
+`.claude/contexto/combate.md`) — não há mais alternador Página normal/Modo Mestre, é só mais uma
+aba. O front matter tem `sessao: {numero: N}`. A lista em `mestre/sessoes/index.md` é gerada pelo
+hook no lugar de `<!-- sessoes:lista -->`.
 
 Os botões **Adicionar NPC** e **Nova sessão** apontam para o Painel (`extra.painel_url` no
 `mkdocs.yml`, rotas `/npc/novo` e `/sessoes/nova`), que cria a página e a insere no `nav` abaixo das

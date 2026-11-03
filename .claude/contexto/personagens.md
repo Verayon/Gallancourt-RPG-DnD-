@@ -50,13 +50,18 @@ modelo de ficha" para o raciocínio completo.
   `admin/personagens_api.py::modificador`, replicado em JS). `Ficha.cr` guarda só o valor SRD do
   monstro (ex.: "1/4" — XP vem de `CR_PARA_XP`, tabela fixa, não armazenado); `nivel`/`xp` são o
   equivalente pra NPC/jogador — escalas diferentes, por isso campos separados, não reaproveitados.
-  `classe`/`antecedente` são rótulos livres de cabeçalho, não multiclasse estruturado (o "motor de
-  regras" que precisaria disso ainda não existe). `deslocamento_m` é número (passo de 1,5 m no
-  editor); `deslocamento_extra` (texto livre) cobre voo/escavar/nadar etc. `percepcao_passiva`
-  (inteiro) é coluna própria — todo personagem tem uma, não é um "sentido" escolhido.
-  `iniciativa_extra` soma ao modificador de Destreza na exibição (não um total já pronto).
+  `classe`/`subclasse`/`antecedente` são rótulos livres de cabeçalho, não multiclasse estruturado
+  (o "motor de regras" que precisaria disso ainda não existe). `deslocamento_m` é número (passo de
+  1,5 m no editor); `deslocamento_extra` (texto livre) cobre voo/escavar/nadar etc.
+  `percepcao_passiva`/`investigacao_passiva`/`intuicao_passiva` (inteiros) são colunas próprias —
+  todo personagem tem as três, não são um "sentido" escolhido (ver `Sentido` abaixo, que é só pra
+  sentidos especiais de alcance). `iniciativa_extra` soma ao modificador de Destreza na exibição
+  (não um total já pronto). `cd_conjuracao`/`bonus_ataque_magico` (inteiros nulos até o Mestre
+  preencher) são números prontos, igual a `ca_total` — não calculados de classe/nível/atributo.
   `pv_temporario`/`dados_vida_total`/`dados_vida_usados`/`carga_maxima`/5 colunas de moeda
-  (`moeda_pc/pp/pe/po/pl`) completam o cabeçalho da ficha.
+  (`moeda_pc/pp/pe/po/pl`) completam o cabeçalho da ficha. `carga_maxima` nulo = o widget usa o
+  padrão SRD (2× Força) só pra exibir o total atual (soma de `peso_kg × quantidade` do inventário)
+  e alertar sobrecarga — nunca grava esse cálculo no banco.
 - **Catálogos compartilhados**, reutilizáveis entre fichas de qualquer tipo:
   `Equipamento`/`Magia`/`Habilidade`/`Idioma`/`Sentido`/`Pericia`, vinculados por tabelas de
   associação próprias (`FichaEquipamento` tem `quantidade`/`equipado`; `FichaSentido` tem `valor`
@@ -66,12 +71,22 @@ modelo de ficha" para o raciocínio completo.
   tem `peso_kg` **numérico** (não texto) — converte sem perda a partir dos dados reais, que já
   seguiam o padrão "`<número> kg`". `origem_tipo`/`origem_personagem_slug` marcam o que nasceu
   exclusivo de um personagem (sem página própria), pra poder filtrar por origem no seletor.
+  `FichaHabilidade`/`FichaMagia` (o vínculo, não o catálogo) têm `favorito` (bool — acesso rápido,
+  `serializar_ficha` ordena favoritos primeiro); `FichaHabilidade` também tem
+  `usos_maximo`/`usos_restantes`/`tipo_descanso` (contador real de uso por descanso, validado
+  contra `banco.TIPOS_DESCANSO` — nulos = sem contador, só o texto livre de `Habilidade.usos`).
+  São por ficha, não por item de catálogo, porque a mesma Habilidade/Magia pode estar favoritada
+  numa ficha e não na outra.
 - **Não são catálogos** — próprios de cada `Ficha`, sem valor de reuso entre personagens:
   `FichaEspacoMagia` (pool de espaços de magia: `nivel`/`maximo`/`usado`/`rotulo` — `rotulo`
   distingue dois pools no mesmo nível, ex. espaços normais vs. Magia de Pacto de um Bruxo);
   `FichaCondicao` (`nome` validado contra a lista fixa `banco.CONDICOES_D20`, as 15 condições do
   5e — não é um catálogo no banco, é um conjunto fechado de regras); `FichaEfeito`
-  (`nome`/`tipo`/`origem`/`duracao`, `tipo` validado contra `banco.TIPOS_EFEITO`).
+  (`nome`/`tipo`/`origem`/`duracao`, `tipo` validado contra `banco.TIPOS_EFEITO`);
+  `FichaResistenciaDano` (`nome` validado contra `banco.TIPOS_DANO`, os 13 tipos de dano do 5e;
+  `modo` validado contra `banco.MODOS_RESISTENCIA_DANO` — `"imune"|"resistente"|"vulneravel"`, só
+  um ativo por tipo de dano por ficha, alternado por `alternar_resistencia_dano`). Informativo —
+  não entra na matemática de dano do Combat Tracker (ver `.claude/contexto/combate.md`).
 - **Lógica** (`admin/personagens_api.py`): isolado do Flask, como `wiki_data.py`/`sessao_viva.py`
   — toda função recebe uma `Session` já aberta. Serializa personagem/ficha pra JSON, cria variante
   (copiando atributos + todos os vínculos e pools da Base, exceto Biografia/Diário que já são

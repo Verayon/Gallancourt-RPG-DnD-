@@ -44,6 +44,7 @@ subcategorias se acessam clicando no corpo da página da categoria (padrão já 
 | `admin/painel_local.env` | Segredos locais do Painel (`PAINEL_SENHA` de login) — gitignorado, nunca commitado; sem ele o login fica desligado (uso só local) |
 | `admin/banco.py` + `alembic/` | Banco SQLite (`dados/gallancourt.db`, gitignorado) — Campanha/Fontes e, desde 2026-10-31, a ficha de combate de monstros, NPCs nomeados e jogadores (ver `.claude/contexto/personagens.md`) |
 | `admin/personagens_api.py` | Leitura/escrita das fichas de personagem no banco — isolado do Flask, como `wiki_data.py` |
+| `admin/combate_api.py` | Combat Tracker (iniciativa, PV, condições, XP/loot) — ver `.claude/contexto/combate.md` |
 | `tests/` | Testes `pytest` do banco de dados (único teste de "regra"/estado hoje; `scripts/testar_site.py` é integração de site) |
 | `dados/linha-do-tempo.yml` | Acontecimentos da campanha (fonte única) |
 | `scripts/` | `gerar_relacoes.py` (fonte única das relações), `testar_site.py` (teste fixo) |
@@ -59,6 +60,7 @@ subcategorias se acessam clicando no corpo da página da categoria (padrão já 
 | Páginas de conteúdo, relações/intrigas, Compêndio | `.claude/contexto/conteudo.md` |
 | Banco de dados (`admin/banco.py`, Alembic, o que migrar ou não) | `.claude/contexto/banco-de-dados.md` |
 | Fichas de personagem (monstro/NPC/jogador), variantes, Modo Mestre, catálogos compartilhados | `.claude/contexto/personagens.md` |
+| Combat Tracker (aba das páginas de sessão), iniciativa, PV em combate, XP/loot | `.claude/contexto/combate.md` |
 
 ## Regras do projeto (decididas pelo autor)
 

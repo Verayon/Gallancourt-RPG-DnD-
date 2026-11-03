@@ -110,10 +110,23 @@ A migração inicial (`scripts/migrar_monstros_para_banco.py` e
 páginas continuam existindo e sendo a fonte de leitura/lore; o banco é só um espelho consultável
 delas para o seletor "+ adicionar".
 
+## Combat Tracker
+
+Cada página de sessão (`docs/mestre/sessoes/sessao-N-*.md`) tem uma aba **Combat Tracker**, a
+última da lista — ela roda o combate ao vivo usando as fichas de monstro/NPC/jogador descritas
+acima: iniciativa (base + desempate oculto), PV com temporário, grade de condições, economia de
+ação (1 Ação/1 Ação Bônus/1 Reação por turno), testes de morte, concentração, reações manuais
+(Contramagia/Esquiva Sobrenatural) e, ao encerrar, distribuição de XP e loot. **Monstro** entra
+como uma cópia isolada (não altera o catálogo); **NPC nomeado e jogador** leem/escrevem direto na
+Ficha real (PV, espaços de magia e itens consumidos persistem entre sessões, até um **Descanso
+longo** na própria ficha). Substitui por completo o antigo "Painel de Iniciativa"
+(`admin/sessao_viva.py`, retirado). Detalhes em `.claude/contexto/combate.md`.
+
 ## Figurantes de sessão
 
 Para uma criatura sem página própria (bandidos de uma sessão, por exemplo) ou pra começar a partir
-de um [NPC genérico](../personagens/genericos/index.md) (guarda, camponês...), continue usando a
+de um NPC genérico (guarda, camponês...; essas páginas vivem em `docs/personagens/genericos/`,
+criadas pelo Painel — sem índice próprio ainda), continue usando a
 aba **Ficha de combate** do [Painel do Mestre](painel.md) — ela insere o cartão direto na página
 de sessão escolhida e guarda os valores num comentário invisível (`<!-- dados:statblock ... -->`).
 Esse sistema mais simples (texto em Markdown, não banco de dados) é de propósito: um figurante

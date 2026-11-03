@@ -33,11 +33,12 @@ ATRIBUTOS_CURTOS = list(CAMPO_ATRIBUTO_DB.keys())
 # abaixo). `pv_atual` fica de fora de propósito — só importa durante um combate (sistema futuro),
 # não faz sentido editar numa ficha de catálogo.
 CAMPOS_FICHA_EDITAVEIS = [
-    "rotulo", "cr", "nivel", "xp", "classe", "antecedente", "bonus_proficiencia", "ca_total",
-    "pv_formula", "pv_maximo", "pv_temporario", "dados_vida_total", "dados_vida_usados",
-    "deslocamento_m", "deslocamento_extra", "percepcao_passiva", "iniciativa_extra",
-    "carga_maxima", "moeda_pc", "moeda_pp", "moeda_pe", "moeda_po", "moeda_pl",
-    *CAMPO_ATRIBUTO_DB.values(),
+    "rotulo", "cr", "nivel", "xp", "classe", "subclasse", "antecedente", "bonus_proficiencia",
+    "ca_total", "pv_formula", "pv_maximo", "pv_temporario", "dados_vida_total",
+    "dados_vida_usados", "deslocamento_m", "deslocamento_extra", "percepcao_passiva",
+    "investigacao_passiva", "intuicao_passiva", "iniciativa_extra", "cd_conjuracao",
+    "bonus_ataque_magico", "carga_maxima", "moeda_pc", "moeda_pp", "moeda_pe", "moeda_po",
+    "moeda_pl", *CAMPO_ATRIBUTO_DB.values(),
 ]
 
 # Campos de Personagem (biografia) que a tela de edição pode gravar direto.
@@ -157,6 +158,7 @@ def serializar_ficha(ficha: banco.Ficha) -> dict:
         "nivel": ficha.nivel,
         "xp": ficha.xp,
         "classe": ficha.classe,
+        "subclasse": ficha.subclasse,
         "antecedente": ficha.antecedente,
         "bonus_proficiencia": ficha.bonus_proficiencia,
         "atributos": atributos,
@@ -170,7 +172,11 @@ def serializar_ficha(ficha: banco.Ficha) -> dict:
         "deslocamento_m": ficha.deslocamento_m,
         "deslocamento_extra": ficha.deslocamento_extra,
         "percepcao_passiva": ficha.percepcao_passiva,
+        "investigacao_passiva": ficha.investigacao_passiva,
+        "intuicao_passiva": ficha.intuicao_passiva,
         "iniciativa_extra": ficha.iniciativa_extra,
+        "cd_conjuracao": ficha.cd_conjuracao,
+        "bonus_ataque_magico": ficha.bonus_ataque_magico,
         "carga_maxima": ficha.carga_maxima,
         "moeda_pc": ficha.moeda_pc, "moeda_pp": ficha.moeda_pp, "moeda_pe": ficha.moeda_pe,
         "moeda_po": ficha.moeda_po, "moeda_pl": ficha.moeda_pl,
@@ -180,12 +186,16 @@ def serializar_ficha(ficha: banco.Ficha) -> dict:
             for v in ficha.equipamentos_vinculo
         ],
         "habilidades": [
-            {"vinculo_id": v.id, **_obj_para_dict(v.habilidade, CAMPOS_HABILIDADE)}
-            for v in ficha.habilidades_vinculo
+            {
+                "vinculo_id": v.id, "favorito": v.favorito, "usos_maximo": v.usos_maximo,
+                "usos_restantes": v.usos_restantes, "tipo_descanso": v.tipo_descanso,
+                **_obj_para_dict(v.habilidade, CAMPOS_HABILIDADE),
+            }
+            for v in sorted(ficha.habilidades_vinculo, key=lambda v: not v.favorito)
         ],
         "magias": [
-            {"vinculo_id": v.id, **_obj_para_dict(v.magia, CAMPOS_MAGIA)}
-            for v in ficha.magias_vinculo
+            {"vinculo_id": v.id, "favorito": v.favorito, **_obj_para_dict(v.magia, CAMPOS_MAGIA)}
+            for v in sorted(ficha.magias_vinculo, key=lambda v: not v.favorito)
         ],
         "idiomas": [
             {"vinculo_id": v.id, **_obj_para_dict(v.idioma, CAMPOS_IDIOMA)}
@@ -205,6 +215,9 @@ def serializar_ficha(ficha: banco.Ficha) -> dict:
         ],
         "condicoes": [
             {"vinculo_id": v.id, "nome": v.nome} for v in ficha.condicoes_vinculo
+        ],
+        "resistencias_dano": [
+            {"vinculo_id": v.id, "nome": v.nome, "modo": v.modo} for v in ficha.resistencias_dano_vinculo
         ],
         "efeitos": [
             {"vinculo_id": v.id, "nome": v.nome, "tipo": v.tipo, "origem": v.origem, "duracao": v.duracao}
@@ -242,15 +255,17 @@ def criar_variante(sessao: Session, personagem: banco.Personagem, rotulo: str) -
         raise ValueError("Este personagem não tem uma ficha Base ainda.")
     nova = banco.Ficha(
         personagem_id=personagem.id, rotulo=rotulo.strip() or "Variante", is_base=False,
-        cr=base.cr, nivel=base.nivel, xp=base.xp, classe=base.classe, antecedente=base.antecedente,
-        bonus_proficiencia=base.bonus_proficiencia,
+        cr=base.cr, nivel=base.nivel, xp=base.xp, classe=base.classe, subclasse=base.subclasse,
+        antecedente=base.antecedente, bonus_proficiencia=base.bonus_proficiencia,
         forca=base.forca, destreza=base.destreza, constituicao=base.constituicao,
         inteligencia=base.inteligencia, sabedoria=base.sabedoria, carisma=base.carisma,
         ca_total=base.ca_total, pv_formula=base.pv_formula, pv_maximo=base.pv_maximo,
         pv_atual=base.pv_atual, pv_temporario=base.pv_temporario,
         dados_vida_total=base.dados_vida_total, dados_vida_usados=base.dados_vida_usados,
         deslocamento_m=base.deslocamento_m, deslocamento_extra=base.deslocamento_extra,
-        percepcao_passiva=base.percepcao_passiva, iniciativa_extra=base.iniciativa_extra,
+        percepcao_passiva=base.percepcao_passiva, investigacao_passiva=base.investigacao_passiva,
+        intuicao_passiva=base.intuicao_passiva, iniciativa_extra=base.iniciativa_extra,
+        cd_conjuracao=base.cd_conjuracao, bonus_ataque_magico=base.bonus_ataque_magico,
         carga_maxima=base.carga_maxima,
         moeda_pc=base.moeda_pc, moeda_pp=base.moeda_pp, moeda_pe=base.moeda_pe,
         moeda_po=base.moeda_po, moeda_pl=base.moeda_pl,
@@ -262,9 +277,12 @@ def criar_variante(sessao: Session, personagem: banco.Personagem, rotulo: str) -
             ficha_id=nova.id, equipamento_id=v.equipamento_id, quantidade=v.quantidade, equipado=v.equipado,
         ))
     for v in base.habilidades_vinculo:
-        sessao.add(banco.FichaHabilidade(ficha_id=nova.id, habilidade_id=v.habilidade_id))
+        sessao.add(banco.FichaHabilidade(
+            ficha_id=nova.id, habilidade_id=v.habilidade_id, favorito=v.favorito,
+            usos_maximo=v.usos_maximo, usos_restantes=v.usos_restantes, tipo_descanso=v.tipo_descanso,
+        ))
     for v in base.magias_vinculo:
-        sessao.add(banco.FichaMagia(ficha_id=nova.id, magia_id=v.magia_id))
+        sessao.add(banco.FichaMagia(ficha_id=nova.id, magia_id=v.magia_id, favorito=v.favorito))
     for v in base.idiomas_vinculo:
         sessao.add(banco.FichaIdioma(ficha_id=nova.id, idioma_id=v.idioma_id))
     for v in base.sentidos_vinculo:
@@ -277,6 +295,8 @@ def criar_variante(sessao: Session, personagem: banco.Personagem, rotulo: str) -
         ))
     for v in base.condicoes_vinculo:
         sessao.add(banco.FichaCondicao(ficha_id=nova.id, nome=v.nome))
+    for v in base.resistencias_dano_vinculo:
+        sessao.add(banco.FichaResistenciaDano(ficha_id=nova.id, nome=v.nome, modo=v.modo))
     for v in base.efeitos_vinculo:
         sessao.add(banco.FichaEfeito(
             ficha_id=nova.id, nome=v.nome, tipo=v.tipo, origem=v.origem, duracao=v.duracao,
@@ -409,6 +429,54 @@ def atualizar_bonus_pericia(sessao: Session, vinculo_id: int, bonus) -> None:
     sessao.commit()
 
 
+_VINCULOS_FAVORITAVEIS = {"habilidades": banco.FichaHabilidade, "magias": banco.FichaMagia}
+
+
+def alternar_favorito_vinculo(sessao: Session, tipo: str, vinculo_id: int) -> bool:
+    """Favoritar/desfavoritar uma Habilidade ou Magia desta ficha (acesso rápido — ver
+    serializar_ficha, que ordena favoritos primeiro). `tipo` é "habilidades" ou "magias", mesma
+    chave usada em adicionar_vinculo."""
+    modelo = _VINCULOS_FAVORITAVEIS.get(tipo)
+    if modelo is None:
+        raise ValueError(f"Vínculo sem favorito: {tipo}")
+    vinculo = sessao.get(modelo, vinculo_id)
+    if vinculo is None:
+        raise ValueError("Vínculo não encontrado.")
+    vinculo.favorito = not vinculo.favorito
+    sessao.commit()
+    return vinculo.favorito
+
+
+def definir_usos_habilidade(sessao: Session, vinculo_id: int, campos: dict) -> None:
+    """Liga/edita o contador de usos por descanso de uma Habilidade nesta ficha (ver
+    FichaHabilidade.usos_maximo/usos_restantes/tipo_descanso) — `usos_maximo=None` desliga o
+    contador (volta a ser só o texto livre de Habilidade.usos)."""
+    vinculo = sessao.get(banco.FichaHabilidade, vinculo_id)
+    if vinculo is None:
+        raise ValueError("Vínculo de habilidade não encontrado.")
+    if "usos_maximo" in campos:
+        valor = campos["usos_maximo"]
+        vinculo.usos_maximo = max(0, _para_numero(valor, 0)) if valor not in (None, "") else None
+        vinculo.usos_restantes = vinculo.usos_maximo
+    if "tipo_descanso" in campos:
+        tipo_descanso = campos["tipo_descanso"] or None
+        if tipo_descanso is not None and tipo_descanso not in banco.TIPOS_DESCANSO:
+            raise ValueError(f"Tipo de descanso desconhecido: {tipo_descanso}")
+        vinculo.tipo_descanso = tipo_descanso
+    sessao.commit()
+
+
+def consumir_uso_habilidade(sessao: Session, vinculo_id: int) -> int | None:
+    """Gasta um uso (botão "usar" na ficha/Combat Tracker) — não deixa passar de 0."""
+    vinculo = sessao.get(banco.FichaHabilidade, vinculo_id)
+    if vinculo is None:
+        raise ValueError("Vínculo de habilidade não encontrado.")
+    if vinculo.usos_restantes is not None:
+        vinculo.usos_restantes = max(0, vinculo.usos_restantes - 1)
+        sessao.commit()
+    return vinculo.usos_restantes
+
+
 def remover_vinculo(sessao: Session, tipo: str, vinculo_id: int) -> None:
     _modelo, assoc, _fk = _modelo_catalogo(tipo)
     vinculo = sessao.get(assoc, vinculo_id)
@@ -472,6 +540,26 @@ def remover_condicao(sessao: Session, vinculo_id: int) -> None:
     if condicao is not None:
         sessao.delete(condicao)
         sessao.commit()
+
+
+def alternar_resistencia_dano(sessao: Session, ficha: banco.Ficha, nome: str, modo: str) -> list[dict]:
+    """Clicar no `modo` já ativo pra este tipo de dano remove; clicar num `modo` diferente troca
+    (só um modo ativo por tipo de dano) — mesma ideia de alternar_condicao, mas com 3 estados em
+    vez de ligado/desligado."""
+    if nome not in banco.TIPOS_DANO:
+        raise ValueError(f"Tipo de dano desconhecido: {nome}")
+    if modo not in banco.MODOS_RESISTENCIA_DANO:
+        raise ValueError(f"Modo de resistência desconhecido: {modo}")
+    existente = next((v for v in ficha.resistencias_dano_vinculo if v.nome == nome), None)
+    if existente is not None and existente.modo == modo:
+        sessao.delete(existente)
+    elif existente is not None:
+        existente.modo = modo
+    else:
+        sessao.add(banco.FichaResistenciaDano(ficha_id=ficha.id, nome=nome, modo=modo))
+    sessao.commit()
+    sessao.refresh(ficha)
+    return [{"vinculo_id": v.id, "nome": v.nome, "modo": v.modo} for v in ficha.resistencias_dano_vinculo]
 
 
 def criar_efeito(sessao: Session, ficha: banco.Ficha, campos: dict) -> banco.FichaEfeito:
@@ -595,6 +683,65 @@ def apagar_foto_personagem(root: Path, sessao: Session, personagem: banco.Person
             antigo.unlink()
     personagem.foto = None
     sessao.commit()
+
+
+# --------------------------------------------------------------------------
+# Descanso Longo — só pra npc/jogador (monstro no Combat Tracker é sempre uma cópia isolada, não
+# precisa "descansar"; ver admin/combate_api.py e o plano "Combat Tracker integrado...").
+# --------------------------------------------------------------------------
+
+def descanso_longo(sessao: Session, ficha: banco.Ficha) -> banco.Ficha:
+    """PV volta ao máximo, PV temporário zera, todos os espaços de magia zeram o `usado`, os
+    dados de vida usados recuperam pela metade (aproximação SRD, arredondando pra baixo —
+    simplificação assumida; a regra completa depende de o jogador escolher gastar Dados de Vida),
+    e toda Habilidade com contador de uso ("curto" ou "longo") volta ao máximo. Condições NÃO são
+    limpas automaticamente — o Mestre remove manualmente as que devem acabar."""
+    ficha.pv_atual = ficha.pv_maximo
+    ficha.pv_temporario = 0
+    for espaco in ficha.espacos_magia_vinculo:
+        espaco.usado = 0
+    total_dados = _para_numero((ficha.dados_vida_total or "").split("d")[0], 0)
+    recuperados = max(1, total_dados // 2) if total_dados else 0
+    ficha.dados_vida_usados = max(0, ficha.dados_vida_usados - recuperados)
+    for vinculo in ficha.habilidades_vinculo:
+        if vinculo.tipo_descanso in banco.TIPOS_DESCANSO:
+            vinculo.usos_restantes = vinculo.usos_maximo
+    sessao.commit()
+    sessao.refresh(ficha)
+    return ficha
+
+
+def descanso_curto(sessao: Session, ficha: banco.Ficha) -> banco.Ficha:
+    """Repõe só as Habilidades de descanso "curto" — não toca PV, espaços de magia nem dados de
+    vida (isso é só o descanso_longo)."""
+    for vinculo in ficha.habilidades_vinculo:
+        if vinculo.tipo_descanso == "curto":
+            vinculo.usos_restantes = vinculo.usos_maximo
+    sessao.commit()
+    sessao.refresh(ficha)
+    return ficha
+
+
+def buscar_personagens(sessao: Session, tipo: str | None = None, busca: str = "") -> list[dict]:
+    """Busca por nome, pra alimentar o seletor "+ adicionar participante" do Combat Tracker
+    (admin/combate_api.py) — mesmo espírito de listar_catalogo, mas sobre Personagem/Ficha."""
+    consulta = sessao.query(banco.Personagem).options(selectinload(banco.Personagem.fichas))
+    if tipo:
+        consulta = consulta.filter(banco.Personagem.tipo == tipo)
+    if busca:
+        consulta = consulta.filter(banco.Personagem.nome.ilike(f"%{busca}%"))
+    resultado = []
+    for p in consulta.order_by(banco.Personagem.nome).limit(50).all():
+        fichas = sorted(p.fichas, key=lambda f: (0 if f.is_base else 1, f.id))
+        resultado.append({
+            "tipo": p.tipo, "slug": p.slug, "nome": p.nome, "foto": p.foto,
+            "fichas": [
+                {"id": f.id, "rotulo": f.rotulo, "is_base": f.is_base, "ca_total": f.ca_total,
+                 "pv_maximo": f.pv_maximo, "cr": f.cr, "nivel": f.nivel}
+                for f in fichas
+            ],
+        })
+    return resultado
 
 
 def listar_personagens_resumo(sessao: Session, tipo: str | None = None) -> dict[str, dict]:

@@ -49,7 +49,7 @@ ligado em casa, sem pagar por servidor nenhum:
    `admin/iniciar-painel-tailscale.bat` (ou rode `set PAINEL_HOST=0.0.0.0` antes do comando usual).
 3. No outro aparelho, abra `http://<nome-ou-IP-tailscale-deste-pc>:5001/` — o Tailscale mostra esse
    endereço na lista de aparelhos do seu tailnet. Tudo funciona normalmente por esse endereço,
-   incluindo os formulários embutidos e o Painel de Iniciativa — como site e Painel são a mesma
+   incluindo os formulários embutidos e o Combat Tracker — como site e Painel são a mesma
    origem, não existe nenhum endereço fixo pra reconfigurar antes de acessar de outro lugar.
 
 !!! warning "Ainda sem senha"
@@ -111,10 +111,9 @@ de sessões), resumo rápido, nível, duração, tom, missão e recompensa. Marq
 Lugares envolvidos nas tabelas (cada uma com busca e filtro por coluna) e, se quiser, escreva no
 campo **Como você quer que esta sessão seja organizada**. Ao clicar em **Criar sessão**, o painel:
 
-1. cria a página de preparação com o mesmo layout da Sessão 0 — um alternador **Página normal /
-   Modo Mestre** no topo (ver "Tocar uma sessão ao vivo" abaixo); do lado "Normal", as abas
-   **Resumo** (com a ficha da sessão), **Cenas**, **NPCs**, **Lugares**, **Loot & Pistas** e
-   **Segredos do Mestre**, nessa ordem;
+1. cria a página de preparação com o mesmo layout da Sessão 0 — abas **Resumo** (com a ficha da
+   sessão), **Cenas**, **NPCs**, **Lugares**, **Loot & Pistas**, **Segredos do Mestre** e, por
+   último, **Combat Tracker** (ver "Tocar uma sessão ao vivo" abaixo);
 2. já preenche a aba **NPCs → Aliados** e a aba **Lugares** com links reais para quem/o que foi
    marcado, em vez de "a preencher", e já salva essa lista como participantes da sessão — sem
    precisar passar pela tela separada de Participantes;
@@ -134,81 +133,54 @@ Essa é a página de **preparação**. Depois de jogar, registre o que aconteceu
 
 ## Tocar uma sessão ao vivo
 
-No topo de toda página de sessão há dois botões: **📖 Página normal** (as abas de preparo de
-sempre, o padrão ao abrir a página) e **🛡️ Modo Mestre — Combate**. Clicar em "Modo Mestre" troca
-a página inteira pelo Painel de Iniciativa — sem recarregar, sem abrir outra aba do navegador nem
-outro site — pra rodar o combate sem o resto da página (Cenas, NPCs…) no meio; clicar de volta em
-"Página normal" volta pro preparo. É um bloco de notas e um rastreador de combate: ele busca os
-dados do Painel do Mestre (que precisa estar rodando no seu computador) por baixo dos panos, e
-redesenha a tela a cada ação. É **preso à página da sessão**: a Sessão 0 tem o seu próprio combate,
-a Sessão 3 do Diário teria o dela, e por aí vai, sem se misturar. Diferente do resto do painel,
-nada aqui mexe em `docs/` nem no conteúdo do site — o estado fica só em `admin/dados/` (de fora do
-git), porque é rascunho de sessão, não cânone nem conteúdo da wiki.
+A última aba de toda página de sessão é o **Combat Tracker** — não precisa mais alternar entre
+"Página normal" e "Modo Mestre": é só mais uma aba, igual às outras. A leitura é pública; os
+controles de escrita (adicionar participante, rolar dano, avançar turno…) exigem entrar em
+**🔑 Modo Mestre** (mesmo botão/senha que edita fichas, no cabeçalho do site). É **preso à página
+da sessão**: a Sessão 0 tem o seu próprio combate, a Sessão 1 teria o dela, e por aí vai, sem se
+misturar — mas, ao contrário do antigo Painel de Iniciativa, o estado agora mora no banco
+(`dados/gallancourt.db`), não em `admin/dados/`: funciona de qualquer aparelho, sem precisar do
+Painel Flask rodando (só a leitura pública do site).
 
-Se preferir usar o Painel direto, sem o site aberto, a mesma coisa continua disponível na aba
-**Sessão ao vivo** (`http://127.0.0.1:5001/sessao-ao-vivo`) — só que ali o seletor de ficha mostra
-todo stat-block do site, em vez de só os desta sessão.
+Clique em **+ adicionar participante** para buscar um monstro, NPC nomeado ou jogador já
+cadastrado (por nome) e trazê-lo pro combate, com uma iniciativa inicial. Monstro entra como uma
+**cópia isolada** — pode adicionar o mesmo monstro várias vezes (ex.: "4 Goblins"), cada cópia com
+seu próprio PV, sem alterar a ficha-catálogo. NPC nomeado e jogador leem e escrevem **direto na
+ficha real** deles — o PV de um combate persiste pra próxima sessão, até um **Descanso longo** (na
+própria ficha, aba Atributos).
 
-### Notas e resumo
+Cada card na lista mostra retrato, nome, PV (com temporário), iniciativa (base editável + um
+desempate oculto com +/-) e uma grade de 15 condições pra ligar/desligar com um clique. Clicar no
+card (fora dos controles) mostra a ficha resumida dele no **Painel do Token**, à direita: CA, PV,
+ações/traços/magias disponíveis, os três marcadores de economia de ação (1 Ação/1 Ação Bônus/1
+Reação, que resetam sozinhos quando chega a vez dele de novo) e um campo pra marcar o que ele está
+concentrando. O botão **alvo** em cada card marca quem recebe o próximo ataque, cura ou teste de
+resistência — pode marcar vários.
 
-Uma caixa de anotação rápida registra uma linha com o horário a cada envio — útil pra marcar
-coisas no calor do momento ("rolou 18 no furtividade", "jogador X perguntou sobre o Correntes").
-O campo **Resumo da sessão**, abaixo, é de texto livre e pensado pra ir sendo escrito aos poucos;
-no fim, o link "registrar a sessão no Diário" leva direto pra aba **Registrar sessão** já com esse
-texto preenchido no campo "O que aconteceu".
+**Próximo turno** avança a ordem (sempre `iniciativa + desempate`); ao voltar ao topo, a rodada
+sobe e a duração de efeitos numéricos (ex.: "3 rodadas") desconta sozinha. PV chegando a zero
+aplica "Caído" e mostra os contadores de teste de morte no card; no início do turno de quem está a
+zero, o botão **Rolar teste de morte** pede a rolagem manual do d20 físico.
 
-### Iniciativa
+### Ataque, cura e resistência
 
-Adicione cada jogador ou NPC com o nome, o tipo e o valor da rolagem de iniciativa. Se o NPC já
-tem uma [ficha de combate](manutencao-do-canone.md#ficha-de-combate-npcs-e-jogadores) nesta própria página ou na
-página de um jogador/NPC marcado em **Participantes da sessão** (ver "Criar uma sessão nova",
-acima), selecione-a em **Ficha vinculada** — o nome e o PV são preenchidos sozinhos (se deixados
-em branco), e a ficha completa dele passa a aparecer na tela quando for a vez dele. O menu só
-mostra essas fichas, não todo stat-block do site — é por isso que vale cadastrar os participantes
-antes de tocar a sessão. Depois de adicionar todo mundo, a tabela fica ordenada sozinha, da maior
-iniciativa pra menor.
+No formulário **Ataque/Cura**, digite a rolagem manual do d20 físico, o bônus e o dano (ou cura) —
+o tracker soma, compara com a CA de cada alvo marcado e aplica o resultado (PV temporário absorve
+primeiro). **Teste de resistência em área…** abre um modal com a CD, se o sucesso reduz à metade e
+uma condição opcional pra quem falhar — digite a rolagem de cada alvo e resolva de uma vez.
+Reações como Contramagia e Esquiva Sobrenatural são manuais nesta versão: o botão **Oferecer
+reação** no Painel do Token pede confirmação antes de consumir a reação do turno.
 
-Clique em **Próximo turno** para avançar — na primeira vez, já começa por quem tem a iniciativa
-mais alta. A lista exibida sempre recomeça por quem está na vez (ela "gira", mas a ordem real de
-iniciativa por baixo não muda), então não precisa catar a linha destacada numa mesa com muita
-gente; ao voltar pro primeiro da lista, a rodada avança sozinha.
+### Log e encerramento
 
-Cada linha tem controles rápidos:
-
-- **PV**: um campo pra somar ou subtrair (ex.: `-7` ou `+5`) e aplicar.
-- **Status**: texto livre separado por vírgula — exaustão, veneno, atordoado, ou qualquer outra
-  condição (ex.: `Exausto (nível 1), Envenenado`).
-- **Caído** / **Morto**: alternam um estado visual (linha apagada, nome riscado) — bons pra
-  decidir rápido quem ainda está de pé numa mesa grande.
-- **Remover**: tira da iniciativa (não apaga do log de ações já registradas).
-
-### Ações e diário de combate
-
-No formulário de ações, escolha quem agiu, o tipo (**Ataque**, **Cura** ou **Outro**), em quem (o
-alvo), a arma/magia/habilidade usada e o valor (dano ou cura). Ao registrar, o painel já aplica
-esse valor no PV do alvo lá em cima — não precisa fazer as duas contas. Cada ação registrada entra
-no log, do mais recente pro mais antigo, com um botão para remover em caso de engano.
-
-Logo abaixo, duas coisas calculadas sozinhas a partir desse log:
-
-- **Diário de combate**: uma frase pronta por ação, agrupada por rodada (ex.: "**Capitão Harker**
-  atacou Jogador Ana com Cimitarra, causando 6 de dano.") — rascunho pra copiar e ajustar na hora
-  de escrever a história da campanha depois.
-- **Resumo do combate**: quem mais causou dano, quem mais recebeu dano, quem mais curou e quem
-  acertou mais golpes — útil pra analisar depois quem andou carregando o grupo.
-
-### Encerrar um combate
-
-Se a mesma página for ter mais de um combate ao longo do tempo (ou pra fechar depois de registrar
-a sessão no Diário), use **Arquivar e começar do zero** no fim da página — guarda tudo (notas,
-combate, log) num arquivo com data e hora em `admin/dados/combates/arquivadas/` e limpa a tela
-para o próximo combate dessa mesma página.
-
-### Encerrar
-
-No fim da sessão, **Arquivar e começar do zero** guarda tudo (notas, combate, ações) num arquivo
-com data e hora em `admin/dados/arquivadas/` e limpa a tela pra próxima sessão. Isso não apaga
-nada — só tira da tela; os arquivos antigos continuam no disco se quiser consultar depois.
+O **Log de combate** (aba recolhível) registra cada ação com uma frase pronta, com botões para
+exportar em TXT ou JSON. **Encerrar combate** abre o **Resumo pós-combate**: soma o XP dos
+monstros derrotados e divide pelos jogadores (valor editável antes de **Distribuir XP**), e lista
+o espólio dos monstros mortos (itens + moeda, com uma moeda extra sorteada por CR) — desmarque o
+que não quer, escolha **dividir entre os jogadores** ou **alocar para um jogador específico** por
+item, e **Enviar para Inventário do Grupo** aplica tudo direto nas fichas reais. Depois disso, a
+página volta a mostrar "nenhum combate em andamento" — um novo **Iniciar combate** começa do zero,
+sem misturar com o anterior.
 
 ## Registrar uma sessão
 

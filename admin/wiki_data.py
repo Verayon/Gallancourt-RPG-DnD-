@@ -1256,8 +1256,6 @@ def _inserir_no_nav(root: Path, cabecalho: str, nova_linha: str, subgrupo: str =
 # Novo NPC — botão "Adicionar NPC" da tabela de NPCs
 # --------------------------------------------------------------------------
 
-CABECALHO_NAV_NPCS = "      - NPCs:"
-
 # (chave, rótulo, obrigatório)
 CAMPOS_NPC_NOVO = [
     ("nome", "Nome", True),
@@ -1301,14 +1299,16 @@ def criar_npc(
     root: Path, valores: dict, imagem: tuple[str, bytes] | None = None, generico: bool = False,
     build: bool = True,
 ) -> dict:
-    """Cria docs/personagens/<slug>.md no padrão das páginas de NPC e o adiciona ao menu.
+    """Cria docs/personagens/<slug>.md no padrão das páginas de NPC — alcançável pela Tabela de
+    NPCs (`personagens/index.md`), não por `mkdocs.yml` (o menu só lista categorias de topo desde
+    2026-10-30, ver CLAUDE.md — NPCs não têm mais entrada própria no menu).
 
     `imagem`, se informada, é (nome_original, conteúdo) do retrato. Com `generico=True`, a
-    página vai para docs/personagens/genericos/ (fora da tabela principal) e para um grupo
-    "Genéricos" próprio no menu — é um NPC-modelo (guarda, camponês, nobre…), não alguém
-    específico; ver `listar_npcs_genericos`. Com `build=False`, não builda o site ainda (sem
-    `build_ok`/`build_saida` no retorno) — para quem ainda vai escrever mais nesta página antes
-    de buildar (ex.: o gerador de NPCs, que anexa uma ficha de combate logo depois).
+    página vai para docs/personagens/genericos/ (fora da tabela principal) — é um NPC-modelo
+    (guarda, camponês, nobre…), não alguém específico; ver `listar_npcs_genericos`. Com
+    `build=False`, não builda o site ainda (sem `build_ok`/`build_saida` no retorno) — para quem
+    ainda vai escrever mais nesta página antes de buildar (ex.: o gerador de NPCs, que anexa uma
+    ficha de combate logo depois).
     """
     nome = (valores.get("nome") or "").strip()
     if not nome:
@@ -1362,9 +1362,7 @@ def criar_npc(
     ])
     _escrever(caminho, _com_front_matter(meta, corpo))
 
-    grupo = "Genéricos" if generico else (campos["cidade"] or "Outros")
-    nav_ok = _inserir_no_nav(root, CABECALHO_NAV_NPCS, f"- {_titulo_nav(nome)}: {rel}", subgrupo=grupo)
-    resultado = {"arquivo": f"docs/{rel}", "rel_docs": rel, "nav_ok": nav_ok}
+    resultado = {"arquivo": f"docs/{rel}", "rel_docs": rel}
     if build:
         build_ok, build_saida = publicar_build(root)
         resultado["build_ok"], resultado["build_saida"] = build_ok, build_saida
@@ -1387,8 +1385,6 @@ def definir_retrato(root: Path, npc_rel_docs: str, nome_original: str, conteudo:
 # Lugares — pré-requisito para uma sessão (botão "Adicionar lugar")
 # --------------------------------------------------------------------------
 
-CABECALHO_NAV_LUGARES = "      - Lugares:"
-
 # (chave, rótulo, obrigatório)
 CAMPOS_LUGAR_NOVO = [
     ("nome", "Nome", True),
@@ -1400,7 +1396,8 @@ CAMPOS_LUGAR_NOVO = [
 
 
 def criar_lugar(root: Path, valores: dict) -> dict:
-    """Cria docs/lugares/<slug>.md e o adiciona ao menu, em Wiki → Lugares."""
+    """Cria docs/lugares/<slug>.md — alcançável pela tabela/lista de Lugares, não por
+    `mkdocs.yml` (menu só lista categorias de topo desde 2026-10-30, ver CLAUDE.md)."""
     nome = (valores.get("nome") or "").strip()
     if not nome:
         raise ValueError("O lugar precisa de um nome.")
@@ -1440,16 +1437,13 @@ def criar_lugar(root: Path, valores: dict) -> dict:
     ])
     _escrever(caminho, _com_front_matter(meta, corpo))
 
-    nav_ok = _inserir_no_nav(root, CABECALHO_NAV_LUGARES, f"- {_titulo_nav(nome)}: {rel}")
     build_ok, build_saida = publicar_build(root)
-    return {"arquivo": f"docs/{rel}", "rel_docs": rel, "nav_ok": nav_ok, "build_ok": build_ok, "build_saida": build_saida}
+    return {"arquivo": f"docs/{rel}", "rel_docs": rel, "build_ok": build_ok, "build_saida": build_saida}
 
 
 # --------------------------------------------------------------------------
 # Jogadores — personagens dos jogadores, pré-requisito para uma sessão
 # --------------------------------------------------------------------------
-
-CABECALHO_NAV_JOGADORES = "      - Jogadores:"
 
 # (chave, rótulo, obrigatório)
 CAMPOS_JOGADOR_NOVO = [
@@ -1461,7 +1455,9 @@ CAMPOS_JOGADOR_NOVO = [
 
 
 def criar_jogador(root: Path, valores: dict) -> dict:
-    """Cria docs/mestre/jogadores/<slug>.md e o adiciona ao menu, em Mestre → Jogadores.
+    """Cria docs/mestre/jogadores/<slug>.md — alcançável pela lista de Jogadores
+    (`<!-- jogadores:lista -->` em docs/mestre/jogadores/index.md), não por `mkdocs.yml` (menu
+    só lista categorias de topo desde 2026-10-30, ver CLAUDE.md).
 
     A ficha de combate do personagem (CA, PV, ações…) é criada depois, como qualquer outra,
     pela aba "Ficha de combate" do Painel, escolhendo esta página.
@@ -1494,9 +1490,8 @@ def criar_jogador(root: Path, valores: dict) -> dict:
     ])
     _escrever(caminho, _com_front_matter(meta, corpo))
 
-    nav_ok = _inserir_no_nav(root, CABECALHO_NAV_JOGADORES, f"- {_titulo_nav(nome)}: {rel}")
     build_ok, build_saida = publicar_build(root)
-    return {"arquivo": f"docs/{rel}", "rel_docs": rel, "nav_ok": nav_ok, "build_ok": build_ok, "build_saida": build_saida}
+    return {"arquivo": f"docs/{rel}", "rel_docs": rel, "build_ok": build_ok, "build_saida": build_saida}
 
 
 # --------------------------------------------------------------------------
@@ -1558,13 +1553,14 @@ def _bloco_lista_ou_vazio(links: list[str]) -> str:
 
 
 def _modelo_sessao(
-    numero: int, titulo: str, valores: dict, rel_docs: str,
+    numero: int, titulo: str, valores: dict,
     links_npcs: list[str] | None = None, links_lugares: list[str] | None = None, prompt: str = "",
 ) -> str:
-    """Página de sessão com o mesmo layout da Sessão 0: alternador Normal/Mestre logo após o
-    título (ver hooks/gallancourt.py, marcador `<!-- mestre:alternancia -->`) — "Normal" traz as
-    abas de preparo de sempre (ficha dentro de Resumo, Cenas, NPCs…), "Mestre" traz só o Painel
-    de Iniciativa, para rodar o combate sem o resto da página no meio.
+    """Página de sessão com o mesmo layout da Sessão 0/1: abas de preparo de sempre (Resumo,
+    Cenas, NPCs, Lugares, Loot & Pistas, Segredos do Mestre) mais a aba **Combat Tracker**,
+    sempre a última — ver hooks/gallancourt.py::_combate_dinamico e
+    docs/javascripts/combate.js. Substitui o antigo alternador Normal/Mestre + Painel de
+    Iniciativa (admin/sessao_viva.py, retirado); o tracker agora é só mais uma aba.
 
     `links_npcs`/`links_lugares` (já resolvidos como `[Nome](caminho)` por `criar_sessao_preparo`)
     pré-preenchem as abas NPCs → Aliados e Lugares, em vez de deixá-las "(a preencher)". `prompt`
@@ -1596,8 +1592,6 @@ sessao:
 ---
 
 # Sessão {numero} — {titulo}
-
-<!-- mestre:alternancia -->
 
 === "Resumo"
 
@@ -1672,14 +1666,9 @@ sessao:
 
 {vazio}
 
-<div class="painel-iniciativa" data-pagina="{rel_docs}" markdown>
+=== "Combat Tracker"
 
-*(o painel aparece aqui quando a página carrega — precisa do [Painel do Mestre](../painel.md)
-rodando no seu computador)*
-
-</div>
-
-<!-- /mestre:alternancia -->
+    <!-- combate:painel -->
 
 ## Depois da sessão
 
@@ -1734,7 +1723,7 @@ def criar_sessao_preparo(
     if links_lugares and not (valores.get("local") or "").strip():
         valores["local"] = ", ".join(links_lugares)
 
-    _escrever(docs_dir(root) / rel, _modelo_sessao(numero, titulo, valores, rel, links_npcs, links_lugares, prompt))
+    _escrever(docs_dir(root) / rel, _modelo_sessao(numero, titulo, valores, links_npcs, links_lugares, prompt))
     nav_ok = _inserir_no_nav(root, CABECALHO_NAV_SESSOES, f"- {_titulo_nav(f'Sessão {numero} — {titulo}')}: {rel}")
     if npcs or jogadores:
         salvar_participantes(root, rel, jogadores, npcs)

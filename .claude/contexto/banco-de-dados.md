@@ -61,7 +61,10 @@ fundação: a cópia de teste não deve herdar segredos nem estado do autor).
 
 **Já migrado**, ao contrário do que diziam versões antigas deste arquivo: a **ficha de combate**
 de monstro (2026-10-30), depois unificada com NPC nomeado e jogador (2026-10-31) — `Personagem`/
-`Ficha` em `admin/banco.py`, ver `.claude/contexto/personagens.md` antes de mexer ali.
+`Ficha` em `admin/banco.py`, ver `.claude/contexto/personagens.md` antes de mexer ali. O **Combat
+Tracker** (2026-11-02) também: `Combate`/`CombateParticipante`/`CombateParticipanteCondicao`/
+`CombateLogEntrada`, substituindo o antigo `admin/sessao_viva.py` (estado em JSON fora do banco) —
+ver `.claude/contexto/combate.md`.
 
 Antes de propor migrar algo pra cá, confira se o ganho (consulta relacional, sem duplicação) supera
 o custo de perder o versionamento em git que o arquivo atual já tem — e pergunte ao autor.

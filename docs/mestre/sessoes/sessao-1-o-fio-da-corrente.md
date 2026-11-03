@@ -19,8 +19,6 @@ participantes:
 
 # Sessão 1 — O Fio da Corrente
 
-<!-- mestre:alternancia -->
-
 === "Resumo"
 
     <div class="ficha" markdown>
@@ -300,7 +298,7 @@ participantes:
 
     !!! tip "Fichas de monstros genéricos ficam no catálogo, não duplicadas aqui"
         Goblins, lobos, bandidos e o capitão bandido já têm ficha completa na página de
-        **Monstros** — ao montar o combate na aba **Painel de Iniciativa**, você pode escolher a
+        **Monstros** — ao montar o combate na aba **Combat Tracker**, você pode adicionar a
         ficha deles de lá diretamente, sem precisar copiar nada para esta página.
 
     ## Fichas de combate
@@ -470,14 +468,9 @@ participantes:
     compras, viagem e talvez o Posto Cinzento). Não force tudo numa noite só — está previsto e
     está tudo bem se a sessão terminar na estrada ou na chegada ao posto, continuando na Sessão 2.
 
-<div class="painel-iniciativa" data-pagina="mestre/sessoes/sessao-1-o-fio-da-corrente.md" markdown>
+=== "Combat Tracker"
 
-*(o painel aparece aqui quando a página carrega — precisa do [Painel do Mestre](../painel.md)
-rodando no seu computador)*
-
-</div>
-
-<!-- /mestre:alternancia -->
+    <!-- combate:painel -->
 
 ## Depois da sessão
 

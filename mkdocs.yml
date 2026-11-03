@@ -46,11 +46,10 @@ extra_javascript:
   - javascripts/painel-fetch.js
   - javascripts/gallancourt.js
   - javascripts/criar-sessao.js
-  - javascripts/painel-iniciativa.js
-  - javascripts/alternancia-mestre.js
   - javascripts/modo-mestre.js
   - javascripts/ficha.js
   - javascripts/roadmap.js
+  - javascripts/combate.js
 
 hooks:
   - hooks/gallancourt.py

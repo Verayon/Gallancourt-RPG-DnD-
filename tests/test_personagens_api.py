@@ -319,3 +319,99 @@ def test_efeito_guarda_origem_e_duracao(tmp_path):
 
         dados = pa.serializar_ficha(base)
         assert dados["efeitos"] == [{"vinculo_id": efeito.id, "nome": "Abençoado", "tipo": "Temporário", "origem": "Bênção", "duracao": "expirado"}]
+
+
+def test_resistencia_dano_tipo_desconhecido_e_recusado(tmp_path):
+    with _sessao_de_teste(tmp_path) as sessao:
+        _personagem, base = _goblin_base(sessao)
+        try:
+            pa.alternar_resistencia_dano(sessao, base, "Dano de verdade", "imune")
+            assert False, "deveria ter recusado um tipo de dano fora de TIPOS_DANO"
+        except ValueError:
+            pass
+
+
+def test_resistencia_dano_alterna_entre_modos_e_remove(tmp_path):
+    with _sessao_de_teste(tmp_path) as sessao:
+        _personagem, base = _goblin_base(sessao)
+
+        pa.alternar_resistencia_dano(sessao, base, "Fogo", "resistente")
+        assert [r["modo"] for r in pa.serializar_ficha(base)["resistencias_dano"] if r["nome"] == "Fogo"] == ["resistente"]
+
+        # clicar num modo diferente troca, não duplica
+        pa.alternar_resistencia_dano(sessao, base, "Fogo", "imune")
+        resistencias = pa.serializar_ficha(base)["resistencias_dano"]
+        assert [r["modo"] for r in resistencias if r["nome"] == "Fogo"] == ["imune"]
+        assert len(resistencias) == 1
+
+        # clicar no mesmo modo de novo remove
+        pa.alternar_resistencia_dano(sessao, base, "Fogo", "imune")
+        assert pa.serializar_ficha(base)["resistencias_dano"] == []
+
+
+def test_favoritar_habilidade_e_magia_ordena_primeiro(tmp_path):
+    with _sessao_de_teste(tmp_path) as sessao:
+        _personagem, base = _goblin_base(sessao)
+        mordida = pa.criar_item_catalogo(sessao, "habilidades", {"nome": "Mordida", "tipo": "acao"})
+        garra = pa.criar_item_catalogo(sessao, "habilidades", {"nome": "Garra", "tipo": "acao"})
+        v_mordida = pa.adicionar_vinculo(sessao, base, "habilidades", mordida["id"])
+        v_garra = pa.adicionar_vinculo(sessao, base, "habilidades", garra["id"])
+
+        pa.alternar_favorito_vinculo(sessao, "habilidades", v_garra["vinculo_id"])
+
+        nomes = [h["nome"] for h in pa.serializar_ficha(base)["habilidades"]]
+        assert nomes == ["Garra", "Mordida"]  # favorito primeiro
+
+        favorito = pa.alternar_favorito_vinculo(sessao, "habilidades", v_garra["vinculo_id"])
+        assert favorito is False  # alternar de novo desfavorita
+        assert v_mordida  # sanity: o outro vínculo não foi tocado
+
+
+def test_consumir_uso_habilidade_ate_zerar(tmp_path):
+    with _sessao_de_teste(tmp_path) as sessao:
+        _personagem, base = _goblin_base(sessao)
+        sopro = pa.criar_item_catalogo(sessao, "habilidades", {"nome": "Sopro de fogo", "tipo": "acao"})
+        vinculo = pa.adicionar_vinculo(sessao, base, "habilidades", sopro["id"])
+
+        pa.definir_usos_habilidade(sessao, vinculo["vinculo_id"], {"usos_maximo": 2, "tipo_descanso": "curto"})
+        assert pa.consumir_uso_habilidade(sessao, vinculo["vinculo_id"]) == 1
+        assert pa.consumir_uso_habilidade(sessao, vinculo["vinculo_id"]) == 0
+        assert pa.consumir_uso_habilidade(sessao, vinculo["vinculo_id"]) == 0  # não passa de 0
+
+
+def test_descanso_curto_so_reseta_contadores_curto(tmp_path):
+    with _sessao_de_teste(tmp_path) as sessao:
+        _personagem, base = _jogador_base(sessao)
+        acao_curta = pa.criar_item_catalogo(sessao, "habilidades", {"nome": "Segundo Fôlego", "tipo": "acao"})
+        acao_longa = pa.criar_item_catalogo(sessao, "habilidades", {"nome": "Ação Surto", "tipo": "acao"})
+        v_curta = pa.adicionar_vinculo(sessao, base, "habilidades", acao_curta["id"])
+        v_longa = pa.adicionar_vinculo(sessao, base, "habilidades", acao_longa["id"])
+        pa.definir_usos_habilidade(sessao, v_curta["vinculo_id"], {"usos_maximo": 1, "tipo_descanso": "curto"})
+        pa.definir_usos_habilidade(sessao, v_longa["vinculo_id"], {"usos_maximo": 1, "tipo_descanso": "longo"})
+        pa.consumir_uso_habilidade(sessao, v_curta["vinculo_id"])
+        pa.consumir_uso_habilidade(sessao, v_longa["vinculo_id"])
+
+        pa.descanso_curto(sessao, base)
+
+        habilidades = {h["nome"]: h["usos_restantes"] for h in pa.serializar_ficha(base)["habilidades"]}
+        assert habilidades["Segundo Fôlego"] == 1  # curto repôs
+        assert habilidades["Ação Surto"] == 0  # longo não repõe num descanso curto
+
+
+def test_descanso_longo_reseta_contadores_curto_e_longo_junto_com_pv_e_slots(tmp_path):
+    with _sessao_de_teste(tmp_path) as sessao:
+        _personagem, base = _jogador_base(sessao)
+        habilidade = pa.criar_item_catalogo(sessao, "habilidades", {"nome": "Ação Surto", "tipo": "acao"})
+        vinculo = pa.adicionar_vinculo(sessao, base, "habilidades", habilidade["id"])
+        pa.definir_usos_habilidade(sessao, vinculo["vinculo_id"], {"usos_maximo": 1, "tipo_descanso": "longo"})
+        pa.consumir_uso_habilidade(sessao, vinculo["vinculo_id"])
+        pa.criar_espaco_magia(sessao, base, {"nivel": 1, "maximo": 2, "usado": 2})
+        base.pv_atual = 1  # pv_atual fica fora de CAMPOS_FICHA_EDITAVEIS de propósito
+        sessao.commit()
+
+        pa.descanso_longo(sessao, base)
+
+        dados = pa.serializar_ficha(base)
+        assert dados["pv_atual"] == base.pv_maximo
+        assert dados["espacos_magia"][0]["usado"] == 0
+        assert dados["habilidades"][0]["usos_restantes"] == 1

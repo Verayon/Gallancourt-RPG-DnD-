@@ -14,20 +14,19 @@ from __future__ import annotations
 import datetime
 import hmac
 import os
-import re
 import secrets
 import time
 from pathlib import Path
 
 from flask import Flask, abort, jsonify, redirect, render_template, request, send_file, session, url_for
 
-import sessao_viva as sv
 import wiki_data as wd
 import roadmap
 import bugs
 import gerador_npc as gn
 import banco
 import personagens_api as ma
+import combate_api as ca
 
 ROOT = Path(os.environ.get("GALLANCOURT_ADMIN_ROOT", wd.DEFAULT_ROOT)).resolve()
 SITE_DIR = ROOT / "site"
@@ -148,7 +147,9 @@ def api_auth_sair():
 # Prefixos de API que ficam de leitura livre mesmo com PAINEL_SENHA definida (ver
 # "Mudança de acesso" — o site passou a ser consulta pública; só criar/editar/excluir exige
 # login). Checado só em GET: POST/PUT/DELETE nesses mesmos prefixos continuam exigindo login.
-_PREFIXOS_API_LEITURA_LIVRE = ("/api/personagens", "/api/catalogo", "/api/auth/", "/api/roadmap")
+_PREFIXOS_API_LEITURA_LIVRE = (
+    "/api/personagens", "/api/catalogo", "/api/auth/", "/api/roadmap", "/api/combate",
+)
 
 
 @app.before_request
@@ -580,16 +581,6 @@ def salvar_ficha_item():
     )
 
 
-def _int_ou_none(valor: str) -> int | None:
-    valor = (valor or "").strip()
-    if not valor:
-        return None
-    try:
-        return int(valor)
-    except ValueError:
-        return None
-
-
 def _combo_ficha(pagina: str, slug: str) -> str:
     return f"{pagina}::{slug}"
 
@@ -599,398 +590,6 @@ def _parse_combo_ficha(valor: str) -> tuple[str, str]:
         return "", ""
     pagina, slug = valor.split("::", 1)
     return pagina, slug
-
-
-def _pv_inicial_da_ficha(dados_ficha: dict | None) -> int | None:
-    m = re.match(r"\s*(\d+)", (dados_ficha or {}).get("pv", "") or "")
-    return int(m.group(1)) if m else None
-
-
-def _redirect_sessao_ao_vivo(pagina: str, ancora: str = ""):
-    url = url_for("ver_sessao_ao_vivo", pagina=pagina)
-    if ancora:
-        url += f"#{ancora}"
-    return redirect(url)
-
-
-def _ficha_da_vez(estado: dict) -> dict | None:
-    """A ficha de combate do combatente da vez, se ele tiver uma vinculada — para mostrar o
-    cartão completo (atributos, ações…) sem precisar abrir a página dele."""
-    atual = next((c for c in estado["combatentes"] if c["id"] == estado["turno_atual"]), None)
-    if atual and atual.get("ficha_pagina") and atual.get("ficha_slug"):
-        caminho_ficha = _resolver_pagina(atual["ficha_pagina"])
-        if caminho_ficha is not None:
-            return wd.ler_statblocks_da_pagina(caminho_ficha).get(atual["ficha_slug"])
-    return None
-
-
-@app.get("/sessao-ao-vivo")
-def ver_sessao_ao_vivo():
-    paginas = wd.listar_todas_paginas(ROOT)
-    pagina_escolhida = request.args.get("pagina", "")
-    contexto = dict(
-        paginas=paginas,
-        pagina_escolhida=pagina_escolhida,
-        fichas_disponiveis=wd.listar_statblocks(ROOT),
-        combo_ficha=_combo_ficha,
-    )
-    if not pagina_escolhida:
-        return render_template("sessao_ao_vivo.html", **contexto)
-
-    if _resolver_pagina(pagina_escolhida) is None:
-        abort(404)
-
-    estado = sv.carregar(ROOT, pagina_escolhida)
-    ficha_da_vez = _ficha_da_vez(estado)
-
-    return render_template(
-        "sessao_ao_vivo.html",
-        estado=estado,
-        combatentes=sv.ordem_de_exibicao(estado),
-        resumo_combate=sv.resumo_combate(estado),
-        diario_combate=sv.gerar_diario_de_combate(estado),
-        tipos_combatente=sv.TIPOS_COMBATENTE,
-        tipos_acao=sv.TIPOS_ACAO,
-        rotulos_acao=sv.ROTULOS_ACAO,
-        ficha_da_vez=ficha_da_vez,
-        atributos_ficha=wd.CAMPOS_STATBLOCK_ATRIBUTOS,
-        rotulos_atributos=wd.ROTULOS_ATRIBUTOS,
-        modificador=wd.modificador,
-        linhas_para_trechos=wd.linhas_para_trechos,
-        **contexto,
-    )
-
-
-@app.post("/sessao-ao-vivo/nota")
-def adicionar_nota_ao_vivo():
-    pagina = request.form.get("pagina", "")
-    if _resolver_pagina(pagina) is None:
-        abort(404)
-    sv.adicionar_nota(ROOT, pagina, request.form.get("texto", ""))
-    return _redirect_sessao_ao_vivo(pagina, "notas")
-
-
-@app.post("/sessao-ao-vivo/nota/<int:indice>/remover")
-def remover_nota_ao_vivo(indice: int):
-    pagina = request.form.get("pagina", "")
-    if _resolver_pagina(pagina) is None:
-        abort(404)
-    sv.remover_nota(ROOT, pagina, indice)
-    return _redirect_sessao_ao_vivo(pagina, "notas")
-
-
-@app.post("/sessao-ao-vivo/resumo")
-def salvar_resumo_ao_vivo():
-    pagina = request.form.get("pagina", "")
-    if _resolver_pagina(pagina) is None:
-        abort(404)
-    sv.salvar_resumo(ROOT, pagina, request.form.get("resumo", ""))
-    return _redirect_sessao_ao_vivo(pagina, "notas")
-
-
-@app.post("/sessao-ao-vivo/combatente")
-def adicionar_combatente_ao_vivo():
-    pagina = request.form.get("pagina", "")
-    if _resolver_pagina(pagina) is None:
-        abort(404)
-
-    nome = request.form.get("nome", "").strip()
-    tipo = request.form.get("tipo", "npc")
-    iniciativa = _int_ou_none(request.form.get("iniciativa", "")) or 0
-    pv_atual = _int_ou_none(request.form.get("pv_atual", ""))
-    pv_maximo = _int_ou_none(request.form.get("pv_maximo", ""))
-    ficha_pagina, ficha_slug = _parse_combo_ficha(request.form.get("ficha", ""))
-
-    if ficha_pagina and ficha_slug:
-        caminho_ficha = _resolver_pagina(ficha_pagina)
-        dados_ficha = wd.ler_statblocks_da_pagina(caminho_ficha).get(ficha_slug) if caminho_ficha else None
-        if dados_ficha:
-            if not nome:
-                nome = dados_ficha.get("nome", "")
-            pv_da_ficha = _pv_inicial_da_ficha(dados_ficha)
-            if pv_da_ficha is not None:
-                pv_atual = pv_da_ficha if pv_atual is None else pv_atual
-                pv_maximo = pv_da_ficha if pv_maximo is None else pv_maximo
-
-    if nome:
-        sv.adicionar_combatente(
-            ROOT, pagina, nome, tipo, iniciativa, pv_atual, pv_maximo, ficha_pagina, ficha_slug,
-        )
-    return _redirect_sessao_ao_vivo(pagina, "iniciativa")
-
-
-@app.post("/sessao-ao-vivo/combatente/<int:cid>/remover")
-def remover_combatente_ao_vivo(cid: int):
-    pagina = request.form.get("pagina", "")
-    if _resolver_pagina(pagina) is None:
-        abort(404)
-    sv.remover_combatente(ROOT, pagina, cid)
-    return _redirect_sessao_ao_vivo(pagina, "iniciativa")
-
-
-@app.post("/sessao-ao-vivo/combatente/<int:cid>/pv")
-def ajustar_pv_ao_vivo(cid: int):
-    pagina = request.form.get("pagina", "")
-    if _resolver_pagina(pagina) is None:
-        abort(404)
-    delta = _int_ou_none(request.form.get("delta", "")) or 0
-    sv.ajustar_pv(ROOT, pagina, cid, delta)
-    return _redirect_sessao_ao_vivo(pagina, "iniciativa")
-
-
-@app.post("/sessao-ao-vivo/combatente/<int:cid>/status")
-def atualizar_status_ao_vivo(cid: int):
-    pagina = request.form.get("pagina", "")
-    if _resolver_pagina(pagina) is None:
-        abort(404)
-    sv.atualizar_status(ROOT, pagina, cid, request.form.get("status", ""))
-    return _redirect_sessao_ao_vivo(pagina, "iniciativa")
-
-
-@app.post("/sessao-ao-vivo/combatente/<int:cid>/flag/<campo>")
-def alternar_flag_ao_vivo(cid: int, campo: str):
-    pagina = request.form.get("pagina", "")
-    if _resolver_pagina(pagina) is None:
-        abort(404)
-    sv.alternar_flag(ROOT, pagina, cid, campo)
-    return _redirect_sessao_ao_vivo(pagina, "iniciativa")
-
-
-@app.post("/sessao-ao-vivo/turno/proximo")
-def proximo_turno_ao_vivo():
-    pagina = request.form.get("pagina", "")
-    if _resolver_pagina(pagina) is None:
-        abort(404)
-    sv.proximo_turno(ROOT, pagina)
-    return _redirect_sessao_ao_vivo(pagina, "iniciativa")
-
-
-@app.post("/sessao-ao-vivo/acao")
-def registrar_acao_ao_vivo():
-    pagina = request.form.get("pagina", "")
-    if _resolver_pagina(pagina) is None:
-        abort(404)
-    autor_id = _int_ou_none(request.form.get("autor_id", ""))
-    alvo_id = _int_ou_none(request.form.get("alvo_id", ""))
-    valor = _int_ou_none(request.form.get("valor", ""))
-    tipo = request.form.get("tipo", "outro")
-    meio = request.form.get("meio", "")
-    obs = request.form.get("obs", "")
-    sv.registrar_acao(ROOT, pagina, autor_id, tipo, alvo_id, meio, valor, obs)
-    return _redirect_sessao_ao_vivo(pagina, "acoes")
-
-
-@app.post("/sessao-ao-vivo/acao/<int:acao_id>/remover")
-def remover_acao_ao_vivo(acao_id: int):
-    pagina = request.form.get("pagina", "")
-    if _resolver_pagina(pagina) is None:
-        abort(404)
-    sv.remover_acao(ROOT, pagina, acao_id)
-    return _redirect_sessao_ao_vivo(pagina, "acoes")
-
-
-@app.post("/sessao-ao-vivo/arquivar")
-def arquivar_sessao_ao_vivo():
-    pagina = request.form.get("pagina", "")
-    if _resolver_pagina(pagina) is None:
-        abort(404)
-    sv.arquivar_e_limpar(ROOT, pagina)
-    return _redirect_sessao_ao_vivo(pagina)
-
-
-# --------------------------------------------------------------------------
-# API JSON do Painel de Iniciativa — mesma lógica das rotas acima (sessao_viva.py continua
-# sendo a única fonte de verdade das regras), só devolvendo o estado como JSON em vez de uma
-# página HTML inteira. Usada pelo widget embutido na própria página da sessão
-# (docs/javascripts/painel-iniciativa.js); as rotas HTML acima continuam existindo, para quem
-# preferir usar o Painel direto, sem o site aberto. Site e Painel são a mesma origem (ver
-# servir_site, mais abaixo), então não precisa de CORS.
-# --------------------------------------------------------------------------
-
-
-def _erro_json(mensagem: str, status: int = 404):
-    return jsonify(erro=mensagem), status
-
-
-def _fichas_disponiveis_sessao(pagina_rel_docs: str) -> list[dict]:
-    """Fichas de combate que fazem sentido oferecer nesta sessão: as que já estão na própria
-    página, mais as dos jogadores/NPCs marcados como participantes dela (ver
-    /sessoes/participantes) — nunca todo stat-block do site."""
-    titulos = {p.rel_docs: p.titulo for p in wd.listar_todas_paginas(ROOT)}
-    participantes = wd.ler_participantes(ROOT, pagina_rel_docs)
-    paginas_relevantes = [pagina_rel_docs] + participantes["jogadores"] + participantes["npcs"]
-
-    resultado = []
-    vistos = set()
-    for rel in paginas_relevantes:
-        caminho = _resolver_pagina(rel)
-        if caminho is None:
-            continue
-        for slug, dados in wd.ler_statblocks_da_pagina(caminho).items():
-            if (rel, slug) in vistos:
-                continue
-            vistos.add((rel, slug))
-            resultado.append({
-                "slug": slug, "nome": dados.get("nome") or slug,
-                "pagina_rel_docs": rel, "pagina_titulo": titulos.get(rel, rel),
-            })
-    return resultado
-
-
-def _estado_json(pagina: str):
-    estado = sv.carregar(ROOT, pagina)
-    return jsonify(
-        pagina=pagina,
-        estado=estado,
-        combatentes=sv.ordem_de_exibicao(estado),
-        resumo_combate=sv.resumo_combate(estado),
-        diario_combate=sv.gerar_diario_de_combate(estado),
-        ficha_da_vez=_ficha_da_vez(estado),
-        fichas_disponiveis=_fichas_disponiveis_sessao(pagina),
-        tipos_combatente=sv.TIPOS_COMBATENTE,
-        tipos_acao=sv.TIPOS_ACAO,
-        rotulos_acao=sv.ROTULOS_ACAO,
-        atributos_ficha=wd.CAMPOS_STATBLOCK_ATRIBUTOS,
-        rotulos_atributos=wd.ROTULOS_ATRIBUTOS,
-    )
-
-
-@app.get("/api/sessao-ao-vivo/<path:pagina>")
-def api_ver_sessao_ao_vivo(pagina):
-    if _resolver_pagina(pagina) is None:
-        return _erro_json("Página não encontrada.")
-    return _estado_json(pagina)
-
-
-@app.post("/api/sessao-ao-vivo/<path:pagina>/nota")
-def api_adicionar_nota(pagina):
-    if _resolver_pagina(pagina) is None:
-        return _erro_json("Página não encontrada.")
-    dados = request.get_json(silent=True) or {}
-    sv.adicionar_nota(ROOT, pagina, dados.get("texto", ""))
-    return _estado_json(pagina)
-
-
-@app.post("/api/sessao-ao-vivo/<path:pagina>/nota/<int:indice>/remover")
-def api_remover_nota(pagina, indice):
-    if _resolver_pagina(pagina) is None:
-        return _erro_json("Página não encontrada.")
-    sv.remover_nota(ROOT, pagina, indice)
-    return _estado_json(pagina)
-
-
-@app.post("/api/sessao-ao-vivo/<path:pagina>/resumo")
-def api_salvar_resumo(pagina):
-    if _resolver_pagina(pagina) is None:
-        return _erro_json("Página não encontrada.")
-    dados = request.get_json(silent=True) or {}
-    sv.salvar_resumo(ROOT, pagina, dados.get("resumo", ""))
-    return _estado_json(pagina)
-
-
-@app.post("/api/sessao-ao-vivo/<path:pagina>/combatente")
-def api_adicionar_combatente(pagina):
-    if _resolver_pagina(pagina) is None:
-        return _erro_json("Página não encontrada.")
-    dados = request.get_json(silent=True) or {}
-    nome = (dados.get("nome") or "").strip()
-    tipo = dados.get("tipo") or "npc"
-    iniciativa = _int_ou_none(str(dados.get("iniciativa", ""))) or 0
-    pv_atual = _int_ou_none(str(dados.get("pv_atual", "")))
-    pv_maximo = _int_ou_none(str(dados.get("pv_maximo", "")))
-    ficha_pagina = dados.get("ficha_pagina") or ""
-    ficha_slug = dados.get("ficha_slug") or ""
-
-    if ficha_pagina and ficha_slug:
-        caminho_ficha = _resolver_pagina(ficha_pagina)
-        dados_ficha = wd.ler_statblocks_da_pagina(caminho_ficha).get(ficha_slug) if caminho_ficha else None
-        if dados_ficha:
-            if not nome:
-                nome = dados_ficha.get("nome", "")
-            pv_da_ficha = _pv_inicial_da_ficha(dados_ficha)
-            if pv_da_ficha is not None:
-                pv_atual = pv_da_ficha if pv_atual is None else pv_atual
-                pv_maximo = pv_da_ficha if pv_maximo is None else pv_maximo
-
-    if nome:
-        sv.adicionar_combatente(
-            ROOT, pagina, nome, tipo, iniciativa, pv_atual, pv_maximo, ficha_pagina, ficha_slug,
-        )
-    return _estado_json(pagina)
-
-
-@app.post("/api/sessao-ao-vivo/<path:pagina>/combatente/<int:cid>/remover")
-def api_remover_combatente(pagina, cid):
-    if _resolver_pagina(pagina) is None:
-        return _erro_json("Página não encontrada.")
-    sv.remover_combatente(ROOT, pagina, cid)
-    return _estado_json(pagina)
-
-
-@app.post("/api/sessao-ao-vivo/<path:pagina>/combatente/<int:cid>/pv")
-def api_ajustar_pv(pagina, cid):
-    if _resolver_pagina(pagina) is None:
-        return _erro_json("Página não encontrada.")
-    dados = request.get_json(silent=True) or {}
-    delta = _int_ou_none(str(dados.get("delta", ""))) or 0
-    sv.ajustar_pv(ROOT, pagina, cid, delta)
-    return _estado_json(pagina)
-
-
-@app.post("/api/sessao-ao-vivo/<path:pagina>/combatente/<int:cid>/status")
-def api_atualizar_status(pagina, cid):
-    if _resolver_pagina(pagina) is None:
-        return _erro_json("Página não encontrada.")
-    dados = request.get_json(silent=True) or {}
-    sv.atualizar_status(ROOT, pagina, cid, dados.get("status", ""))
-    return _estado_json(pagina)
-
-
-@app.post("/api/sessao-ao-vivo/<path:pagina>/combatente/<int:cid>/flag/<campo>")
-def api_alternar_flag(pagina, cid, campo):
-    if _resolver_pagina(pagina) is None:
-        return _erro_json("Página não encontrada.")
-    sv.alternar_flag(ROOT, pagina, cid, campo)
-    return _estado_json(pagina)
-
-
-@app.post("/api/sessao-ao-vivo/<path:pagina>/turno/proximo")
-def api_proximo_turno(pagina):
-    if _resolver_pagina(pagina) is None:
-        return _erro_json("Página não encontrada.")
-    sv.proximo_turno(ROOT, pagina)
-    return _estado_json(pagina)
-
-
-@app.post("/api/sessao-ao-vivo/<path:pagina>/acao")
-def api_registrar_acao(pagina):
-    if _resolver_pagina(pagina) is None:
-        return _erro_json("Página não encontrada.")
-    dados = request.get_json(silent=True) or {}
-    autor_id = _int_ou_none(str(dados.get("autor_id", "")))
-    alvo_id = _int_ou_none(str(dados.get("alvo_id", "")))
-    valor = _int_ou_none(str(dados.get("valor", "")))
-    tipo = dados.get("tipo") or "outro"
-    meio = dados.get("meio") or ""
-    obs = dados.get("obs") or ""
-    sv.registrar_acao(ROOT, pagina, autor_id, tipo, alvo_id, meio, valor, obs)
-    return _estado_json(pagina)
-
-
-@app.post("/api/sessao-ao-vivo/<path:pagina>/acao/<int:acao_id>/remover")
-def api_remover_acao(pagina, acao_id):
-    if _resolver_pagina(pagina) is None:
-        return _erro_json("Página não encontrada.")
-    sv.remover_acao(ROOT, pagina, acao_id)
-    return _estado_json(pagina)
-
-
-@app.post("/api/sessao-ao-vivo/<path:pagina>/arquivar")
-def api_arquivar(pagina):
-    if _resolver_pagina(pagina) is None:
-        return _erro_json("Página não encontrada.")
-    sv.arquivar_e_limpar(ROOT, pagina)
-    return _estado_json(pagina)
 
 
 # --------------------------------------------------------------------------
@@ -1011,6 +610,10 @@ def _tipo_catalogo_valido(tipo: str) -> bool:
 
 def _tipo_ator_valido(tipo: str) -> bool:
     return tipo in banco.TIPOS_ATOR
+
+
+def _erro_json(mensagem: str, status: int = 404):
+    return jsonify(erro=mensagem), status
 
 
 @app.get("/api/personagens/<tipo>/<slug>")
@@ -1133,6 +736,60 @@ def api_remover_vinculo(ficha_id, tipo, vinculo_id):
         personagem = ficha.personagem
         ma.remover_vinculo(sessao, tipo, vinculo_id)
         return jsonify(ma.serializar_personagem(personagem))
+
+
+@app.put("/api/fichas/<int:ficha_id>/<tipo>/<int:vinculo_id>/favorito")
+def api_alternar_favorito_vinculo(ficha_id, tipo, vinculo_id):
+    with SessaoBanco() as sessao:
+        ficha = ma.obter_ficha(sessao, ficha_id)
+        if ficha is None:
+            return _erro_json("Ficha não encontrada.")
+        try:
+            ma.alternar_favorito_vinculo(sessao, tipo, vinculo_id)
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        return jsonify(ma.serializar_personagem(ficha.personagem))
+
+
+@app.put("/api/fichas/<int:ficha_id>/habilidades/<int:vinculo_id>/usos")
+def api_definir_usos_habilidade(ficha_id, vinculo_id):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        ficha = ma.obter_ficha(sessao, ficha_id)
+        if ficha is None:
+            return _erro_json("Ficha não encontrada.")
+        try:
+            ma.definir_usos_habilidade(sessao, vinculo_id, dados)
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        return jsonify(ma.serializar_personagem(ficha.personagem))
+
+
+@app.post("/api/fichas/<int:ficha_id>/habilidades/<int:vinculo_id>/usar")
+def api_consumir_uso_habilidade(ficha_id, vinculo_id):
+    with SessaoBanco() as sessao:
+        ficha = ma.obter_ficha(sessao, ficha_id)
+        if ficha is None:
+            return _erro_json("Ficha não encontrada.")
+        try:
+            ma.consumir_uso_habilidade(sessao, vinculo_id)
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        return jsonify(ma.serializar_personagem(ficha.personagem))
+
+
+@app.post("/api/fichas/<int:ficha_id>/resistencias-dano")
+def api_alternar_resistencia_dano(ficha_id):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        ficha = ma.obter_ficha(sessao, ficha_id)
+        if ficha is None:
+            return _erro_json("Ficha não encontrada.")
+        try:
+            ma.alternar_resistencia_dano(sessao, ficha, dados.get("nome", ""), dados.get("modo", ""))
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        return jsonify(ma.serializar_personagem(ficha.personagem))
 
 
 @app.put("/api/fichas/<int:ficha_id>/sentidos/<int:vinculo_id>")
@@ -1325,6 +982,321 @@ def api_apagar_foto_personagem(tipo, slug):
             return _erro_json("Personagem não encontrado.")
         ma.apagar_foto_personagem(ROOT, sessao, personagem)
         return jsonify(ma.serializar_personagem(personagem))
+
+
+@app.post("/api/personagens/<tipo>/<slug>/fichas/<int:ficha_id>/descanso-longo")
+def api_descanso_longo(tipo, slug, ficha_id):
+    if tipo not in ("npc", "jogador"):
+        return _erro_json("Descanso longo só se aplica a NPC nomeado ou jogador.", 400)
+    with SessaoBanco() as sessao:
+        ficha = ma.obter_ficha(sessao, ficha_id)
+        if ficha is None or ficha.personagem.slug != slug or ficha.personagem.tipo != tipo:
+            return _erro_json("Ficha não encontrada.")
+        ma.descanso_longo(sessao, ficha)
+        return jsonify(ma.serializar_personagem(ma.obter_personagem(sessao, tipo, slug)))
+
+
+@app.post("/api/personagens/<tipo>/<slug>/fichas/<int:ficha_id>/descanso-curto")
+def api_descanso_curto(tipo, slug, ficha_id):
+    if tipo not in ("npc", "jogador"):
+        return _erro_json("Descanso curto só se aplica a NPC nomeado ou jogador.", 400)
+    with SessaoBanco() as sessao:
+        ficha = ma.obter_ficha(sessao, ficha_id)
+        if ficha is None or ficha.personagem.slug != slug or ficha.personagem.tipo != tipo:
+            return _erro_json("Ficha não encontrada.")
+        ma.descanso_curto(sessao, ficha)
+        return jsonify(ma.serializar_personagem(ma.obter_personagem(sessao, tipo, slug)))
+
+
+@app.get("/api/personagens-busca")
+def api_buscar_personagens():
+    with SessaoBanco() as sessao:
+        itens = ma.buscar_personagens(
+            sessao, tipo=request.args.get("tipo") or None, busca=request.args.get("q", ""),
+        )
+        return jsonify(itens=itens)
+
+
+# --------------------------------------------------------------------------
+# API JSON do Combat Tracker (ver admin/banco.py: Combate/CombateParticipante/.../
+# admin/combate_api.py) — substitui o antigo Painel de Iniciativa (sessao_viva.py). GET é público
+# (leitura livre do site, ver _PREFIXOS_API_LEITURA_LIVRE); toda escrita exige Modo Mestre. Usada
+# pela aba "Combat Tracker" das páginas de sessão (docs/javascripts/combate.js).
+# --------------------------------------------------------------------------
+
+def _combate_json(combate):
+    return jsonify(combate=ca.serializar_combate(combate))
+
+
+@app.get("/api/combate/<path:pagina>")
+def api_ver_combate(pagina):
+    with SessaoBanco() as sessao:
+        combate = ca.obter_combate_ativo(sessao, pagina)
+        if combate is None:
+            return jsonify(combate=None)
+        return _combate_json(combate)
+
+
+@app.post("/api/combate/<path:pagina>/iniciar")
+def api_iniciar_combate(pagina):
+    with SessaoBanco() as sessao:
+        combate = ca.iniciar_combate(sessao, pagina)
+        return _combate_json(combate)
+
+
+@app.post("/api/combate/<int:combate_id>/encerrar")
+def api_encerrar_combate(combate_id):
+    with SessaoBanco() as sessao:
+        combate = ca.obter_combate(sessao, combate_id)
+        if combate is None:
+            return _erro_json("Combate não encontrado.")
+        ca.encerrar_combate(sessao, combate)
+        return _combate_json(combate)
+
+
+@app.post("/api/combate/<int:combate_id>/participantes")
+def api_adicionar_participante(combate_id):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        combate = ca.obter_combate(sessao, combate_id)
+        if combate is None:
+            return _erro_json("Combate não encontrado.")
+        try:
+            ca.adicionar_participante(
+                sessao, combate, int(dados.get("ficha_id")),
+                dados.get("nome_exibicao"), dados.get("iniciativa_base", 0),
+            )
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        return _combate_json(ca.obter_combate(sessao, combate_id))
+
+
+@app.delete("/api/combate/<int:combate_id>/participantes/<int:participante_id>")
+def api_remover_participante(combate_id, participante_id):
+    with SessaoBanco() as sessao:
+        ca.remover_participante(sessao, participante_id)
+        combate = ca.obter_combate(sessao, combate_id)
+        if combate is None:
+            return _erro_json("Combate não encontrado.")
+        return _combate_json(combate)
+
+
+@app.put("/api/combate/<int:combate_id>/participantes/<int:participante_id>/iniciativa")
+def api_atualizar_iniciativa(combate_id, participante_id):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        try:
+            ca.atualizar_iniciativa(sessao, participante_id, dados.get("base"), dados.get("desempate"))
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        combate = ca.obter_combate(sessao, combate_id)
+        if combate is None:
+            return _erro_json("Combate não encontrado.")
+        return _combate_json(combate)
+
+
+@app.post("/api/combate/<int:combate_id>/participantes/<int:participante_id>/pv")
+def api_ajustar_pv_combate(combate_id, participante_id):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        try:
+            ca.ajustar_pv(sessao, participante_id, dados.get("delta", 0), bool(dados.get("cura")))
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        combate = ca.obter_combate(sessao, combate_id)
+        if combate is None:
+            return _erro_json("Combate não encontrado.")
+        return _combate_json(combate)
+
+
+@app.put("/api/combate/<int:combate_id>/participantes/<int:participante_id>/pv-temporario")
+def api_definir_pv_temporario(combate_id, participante_id):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        try:
+            ca.definir_pv_temporario(sessao, participante_id, dados.get("valor", 0))
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        combate = ca.obter_combate(sessao, combate_id)
+        if combate is None:
+            return _erro_json("Combate não encontrado.")
+        return _combate_json(combate)
+
+
+@app.post("/api/combate/<int:combate_id>/participantes/<int:participante_id>/condicoes")
+def api_alternar_condicao(combate_id, participante_id):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        try:
+            ca.alternar_condicao(sessao, participante_id, dados.get("nome", ""))
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        combate = ca.obter_combate(sessao, combate_id)
+        if combate is None:
+            return _erro_json("Combate não encontrado.")
+        return _combate_json(combate)
+
+
+@app.put("/api/combate/<int:combate_id>/participantes/<int:participante_id>/concentracao")
+def api_definir_concentracao(combate_id, participante_id):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        ca.definir_concentracao(sessao, participante_id, dados.get("nome"))
+        combate = ca.obter_combate(sessao, combate_id)
+        if combate is None:
+            return _erro_json("Combate não encontrado.")
+        return _combate_json(combate)
+
+
+@app.post("/api/combate/<int:combate_id>/participantes/<int:participante_id>/economia-acao")
+def api_alternar_economia_acao(combate_id, participante_id):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        try:
+            ca.alternar_economia_acao(sessao, participante_id, dados.get("campo", ""))
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        combate = ca.obter_combate(sessao, combate_id)
+        if combate is None:
+            return _erro_json("Combate não encontrado.")
+        return _combate_json(combate)
+
+
+@app.post("/api/combate/<int:combate_id>/participantes/<int:participante_id>/reacao")
+def api_oferecer_reacao(combate_id, participante_id):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        try:
+            resultado = ca.oferecer_reacao(sessao, participante_id, dados.get("rotulo", ""))
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        combate = ca.obter_combate(sessao, combate_id)
+        if combate is None:
+            return _erro_json("Combate não encontrado.")
+        return jsonify(combate=ca.serializar_combate(combate), ultima_reacao=resultado)
+
+
+@app.post("/api/combate/<int:combate_id>/participantes/<int:participante_id>/teste-morte")
+def api_rolar_teste_morte(combate_id, participante_id):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        try:
+            resultado = ca.rolar_teste_morte(sessao, participante_id, dados.get("d20", 10))
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        combate = ca.obter_combate(sessao, combate_id)
+        if combate is None:
+            return _erro_json("Combate não encontrado.")
+        return jsonify(combate=ca.serializar_combate(combate), ultimo_teste_morte=resultado)
+
+
+@app.post("/api/combate/<int:combate_id>/turno/proximo")
+def api_proximo_turno_combate(combate_id):
+    with SessaoBanco() as sessao:
+        combate = ca.obter_combate(sessao, combate_id)
+        if combate is None:
+            return _erro_json("Combate não encontrado.")
+        ca.proximo_turno(sessao, combate)
+        return _combate_json(ca.obter_combate(sessao, combate_id))
+
+
+@app.post("/api/combate/<int:combate_id>/ataque")
+def api_resolver_ataque(combate_id):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        combate = ca.obter_combate(sessao, combate_id)
+        if combate is None:
+            return _erro_json("Combate não encontrado.")
+        resultado = ca.resolver_ataque(
+            sessao, combate, [int(a) for a in dados.get("alvos", [])],
+            dados.get("d20", 10), dados.get("bonus", 0), dados.get("dano", 0),
+            bool(dados.get("cura")),
+        )
+        return jsonify(combate=ca.serializar_combate(ca.obter_combate(sessao, combate_id)), ultimo_ataque=resultado)
+
+
+@app.post("/api/combate/<int:combate_id>/resistencia")
+def api_resolver_resistencia(combate_id):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        combate = ca.obter_combate(sessao, combate_id)
+        if combate is None:
+            return _erro_json("Combate não encontrado.")
+        resultado = ca.resolver_resistencia(
+            sessao, dados.get("cd", 10), bool(dados.get("meio_no_sucesso", True)),
+            dados.get("condicao_no_erro"), dados.get("alvos", []),
+        )
+        return jsonify(combate=ca.serializar_combate(ca.obter_combate(sessao, combate_id)), ultima_resistencia=resultado)
+
+
+@app.post("/api/combate/<int:combate_id>/participantes/<int:participante_id>/concentracao/teste")
+def api_checar_concentracao(combate_id, participante_id):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        resultado = ca.checar_concentracao(
+            sessao, participante_id, dados.get("d20", 10), dados.get("bonus", 0), dados.get("dano", 0),
+        )
+        combate = ca.obter_combate(sessao, combate_id)
+        if combate is None:
+            return _erro_json("Combate não encontrado.")
+        return jsonify(combate=ca.serializar_combate(combate), ultima_concentracao=resultado)
+
+
+@app.post("/api/combate/<int:combate_id>/log")
+def api_registrar_log(combate_id):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        combate = ca.obter_combate(sessao, combate_id)
+        if combate is None:
+            return _erro_json("Combate não encontrado.")
+        ca.registrar_log(sessao, combate, dados.get("texto", ""), dados.get("tipo"))
+        return _combate_json(ca.obter_combate(sessao, combate_id))
+
+
+@app.get("/api/combate/<int:combate_id>/log/exportar")
+def api_exportar_log(combate_id):
+    formato = request.args.get("formato", "txt")
+    with SessaoBanco() as sessao:
+        combate = ca.obter_combate(sessao, combate_id)
+        if combate is None:
+            return _erro_json("Combate não encontrado.")
+        conteudo = ca.exportar_log(combate, formato)
+        tipo_mime = "application/json" if formato == "json" else "text/plain"
+        return conteudo, 200, {"Content-Type": f"{tipo_mime}; charset=utf-8"}
+
+
+@app.get("/api/combate/<int:combate_id>/resumo")
+def api_resumo_pos_combate(combate_id):
+    with SessaoBanco() as sessao:
+        combate = ca.obter_combate(sessao, combate_id)
+        if combate is None:
+            return _erro_json("Combate não encontrado.")
+        return jsonify(xp=ca.calcular_resumo_xp(combate), loot=ca.compilar_loot(combate))
+
+
+@app.post("/api/combate/<int:combate_id>/distribuir-xp")
+def api_distribuir_xp(combate_id):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        combate = ca.obter_combate(sessao, combate_id)
+        if combate is None:
+            return _erro_json("Combate não encontrado.")
+        ca.distribuir_xp(sessao, combate, dados.get("xp_por_jogador", 0))
+        return jsonify(ok=True)
+
+
+@app.post("/api/combate/<int:combate_id>/aplicar-loot")
+def api_aplicar_loot(combate_id):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        combate = ca.obter_combate(sessao, combate_id)
+        if combate is None:
+            return _erro_json("Combate não encontrado.")
+        try:
+            resultado = ca.aplicar_loot(sessao, combate, dados.get("escolhas", []))
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        return jsonify(resultado)
 
 
 # --------------------------------------------------------------------------

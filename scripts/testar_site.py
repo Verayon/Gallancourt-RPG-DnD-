@@ -306,7 +306,6 @@ def teste_painel_npc(copia: Path):
     pagina = copia / "docs" / "personagens" / f"{SLUG_TESTE}.md"
     assert pagina.exists(), "página do NPC não foi criada"
     assert front_matter(ler(pagina)).get("npc", {}).get("titulo") == "Capitã", "dados do NPC não gravados"
-    assert f"personagens/{SLUG_TESTE}.md" in ler(copia / "mkdocs.yml"), "NPC não entrou no menu"
 
 
 @verificacao("7. Painel", "Adicionar NPC genérico")
@@ -315,7 +314,6 @@ def teste_painel_npc_generico(copia: Path):
     _ok(c.post("/npc/novo", data={"nome": "Guarda de teste", "generico": "on"}))
     pagina = copia / "docs" / "personagens" / "genericos" / "guarda-de-teste.md"
     assert pagina.exists(), "página do NPC genérico não foi criada (deveria ir para personagens/genericos/)"
-    assert "personagens/genericos/guarda-de-teste.md" in ler(copia / "mkdocs.yml"), "NPC genérico não entrou no menu"
 
 
 @verificacao("7. Painel", "Começar ficha de combate a partir de um NPC genérico")
@@ -348,7 +346,6 @@ def teste_painel_lugar(copia: Path):
     pagina = copia / "docs" / "lugares" / "taberna-de-teste.md"
     assert pagina.exists(), "página do lugar não foi criada"
     assert front_matter(ler(pagina)).get("lugar", {}).get("situado") == "Dodixie", "dados do lugar não gravados"
-    assert "lugares/taberna-de-teste.md" in ler(copia / "mkdocs.yml"), "lugar não entrou no menu"
 
 
 @verificacao("7. Painel", "Adicionar jogador")
@@ -357,7 +354,6 @@ def teste_painel_jogador(copia: Path):
     _ok(c.post("/jogador/novo", data={"nome": "Personagem de teste", "jogador": "Jogador de teste"}))
     pagina = copia / "docs" / "mestre" / "jogadores" / "personagem-de-teste.md"
     assert pagina.exists(), "página do jogador não foi criada"
-    assert "mestre/jogadores/personagem-de-teste.md" in ler(copia / "mkdocs.yml"), "jogador não entrou no menu"
 
 
 @verificacao("7. Painel", "Criar sessão nova")
@@ -427,38 +423,6 @@ def teste_painel_api_criar_sessao(copia: Path):
     assert "Quero uma sessão de teste." in texto, "anotação do prompt não apareceu na sessão"
     assert front_matter(texto).get("participantes", {}).get("npcs") == ["personagens/npc-via-api.md"], \
         "participantes (npcs) não gravados a partir da criação via API"
-
-
-@verificacao("7. Painel", "API JSON do Painel de Iniciativa embutido")
-def teste_painel_api_iniciativa(copia: Path):
-    c = _painel(copia)
-    pagina = "mestre/sessoes/sessao-0-os-grilhoes-da-estrada.md"
-    base = f"/api/sessao-ao-vivo/{pagina}"
-
-    r = c.get(base)
-    assert r.status_code == 200, f"HTTP {r.status_code}"
-    dados = r.get_json()
-    assert dados["pagina"] == pagina, "resposta não trouxe a página certa"
-    # A Sessão 0 tem 6 fichas de combate na própria página e nenhum participante cadastrado —
-    # a lista tem que vir só dessas 6, nunca de todo stat-block do site (item 2.6.1 do pedido).
-    assert len(dados["fichas_disponiveis"]) == 6, (
-        f"esperava 6 fichas (só as da própria página), veio {len(dados['fichas_disponiveis'])}"
-    )
-    assert all(f["pagina_rel_docs"] == pagina for f in dados["fichas_disponiveis"]), (
-        "uma ficha de fora da página vazou para a lista — deveria estar restrita à sessão"
-    )
-
-    r2 = c.post(f"{base}/combatente", json={"nome": "Teste API", "tipo": "jogador", "iniciativa": 7})
-    assert r2.status_code == 200, f"HTTP {r2.status_code}"
-    dados2 = r2.get_json()
-    combatente = next((x for x in dados2["combatentes"] if x["nome"] == "Teste API"), None)
-    assert combatente is not None, "combatente criado pela API não apareceu no estado devolvido"
-
-    r3 = c.post(f"{base}/combatente/{combatente['id']}/remover")
-    assert r3.status_code == 200 and not r3.get_json()["combatentes"], "remoção pela API não funcionou"
-
-    r4 = c.get("/api/sessao-ao-vivo/personagens/pagina-que-nao-existe.md")
-    assert r4.status_code == 404 and r4.get_json().get("erro"), "página inexistente devia devolver 404 em JSON"
 
 
 @verificacao("7. Painel", "Criar item de Loot & Pistas dentro de uma aba de sessão")
@@ -699,7 +663,7 @@ def main() -> int:
                 teste_painel_npc, teste_painel_npc_generico, teste_painel_copiar_ficha_generica,
                 teste_painel_lugar, teste_painel_jogador, teste_painel_sessao, teste_painel_participantes,
                 teste_painel_api_entidades, teste_painel_api_criar_sessao,
-                teste_painel_api_iniciativa, teste_painel_item, teste_painel_acontecimento, teste_painel_efeito,
+                teste_painel_item, teste_painel_acontecimento, teste_painel_efeito,
                 teste_painel_servir_site,
             ):
                 t(copia)

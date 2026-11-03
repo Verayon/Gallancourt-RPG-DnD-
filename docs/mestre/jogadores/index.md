@@ -11,7 +11,8 @@ preencha o que fizer sentido para cada personagem):
 
 1. **Criar jogador** (formulário abaixo) — nome do personagem, quem joga e um resumo de uma
    linha. Cadastre cada um antes de marcá-lo como participante de uma sessão (Painel →
-   **Participantes da sessão**), para que o Painel de Iniciativa já saiba quem oferecer na lista.
+   **Participantes da sessão**), pra já pré-preencher a aba NPCs/Lugares da sessão com links
+   reais — o Combat Tracker busca por nome, não precisa da lista de participantes.
 2. **Ficha de combate** — abra a página do jogador e entre em **🔑 Modo Mestre** (cabeçalho, ao
    lado do alternador claro/escuro): a ficha aparece direto na página, editável ali mesmo —
    atributos, CA, PV, deslocamento, carga, perícias, equipamento, espaços de magia, condições e

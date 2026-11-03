@@ -8,8 +8,6 @@ sessao:
 
 # Sessão 0 — Os Grilhões da Estrada
 
-<!-- mestre:alternancia -->
-
 === "Resumo"
 
     <div class="ficha" markdown>
@@ -691,14 +689,10 @@ sessao:
     - Olim, se sobreviveu, sabe o nome "o Correntes" e que a entrega é feita numa torre nas
       colinas — foi até lá antes de se infiltrar no grupo de Harker —, mas também não conhece
       Castellane; só recebia instruções por um contato intermediário em Dodixie.
-<div class="painel-iniciativa" data-pagina="mestre/sessoes/sessao-0-os-grilhoes-da-estrada.md" markdown>
 
-*(o painel aparece aqui quando a página carrega — precisa do [Painel do Mestre](../painel.md)
-rodando no seu computador)*
+=== "Combat Tracker"
 
-</div>
-
-<!-- /mestre:alternancia -->
+    <!-- combate:painel -->
 
 ## Depois da sessão
 

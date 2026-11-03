@@ -54,6 +54,20 @@ CONDICOES_D20 = (
 )
 TIPOS_EFEITO = ("Temporário", "Passivo", "Inativo")
 
+# Os 13 tipos de dano do 5e, pra grade de Imunidades/Resistências/Vulnerabilidades (ver
+# FichaResistenciaDano) — mesma ideia de CONDICOES_D20: lista fixa validada em Python, não um
+# catálogo que cresce.
+TIPOS_DANO = (
+    "Ácido", "Contundente", "Cortante", "Elétrico", "Fogo", "Força", "Frio", "Necrótico",
+    "Perfurante", "Psíquico", "Radiante", "Sônico", "Veneno",
+)
+MODOS_RESISTENCIA_DANO = ("imune", "resistente", "vulneravel")
+
+# Descanso que reseta os contadores de uso de Habilidade (ver FichaHabilidade.tipo_descanso) — um
+# "curto" reseta só os de descanso curto; um "longo" (personagens_api.descanso_longo) reseta os
+# dois, junto com PV e espaços de magia.
+TIPOS_DESCANSO = ("curto", "longo")
+
 
 class Personagem(Base):
     """Um ator jogável no sistema (a família de fichas) — monstro, NPC nomeado ou jogador,
@@ -144,6 +158,7 @@ class Ficha(Base):
     # Rótulos livres de cabeçalho (ex.: "Guerreiro 5", "Soldado") — não multiclasse estruturado;
     # o "motor de regras" que precisaria disso de verdade ainda não existe (ver ARQUITETURA.md).
     classe: Mapped[str | None] = mapped_column(String(150), nullable=True)
+    subclasse: Mapped[str | None] = mapped_column(String(150), nullable=True)
     antecedente: Mapped[str | None] = mapped_column(String(100), nullable=True)
     bonus_proficiencia: Mapped[int] = mapped_column(default=2)
     forca: Mapped[int] = mapped_column(default=10)
@@ -170,9 +185,16 @@ class Ficha(Base):
     # ca_total). Toda criatura tem um, por isso é coluna própria, não um Sentido do catálogo (que
     # só guarda sentidos especiais de alcance: Visão no escuro, Visão cega, Tremorsentido...).
     percepcao_passiva: Mapped[int] = mapped_column(default=10)
+    # Mesma ideia de percepcao_passiva — número pronto, não recalculado a partir de perícia.
+    investigacao_passiva: Mapped[int] = mapped_column(default=10)
+    intuicao_passiva: Mapped[int] = mapped_column(default=10)
     # Somado ao modificador de Destreza na exibição (não um total já pronto) — cobre casos como o
     # dote Alerta, sem precisar guardar o total calculado.
     iniciativa_extra: Mapped[int] = mapped_column(default=0)
+    # Nulos até o Mestre preencher (nem toda ficha conjura) — número pronto, igual a ca_total, não
+    # calculado a partir de classe/nível/atributo.
+    cd_conjuracao: Mapped[int | None] = mapped_column(nullable=True)
+    bonus_ataque_magico: Mapped[int | None] = mapped_column(nullable=True)
     # Nulo = o widget usa o padrão SRD (2x Força em kg) sem guardar nada; preenchido só quando o
     # Mestre quer um valor diferente do padrão.
     carga_maxima: Mapped[float | None] = mapped_column(nullable=True)
@@ -208,6 +230,9 @@ class Ficha(Base):
         back_populates="ficha", cascade="all, delete-orphan",
     )
     efeitos_vinculo: Mapped[list["FichaEfeito"]] = relationship(
+        back_populates="ficha", cascade="all, delete-orphan",
+    )
+    resistencias_dano_vinculo: Mapped[list["FichaResistenciaDano"]] = relationship(
         back_populates="ficha", cascade="all, delete-orphan",
     )
 
@@ -329,24 +354,34 @@ class FichaEquipamento(Base):
 
 
 class FichaHabilidade(Base):
-    """Vínculo N:N entre ficha e Habilidade."""
+    """Vínculo N:N entre ficha e Habilidade — `favorito`/`usos_*` são por ficha (a mesma Habilidade
+    do catálogo pode ser favoritada numa ficha e não na outra, ou ter usos restantes diferentes),
+    por isso moram aqui, não em Habilidade."""
     __tablename__ = "ficha_habilidades"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     ficha_id: Mapped[int] = mapped_column(ForeignKey("fichas.id"))
     habilidade_id: Mapped[int] = mapped_column(ForeignKey("habilidades.id"))
+    favorito: Mapped[bool] = mapped_column(default=False)
+    # Nulos = sem contador (usos ilimitados ou não rastreados) — só preenchidos quando o Mestre
+    # quer acompanhar "usos por descanso" de verdade, em vez do texto livre em Habilidade.usos.
+    usos_maximo: Mapped[int | None] = mapped_column(nullable=True)
+    usos_restantes: Mapped[int | None] = mapped_column(nullable=True)
+    tipo_descanso: Mapped[str | None] = mapped_column(String(10), nullable=True)  # ver TIPOS_DESCANSO
 
     ficha: Mapped["Ficha"] = relationship(back_populates="habilidades_vinculo")
     habilidade: Mapped["Habilidade"] = relationship()
 
 
 class FichaMagia(Base):
-    """Vínculo N:N entre ficha e Magia."""
+    """Vínculo N:N entre ficha e Magia — `favorito` é por ficha, mesma lógica de
+    FichaHabilidade.favorito."""
     __tablename__ = "ficha_magias"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     ficha_id: Mapped[int] = mapped_column(ForeignKey("fichas.id"))
     magia_id: Mapped[int] = mapped_column(ForeignKey("magias.id"))
+    favorito: Mapped[bool] = mapped_column(default=False)
 
     ficha: Mapped["Ficha"] = relationship(back_populates="magias_vinculo")
     magia: Mapped["Magia"] = relationship()
@@ -421,6 +456,21 @@ class FichaCondicao(Base):
     ficha: Mapped["Ficha"] = relationship(back_populates="condicoes_vinculo")
 
 
+class FichaResistenciaDano(Base):
+    """Imunidade/Resistência/Vulnerabilidade a um tipo de dano — `nome` validado contra
+    `TIPOS_DANO`, `modo` contra `MODOS_RESISTENCIA_DANO`. Só um `modo` ativo por tipo de dano por
+    ficha (ver personagens_api.alternar_resistencia_dano); informativo na ficha, não entra na
+    matemática de dano do Combat Tracker (ver .claude/contexto/combate.md)."""
+    __tablename__ = "ficha_resistencias_dano"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    ficha_id: Mapped[int] = mapped_column(ForeignKey("fichas.id"))
+    nome: Mapped[str] = mapped_column(String(30))
+    modo: Mapped[str] = mapped_column(String(15))
+
+    ficha: Mapped["Ficha"] = relationship(back_populates="resistencias_dano_vinculo")
+
+
 class FichaEfeito(Base):
     """Um efeito aplicado (temporário/passivo/inativo) — específico desta ficha, não um catálogo
     compartilhado: um "Abençoado por 1 minuto" não tem valor de reuso entre personagens, ao
@@ -435,6 +485,100 @@ class FichaEfeito(Base):
     duracao: Mapped[str | None] = mapped_column(String(100), nullable=True)
 
     ficha: Mapped["Ficha"] = relationship(back_populates="efeitos_vinculo")
+
+
+class Combate(Base):
+    """Uma luta/encontro rodado no Combat Tracker de uma página de sessão
+    (docs/mestre/sessoes/sessao-N-*.md) — substitui o antigo admin/sessao_viva.py (estado em JSON
+    fora do banco, só acessível com o Painel local rodando). Uma página pode ter vários Combates
+    ao longo do tempo (um por encontro); só um fica `ativo` por vez nela."""
+    __tablename__ = "combates"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    pagina_rel_docs: Mapped[str] = mapped_column(String(300), index=True)
+    rodada: Mapped[int] = mapped_column(default=1)
+    # Sem ForeignKey de propósito (evita referência circular com combate_participantes.combate_id
+    # dentro da mesma migração) — é só um ponteiro pra posição atual na ordem, não precisa de
+    # integridade referencial forte; admin/combate_api.py sempre confere se o id ainda existe.
+    turno_participante_id: Mapped[int | None] = mapped_column(nullable=True)
+    ativo: Mapped[bool] = mapped_column(default=True)
+    criado_em: Mapped[datetime.datetime] = mapped_column(
+        DateTime, default=lambda: datetime.datetime.now(datetime.UTC)
+    )
+    finalizado_em: Mapped[datetime.datetime | None] = mapped_column(DateTime, nullable=True)
+
+    participantes: Mapped[list["CombateParticipante"]] = relationship(
+        back_populates="combate", cascade="all, delete-orphan",
+        order_by="CombateParticipante.id",
+    )
+    log_vinculo: Mapped[list["CombateLogEntrada"]] = relationship(
+        back_populates="combate", cascade="all, delete-orphan", order_by="CombateLogEntrada.id",
+    )
+
+
+class CombateParticipante(Base):
+    """Um token dentro de um Combate — aponta pra uma Ficha real (`ficha_id`), mas o que é cópia
+    isolada e o que é vínculo ao vivo depende do tipo do Personagem dono da Ficha (ver
+    `Personagem.tipo`, consultado via `ficha.personagem.tipo`):
+    - monstro: `copia_pv_atual`/`copia_pv_temporario` e `CombateParticipanteCondicao` guardam o
+      estado deste participante isolado — nada aqui toca a Ficha real do catálogo (a mesma Ficha
+      de "Goblin" pode estar em vários CombateParticipante ao mesmo tempo, cada um com seu PV).
+    - npc/jogador: PV/PV temporário são lidos/escritos direto em `Ficha.pv_atual`/`pv_temporario`
+      (`copia_pv_atual`/`copia_pv_temporario` ficam `None`); as condições também viram
+      `FichaCondicao` de verdade, visíveis na aba Efeitos da própria ficha — só "resetam" com um
+      Descanso Longo (ver admin/personagens_api.py)."""
+    __tablename__ = "combate_participantes"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    combate_id: Mapped[int] = mapped_column(ForeignKey("combates.id"))
+    ficha_id: Mapped[int] = mapped_column(ForeignKey("fichas.id"))
+    nome_exibicao: Mapped[str | None] = mapped_column(String(200), nullable=True)
+    iniciativa_base: Mapped[int] = mapped_column(default=0)
+    iniciativa_desempate: Mapped[int] = mapped_column(default=0)
+    acao_usada: Mapped[bool] = mapped_column(default=False)
+    acao_bonus_usada: Mapped[bool] = mapped_column(default=False)
+    reacao_usada: Mapped[bool] = mapped_column(default=False)
+    concentrando_em: Mapped[str | None] = mapped_column(String(200), nullable=True)
+    death_save_sucessos: Mapped[int] = mapped_column(default=0)
+    death_save_falhas: Mapped[int] = mapped_column(default=0)
+    copia_pv_atual: Mapped[int | None] = mapped_column(nullable=True)
+    copia_pv_temporario: Mapped[int | None] = mapped_column(nullable=True)
+
+    combate: Mapped["Combate"] = relationship(back_populates="participantes")
+    ficha: Mapped["Ficha"] = relationship()
+    condicoes_vinculo: Mapped[list["CombateParticipanteCondicao"]] = relationship(
+        back_populates="participante", cascade="all, delete-orphan",
+    )
+
+
+class CombateParticipanteCondicao(Base):
+    """Condição ativa num participante do combate — nome validado contra CONDICOES_D20, igual a
+    FichaCondicao. Para npc/jogador, admin/combate_api.py espelha a mesma condição como
+    FichaCondicao de verdade (aparece na aba Efeitos); para monstro, fica só aqui, isolada."""
+    __tablename__ = "combate_participante_condicoes"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    participante_id: Mapped[int] = mapped_column(ForeignKey("combate_participantes.id"))
+    nome: Mapped[str] = mapped_column(String(30))
+
+    participante: Mapped["CombateParticipante"] = relationship(back_populates="condicoes_vinculo")
+
+
+class CombateLogEntrada(Base):
+    """Uma linha do log de combate (módulo 5.2 do pedido) — texto pronto pra exibir e exportar em
+    JSON/TXT, não recalculado a partir de outra coisa."""
+    __tablename__ = "combate_log_entradas"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    combate_id: Mapped[int] = mapped_column(ForeignKey("combates.id"))
+    rodada: Mapped[int] = mapped_column(default=1)
+    criado_em: Mapped[datetime.datetime] = mapped_column(
+        DateTime, default=lambda: datetime.datetime.now(datetime.UTC)
+    )
+    texto: Mapped[str] = mapped_column(Text)
+    tipo: Mapped[str | None] = mapped_column(String(20), nullable=True)
+
+    combate: Mapped["Combate"] = relationship(back_populates="log_vinculo")
 
 
 def caminho_banco(root: Path) -> Path:

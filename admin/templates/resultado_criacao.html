@@ -13,7 +13,9 @@
 <h2>O que foi feito</h2>
 <ul>
   <li>Página criada: <code>{{ r.arquivo }}</code></li>
+  {% if r.nav_ok is defined %}
   <li>Menu do site (<code>mkdocs.yml</code>): {{ "atualizado" if r.nav_ok else "não encontrei onde inserir — confira manualmente" }}</li>
+  {% endif %}
 </ul>
 
 <p>
