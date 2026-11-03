@@ -1613,6 +1613,13 @@ sessao:
 
 {vazio}
 
+    ## Depois da sessão
+
+    - Registre o que realmente aconteceu pelo [Painel do Mestre](../painel.md) (ou o
+      [modelo manual](../registro-manual-de-sessao.md)) — isso cria uma entrada no
+      [Diário de Sessões](../../diario/index.md).
+    - Se algum elemento desta sessão virar fato definitivo do mundo, formalize-o nas páginas da wiki.
+
 === "Cenas"
 
     ### Cena 1
@@ -1669,13 +1676,6 @@ sessao:
 === "Combat Tracker"
 
     <!-- combate:painel -->
-
-## Depois da sessão
-
-- Registre o que realmente aconteceu pelo [Painel do Mestre](../painel.md) (ou o
-  [modelo manual](../registro-manual-de-sessao.md)) — isso cria uma entrada no
-  [Diário de Sessões](../../diario/index.md).
-- Se algum elemento desta sessão virar fato definitivo do mundo, formalize-o nas páginas da wiki.
 """
 
 
@@ -1845,10 +1845,20 @@ def listar_bugs(root: Path) -> list[dict]:
     return bugs.ordenar(bugs.carregar(root))
 
 
-def criar_bug(root: Path, area: str, descricao: str) -> int:
+def versao_atual_changelog(root: Path) -> str:
+    """Rótulo da versão mais recente do changelog (ex.: "0.5") — usado para preencher o campo
+    "versão" de um bug report automaticamente, sem perguntar a quem reporta."""
+    atual = changelog.versao_atual(changelog.carregar(root))
+    return (atual or {}).get("versao") or "?"
+
+
+def criar_bug(root: Path, pagina: str, tipo: str, descricao: str) -> int:
     if not descricao.strip():
         raise ValueError("Descreva o problema antes de enviar.")
-    return bugs.criar(root, area.strip(), descricao.strip())
+    if tipo not in bugs.TIPOS:
+        raise ValueError("Escolha um tipo de bug válido.")
+    versao = versao_atual_changelog(root)
+    return bugs.criar(root, pagina.strip(), tipo.strip(), descricao.strip(), versao)
 
 
 def marcar_bug_resolvido(root: Path, id_bug: int, nota: str) -> bool:

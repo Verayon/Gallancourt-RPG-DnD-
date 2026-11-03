@@ -59,7 +59,7 @@ app.config["SESSION_COOKIE_SECURE"] = os.environ.get("PAINEL_HTTPS", "") == "1"
 app.permanent_session_lifetime = datetime.timedelta(days=30)
 
 SENHA_PAINEL = os.environ.get("PAINEL_SENHA", "").strip()
-_ROTAS_LIVRES = {"tela_login", "fazer_login", "static"}
+_ROTAS_LIVRES = {"tela_login", "fazer_login", "static", "api_bugs_opcoes", "api_criar_bug"}
 _tentativas_falhas: dict[str, list[float]] = {}
 _JANELA_BLOQUEIO_SEGUNDOS = 300
 _MAX_TENTATIVAS = 5
@@ -1803,25 +1803,27 @@ def apagar_fonte():
 
 
 # --------------------------------------------------------------------------
-# Bugs reportados — /bug/novo é o botão público (qualquer página do site); /bugs é a triagem,
-# só pelo Painel.
+# Bugs reportados — /api/bugs* é o popup público (qualquer página do site, sem login, ver
+# docs/javascripts/bug-report.js e _ROTAS_LIVRES acima); /bugs é a triagem, só pelo Painel.
 # --------------------------------------------------------------------------
 
-@app.get("/bug/novo")
-def formulario_bug():
-    return render_template("bug_novo.html", areas=bugs.AREAS, salvo=False)
+@app.get("/api/bugs/opcoes")
+def api_bugs_opcoes():
+    return jsonify(tipos=bugs.TIPOS, versao=wd.versao_atual_changelog(ROOT))
 
 
-@app.post("/bug/novo")
-def criar_bug():
-    area = request.form.get("area", "")
-    descricao = request.form.get("descricao", "")
+@app.post("/api/bugs")
+def api_criar_bug():
+    dados = request.get_json(silent=True) or {}
+    pagina = str(dados.get("pagina") or "")
+    tipo = str(dados.get("tipo") or "")
+    descricao = str(dados.get("descricao") or "")
     try:
-        novo_id = wd.criar_bug(ROOT, area, descricao)
+        novo_id = wd.criar_bug(ROOT, pagina, tipo, descricao)
     except ValueError as exc:
-        return render_template("bug_novo.html", areas=bugs.AREAS, salvo=False, erro=str(exc))
+        return jsonify(erro=str(exc)), 400
     wd.publicar_build(ROOT)
-    return render_template("bug_novo.html", areas=bugs.AREAS, salvo=novo_id)
+    return jsonify(ok=True, id=novo_id)
 
 
 @app.get("/bugs")

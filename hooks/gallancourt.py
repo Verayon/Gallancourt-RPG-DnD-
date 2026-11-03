@@ -94,7 +94,7 @@ _BUGS: list[dict] = []
 
 RETRATO_PADRAO = "../assets/placeholders/personagem.svg"
 DICA_PAINEL = "Abre o Painel do Mestre — ele precisa estar rodando no seu computador"
-DICA_BUG = "Reportar um problema — abre um formulário (precisa do Painel rodando no seu computador)"
+DICA_BUG = "Reportar um problema — abre um popup rápido (precisa do Painel rodando no seu computador)"
 
 # Colunas da tabela de NPCs: (rótulo, chave no bloco npc:)
 COLUNAS_NPC = [
@@ -1042,8 +1042,8 @@ def _rodape_global() -> str:
     rotulo = f"v{atual['versao']}" if atual and atual.get("versao") else "v0 — pré-lançamento"
     selo = f'<a class="selo-versao" href="/changelog/" title="Ver o changelog">{html.escape(rotulo)}</a>'
     botao = (
-        f'<a class="botao-reportar-bug" href="/bug/novo" target="_blank" rel="noopener" '
-        f'title="{DICA_BUG}">🐞 Reportar bug</a>'
+        f'<button type="button" class="botao-reportar-bug" data-abrir-bug-report '
+        f'title="{DICA_BUG}">🐞 Reportar bug</button>'
     )
     return f"\n{selo}\n{botao}\n"
 

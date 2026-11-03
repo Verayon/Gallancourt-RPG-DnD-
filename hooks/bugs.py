@@ -1,16 +1,21 @@
 """Bugs reportados no site.
 
 Fonte única: `dados/bugs.yml` (fora de `docs/`, não é publicado como arquivo). Qualquer pessoa
-pode reportar um bug pelo botão "Reportar bug", visível em qualquer página do site (abre
-`/bug/novo`, servido pelo Painel). Cada bug tem uma área, uma descrição e um status —
+pode reportar um bug pelo botão flutuante "🐞 Reportar bug", visível em qualquer página do site —
+abre um popup (sem navegar para outra página, sem precisar de login; ver
+`docs/javascripts/bug-report.js`), que já manda a página atual e a versão atual do site sem
+precisar perguntar a quem reporta. Cada bug tem página, tipo, versão, descrição e um status —
 "Aguardando" até alguém (hoje, um agente do Claude Code, a pedido do Mestre) investigar,
 corrigir e testar a correção; aí passa para "Resolvido".
 
-Usado em dois lugares:
+Usado em três lugares:
 
+- `docs/javascripts/bug-report.js` fala com `/api/bugs` (POST, público) e `/api/bugs/opcoes`
+  (GET, público) — ver rotas em `admin/app.py`;
 - `hooks/gallancourt.py` (geração do site) monta a tabela em `docs/configuracoes/bugs.md` e o
   botão flutuante de report, presente em toda página;
-- `admin/wiki_data.py` (Painel do Mestre) cria bugs e muda o status.
+- `admin/wiki_data.py` (Painel do Mestre) cria bugs e muda o status (listagem/triagem em `/bugs`,
+  essa sim atrás de login).
 """
 from __future__ import annotations
 
@@ -24,12 +29,14 @@ ARQUIVO = Path("dados") / "bugs.yml"
 CABECALHO_ARQUIVO = """\
 # Bugs reportados em Crônicas de Gallancourt.
 #
-# Criados pelo botão "Reportar bug" do site (qualquer página) e processados pelo Painel do
-# Mestre (aba "Bugs"). Status: Aguardando (ainda não corrigido) ou Resolvido.
+# Criados pelo popup "🐞 Reportar bug" do site (qualquer página, sem login) e processados pelo
+# Painel do Mestre (aba "Bugs"). Status: Aguardando (ainda não corrigido) ou Resolvido.
 #
 # Campos de cada bug:
 #   id             número único (o Painel preenche)
-#   area           parte do site afetada
+#   pagina         página do site onde o bug foi notado (capturada automaticamente)
+#   tipo           categoria do problema (ver TIPOS abaixo)
+#   versao         versão do site no momento do report (capturada automaticamente do changelog)
 #   descricao      o que está errado, descrito por quem reportou
 #   status         Aguardando ou Resolvido
 #   criado_em      data em que foi reportado (AAAA-MM-DD)
@@ -37,11 +44,11 @@ CABECALHO_ARQUIVO = """\
 #   nota_resolucao o que foi feito para corrigir (preenchido ao marcar como Resolvido)
 """
 
-AREAS = [
-    "Wiki (conteúdo e páginas)",
-    "Painel do Mestre",
-    "Sessão ao vivo / Iniciativa",
-    "Busca e navegação",
+TIPOS = [
+    "Visual",
+    "Funcional",
+    "Dados incorretos",
+    "Desempenho",
     "Outro",
 ]
 
@@ -68,13 +75,19 @@ def salvar(raiz: Path, bugs: list[dict]) -> None:
     arq.write_text(CABECALHO_ARQUIVO + "\n" + corpo, encoding="utf-8")
 
 
-def criar(raiz: Path, area: str, descricao: str) -> int:
+def criar(raiz: Path, pagina: str, tipo: str, descricao: str, versao: str) -> int:
+    if not descricao.strip():
+        raise ValueError("Descreva o que está errado.")
+    if tipo not in TIPOS:
+        raise ValueError(f"Tipo de bug inválido: {tipo!r}.")
     bugs = carregar(raiz)
     novo_id = max((int(b.get("id") or 0) for b in bugs), default=0) + 1
     bugs.append({
         "id": novo_id,
-        "area": area or "Outro",
-        "descricao": descricao,
+        "pagina": pagina or "—",
+        "tipo": tipo,
+        "versao": versao or "?",
+        "descricao": descricao.strip(),
         "status": "Aguardando",
         "criado_em": datetime.date.today().isoformat(),
         "resolvido_em": "",
@@ -128,10 +141,11 @@ def tabela(bugs: list[dict]) -> str:
     if not bugs:
         return "*Nenhum bug reportado ainda.*"
     linhas = ordenar(bugs)
-    cabecalho = "| # | Área | Descrição | Status | Reportado em |"
-    separador = "|---|---|---|---|---|"
+    cabecalho = "| # | Página | Tipo | Versão | Descrição | Status | Reportado em |"
+    separador = "|---|---|---|---|---|---|---|"
     corpo = [
-        f"| {b.get('id')} | {_celula(b.get('area'))} | {_celula(b.get('descricao'))} | "
+        f"| {b.get('id')} | {_celula(b.get('pagina'))} | {_celula(b.get('tipo'))} | "
+        f"{_celula(b.get('versao'))} | {_celula(b.get('descricao'))} | "
         f"{_selo_status(b.get('status'))} | {_celula(b.get('criado_em'))} |"
         for b in linhas
     ]

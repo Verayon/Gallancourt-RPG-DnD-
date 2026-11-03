@@ -35,36 +35,81 @@ versoes:
   versao: '0.3'
   data: '2026-10-30'
   mudancas:
-  - 'Monstros saíram do Markdown e passaram a viver num banco de dados: agora é possível criar
-    variantes de uma criatura (ex.: Goblin → Goblin Arqueiro) direto na própria página pública,
-    trocando equipamento, traços/ações/reações e magias — tudo editável ao vivo, sem precisar
-    reconstruir o site.'
-  - 'Equipamento, Traços/Ações/Reações, Magias, Idiomas e Sentidos de monstros viraram catálogos
-    compartilhados entre criaturas, com busca e filtro completos (as mesmas colunas das páginas de
-    Itens/Magias) ao adicionar.'
-  - 'Modo Mestre: a senha do Painel agora também libera edição direto nas páginas do site (botão no
-    cabeçalho, ao lado do alternador claro/escuro — um popup simples, sem navegar para outra
-    página). A leitura do site passou a ser livre para qualquer um; só criar/editar/excluir continua
-    exigindo a senha.'
+  - 'Monstros saíram do Markdown e passaram a viver num banco de dados: agora é possível criar variantes
+    de uma criatura (ex.: Goblin → Goblin Arqueiro) direto na própria página pública, trocando equipamento,
+    traços/ações/reações e magias — tudo editável ao vivo, sem precisar reconstruir o site.'
+  - Equipamento, Traços/Ações/Reações, Magias, Idiomas e Sentidos de monstros viraram catálogos compartilhados
+    entre criaturas, com busca e filtro completos (as mesmas colunas das páginas de Itens/Magias) ao adicionar.
+  - 'Modo Mestre: a senha do Painel agora também libera edição direto nas páginas do site (botão no cabeçalho,
+    ao lado do alternador claro/escuro — um popup simples, sem navegar para outra página). A leitura do
+    site passou a ser livre para qualquer um; só criar/editar/excluir continua exigindo a senha.'
   - CA, CR, PV máximo e Deslocamento de monstros agora são editados com setas (incremento/decremento)
-    direto onde aparecem na ficha, sem campo de edição separado no fim da página; movimento sobe ou
-    desce em passos de 1,5 m.
+    direto onde aparecem na ficha, sem campo de edição separado no fim da página; movimento sobe ou desce
+    em passos de 1,5 m.
   - 'Validação: campos numéricos de fichas de monstro e do catálogo não aceitam mais valores negativos
     onde não faz sentido.'
-  - Roadmap agora é editável (adicionar, editar, excluir) direto na página pública em Modo Mestre,
-    com um campo opcional de responsável por item — sem precisar abrir o Painel.
-  - 'Menu da esquerda simplificado: só as categorias principais (Lore, Wiki, Compêndio, Mestre,
-    Configurações) aparecem ali agora; as subcategorias (Mundo, Cidades, NPCs, Monstros...) são
-    acessadas pelo corpo da página de cada categoria, como já funcionava para Monstros.'
+  - Roadmap agora é editável (adicionar, editar, excluir) direto na página pública em Modo Mestre, com
+    um campo opcional de responsável por item — sem precisar abrir o Painel.
+  - 'Menu da esquerda simplificado: só as categorias principais (Lore, Wiki, Compêndio, Mestre, Configurações)
+    aparecem ali agora; as subcategorias (Mundo, Cidades, NPCs, Monstros...) são acessadas pelo corpo
+    da página de cada categoria, como já funcionava para Monstros.'
 - id: 4
   versao: '0.4'
   data: '2026-10-30'
   mudancas:
-  - 'Perícias de monstro deixaram de ser texto livre: agora é um catálogo (as mesmas 18 perícias
-    do D&D 5e) com um bônus numérico por criatura, pronto para uma futura rolagem automatizada
-    (d20 + bônus), editável em Modo Mestre com busca/adicionar igual a equipamento e magias.'
-  - 'Sentidos especiais (Visão no escuro, Visão cega...) agora guardam o alcance como número em
-    metros, não texto — e duas entradas duplicadas do catálogo (criadas por uma divisão imperfeita
-    do texto original) foram unificadas em "Visão cega".'
-  - Percepção passiva agora é um campo numérico próprio da ficha (com seta de +/-, como CA e PV),
-    em vez de aparecer misturada na lista de Sentidos.
+  - 'Perícias de monstro deixaram de ser texto livre: agora é um catálogo (as mesmas 18 perícias do D&D
+    5e) com um bônus numérico por criatura, pronto para uma futura rolagem automatizada (d20 + bônus),
+    editável em Modo Mestre com busca/adicionar igual a equipamento e magias.'
+  - Sentidos especiais (Visão no escuro, Visão cega...) agora guardam o alcance como número em metros,
+    não texto — e duas entradas duplicadas do catálogo (criadas por uma divisão imperfeita do texto original)
+    foram unificadas em "Visão cega".
+  - Percepção passiva agora é um campo numérico próprio da ficha (com seta de +/-, como CA e PV), em vez
+    de aparecer misturada na lista de Sentidos.
+- id: 5
+  versao: '0.5'
+  data: '2026-11-03'
+  mudancas:
+  - 'Combat Tracker completo: iniciativa automática (com desempate por Destreza), participantes de ficha
+    real ou cópia de monstro, resolução de ataques/testes/resistências, condições, log de rodadas e fim
+    de combate com loot dividido.'
+  - Resistências/imunidades/vulnerabilidades a dano na ficha, com grade de toggle (3 modos) igual às condições.
+  - CD de conjuração e bônus de ataque mágico no topo do Grimório; Subclasse ao lado de Classe; Investigação
+    e Intuição passivas ao lado de Percepção passiva.
+  - Favoritar (★) habilidades e magias — sobem para o topo da lista na Ficha e no Painel de combate.
+  - Contador real de uso de habilidades por descanso (curto/longo), com botão 'usar' e novo botão 'Descanso
+    curto' (reseta só os contadores de descanso curto).
+  - Carga de inventário calculada automaticamente (peso x quantidade) com alerta visual ao exceder a carga
+    máxima.
+  - Evasão (habilidade) agora zera o dano em resistências de área bem-sucedidas; loot de combate passa
+    a somar moeda extra automaticamente pelo CR médio dos monstros derrotados.
+  - Log de combate mostra o horário de cada evento, no site e na exportação .txt.
+  - 'Correção: link morto em ''Manutenção do Cânone'' que travava todo build --strict do site.'
+  - 'Correção: aviso falso de ''não entrou no menu'' ao criar NPC/Lugar/Jogador pelo Painel (o menu já
+    era plano desde a v0.3; o código de inserção antigo nunca mais funcionava).'
+- id: 6
+  versao: '0.6'
+  data: '2026-11-03'
+  mudancas:
+  - 'Reportar bug agora é público de verdade: o botão flutuante abre um popup (sem navegar pra outra página,
+    sem precisar de senha do Mestre) em vez de redirecionar para a tela de login.'
+  - Bug report ganhou página (capturada automaticamente da URL atual) e versão (capturada automaticamente
+    do changelog); o campo 'Área' foi substituído por um novo campo 'Tipo' (Visual, Funcional, Dados incorretos,
+    Desempenho, Outro).
+  - Triagem de bugs no Painel (/bugs) mostra as novas colunas Página/Tipo/Versão.
+  - 'Correção: desde que a senha do Painel passou a valer para todo o site, o botão ''Reportar bug'' ficava
+    preso na tela de login — agora é 100% público.'
+  - Criado scripts/registrar_changelog.py para o Claude Code registrar versões no changelog sem precisar
+    abrir o Painel pelo navegador.
+  - 'Roadmap: marcados como concluídos os itens ''Fazer o combat tracker'' e ''Commitar o trabalho pendente'',
+    que já estavam feitos mas ainda apareciam como Planejado.'
+- id: 7
+  versao: '0.7'
+  data: '2026-11-03'
+  mudancas:
+  - 'Correção: a seção ''Depois da sessão'', nas páginas de sessão, aparecia no final de TODAS as abas
+    (Resumo, Cenas, NPCs...); agora só aparece dentro da aba Resumo, onde deveria estar desde o início.'
+  - 'Combat Tracker: reforma visual completa seguindo a especificação original — painel com tons escuros
+    fixos de VTT (independente do tema claro/escuro do site), barra de PV colorida (verde/âmbar/vermelho)
+    nos cards e no Painel do Token, grade compacta de ícones de condição (sem mais siglas coladas/colidindo),
+    chip de CA, economia de ação (1 Ação/Bônus/Reação) como chips, e o campo de reação (Contramagia/Esquiva)
+    que ficava cortado agora ocupa a largura toda.'

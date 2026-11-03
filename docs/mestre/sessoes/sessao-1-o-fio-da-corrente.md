@@ -84,6 +84,17 @@ participantes:
       talvez a chegada ao covil). Está tudo bem se não chegar ao Posto Cinzento — isso só empurra
       a Cena 7 para a Sessão 2, igual ao que já aconteceu na preparação da Sessão 0.
 
+    ## Depois da sessão
+
+    - Registre o que realmente aconteceu pelo [Painel do Mestre](../painel.md) (ou o
+      [modelo manual](../registro-manual-de-sessao.md)) — isso cria a próxima entrada do
+      [Diário de Sessões](../../diario/index.md) e atualiza a ficha de cada personagem envolvido.
+    - Se Osric Vallenne, Mestra Ilsabet Coeur, a Residência Duvant, "o Intermediário" ou o sinete de
+      cera virarem fatos definitivos do mundo (e não só desta mesa), considere formalizá-los depois em
+      páginas próprias — esta página continua sendo só o rascunho de preparação, não o registro final.
+    - Atualize o status de Grum e Harker (e, se chegar lá, do Intermediário) em algum lugar visível —
+      por exemplo nas notas da própria Sessão 0 — para não perder o fio entre sessões.
+
 === "Cenas"
 
     ## Índice desta aba
@@ -471,14 +482,3 @@ participantes:
 === "Combat Tracker"
 
     <!-- combate:painel -->
-
-## Depois da sessão
-
-- Registre o que realmente aconteceu pelo [Painel do Mestre](../painel.md) (ou o
-  [modelo manual](../registro-manual-de-sessao.md)) — isso cria a próxima entrada do
-  [Diário de Sessões](../../diario/index.md) e atualiza a ficha de cada personagem envolvido.
-- Se Osric Vallenne, Mestra Ilsabet Coeur, a Residência Duvant, "o Intermediário" ou o sinete de
-  cera virarem fatos definitivos do mundo (e não só desta mesa), considere formalizá-los depois em
-  páginas próprias — esta página continua sendo só o rascunho de preparação, não o registro final.
-- Atualize o status de Grum e Harker (e, se chegar lá, do Intermediário) em algum lugar visível —
-  por exemplo nas notas da própria Sessão 0 — para não perder o fio entre sessões.

@@ -67,6 +67,17 @@ sessao:
         - Os aliados devem vencer a maior parte da luta sozinhos — os jogadores não precisam
           derrotar todos os bandidos para a cena funcionar.
 
+    ## Depois da sessão
+
+    - Registre o que realmente aconteceu pelo [Painel do Mestre](../painel.md) (ou o
+      [modelo manual](../registro-manual-de-sessao.md)) — isso cria a primeira entrada do
+      [Diário de Sessões](../../diario/index.md) e já te dá a ficha de cada personagem envolvido.
+    - Se a torre, o nome do Correntes, Olim/Milo ou qualquer outro elemento desta sessão virar fato
+      definitivo do mundo (e não só da mesa), considere formalizá-lo depois nas páginas de
+      [Geografia](../../geografia/index.md), [Operações clandestinas](../../mundo/operacoes-clandestinas.md)
+      ou, se Milo se tornar um NPC recorrente, uma página própria em `docs/personagens/` — esta
+      página continua sendo só o rascunho de preparação, não o registro final.
+
 === "Cenas"
 
     ## Índice desta aba
@@ -693,14 +704,3 @@ sessao:
 === "Combat Tracker"
 
     <!-- combate:painel -->
-
-## Depois da sessão
-
-- Registre o que realmente aconteceu pelo [Painel do Mestre](../painel.md) (ou o
-  [modelo manual](../registro-manual-de-sessao.md)) — isso cria a primeira entrada do
-  [Diário de Sessões](../../diario/index.md) e já te dá a ficha de cada personagem envolvido.
-- Se a torre, o nome do Correntes, Olim/Milo ou qualquer outro elemento desta sessão virar fato
-  definitivo do mundo (e não só da mesa), considere formalizá-lo depois nas páginas de
-  [Geografia](../../geografia/index.md), [Operações clandestinas](../../mundo/operacoes-clandestinas.md)
-  ou, se Milo se tornar um NPC recorrente, uma página própria em `docs/personagens/` — esta
-  página continua sendo só o rascunho de preparação, não o registro final.

@@ -47,7 +47,10 @@ subcategorias se acessam clicando no corpo da página da categoria (padrão já 
 | `admin/combate_api.py` | Combat Tracker (iniciativa, PV, condições, XP/loot) — ver `.claude/contexto/combate.md` |
 | `tests/` | Testes `pytest` do banco de dados (único teste de "regra"/estado hoje; `scripts/testar_site.py` é integração de site) |
 | `dados/linha-do-tempo.yml` | Acontecimentos da campanha (fonte única) |
-| `scripts/` | `gerar_relacoes.py` (fonte única das relações), `testar_site.py` (teste fixo) |
+| `dados/changelog.yml` | Versões do site (ver `hooks/changelog.py`). Acrescente com `scripts/registrar_changelog.py` (sem precisar do Painel) |
+| `dados/roadmap.yml` | O que falta fazer (ver `hooks/roadmap.py`). Leia/edite direto o YAML, ou chame `wd.salvar_item_roadmap`/`wd.apagar_item_roadmap` (`admin/wiki_data.py`) — mesma função usada pelo widget em Modo Mestre na página `/roadmap/` |
+| `dados/bugs.yml` | Bugs reportados pelo botão "🐞 Reportar bug" de qualquer página (ver `hooks/bugs.py`) |
+| `scripts/` | `gerar_relacoes.py` (fonte única das relações), `testar_site.py` (teste fixo), `registrar_changelog.py` (changelog sem o Painel) |
 | `fontes/` | Acervo do autor — **não editar**; guia em `fontes/README.md` |
 
 **Antes de mexer numa área, leia só o arquivo de contexto dela:**
@@ -98,6 +101,15 @@ Valois: idealista disfarçado · títulos dos rascunhos antigos não adotados. P
   NPC, sessão e acontecimento → funções de `admin/wiki_data.py`.
 - **Validação:** `mkdocs build --strict` durante o trabalho; o teste completo só quando o autor
   pedir (`/testar-site`). Da saída, leia só o resumo e as linhas ❌.
+- **Testes só quando o autor pedir — igual a commit/push.** Pedido de implementação, ajuste ou
+  alteração entrega só o que foi pedido: nada de `pytest`, escrever testes novos ou rodar
+  `/testar-site` por conta própria. Só roda quando o autor pedir explicitamente (ou quando a tarefa
+  pedida for literalmente escrever/rodar testes).
+- **Changelog: registre sempre, sem precisar pedir** — é o oposto da regra de testes/commit. Ao
+  terminar qualquer mudança (implementação, remoção, ajuste, correção de bug), rode
+  `python scripts/registrar_changelog.py <versao> <data> "<mudança 1>" ["<mudança 2>" ...]`
+  (escreve direto em `dados/changelog.yml`, sem precisar do Painel rodando). Versão: incremente o
+  último número em 0.1 (ex.: 0.4 → 0.5), a menos que o autor peça outro número.
 - **Markdown/YAML continuam sendo a fonte de verdade de tudo que já existe** (lore, ficha de
   planejamento de NPC, Changelog/Roadmap/linha do tempo) — não migre nada disso pro banco
   (`admin/banco.py`) sem o autor pedir explicitamente; ver `ARQUITETURA.md` pro porquê. **Exceção:

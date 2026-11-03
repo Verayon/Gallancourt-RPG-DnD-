@@ -19,6 +19,14 @@
     "Exausto", "Incapacitado", "Inconsciente", "Invisível", "Paralisado", "Petrificado",
     "Restringido", "Surdo",
   ];
+  // Sigla de 3 letras por condição — únicas de propósito (não é só as 3 primeiras letras: Incapacitado
+  // e Inconsciente colidiriam em "INC"). Mostrada no ícone pequeno do card; o nome completo vai no title.
+  var SIGLA_CONDICAO = {
+    "Agarrado": "AGR", "Apavorado": "APV", "Atordoado": "ATD", "Caído": "CAI", "Cego": "CGO",
+    "Enfeitiçado": "ENF", "Envenenado": "EVN", "Exausto": "EXA", "Incapacitado": "ICP",
+    "Inconsciente": "ICS", "Invisível": "INV", "Paralisado": "PRL", "Petrificado": "PTR",
+    "Restringido": "RST", "Surdo": "SUR",
+  };
   var TIPOS_ATOR = ["monstro", "npc", "jogador"];
   var ROTULOS_TIPO_ATOR = { monstro: "Monstro", npc: "NPC", jogador: "Jogador" };
   var SIGLAS_MOEDA = ["pc", "pp", "pe", "po", "pl"];
@@ -26,6 +34,18 @@
   function escapeHtml(valor) {
     return String(valor == null ? "" : valor)
       .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  function barraPv(atual, maximo, temporario, classeExtra) {
+    var pct = maximo > 0 ? Math.max(0, Math.min(100, (atual / maximo) * 100)) : 0;
+    var nivel = pct <= 25 ? "critico" : (pct <= 50 ? "ferido" : "ok");
+    var texto = atual + "/" + maximo + (temporario ? " (+" + temporario + ")" : "");
+    return (
+      '<div class="combate-painel__barra-pv' + (classeExtra ? " " + classeExtra : "") + '">' +
+      '<div class="combate-painel__barra-pv-preenchimento combate-painel__barra-pv-preenchimento--' + nivel + '" style="width:' + pct + '%"></div>' +
+      '<span class="combate-painel__barra-pv-texto">PV ' + escapeHtml(texto) + "</span>" +
+      "</div>"
+    );
   }
 
   function Widget(raiz) {
@@ -192,7 +212,6 @@
     var daVez = c.turno_participante_id === p.id;
     var emFoco = this.foco === p.id;
     var alvoMarcado = !!this.alvos[p.id];
-    var pv = p.pv_atual + "/" + p.pv_maximo + (p.pv_temporario ? " (+" + p.pv_temporario + ")" : "");
     var foto = p.foto
       ? '<img class="combate-painel__card-foto" src="' + escapeHtml(p.foto) + '" alt="">'
       : '<div class="combate-painel__card-foto combate-painel__card-foto--vazia"></div>';
@@ -200,9 +219,9 @@
     var condicoesGrade = this.autenticado
       ? CONDICOES_D20.map(function (nome) {
           var ativa = p.condicoes.indexOf(nome) !== -1;
-          return '<button type="button" class="pilula combate-painel__cond' + (ativa ? " pilula--ativa" : "") +
+          return '<button type="button" class="combate-painel__cond' + (ativa ? " combate-painel__cond--ativa" : "") +
             '" data-acao="alternar-condicao" data-participante="' + p.id + '" data-nome="' + escapeHtml(nome) + '" title="' + escapeHtml(nome) + '">' +
-            escapeHtml(nome.slice(0, 3)) + "</button>";
+            escapeHtml(SIGLA_CONDICAO[nome] || nome.slice(0, 3)) + "</button>";
         }).join("")
       : p.condicoes.map(function (nome) { return '<span class="pilula pilula--ativa">' + escapeHtml(nome) + "</span>"; }).join("");
 
@@ -233,9 +252,10 @@
       '<div class="combate-painel__card' + (daVez ? " combate-painel__card--davez" : "") + (emFoco ? " combate-painel__card--foco" : "") +
       (p.morto ? " combate-painel__card--morto" : "") + '" data-acao="focar" data-participante="' + p.id + '">' +
       '<div class="combate-painel__card-topo">' + foto +
-      '<div><strong>' + escapeHtml(p.nome) + (p.morto ? " 💀" : (p.caido ? " 🩸" : "")) + "</strong>" +
-      '<div class="ajuda">CA ' + p.ca_total + " · PV " + pv + "</div>" +
+      '<div class="combate-painel__card-info"><strong>' + escapeHtml(p.nome) + (p.morto ? " 💀" : (p.caido ? " 🩸" : "")) + "</strong>" +
+      '<span class="combate-painel__ca-chip" title="Classe de Armadura"><strong>CA</strong> ' + p.ca_total + "</span>" +
       "<div>" + iniciativa + "</div></div></div>" +
+      barraPv(p.pv_atual, p.pv_maximo, p.pv_temporario) +
       '<div class="combate-painel__card-condicoes">' + condicoesGrade + "</div>" +
       deathSaves +
       '<div class="combate-painel__card-acoes">' + acoesCard + "</div>" +
@@ -274,9 +294,10 @@
     var economia = editavel
       ? ["acao_usada", "acao_bonus_usada", "reacao_usada"].map(function (campo, i) {
           var rotulos = ["1 Ação", "1 Ação Bônus", "1 Reação"];
-          return '<label><input type="checkbox" data-acao="economia-acao" data-participante="' + p.id + '" data-campo="' + campo + '"' +
+          return '<label class="combate-painel__economia-item' + (p[campo] ? " combate-painel__economia-item--gasta" : "") + '">' +
+            '<input type="checkbox" data-acao="economia-acao" data-participante="' + p.id + '" data-campo="' + campo + '"' +
             (p[campo] ? " checked" : "") + "> " + rotulos[i] + "</label>";
-        }).join(" ")
+        }).join("")
       : "";
 
     var concentracao = editavel
@@ -293,12 +314,15 @@
 
     return (
       '<div class="combate-painel__token">' +
-      "<h4>" + escapeHtml(p.nome) + "</h4>" +
-      '<div class="stat-block__chips">' +
-      '<span><strong>CA</strong> ' + p.ca_total + "</span>" +
-      '<span><strong>PV</strong> ' + p.pv_atual + "/" + p.pv_maximo + (p.pv_temporario ? " (+" + p.pv_temporario + " temp.)" : "") + "</span>" +
-      concentracao +
+      '<div class="combate-painel__token-cabecalho">' +
+      (p.foto
+        ? '<img class="combate-painel__card-foto combate-painel__card-foto--grande" src="' + escapeHtml(p.foto) + '" alt="">'
+        : '<div class="combate-painel__card-foto combate-painel__card-foto--grande combate-painel__card-foto--vazia"></div>') +
+      '<div class="combate-painel__token-titulo"><h4>' + escapeHtml(p.nome) + "</h4>" +
+      '<span class="combate-painel__ca-chip" title="Classe de Armadura"><strong>CA</strong> ' + p.ca_total + "</span></div>" +
       "</div>" +
+      barraPv(p.pv_atual, p.pv_maximo, p.pv_temporario, "combate-painel__barra-pv--grande") +
+      (concentracao ? '<div class="combate-painel__grupo">' + concentracao + "</div>" : "") +
       (economia ? '<div class="combate-painel__economia">' + economia + "</div>" : "") +
       reacao +
       (slots ? '<div class="combate-painel__grupo"><strong>Espaços de magia</strong><br>' + slots + "</div>" : "") +

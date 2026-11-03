@@ -50,6 +50,7 @@ extra_javascript:
   - javascripts/ficha.js
   - javascripts/roadmap.js
   - javascripts/combate.js
+  - javascripts/bug-report.js
 
 hooks:
   - hooks/gallancourt.py

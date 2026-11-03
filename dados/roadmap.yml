@@ -44,16 +44,6 @@ itens:
   prioridade: Baixa
   tipo: UI
   status: Planejado
-- id: 6
-  item: em Raças, alterar os valores da coluna "Livro" de 2014 e 2024 para "PBH 2014" e "PBH 2024" respectivamente
-  prioridade: Baixa
-  tipo: Conteúdo
-  status: Planejado
-- id: 7
-  item: em Raças, alterar os valores da coluna "Livro" de 2014 e 2024 para "PBH 2014" e "PBH 2024" respectivamente
-  prioridade: Baixa
-  tipo: Conteúdo
-  status: Planejado
 - id: 8
   item: 'Hospedagem pública ainda é provisória: link do Cloudflare Tunnel muda toda vez que o túnel reinicia.
     Para um link fixo, falta registrar um domínio próprio e configurar um túnel nomeado (ou IP passthrough/bridge
@@ -67,10 +57,10 @@ itens:
     commit.'
   prioridade: Alta
   tipo: Infra
-  status: Planejado
+  status: Concluído
 - id: 10
   item: Fazer o combat tracker
   prioridade: Alta
   tipo: UI
-  status: Planejado
+  status: Concluído
   responsavel: ''

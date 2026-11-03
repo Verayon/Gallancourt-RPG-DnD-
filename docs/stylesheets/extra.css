@@ -2374,7 +2374,33 @@ th[aria-sort="descending"] .magia-ordenar::after { content: " ▼"; opacity: 1; 
    docs/javascripts/combate.js). A raiz leva a classe `ficha-personagem` também, só pra herdar
    os estilos de botão/input/pilula/chip acima sem duplicar — aqui só o layout específico do
    tracker (cabeçalho, grade de duas colunas, cards de participante, modais).
-   -------------------------------------------------------------------------- */
+
+   Tons escuros fixos de VTT (pedido do autor na especificação original): a sala de jogo fica
+   escura mesmo com o site no tema claro — redefine as variáveis --gc-* (mesmos valores do tema
+   "slate" global, ver topo do arquivo) só dentro de .combate-painel, então todo componente
+   compartilhado (botão/input/pilula/chip) já herda escuro de graça, sem duplicar regra nenhuma. */
+.md-typeset .combate-painel {
+  --gc-bg: #1d1a16;
+  --gc-bg-alt: #221e19;
+  --gc-panel: #28241e;
+  --gc-panel-border: #453f34;
+  --gc-ink: #e2d9c4;
+  --gc-ink-dim: #a99b82;
+  --gc-gold: #b7914f;
+  --gc-gold-soft: #cdb176;
+  --gc-red: #9c5347;
+  display: block;
+  background: var(--gc-bg);
+  color: var(--gc-ink);
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+.md-typeset .combate-painel h3,
+.md-typeset .combate-painel h4 {
+  color: var(--gc-gold-soft);
+}
 
 .md-typeset .combate-painel__cabecalho {
   display: flex;
@@ -2396,9 +2422,10 @@ th[aria-sort="descending"] .magia-ordenar::after { content: " ▼"; opacity: 1; 
 
 .combate-painel__layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  grid-template-columns: minmax(260px, 1fr) minmax(300px, 1.2fr);
   gap: 1rem;
   margin: .8rem 0;
+  align-items: start;
 }
 
 @media (max-width: 52rem) {
@@ -2439,6 +2466,18 @@ th[aria-sort="descending"] .magia-ordenar::after { content: " ▼"; opacity: 1; 
   display: flex;
   gap: .6rem;
   align-items: flex-start;
+  margin-bottom: .5rem;
+}
+
+.combate-painel__card-info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .3rem .5rem;
+}
+
+.combate-painel__card-info > strong {
+  flex: 1 0 100%;
 }
 
 .combate-painel__card-foto {
@@ -2454,18 +2493,101 @@ th[aria-sort="descending"] .magia-ordenar::after { content: " ▼"; opacity: 1; 
   background: var(--gc-bg-alt);
 }
 
-.combate-painel__card-condicoes {
+.combate-painel__card-foto--grande {
+  flex-basis: 3.6rem;
+  width: 3.6rem;
+  height: 3.6rem;
+}
+
+.md-typeset .combate-painel__ca-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .2rem;
+  padding: .05rem .5rem;
+  border-radius: 999px;
+  border: 1px solid var(--gc-panel-border);
+  background: var(--gc-bg-alt);
+  font-size: .78rem;
+  font-weight: 700;
+  color: var(--gc-ink-dim);
+}
+
+/* Barra de PV — verde/âmbar/vermelho conforme a fração restante (ver barraPv() em combate.js). */
+.combate-painel__barra-pv {
+  position: relative;
+  height: 1.1rem;
+  border-radius: 999px;
+  background: var(--gc-bg-alt);
+  border: 1px solid var(--gc-panel-border);
+  overflow: hidden;
+  margin: .3rem 0;
+}
+
+.combate-painel__barra-pv--grande {
+  height: 1.4rem;
+  margin: .6rem 0;
+}
+
+.combate-painel__barra-pv-preenchimento {
+  position: absolute;
+  inset: 0;
+  width: 0;
+  transition: width .2s ease;
+}
+
+.combate-painel__barra-pv-preenchimento--ok { background: #4caf7a; }
+.combate-painel__barra-pv-preenchimento--ferido { background: #d98c3a; }
+.combate-painel__barra-pv-preenchimento--critico { background: #a53125; }
+
+.combate-painel__barra-pv-texto {
+  position: relative;
+  z-index: 1;
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: .72rem;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .6);
+}
+
+/* Grade fixa de ícones pequenos (pedido na especificação: "matriz de pequenos ícones de status"
+   como toggle) — tamanho fixo em vez de pilulas que esticam com o texto, pra não quebrar feio
+   com 15 condições possíveis por card e pra nunca colidir (ver SIGLA_CONDICAO em combate.js). */
+.combate-painel__card-condicoes {
+  display: grid;
+  grid-template-columns: repeat(5, 1.9rem);
   gap: .25rem;
   margin: .5rem 0 0;
 }
 
 .md-typeset .combate-painel__cond {
-  padding: .1rem .35rem;
-  font-size: .65rem;
-  text-transform: uppercase;
-  letter-spacing: .02em;
+  width: 1.9rem;
+  height: 1.6rem;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: .01em;
+  border-radius: 4px;
+  border: 1px solid var(--gc-panel-border);
+  background: var(--gc-bg-alt);
+  color: var(--gc-ink-dim);
+  cursor: pointer;
+}
+
+.md-typeset .combate-painel__cond:hover {
+  border-color: var(--gc-gold-soft);
+  color: var(--gc-ink);
+}
+
+.md-typeset .combate-painel__cond--ativa {
+  background: var(--gc-red);
+  border-color: var(--gc-red);
+  color: #fff;
 }
 
 .combate-painel__death-saves {
@@ -2486,28 +2608,65 @@ th[aria-sort="descending"] .magia-ordenar::after { content: " ▼"; opacity: 1; 
 }
 
 .combate-painel__token {
-  padding: .8rem;
+  padding: 1rem;
   border: 1px solid var(--gc-panel-border);
   border-radius: 8px;
   background: var(--gc-panel);
 }
 
+.combate-painel__token-cabecalho {
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+}
+
+.combate-painel__token-titulo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem;
+}
+
 .combate-painel__token h4 {
-  margin-top: 0;
+  margin: 0;
+  flex: 1 0 100%;
 }
 
 .combate-painel__economia {
   display: flex;
   flex-wrap: wrap;
-  gap: .8rem;
+  gap: .4rem;
   margin: .6rem 0;
-  font-size: .85rem;
+}
+
+.md-typeset .combate-painel__economia-item {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .25rem .6rem;
+  border-radius: 999px;
+  border: 1px solid var(--gc-panel-border);
+  background: var(--gc-bg-alt);
+  font-size: .8rem;
+  cursor: pointer;
+}
+
+.md-typeset .combate-painel__economia-item--gasta {
+  border-color: var(--gc-panel-border);
+  color: var(--gc-ink-dim);
+  text-decoration: line-through;
+  opacity: .7;
 }
 
 .combate-painel__reacao {
   display: flex;
-  gap: .5rem;
-  margin: .5rem 0;
+  flex-direction: column;
+  gap: .4rem;
+  margin: .6rem 0;
+}
+
+.md-typeset .ficha-personagem .combate-painel__reacao .input-medio {
+  width: 100%;
 }
 
 .md-typeset .combate-painel__ataque {
@@ -2672,6 +2831,9 @@ th[aria-sort="descending"] .magia-ordenar::after { content: " ▼"; opacity: 1; 
   right: .6rem;
   color: #fff;
   background: #c0392b;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
 }
 
 .md-typeset .botao-reportar-bug:hover {
@@ -2770,4 +2932,49 @@ th[aria-sort="descending"] .magia-ordenar::after { content: " ▼"; opacity: 1; 
 .modo-mestre-popup .botao-remover {
   background: transparent;
   color: var(--gc-red, #9c5347);
+}
+
+/* Popup de "Reportar bug" (docs/javascripts/bug-report.js) — reaproveita a caixa/overlay do
+   Modo Mestre acima; só o formulário é diferente (vertical, com select e textarea em vez de uma
+   senha só). */
+.modo-mestre-popup__caixa .bug-report-form {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.modo-mestre-popup__caixa .bug-report-form label {
+  display: block;
+  margin-bottom: .7rem;
+  font-weight: 600;
+}
+
+.modo-mestre-popup__caixa select,
+.modo-mestre-popup__caixa textarea {
+  display: block;
+  width: 100%;
+  margin-top: .3rem;
+  padding: .4rem .6rem;
+  border-radius: 4px;
+  border: 1px solid var(--gc-panel-border, #453f34);
+  background: var(--gc-bg-alt, #221e19);
+  color: inherit;
+  font-family: inherit;
+  font-weight: 400;
+  resize: vertical;
+}
+
+.modo-mestre-popup__ajuda {
+  margin: 0 0 .8rem;
+  font-size: .85rem;
+  opacity: .8;
+}
+
+.modo-mestre-popup__ajuda code {
+  color: var(--gc-gold, #b7914f);
+}
+
+.modo-mestre-popup__sucesso {
+  color: #4caf7a;
+  margin-bottom: 0;
+  font-weight: 600;
 }

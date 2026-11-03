@@ -3,22 +3,24 @@
 {% block conteudo %}
 <h1>Bugs reportados</h1>
 <p class="ajuda">
-  Reportados por qualquer pessoa pelo botão "Reportar bug", visível em toda página do site.
-  Para corrigir um bug "Aguardando", peça para um agente (o Claude Code) investigar, corrigir e
-  testar a correção — ele pode usar esta lista e marcar como "Resolvido" por aqui, com uma nota
-  do que foi feito.
+  Reportados por qualquer pessoa pelo popup "🐞 Reportar bug", visível em toda página do site
+  (sem precisar de login). Para corrigir um bug "Aguardando", peça para um agente (o Claude Code)
+  investigar, corrigir e testar a correção — ele pode usar esta lista e marcar como "Resolvido"
+  por aqui, com uma nota do que foi feito.
 </p>
 
 {% if not bugs %}
 <p class="ajuda">Nenhum bug reportado ainda.</p>
 {% else %}
 <table class="tabela-eventos">
-  <thead><tr><th>#</th><th>Área</th><th>Descrição</th><th>Status</th><th>Reportado em</th><th></th></tr></thead>
+  <thead><tr><th>#</th><th>Página</th><th>Tipo</th><th>Versão</th><th>Descrição</th><th>Status</th><th>Reportado em</th><th></th></tr></thead>
   <tbody>
   {% for b in bugs %}
   <tr>
     <td>{{ b.id }}</td>
-    <td>{{ b.get('area') }}</td>
+    <td>{{ b.get('pagina') }}</td>
+    <td>{{ b.get('tipo') }}</td>
+    <td>{{ b.get('versao') }}</td>
     <td>{{ b.get('descricao') }}</td>
     <td>
       {{ b.get('status') }}
