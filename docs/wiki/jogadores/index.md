@@ -1,7 +1,6 @@
 ---
 tags:
-  - Mestre
-  - Jogador
+  - Jogadores
 ---
 
 # Jogadores

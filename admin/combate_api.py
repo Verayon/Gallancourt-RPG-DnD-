@@ -25,6 +25,7 @@ from sqlalchemy.orm import Session, joinedload, selectinload
 
 import banco
 import personagens_api as pa
+import sessao_viva_api as sv
 
 # --------------------------------------------------------------------------
 # Helpers de tipo e serialização
@@ -92,6 +93,7 @@ def serializar_participante(participante: banco.CombateParticipante) -> dict:
         "acao_usada": participante.acao_usada,
         "acao_bonus_usada": participante.acao_bonus_usada,
         "reacao_usada": participante.reacao_usada,
+        "movimento_usado": participante.movimento_usado,
         "concentrando_em": participante.concentrando_em,
         "death_save_sucessos": participante.death_save_sucessos,
         "death_save_falhas": participante.death_save_falhas,
@@ -105,14 +107,28 @@ def serializar_participante(participante: banco.CombateParticipante) -> dict:
             for v in sorted(ficha.habilidades_vinculo, key=lambda v: not v.favorito)
         ],
         "magias": [
-            {"nome": v.magia.nome, "nivel": v.magia.nivel, "resistencia": v.magia.resistencia,
+            {"vinculo_id": v.id, "nome": v.magia.nome, "nivel": v.magia.nivel, "resistencia": v.magia.resistencia,
              "dano_formula": v.magia.dano_formula, "dano_tipo": v.magia.dano_tipo, "favorito": v.favorito}
             for v in sorted(ficha.magias_vinculo, key=lambda v: not v.favorito)
         ],
-        "espacos_magia": [
-            {"nivel": e.nivel, "maximo": e.maximo, "usado": e.usado, "rotulo": e.rotulo}
-            for e in ficha.espacos_magia_vinculo
-        ] if not _e_copia(participante) else [],
+        "espacos_magia": (
+            [{"nivel": e.nivel, "maximo": e.maximo, "usado": e.usado, "rotulo": e.rotulo}
+             for e in ficha.espacos_magia_vinculo]
+            if not _e_copia(participante) else
+            [{"nivel": r.referencia, "maximo": r.maximo, "usado": r.usado, "rotulo": None}
+             for r in participante.recursos_copia_vinculo if r.tipo == "slot_magia"]
+        ),
+        "equipamentos": [
+            {
+                "vinculo_id": v.id, "nome": v.equipamento.nome, "quantidade": v.quantidade,
+                "favorito": v.favorito, "tipo_acao": v.equipamento.tipo_acao,
+                "cargas": (
+                    {"restante": c[0], "maximo": c[1]}
+                    if (c := _carga_restante(participante, v.id)) else None
+                ),
+            }
+            for v in sorted(ficha.equipamentos_vinculo, key=lambda v: not v.favorito)
+        ],
     }
 
 
@@ -217,7 +233,27 @@ def adicionar_participante(
     sessao.add(participante)
     sessao.commit()
     sessao.refresh(participante)
+    if e_monstro:
+        _semear_recursos_copia(sessao, participante, ficha)
     return participante
+
+
+def _semear_recursos_copia(sessao: Session, participante: banco.CombateParticipante, ficha: banco.Ficha) -> None:
+    """Copia os pools de espaço de magia e as cargas de item mágico da Ficha base pra
+    `CombateParticipanteRecursoCopia`, só pra participantes monstro (ver docstring da classe em
+    banco.py) — cada cópia de combate gasta seu próprio recurso, sem tocar a Ficha real."""
+    for espaco in ficha.espacos_magia_vinculo:
+        sessao.add(banco.CombateParticipanteRecursoCopia(
+            participante_id=participante.id, tipo="slot_magia",
+            referencia=espaco.nivel, maximo=espaco.maximo, usado=0,
+        ))
+    for vinculo in ficha.equipamentos_vinculo:
+        if vinculo.equipamento.cargas_maximo is not None:
+            sessao.add(banco.CombateParticipanteRecursoCopia(
+                participante_id=participante.id, tipo="carga_item",
+                referencia=vinculo.id, maximo=vinculo.equipamento.cargas_maximo, usado=0,
+            ))
+    sessao.commit()
 
 
 def remover_participante(sessao: Session, participante_id: int) -> None:
@@ -345,6 +381,150 @@ def definir_concentracao(sessao: Session, participante_id: int, nome: str | None
 
 
 # --------------------------------------------------------------------------
+# Recursos consumíveis — slots de magia e cargas de item mágico, com bloqueio de uso indevido
+# (opção de forçar). Cópia (monstro) usa CombateParticipanteRecursoCopia; npc/jogador lê/escreve
+# direto em FichaEspacoMagia/FichaEquipamento.cargas_atual, mesmo princípio de PV (ver _e_copia).
+# --------------------------------------------------------------------------
+
+def _pools_slot_magia(participante: banco.CombateParticipante, nivel: int):
+    """Devolve a lista de pools (reais ou cópia) de espaço de magia neste nível — pode haver mais
+    de um pool no mesmo nível (ex. Magia de Pacto do Bruxo, ver FichaEspacoMagia.rotulo)."""
+    if _e_copia(participante):
+        return [r for r in participante.recursos_copia_vinculo if r.tipo == "slot_magia" and r.referencia == nivel]
+    return [e for e in participante.ficha.espacos_magia_vinculo if e.nivel == nivel]
+
+
+def _carga_restante(participante: banco.CombateParticipante, equipamento_vinculo_id: int) -> tuple[int, int] | None:
+    """(restante, máximo) de cargas deste item — None se o item não tem
+    Equipamento.cargas_maximo definido (consumível normal, ver usar_carga_item)."""
+    if _e_copia(participante):
+        pool = next(
+            (r for r in participante.recursos_copia_vinculo
+             if r.tipo == "carga_item" and r.referencia == equipamento_vinculo_id), None,
+        )
+        return (pool.maximo - pool.usado, pool.maximo) if pool else None
+    vinculo = next(
+        (v for v in participante.ficha.equipamentos_vinculo if v.id == equipamento_vinculo_id), None,
+    )
+    if vinculo is None or vinculo.equipamento.cargas_maximo is None:
+        return None
+    maximo = vinculo.equipamento.cargas_maximo
+    restante = maximo if vinculo.cargas_atual is None else vinculo.cargas_atual
+    return (restante, maximo)
+
+
+def conjurar_magia(
+    sessao: Session, participante_id: int, magia_vinculo_id: int, nivel_slot: int, forcar: bool = False,
+) -> dict:
+    participante = _carregar_participante(sessao, participante_id)
+    if participante is None:
+        raise ValueError("Participante não encontrado.")
+    magia_vinculo = next(
+        (v for v in participante.ficha.magias_vinculo if v.id == magia_vinculo_id), None,
+    )
+    if magia_vinculo is None:
+        raise ValueError("Magia não encontrada nesta ficha.")
+    if magia_vinculo.magia.nivel and nivel_slot < magia_vinculo.magia.nivel:
+        raise ValueError(f"{magia_vinculo.magia.nome} exige um espaço de nível {magia_vinculo.magia.nivel} ou maior.")
+
+    pools = _pools_slot_magia(participante, nivel_slot)
+    pool_com_espaco = next((p for p in pools if p.usado < p.maximo), None)
+    if pool_com_espaco is None and not forcar:
+        return {
+            "bloqueado": True,
+            "motivo": (
+                f"Sem espaço de magia de nível {nivel_slot} disponível."
+                if pools else f"Esta ficha não tem pool de magia de nível {nivel_slot}."
+            ),
+        }
+    pool = pool_com_espaco or (pools[0] if pools else None)
+    if pool is not None:
+        pool.usado += 1
+    registrar_log(
+        sessao, participante.combate,
+        f"{_nome_participante(participante)} conjurou {magia_vinculo.magia.nome} (espaço nível {nivel_slot})"
+        + (" — forçado, sem espaço disponível" if pool_com_espaco is None else ""),
+        tipo="magia",
+    )
+    sessao.commit()
+    return {"bloqueado": False, "forcado": pool_com_espaco is None}
+
+
+def usar_carga_item(
+    sessao: Session, participante_id: int, equipamento_vinculo_id: int, forcar: bool = False,
+) -> dict:
+    participante = _carregar_participante(sessao, participante_id)
+    if participante is None:
+        raise ValueError("Participante não encontrado.")
+    carga = _carga_restante(participante, equipamento_vinculo_id)
+    if carga is None:
+        # Item sem cargas definidas: comportamento de consumível normal, decrementa quantidade.
+        return _usar_item_sem_carga(sessao, participante, equipamento_vinculo_id)
+
+    restante, maximo = carga
+    nome_item = _nome_item_vinculo(participante, equipamento_vinculo_id)
+    tem_carga = restante > 0
+    if not tem_carga and not forcar:
+        return {"bloqueado": True, "motivo": f"{nome_item} não tem cargas restantes."}
+    nova_restante = max(0, restante - 1)
+
+    if _e_copia(participante):
+        pool = next(
+            r for r in participante.recursos_copia_vinculo
+            if r.tipo == "carga_item" and r.referencia == equipamento_vinculo_id
+        )
+        pool.usado = maximo - nova_restante
+    else:
+        vinculo = next(
+            v for v in participante.ficha.equipamentos_vinculo if v.id == equipamento_vinculo_id
+        )
+        vinculo.cargas_atual = nova_restante
+
+    registrar_log(
+        sessao, participante.combate,
+        f"{_nome_participante(participante)} usou uma carga de {nome_item} ({nova_restante}/{maximo} restantes)"
+        + (" — forçado, sem carga disponível" if not tem_carga else ""),
+        tipo="item",
+    )
+    sessao.commit()
+    return {"bloqueado": False, "forcado": not tem_carga}
+
+
+def _usar_item_sem_carga(sessao: Session, participante: banco.CombateParticipante, equipamento_vinculo_id: int) -> dict:
+    """Cópia (monstro) não tem inventário gravável — este caminho só existe pra npc/jogador, igual
+    ao resto do consumo de item hoje (ver .claude/contexto/combate.md: monstro não rastreia
+    munição/consumo nesta v1, exceto o que ganhou pool de carga explícito acima)."""
+    if _e_copia(participante):
+        raise ValueError("Este item não tem cargas rastreadas para monstros.")
+    vinculo = next(
+        (v for v in participante.ficha.equipamentos_vinculo if v.id == equipamento_vinculo_id), None,
+    )
+    if vinculo is None:
+        raise ValueError("Item não encontrado nesta ficha.")
+    if vinculo.quantidade <= 0:
+        return {"bloqueado": True, "motivo": f"{vinculo.equipamento.nome} não tem unidades restantes."}
+    vinculo.quantidade -= 1
+    registrar_log(
+        sessao, participante.combate,
+        f"{_nome_participante(participante)} usou {vinculo.equipamento.nome} ({vinculo.quantidade} restantes)",
+        tipo="item",
+    )
+    sessao.commit()
+    return {"bloqueado": False, "forcado": False}
+
+
+def _nome_participante(participante: banco.CombateParticipante) -> str:
+    return participante.nome_exibicao or participante.ficha.personagem.nome
+
+
+def _nome_item_vinculo(participante: banco.CombateParticipante, equipamento_vinculo_id: int) -> str:
+    vinculo = next(
+        (v for v in participante.ficha.equipamentos_vinculo if v.id == equipamento_vinculo_id), None,
+    )
+    return vinculo.equipamento.nome if vinculo else "item"
+
+
+# --------------------------------------------------------------------------
 # Turnos, rodadas, economia de ação (módulo 2.3 e 5.1)
 # --------------------------------------------------------------------------
 
@@ -359,6 +539,7 @@ def _resetar_economia_acao(participante: banco.CombateParticipante) -> None:
     participante.acao_usada = False
     participante.acao_bonus_usada = False
     participante.reacao_usada = False
+    participante.movimento_usado = False
 
 
 def proximo_turno(sessao: Session, combate: banco.Combate) -> banco.Combate:
@@ -409,7 +590,7 @@ def _duracao_em_rodadas(texto: str | None) -> int | None:
 
 
 def alternar_economia_acao(sessao: Session, participante_id: int, campo: str) -> bool:
-    if campo not in ("acao_usada", "acao_bonus_usada", "reacao_usada"):
+    if campo not in ("acao_usada", "acao_bonus_usada", "reacao_usada", "movimento_usado"):
         raise ValueError(f"Campo de economia de ação desconhecido: {campo}")
     participante = sessao.get(banco.CombateParticipante, participante_id)
     if participante is None:
@@ -615,10 +796,21 @@ def calcular_resumo_xp(combate: banco.Combate) -> dict:
 
 def distribuir_xp(sessao: Session, combate: banco.Combate, xp_por_jogador: int) -> None:
     xp_por_jogador = max(0, pa._para_numero(xp_por_jogador, 0))
+    fichas_afetadas = []
     for p in combate.participantes:
         if p.ficha.personagem.tipo == "jogador" and pv_atual(p) > 0:
             p.ficha.xp = (p.ficha.xp or 0) + xp_por_jogador
-    sessao.commit()
+            fichas_afetadas.append(p.ficha_id)
+    if xp_por_jogador <= 0 or not fichas_afetadas:
+        sessao.commit()
+        return
+    # Registra no log do Master's Shield (ver sessao_viva_api) — antes esse evento não deixava
+    # nenhum rastro consultável, só o número cru em Ficha.xp.
+    sv.registrar_interacao(sessao, combate.pagina_rel_docs, {
+        "tipo": "xp", "combate_id": combate.id,
+        "descricao": f"Distribuição de XP: {xp_por_jogador} para cada jogador vivo.",
+        "participantes": [{"ficha_id": fid, "papel": "alvo"} for fid in fichas_afetadas],
+    })
 
 
 def compilar_loot(combate: banco.Combate) -> dict:
@@ -691,5 +883,17 @@ def aplicar_loot(sessao: Session, combate: banco.Combate, escolhas: list[dict]) 
                 else:
                     vinculo.quantidade += parte
             aplicado.append({"ficha_id": ficha.id, "quantidade": parte, "escolha": escolha})
-    sessao.commit()
+    if not aplicado:
+        sessao.commit()
+        return {"aplicado": aplicado}
+    fichas_afetadas = sorted({a["ficha_id"] for a in aplicado})
+    resumo_partes = [
+        f"{a['quantidade']} " + ("moeda" if a["escolha"].get("tipo") == "moeda" else "item")
+        for a in aplicado
+    ]
+    sv.registrar_interacao(sessao, combate.pagina_rel_docs, {
+        "tipo": "loot", "combate_id": combate.id,
+        "descricao": "Loot aplicado: " + ", ".join(resumo_partes),
+        "participantes": [{"ficha_id": fid, "papel": "alvo"} for fid in fichas_afetadas],
+    })
     return {"aplicado": aplicado}

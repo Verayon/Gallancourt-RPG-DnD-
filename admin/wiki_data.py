@@ -95,7 +95,7 @@ def listar_lugares(root: Path) -> list[Entidade]:
 
 
 def listar_jogadores(root: Path) -> list[Entidade]:
-    return _listar_entidades(docs_dir(root) / "mestre" / "jogadores", "mestre/jogadores")
+    return _listar_entidades(docs_dir(root) / "wiki" / "jogadores", "wiki/jogadores")
 
 
 def _listar_detalhado(pasta: Path, rel_prefixo: str, chave_front_matter: str, colunas: list[str]) -> list[dict]:
@@ -139,7 +139,7 @@ def listar_lugares_detalhado(root: Path) -> list[dict]:
 
 def listar_jogadores_detalhado(root: Path) -> list[dict]:
     return _listar_detalhado(
-        docs_dir(root) / "mestre" / "jogadores", "mestre/jogadores", "jogador", ["jogador", "raca_classe", "resumo"],
+        docs_dir(root) / "wiki" / "jogadores", "wiki/jogadores", "jogador", ["jogador", "raca_classe", "resumo"],
     )
 
 
@@ -1455,8 +1455,8 @@ CAMPOS_JOGADOR_NOVO = [
 
 
 def criar_jogador(root: Path, valores: dict) -> dict:
-    """Cria docs/mestre/jogadores/<slug>.md — alcançável pela lista de Jogadores
-    (`<!-- jogadores:lista -->` em docs/mestre/jogadores/index.md), não por `mkdocs.yml` (menu
+    """Cria docs/wiki/jogadores/<slug>.md — alcançável pela lista de Jogadores
+    (`<!-- jogadores:lista -->` em docs/wiki/jogadores/index.md), não por `mkdocs.yml` (menu
     só lista categorias de topo desde 2026-10-30, ver CLAUDE.md).
 
     A ficha de combate do personagem (CA, PV, ações…) é criada depois, como qualquer outra,
@@ -1466,14 +1466,14 @@ def criar_jogador(root: Path, valores: dict) -> dict:
     if not nome:
         raise ValueError("O personagem precisa de um nome.")
     slug = slug_statblock(nome)
-    rel = f"mestre/jogadores/{slug}.md"
+    rel = f"wiki/jogadores/{slug}.md"
     caminho = docs_dir(root) / rel
     if caminho.exists():
         raise ValueError(f"Já existe uma página para esse nome: docs/{rel}")
 
     campos = {chave: (valores.get(chave) or "").strip() for chave, _, _ in CAMPOS_JOGADOR_NOVO}
     meta = {
-        "tags": ["Mestre", "Jogador"],
+        "tags": ["Jogador"],
         "hide": ["toc"],
         "jogador": {
             "jogador": campos["jogador"] or "—",
@@ -1557,10 +1557,12 @@ def _modelo_sessao(
     links_npcs: list[str] | None = None, links_lugares: list[str] | None = None, prompt: str = "",
 ) -> str:
     """Página de sessão com o mesmo layout da Sessão 0/1: abas de preparo de sempre (Resumo,
-    Cenas, NPCs, Lugares, Loot & Pistas, Segredos do Mestre) mais a aba **Combat Tracker**,
-    sempre a última — ver hooks/gallancourt.py::_combate_dinamico e
-    docs/javascripts/combate.js. Substitui o antigo alternador Normal/Mestre + Painel de
-    Iniciativa (admin/sessao_viva.py, retirado); o tracker agora é só mais uma aba.
+    Cenas, NPCs, Lugares, Loot & Pistas, Segredos do Mestre) mais a aba **Master's Shield**,
+    sempre a última — ver hooks/gallancourt.py::_sessao_viva_dinamica/_combate_dinamico e
+    docs/javascripts/sessao_viva.js/combate.js. Substitui o antigo alternador Normal/Mestre +
+    Painel de Iniciativa (admin/sessao_viva.py, retirado); o Combat Tracker (iniciativa/turnos)
+    continua existindo, aninhado dentro do Master's Shield, que fica sempre visível (calendário/
+    localidade/log de interações), não só quando há combate.
 
     `links_npcs`/`links_lugares` (já resolvidos como `[Nome](caminho)` por `criar_sessao_preparo`)
     pré-preenchem as abas NPCs → Aliados e Lugares, em vez de deixá-las "(a preencher)". `prompt`
@@ -1641,6 +1643,10 @@ sessao:
     Crie as fichas pela aba **Ficha de combate** do [Painel do Mestre](../painel.md), escolhendo
     esta página.
 
+    ## Encontro planejado
+
+    <!-- encontro:planejado -->
+
     ## Figurantes
 
 {vazio}
@@ -1673,7 +1679,9 @@ sessao:
 
 {vazio}
 
-=== "Combat Tracker"
+=== "Master's Shield"
+
+    <!-- sessaoviva:painel -->
 
     <!-- combate:painel -->
 """

@@ -49,7 +49,9 @@ extra_javascript:
   - javascripts/modo-mestre.js
   - javascripts/ficha.js
   - javascripts/roadmap.js
+  - javascripts/sessao_viva.js
   - javascripts/combate.js
+  - javascripts/encontro.js
   - javascripts/bug-report.js
 
 hooks:

@@ -53,6 +53,12 @@ mundo de Gallancourt, organizado para consulta rápida durante a mesa.
 
     Todos os personagens em uma tabela que se ordena e filtra.
 
+-   [![](../assets/placeholders/personagem.svg){ .card-portrait }](jogadores/index.md)
+
+    **[Jogadores](jogadores/index.md)**
+
+    Os personagens dos jogadores da mesa: ficha de combate, biografia e tabela filtrável.
+
 -   [![](../assets/placeholders/evento.svg){ .card-portrait }](../eventos/index.md)
 
     **[Eventos](../eventos/index.md)**

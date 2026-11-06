@@ -1,16 +1,15 @@
 ---
 tags:
-- Mestre
 - Jogador
 hide:
 - toc
 jogador:
-  jogador: Bel
-  raca_classe: Elfo Mago
+  jogador: Luke
+  raca_classe: Meio-Elfo Bardo
   resumo: ''
 ---
 
-# Elariel Fogo do Sol
+# Vivien Elaris
 
 *(Descrição a preencher.)*
 

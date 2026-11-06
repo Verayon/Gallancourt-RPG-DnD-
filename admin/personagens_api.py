@@ -76,15 +76,19 @@ _CATALOGOS = {
 CAMPOS_EQUIPAMENTO = [
     "nome", "categoria", "custo", "peso_kg", "dano_formula", "dano_tipo", "propriedades",
     "ca_bonus", "ca_formula", "raridade", "fonte", "descricao", "slug_origem", "origem_tipo",
-    "origem_personagem_slug",
+    "origem_personagem_slug", "tipo_acao", "cargas_maximo", "e_container", "capacidade_kg",
 ]
+
+# Campos do vínculo (FichaEquipamento) que a UI pode editar depois que o item já foi adicionado —
+# diferente dos outros tipos de vínculo, que só favoritam/removem (ver PUT /equipamentos/<vinculo>).
+CAMPOS_FICHA_EQUIPAMENTO_EDITAVEIS = ["quantidade", "equipado", "guardado_em_vinculo_id"]
 CAMPOS_HABILIDADE = [
     "nome", "tipo", "bonus_acerto", "dano_formula", "dano_tipo", "alcance", "usos", "descricao",
-    "origem_tipo", "origem_personagem_slug",
+    "origem_tipo", "origem_personagem_slug", "tipo_acao",
 ]
 CAMPOS_MAGIA = [
     "nome", "nivel", "escola", "tempo", "alcance", "componentes", "duracao", "classes",
-    "dano_formula", "dano_tipo", "resistencia", "fonte", "descricao", "slug_origem",
+    "dano_formula", "dano_tipo", "resistencia", "fonte", "descricao", "slug_origem", "tipo_acao",
 ]
 CAMPOS_IDIOMA = ["nome"]
 CAMPOS_SENTIDO = ["nome"]
@@ -182,8 +186,10 @@ def serializar_ficha(ficha: banco.Ficha) -> dict:
         "moeda_po": ficha.moeda_po, "moeda_pl": ficha.moeda_pl,
         "equipamentos": [
             {"vinculo_id": v.id, "quantidade": v.quantidade, "equipado": v.equipado,
+             "favorito": v.favorito, "guardado_em_vinculo_id": v.guardado_em_vinculo_id,
+             "cargas_atual": (v.cargas_atual if v.cargas_atual is not None else v.equipamento.cargas_maximo),
              **_obj_para_dict(v.equipamento, CAMPOS_EQUIPAMENTO)}
-            for v in ficha.equipamentos_vinculo
+            for v in sorted(ficha.equipamentos_vinculo, key=lambda v: not v.favorito)
         ],
         "habilidades": [
             {
@@ -212,6 +218,14 @@ def serializar_ficha(ficha: banco.Ficha) -> dict:
         "espacos_magia": [
             {"vinculo_id": v.id, "nivel": v.nivel, "maximo": v.maximo, "usado": v.usado, "rotulo": v.rotulo}
             for v in ficha.espacos_magia_vinculo
+        ],
+        "classes": [
+            {
+                "vinculo_id": v.id, "classe_id": v.classe_id, "classe_nome": v.classe.nome,
+                "subclasse_id": v.subclasse_id, "subclasse_nome": v.subclasse.nome if v.subclasse_id else None,
+                "nivel": v.nivel,
+            }
+            for v in sorted(ficha.classes_vinculo, key=lambda v: -v.nivel)
         ],
         "condicoes": [
             {"vinculo_id": v.id, "nome": v.nome} for v in ficha.condicoes_vinculo
@@ -373,7 +387,7 @@ def listar_catalogo(
 
 
 # Mínimo dos campos numéricos de cada catálogo (ver _MINIMOS_NUMERICOS acima, mesma lógica).
-_MINIMOS_CATALOGO = {"ca_bonus": 0, "bonus_acerto": 0, "nivel": 0, "peso_kg": 0.0}
+_MINIMOS_CATALOGO = {"ca_bonus": 0, "bonus_acerto": 0, "nivel": 0, "peso_kg": 0.0, "capacidade_kg": 0.0}
 
 
 def criar_item_catalogo(sessao: Session, tipo: str, campos: dict) -> dict:
@@ -385,6 +399,8 @@ def criar_item_catalogo(sessao: Session, tipo: str, campos: dict) -> dict:
     for chave, minimo in _MINIMOS_CATALOGO.items():
         if chave in valores and valores[chave] not in (None, ""):
             valores[chave] = max(minimo, _para_numero(valores[chave], minimo))
+    if "e_container" in valores:
+        valores["e_container"] = bool(valores["e_container"])
     obj = modelo(**valores)
     sessao.add(obj)
     sessao.commit()
@@ -413,6 +429,45 @@ def adicionar_vinculo(sessao: Session, ficha: banco.Ficha, tipo: str, item_id: i
     return {"vinculo_id": vinculo.id, **_obj_para_dict(item, _CAMPOS_CATALOGO[tipo])}
 
 
+def atualizar_vinculo_equipamento(sessao: Session, ficha: banco.Ficha, vinculo_id: int, campos: dict) -> dict:
+    """Edita quantidade/equipado/guardado_em_vinculo_id de um item já vinculado à ficha —
+    adicionar_vinculo só define o valor inicial, isso aqui é a única forma de mudar depois (botão
+    "Equipar"/seletor "Guardado em" na aba Inventário). Mover um item pra dentro de um contêiner
+    (Equipamento.e_container) avisa, mas não bloqueia, quando passa de Equipamento.capacidade_kg —
+    decisão de UX do próprio design: o Mestre decide se ignora o aviso."""
+    vinculo = sessao.get(banco.FichaEquipamento, vinculo_id)
+    if vinculo is None or vinculo.ficha_id != ficha.id:
+        raise ValueError("Vínculo de equipamento não encontrado nesta ficha.")
+    if "quantidade" in campos:
+        vinculo.quantidade = max(1, _para_numero(campos.get("quantidade"), vinculo.quantidade))
+    if "equipado" in campos:
+        vinculo.equipado = bool(campos.get("equipado"))
+    aviso = None
+    if "guardado_em_vinculo_id" in campos:
+        destino_id = campos.get("guardado_em_vinculo_id")
+        destino_id = int(destino_id) if destino_id not in (None, "") else None
+        if destino_id == vinculo.id:
+            raise ValueError("Um item não pode guardar a si mesmo.")
+        destino = sessao.get(banco.FichaEquipamento, destino_id) if destino_id else None
+        if destino_id and (destino is None or destino.ficha_id != ficha.id):
+            raise ValueError("Contêiner não encontrado nesta ficha.")
+        vinculo.guardado_em_vinculo_id = destino_id
+        if destino is not None and destino.equipamento.e_container and destino.equipamento.capacidade_kg is not None:
+            peso_atual = sum(
+                (v.equipamento.peso_kg or 0.0) * v.quantidade
+                for v in ficha.equipamentos_vinculo
+                if v.guardado_em_vinculo_id == destino.id and v.id != vinculo.id
+            )
+            peso_item = (vinculo.equipamento.peso_kg or 0.0) * vinculo.quantidade
+            if peso_atual + peso_item > destino.equipamento.capacidade_kg + 1e-9:
+                aviso = (
+                    f"{vinculo.equipamento.nome} não cabe em {destino.equipamento.nome} "
+                    f"(limite de {destino.equipamento.capacidade_kg:g} kg)."
+                )
+    sessao.commit()
+    return {"aviso": aviso}
+
+
 def atualizar_valor_sentido(sessao: Session, vinculo_id: int, valor) -> None:
     vinculo = sessao.get(banco.FichaSentido, vinculo_id)
     if vinculo is None:
@@ -429,13 +484,17 @@ def atualizar_bonus_pericia(sessao: Session, vinculo_id: int, bonus) -> None:
     sessao.commit()
 
 
-_VINCULOS_FAVORITAVEIS = {"habilidades": banco.FichaHabilidade, "magias": banco.FichaMagia}
+_VINCULOS_FAVORITAVEIS = {
+    "habilidades": banco.FichaHabilidade, "magias": banco.FichaMagia,
+    "equipamentos": banco.FichaEquipamento,
+}
 
 
 def alternar_favorito_vinculo(sessao: Session, tipo: str, vinculo_id: int) -> bool:
-    """Favoritar/desfavoritar uma Habilidade ou Magia desta ficha (acesso rápido — ver
-    serializar_ficha, que ordena favoritos primeiro). `tipo` é "habilidades" ou "magias", mesma
-    chave usada em adicionar_vinculo."""
+    """Favoritar/desfavoritar um Equipamento, Habilidade ou Magia desta ficha (acesso rápido — ver
+    serializar_ficha, que ordena favoritos primeiro, e a lista de Favoritos na aba Atributos em
+    docs/javascripts/ficha.js). `tipo` é "equipamentos"/"habilidades"/"magias", mesma chave usada
+    em adicionar_vinculo."""
     modelo = _VINCULOS_FAVORITAVEIS.get(tipo)
     if modelo is None:
         raise ValueError(f"Vínculo sem favorito: {tipo}")
@@ -717,6 +776,174 @@ def descanso_curto(sessao: Session, ficha: banco.Ficha) -> banco.Ficha:
     for vinculo in ficha.habilidades_vinculo:
         if vinculo.tipo_descanso == "curto":
             vinculo.usos_restantes = vinculo.usos_maximo
+    sessao.commit()
+    sessao.refresh(ficha)
+    return ficha
+
+
+# --------------------------------------------------------------------------
+# Motor de nível (Classe/Subclasse/ClasseFeature/FichaClasse) — reabre, a pedido explícito do
+# autor (2026-11-04), a decisão anterior de "classe/subclasse são só rótulo livre, sem motor de
+# regras" (ver .claude/contexto/personagens.md). Cresce sob demanda: o Mestre cria a Classe/
+# Subclasse na hora de usar "Subir de nível" pela primeira vez, sem seed de todas as classes do
+# PHB — ver docs/javascripts/ficha.js.
+# --------------------------------------------------------------------------
+
+def listar_classes(sessao: Session) -> list[dict]:
+    classes = sessao.query(banco.Classe).order_by(banco.Classe.nome).all()
+    return [
+        {
+            "id": c.id, "nome": c.nome, "dado_vida": c.dado_vida,
+            "atributo_conjuracao": c.atributo_conjuracao, "progressao_conjuracao": c.progressao_conjuracao,
+            "subclasses": [{"id": s.id, "nome": s.nome} for s in sorted(c.subclasses_vinculo, key=lambda s: s.nome)],
+        }
+        for c in classes
+    ]
+
+
+def criar_classe(sessao: Session, campos: dict) -> dict:
+    nome = (campos.get("nome") or "").strip()
+    if not nome:
+        raise ValueError("Informe o nome da classe.")
+    dado_vida = int(_para_numero(campos.get("dado_vida"), 8))
+    if dado_vida not in (6, 8, 10, 12):
+        raise ValueError("Dado de vida precisa ser 6, 8, 10 ou 12.")
+    progressao = (campos.get("progressao_conjuracao") or "").strip() or None
+    if progressao is not None and progressao not in banco.PROGRESSOES_CONJURACAO:
+        raise ValueError(f"Progressão de conjuração desconhecida: {progressao}")
+    classe = banco.Classe(
+        nome=nome, dado_vida=dado_vida,
+        atributo_conjuracao=(campos.get("atributo_conjuracao") or "").strip() or None,
+        progressao_conjuracao=progressao,
+    )
+    sessao.add(classe)
+    sessao.commit()
+    sessao.refresh(classe)
+    return {"id": classe.id, "nome": classe.nome, "dado_vida": classe.dado_vida, "subclasses": []}
+
+
+def criar_subclasse(sessao: Session, classe_id: int, nome: str) -> dict:
+    classe = sessao.get(banco.Classe, classe_id)
+    if classe is None:
+        raise ValueError("Classe não encontrada.")
+    nome = (nome or "").strip()
+    if not nome:
+        raise ValueError("Informe o nome da subclasse.")
+    subclasse = banco.Subclasse(classe_id=classe_id, nome=nome)
+    sessao.add(subclasse)
+    sessao.commit()
+    sessao.refresh(subclasse)
+    return {"id": subclasse.id, "nome": subclasse.nome, "classe_id": classe_id}
+
+
+def recalcular_espacos_magia(sessao: Session, ficha: banco.Ficha) -> None:
+    """Recalcula os máximos de FichaEspacoMagia a partir das classes conjuradoras da ficha — nunca
+    toca `usado` além de encaixá-lo dentro do novo máximo. Completo conta o nível inteiro, meio
+    conta nível÷2, terço conta nível÷3; a soma consulta TABELA_SLOTS_CONJURADOR_COMPLETO (regra de
+    multiclasse padrão do 5e). Bruxo (pacto) é um pool à parte, `rotulo="Pacto"`."""
+    nivel_conjurador = 0
+    nivel_bruxo = 0
+    for fc in ficha.classes_vinculo:
+        prog = fc.classe.progressao_conjuracao
+        if prog == "completo":
+            nivel_conjurador += fc.nivel
+        elif prog == "meio":
+            nivel_conjurador += fc.nivel // 2
+        elif prog == "terco":
+            nivel_conjurador += fc.nivel // 3
+        elif prog == "pacto":
+            nivel_bruxo += fc.nivel
+
+    alvo = dict(banco.TABELA_SLOTS_CONJURADOR_COMPLETO.get(min(nivel_conjurador, 20), {})) if nivel_conjurador > 0 else {}
+    pools_normais = {e.nivel: e for e in ficha.espacos_magia_vinculo if e.rotulo != "Pacto"}
+    for nivel_magia, maximo in alvo.items():
+        pool = pools_normais.get(nivel_magia)
+        if pool is None:
+            sessao.add(banco.FichaEspacoMagia(ficha_id=ficha.id, nivel=nivel_magia, maximo=maximo, usado=0))
+        else:
+            pool.maximo = maximo
+            pool.usado = min(pool.usado, maximo)
+    for nivel_magia, pool in pools_normais.items():
+        if nivel_magia not in alvo:
+            sessao.delete(pool)
+
+    if nivel_bruxo > 0:
+        qtd, nivel_slot = banco.TABELA_SLOTS_PACTO_BRUXO.get(min(nivel_bruxo, 20), (0, 0))
+        pool_pacto = next((e for e in ficha.espacos_magia_vinculo if e.rotulo == "Pacto"), None)
+        if pool_pacto is None:
+            sessao.add(banco.FichaEspacoMagia(ficha_id=ficha.id, nivel=nivel_slot, maximo=qtd, usado=0, rotulo="Pacto"))
+        else:
+            pool_pacto.nivel = nivel_slot
+            pool_pacto.maximo = qtd
+            pool_pacto.usado = min(pool_pacto.usado, qtd)
+    sessao.commit()
+
+
+def subir_de_nivel(
+    sessao: Session, ficha: banco.Ficha, classe_id: int, subclasse_id: int | None = None,
+    pv_ganho: int | None = None,
+) -> banco.Ficha:
+    """Sobe 1 nível numa classe da ficha (cria a linha de FichaClasse se for a primeira vez nessa
+    classe — multiclasse). Recalcula nível total/bônus de proficiência/espaços de magia e
+    desbloqueia as ClasseFeature daquele nível (get-or-create Habilidade + FichaHabilidade).
+    `pv_ganho` default é a média do dado de vida (arredondada pra cima, regra SRD) + mod. de
+    Constituição; o Mestre pode informar o valor exato se rolou o dado físico."""
+    classe = sessao.get(banco.Classe, classe_id)
+    if classe is None:
+        raise ValueError("Classe não encontrada.")
+    subclasse = sessao.get(banco.Subclasse, subclasse_id) if subclasse_id is not None else None
+    if subclasse_id is not None and subclasse is None:
+        raise ValueError("Subclasse não encontrada.")
+
+    fc = next((x for x in ficha.classes_vinculo if x.classe_id == classe_id), None)
+    if fc is None:
+        fc = banco.FichaClasse(classe=classe, subclasse=subclasse, nivel=0)
+        ficha.classes_vinculo.append(fc)
+    fc.nivel += 1
+    if subclasse is not None:
+        fc.subclasse = subclasse
+
+    if pv_ganho is None:
+        media_dado = classe.dado_vida // 2 + 1
+        pv_ganho = media_dado + modificador(ficha.constituicao)
+    else:
+        pv_ganho = int(_para_numero(pv_ganho, 0))
+    ficha.pv_maximo = max(1, ficha.pv_maximo + pv_ganho)
+    if pv_ganho > 0:
+        ficha.pv_atual = min(ficha.pv_atual + pv_ganho, ficha.pv_maximo)
+
+    nivel_total = sum(x.nivel for x in ficha.classes_vinculo)
+    ficha.nivel = nivel_total
+    ficha.bonus_proficiencia = banco.bonus_proficiencia_por_nivel(nivel_total)
+
+    recalcular_espacos_magia(sessao, ficha)
+
+    novas_features = [
+        feat for feat in classe.features_vinculo
+        if feat.nivel == fc.nivel and (feat.subclasse_id is None or feat.subclasse_id == fc.subclasse_id)
+    ]
+    for feat in novas_features:
+        habilidade = (
+            sessao.query(banco.Habilidade)
+            .filter(banco.Habilidade.nome == feat.nome, banco.Habilidade.origem_tipo == "classe")
+            .first()
+        )
+        if habilidade is None:
+            habilidade = banco.Habilidade(
+                nome=feat.nome, tipo="traco", descricao=feat.descricao, origem_tipo="classe",
+            )
+            sessao.add(habilidade)
+            sessao.commit()
+            sessao.refresh(habilidade)
+        ja_tem = any(v.habilidade_id == habilidade.id for v in ficha.habilidades_vinculo)
+        if not ja_tem:
+            sessao.add(banco.FichaHabilidade(ficha_id=ficha.id, habilidade_id=habilidade.id))
+
+    ordenadas = sorted(ficha.classes_vinculo, key=lambda x: -x.nivel)
+    ficha.classe = " / ".join(f"{x.classe.nome} {x.nivel}" for x in ordenadas)
+    subclasses_nomes = [x.subclasse.nome for x in ordenadas if x.subclasse_id]
+    ficha.subclasse = " / ".join(subclasses_nomes) if subclasses_nomes else None
+
     sessao.commit()
     sessao.refresh(ficha)
     return ficha

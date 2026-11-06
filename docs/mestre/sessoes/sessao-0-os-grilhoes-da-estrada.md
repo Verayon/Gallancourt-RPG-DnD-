@@ -701,6 +701,8 @@ sessao:
       colinas — foi até lá antes de se infiltrar no grupo de Harker —, mas também não conhece
       Castellane; só recebia instruções por um contato intermediário em Dodixie.
 
-=== "Combat Tracker"
+=== "Master's Shield"
+
+    <!-- sessaoviva:painel -->
 
     <!-- combate:painel -->

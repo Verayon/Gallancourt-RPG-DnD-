@@ -38,20 +38,23 @@ subcategorias se acessam clicando no corpo da página da categoria (padrão já 
 
 | Caminho | O quê |
 |---|---|
-| `docs/` | O site. Menu: Início, Lore, Wiki (Mundo, Geografia, Cidades, Lugares, Facções, NPCs=`personagens/`, Eventos), Compêndio, Mestre (sessões, jogadores, diário, linha do tempo), Configurações |
+| `docs/` | O site. Menu: Início, Lore, Wiki (Mundo, Geografia, Cidades, Lugares, Facções, NPCs=`personagens/`, Jogadores=`wiki/jogadores/`, Eventos), Compêndio, Mestre (sessões, diário, linha do tempo), Configurações |
 | `hooks/` | Código que roda no build: `gallancourt.py` (NPCs, tabelas, abas), `linha_tempo.py` |
 | `admin/` | Painel do Mestre (Flask local) — cria NPCs, sessões, fichas, acontecimentos |
 | `admin/painel_local.env` | Segredos locais do Painel (`PAINEL_SENHA` de login) — gitignorado, nunca commitado; sem ele o login fica desligado (uso só local) |
 | `admin/banco.py` + `alembic/` | Banco SQLite (`dados/gallancourt.db`, gitignorado) — Campanha/Fontes e, desde 2026-10-31, a ficha de combate de monstros, NPCs nomeados e jogadores (ver `.claude/contexto/personagens.md`) |
 | `admin/personagens_api.py` | Leitura/escrita das fichas de personagem no banco — isolado do Flask, como `wiki_data.py` |
-| `admin/combate_api.py` | Combat Tracker (iniciativa, PV, condições, XP/loot) — ver `.claude/contexto/combate.md` |
+| `admin/combate_api.py` | Combat Tracker (iniciativa, PV, condições, XP/loot, recursos consumíveis) — ver `.claude/contexto/combate.md` |
+| `admin/encontro_api.py` | Encontros planejados (rascunho de combate na aba NPCs, pré-carrega o Combat Tracker) — ver `.claude/contexto/combate.md` |
+| `admin/sessao_viva_api.py` | Master's Shield — painel sempre visível (calendário/localidade/log de interações), aninha o Combat Tracker — ver `.claude/contexto/combate.md` |
 | `tests/` | Testes `pytest` do banco de dados (único teste de "regra"/estado hoje; `scripts/testar_site.py` é integração de site) |
 | `dados/linha-do-tempo.yml` | Acontecimentos da campanha (fonte única) |
 | `dados/changelog.yml` | Versões do site (ver `hooks/changelog.py`). Acrescente com `scripts/registrar_changelog.py` (sem precisar do Painel) |
 | `dados/roadmap.yml` | O que falta fazer (ver `hooks/roadmap.py`). Leia/edite direto o YAML, ou chame `wd.salvar_item_roadmap`/`wd.apagar_item_roadmap` (`admin/wiki_data.py`) — mesma função usada pelo widget em Modo Mestre na página `/roadmap/` |
 | `dados/bugs.yml` | Bugs reportados pelo botão "🐞 Reportar bug" de qualquer página (ver `hooks/bugs.py`) |
-| `scripts/` | `gerar_relacoes.py` (fonte única das relações), `testar_site.py` (teste fixo), `registrar_changelog.py` (changelog sem o Painel) |
+| `scripts/` | `gerar_relacoes.py` (fonte única das relações), `testar_site.py` (teste fixo), `registrar_changelog.py` (changelog sem o Painel), `converter_pdfs.py` (converte PDFs de `referencias/pdfs/` em Markdown — ver `PDF_CONVERTER.md`) |
 | `fontes/` | Acervo do autor — **não editar**; guia em `fontes/README.md` |
+| `referencias/pdfs/` | Livros-fonte (PDF) para importar regras/magias/monstros à wiki — **não versionado** (`.gitignore`); converta com `PDF_CONVERTER.md` antes de ler, nunca abra o PDF original |
 
 **Antes de mexer numa área, leia só o arquivo de contexto dela:**
 

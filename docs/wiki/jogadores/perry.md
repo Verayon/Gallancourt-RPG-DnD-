@@ -1,6 +1,5 @@
 ---
 tags:
-- Mestre
 - Jogador
 hide:
 - toc

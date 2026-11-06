@@ -113,3 +113,95 @@ versoes:
     nos cards e no Painel do Token, grade compacta de ícones de condição (sem mais siglas coladas/colidindo),
     chip de CA, economia de ação (1 Ação/Bônus/Reação) como chips, e o campo de reação (Contramagia/Esquiva)
     que ficava cortado agora ocupa a largura toda.'
+- id: 8
+  versao: '0.8'
+  data: '2026-11-03'
+  mudancas:
+  - Novo módulo de conversão PDF -> Markdown (scripts/converter_pdfs.py), usando Docling para reconstruir
+    com alta fidelidade o texto, títulos e tabelas dos livros em referencias/pdfs/, sem precisar de OCR
+    (os PDFs já têm texto selecionável). Roda num ambiente Python isolado (.venv-pdf), separado do ambiente
+    do Painel.
+  - Criado o guia PDF_CONVERTER.md na raiz do projeto, explicando como instalar o ambiente e converter
+    um PDF específico (por número, por nome ou todos de uma vez).
+  - referencias/pdfs/ (os livros originais e os .md gerados) e .venv-pdf/ passam a ser ignorados pelo
+    git — não sobem para o repositório remoto.
+- id: 9
+  versao: '0.9'
+  data: '2026-11-04'
+  mudancas:
+  - 'Reforma visual da Ficha de Personagem no estilo D&D Beyond (jogador/NPC/monstro, mesmo componente):
+    fileira de atributos (CA + 6 atributos + Iniciativa) e barra de PV colorida agora ficam sempre visíveis
+    no cabeçalho, fora das abas; a aba Atributos ganhou uma lista de ★ Favoritos que agrega equipamento,
+    magias e habilidades marcados, com filtro por tipo de ação (Ação/Ação Bônus/Reação).'
+  - Novo campo tipo_acao em Equipamento/Magia/Habilidade e favorito em FichaEquipamento (migração + scripts/preencher_tipo_acao.py,
+    que já classificou os 417 magias/366 habilidades/303 equipamentos existentes a partir dos dados do
+    catálogo).
+  - Jogadores saem de dentro de Mestre e viram uma seção da Wiki (docs/wiki/jogadores/, ao lado de NPCs
+    e Monstros) — mesma URL pública de antes, só reorganizado; todos os links internos e rotas do Painel
+    foram atualizados.
+- id: 10
+  versao: '0.10'
+  data: '2026-11-04'
+  mudancas:
+  - 'Encontro planejado: a aba NPCs das páginas de sessão ganhou uma lista de rascunhos de combate (escolher
+    NPCs/monstros/jogadores do banco com antecedência); o botão Iniciar combate do Combat Tracker agora
+    pode carregar um desses rascunhos de uma vez, em vez de adicionar participante por participante na
+    hora.'
+  - Combat Tracker passa a bloquear (com opção de forçar) conjurar magia sem espaço de magia do nível
+    certo ou usar item mágico sem carga disponível — agora vale também para monstros (cópia isolada por
+    participante, sem tocar a Ficha real do catálogo), não só NPC/jogador.
+  - Novo campo cargas_maximo em Equipamento (catálogo) e cargas_atual em FichaEquipamento (por ficha)
+    para itens mágicos com carga; item sem cargas continua se comportando como consumível normal (quantidade).
+- id: 11
+  versao: '0.11'
+  data: '2026-11-04'
+  mudancas:
+  - 'Motor de nível: botão "Subir de nível" na ficha de jogador/NPC — escolhe (ou cria na hora) Classe/Subclasse
+    e calcula sozinho PV ganho, bônus de proficiência e espaços de magia (inclusive multiclasse e Magia
+    de Pacto do Bruxo), além de desbloquear automaticamente as features de classe cadastradas para aquele
+    nível.'
+  - Novo catálogo Classe/Subclasse/ClasseFeature (admin/banco.py) e tabela FichaClasse para multiclasse
+    estruturada — cresce sob demanda, sem seed de classes do PHB; nada muda em fichas que não usarem o
+    botão novo.
+  - Reverte, a pedido do autor, a decisão anterior de classe/subclasse serem só texto livre sem cálculo
+    — documentado em .claude/contexto/personagens.md.
+- id: 12
+  versao: '0.12'
+  data: '2026-11-05'
+  mudancas:
+  - 'Visual novo de ficha de personagem e Combat Tracker (baseado em designs do autor no app do Claude):
+    fontes/paleta repintadas, barra de experiência no cabeçalho integrada ao botão "Subir de nível", símbolos
+    de ação/ação bônus/reação, pips de pool de magia/carga de item e banner "Ação bloqueada" (Cancelar/Forçar)
+    no lugar do confirm() do navegador, modal de "Iniciar combate" com prévia dos encontros planejados.'
+  - 'Inventário ganha contêineres de verdade: Equipamento.e_container/capacidade_kg marca um item como
+    mochila/bolsa, FichaEquipamento.guardado_em_vinculo_id guarda outro item dentro dele (PUT /api/fichas/<id>/equipamentos/<vinculo>,
+    nova rota); passar da capacidade avisa, não bloqueia. Também corrige a lacuna de não dar pra equipar/trocar
+    quantidade depois que o item já foi adicionado.'
+  - Combate ganha Movimento na economia de ação (CombateParticipante.movimento_usado), junto de Ação/Ação
+    Bônus/Reação, resetado a cada turno do mesmo jeito.
+- id: 13
+  versao: '0.13'
+  data: '2026-11-05'
+  mudancas:
+  - Novo painel "Master's Shield" nas páginas de sessão — sempre visível, com calendário de jogo, localidade
+    atual (lugares cadastrados ou provisórios criados ao vivo) e um log de interações relacional (participantes,
+    perícia/CD, rolagens manuais ou online).
+  - O Combat Tracker (iniciativa, turnos, PV, recursos) continua existindo exatamente como antes, agora
+    aninhado dentro do Master's Shield.
+  - Distribuição de XP e aplicação de loot ao fim de um combate passam a deixar rastro no log de interações
+    (antes não geravam nenhum registro).
+  - Conversão dos livros Livro do Jogador, Guia de Xanathar, Caldeirão de Tasha e Manual dos Monstros
+    de PDF para Markdown, pra alimentar a wiki.
+- id: 14
+  versao: '0.14'
+  data: '2026-11-06'
+  mudancas:
+  - Catálogo de Raças (novo, com traços raciais) semeado a partir do Livro do Jogador — 9 raças base +
+    9 sub-raças/linhagens.
+  - Catálogo de Classes semeado com as 12 classes do Livro do Jogador (dado de vida, atributo de conjuração).
+  - Catálogo de Magias (417) e Itens (303) passam a referenciar a Fonte de verdade (PHB/XGE/Caldeirão
+    de Tasha), em vez de só um texto livre.
+  - 58 monstros novos importados do Manual dos Monstros pro catálogo (de 98 pra 156), cada um com página
+    própria na wiki.
+  - O sistema agora registra quais livros já alimentaram os catálogos (Fonte.importado_em) — o Guia de
+    Xanathar ainda não entrou, por precisar de uma reconversão do PDF.

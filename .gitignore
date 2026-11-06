@@ -3,11 +3,16 @@ site.novo/
 site.antigo/
 __pycache__/
 .venv/
+.venv-pdf/
+referencias/pdfs/
 admin/dados/
 admin/painel_local.env
 admin/Caddyfile
 admin/Caddyfile.auto.json
 dados/gallancourt.db
 dados/gallancourt.db-journal
+dados/gallancourt.db.backup-*
+admin/_servidor_stderr.log
+admin/_servidor_stdout.log
 .pytest_cache/
 

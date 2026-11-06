@@ -1,16 +1,15 @@
 ---
 tags:
-- Mestre
 - Jogador
 hide:
 - toc
 jogador:
-  jogador: Miguel
-  raca_classe: Meio-Anão Patrulheiro
+  jogador: Mari
+  raca_classe: Meio-Gigante Guerreiro
   resumo: ''
 ---
 
-# Rowan CataPedras
+# Astraelle
 
 *(Descrição a preencher.)*
 

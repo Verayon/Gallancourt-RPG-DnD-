@@ -14,7 +14,8 @@ Iniciativa" (`admin/sessao_viva.py`, `docs/javascripts/painel-iniciativa.js`,
 página (`admin/dados/combates/*.json`), só acessível com o Painel Flask rodando localmente, e
 combatentes eram nome/PV digitados à mão, sem vínculo real com nenhuma Ficha.
 
-**Onde vive**: uma aba nova, **"Combat Tracker"**, dentro da própria página de sessão
+**Onde vive**: uma aba, **"Master's Shield"** (2026-11-05, nome temporário — ver seção abaixo;
+antes se chamava só "Combat Tracker"), dentro da própria página de sessão
 (`docs/mestre/sessoes/sessao-N-*.md`), sempre a última da lista de abas (depois de "Segredos do
 Mestre") — não é mais um alternador Página normal/Modo Mestre separado. O marcador
 `<!-- combate:painel -->` (dentro da aba, ver `admin/wiki_data.py::_modelo_sessao`) vira uma `<div
@@ -22,6 +23,41 @@ class="combate-painel ficha-personagem" data-pagina="...">` vazia (mesmo padrão
 `hooks/gallancourt.py::_ficha_dinamica_personagem`) — `docs/javascripts/combate.js` busca
 `/api/combate/<pagina>` ao carregar e desenha tudo ali. **GET é público** (leitura livre, como o
 resto do site); toda escrita exige a mesma sessão de Modo Mestre que já edita fichas.
+
+## Master's Shield — painel sempre visível por cima do Combat Tracker (2026-11-05, Fase 1)
+
+O projeto passou a ter dois propósitos (Wiki + VTT simplificado pra mesa presencial, sem mapa) —
+o Combat Tracker evolui pra esse VTT, batizado **Master's Shield** (nome ainda temporário, o autor
+pediu pra adiar o nome final). Diferente do Combat Tracker (que só mostra algo além do botão
+"Iniciar combate" quando há um `Combate` ativo), o Master's Shield fica **sempre visível** na
+página de sessão — calendário de jogo, localidade atual e um log de interações relacional (ligado
+a Fichas/lugares/rolagens, não texto livre), pra permitir consultas depois ("quando", "onde",
+"quem", "qual rolagem"). O Combat Tracker continua existindo exatamente como descrito neste
+arquivo, só que aninhado visualmente dentro do Master's Shield.
+
+- **Dois marcadores, duas raízes, na mesma aba**: `<!-- sessaoviva:painel -->` (novo, sempre
+  injetado por `hooks/gallancourt.py::_sessao_viva_dinamica`, raiz `.sessao-viva-painel`, widget
+  `docs/javascripts/sessao_viva.js`) fica **acima** de `<!-- combate:painel -->` (sem mudança —
+  continua um `<div>` separado, `combate.js` não foi tocado). Não são pai/filho no DOM — dois
+  widgets independentes, cada um buscando sua própria API.
+- **Schema novo** (`admin/banco.py`, migração `7b2e4c9a1f6d`): `SessaoAoVivo` (nome temporário —
+  uma linha por `pagina_rel_docs`, mesmo padrão de `Combate`; guarda o momento atual
+  ano/mes/dia/hora/minuto — `mes` é texto livre, porque `docs/mundo/calendario.md` deixa a duração
+  dos meses em aberto de propósito — e `lugar_atual_id`); `Lugar` (local canônico, com
+  `pagina_rel_docs` quando já tem página na wiki — importados uma vez de `docs/lugares/*.md` por
+  `scripts/importar_lugares.py` — ou provisório, `canonico=False`, criado ao vivo durante a sessão,
+  com `lugar_pai_id` apontando pro lugar canônico que o contém; nenhuma automação promove um
+  provisório a canônico ainda, isso é revisão manual do Mestre depois da sessão); `Interacao` +
+  `InteracaoParticipante` (sempre via `Ficha.id`, nunca `Personagem` direto — mesmo padrão de
+  `CombateParticipante`) + `Rolagem` (presa a uma Interacao; `online` distingue dado físico
+  digitado vs. rolado pelo próprio sistema em `sessao_viva_api.rolar_online`).
+- **`combate_api.distribuir_xp`/`aplicar_loot` agora chamam `sessao_viva_api.registrar_interacao`**
+  (tipo `"xp"`/`"loot"`) — antes esses dois eventos não passavam por `registrar_log` nem por
+  nenhum outro log, ficavam fora de qualquer rastro consultável.
+- **Fora de escopo nesta Fase 1** (ver o plano "Master's Shield — Fase 1"): nenhum botão de
+  "fechar sessão" agrega o log ainda pra pré-popular o Diário/linha do tempo
+  (`wiki_data.aplicar_sessao`/`registrar_sessao_na_linha_do_tempo`) — isso é a Fase 2, depois que
+  esta fundação estiver validada em uso real.
 
 ## Cópia (monstro) vs. vínculo real (NPC/jogador) — regra central
 
@@ -40,10 +76,13 @@ Confirmada explicitamente com o autor, é a decisão de schema mais importante d
   `participante.ficha.personagem.tipo == "monstro"`. Toda função que toca PV/condição
   (`ajustar_pv`, `alternar_condicao`, `definir_pv_temporario`) passa por esse branch — não leia só
   a Ficha ou só a cópia, confira sempre o tipo primeiro.
-- **Espaços de magia e itens consumidos** seguem a mesma regra via as tabelas que a Ficha já tinha
-  (`FichaEspacoMagia.usado`, quantidade em `FichaEquipamento`) — só pra npc/jogador, escritos
-  direto. Para monstro, esta v1 **não** rastreia consumo de slot/munição durante o combate
-  (simplificação assumida; o Mestre acompanha narrativamente se precisar).
+- **Espaços de magia e cargas de item mágico** seguem a mesma regra cópia/real (desde 2026-11-04,
+  revertendo a simplificação anterior "monstro não rastreia consumo" — a pedido explícito do
+  autor): npc/jogador leem/escrevem direto em `FichaEspacoMagia.usado`/`FichaEquipamento.
+  cargas_atual`; monstro usa uma cópia isolada, `CombateParticipanteRecursoCopia` (mesmo princípio
+  de `copia_pv_atual`), semeada a partir dos pools da Ficha base em `adicionar_participante` — duas
+  cópias simultâneas do mesmo monstro (ex. "Goblin Xamã 1"/"2") gastam seus próprios slots sem
+  interferir uma na outra, e nada disso toca a Ficha real do catálogo.
 
 ## Descanso Longo e Descanso Curto
 
@@ -65,8 +104,11 @@ longo" em `docs/javascripts/ficha.js` (`_rodape`), visível só pra fichas de ti
   `turno_participante_id` **não** tem `ForeignKey` (evita referência circular dentro da mesma
   migração) — é só um ponteiro de posição, confira sempre se o id ainda existe.
 - `CombateParticipante(combate_id, ficha_id, nome_exibicao, iniciativa_base, iniciativa_desempate,
-  acao_usada, acao_bonus_usada, reacao_usada, concentrando_em, death_save_sucessos/falhas,
-  copia_pv_atual, copia_pv_temporario)` — `nome_exibicao` existe porque vários participantes podem
+  acao_usada, acao_bonus_usada, reacao_usada, movimento_usado, concentrando_em,
+  death_save_sucessos/falhas, copia_pv_atual, copia_pv_temporario)` — `movimento_usado` (desde
+  2026-11-05) segue exatamente o mesmo padrão dos outros três flags de economia de ação:
+  `_resetar_economia_acao` zera os quatro, só no participante que entra no turno
+  (`proximo_turno`); `nome_exibicao` existe porque vários participantes podem
   compartilhar a mesma Ficha de monstro (ex.: "Goblin 1", "Goblin 2"). A ordenação de iniciativa é
   sempre `iniciativa_base + iniciativa_desempate * 0.01` (ver `combate_api._ordem`), nunca
   armazenada — recalculada a cada leitura. `iniciativa_desempate` é preenchido automaticamente ao
@@ -76,6 +118,44 @@ longo" em `docs/javascripts/ficha.js` (`_rodape`), visível só pra fichas de ti
   participante é npc/jogador; fica só aqui quando é monstro.
 - `CombateLogEntrada(combate_id, rodada, criado_em, texto, tipo)` — texto pronto pra exibir/
   exportar, não recalculado.
+
+## Encontro planejado (pré-carrega o Combat Tracker)
+
+Desde 2026-11-04: uma página de sessão pode ter vários rascunhos de encontro
+(`EncontroPlanejado`/`EncontroParticipantePlanejado` em `admin/banco.py`, lógica isolada em
+`admin/encontro_api.py`), montados com antecedência na aba **NPCs** (marcador
+`<!-- encontro:planejado -->`, widget `docs/javascripts/encontro.js`) — escolher NPCs/monstros/
+jogadores do banco, sem precisar que o combate já exista. `api_iniciar_combate` (`admin/app.py`)
+cria o `Combate` normalmente e, se um `encontro_id` veio no corpo, chama
+`encontro_api.carregar_no_combate`, que só itera os participantes planejados chamando
+`combate_api.adicionar_participante` pra cada um — nenhuma lógica de combate nova, o rascunho é só
+uma lista de `ficha_id`/nome de exibição salva antes da hora. O rascunho em si nunca participa do
+combate e continua existindo depois (não é apagado ao ser usado). Desde 2026-11-05, a tela "sem
+combate" abre esse fluxo como modal (`data-acao="abrir-iniciar-combate"`,
+`combate.js::_modalIniciarCombate`, mesma família `.combate-modal` do resumo pós-combate) em vez do
+`<select>` solto — cartões clicáveis com nome/contagem/prévia da ordem, sem endpoint novo.
+
+## Recursos consumíveis: bloqueia uso indevido, com opção de forçar
+
+Desde 2026-11-04 (a pedido do autor): conjurar uma magia ou usar um item com carga no Combat
+Tracker confere se o recurso existe antes de gastar — `combate_api.conjurar_magia`/
+`usar_carga_item`. Sem espaço de magia do nível certo (ou sem carga), a chamada devolve
+`{"bloqueado": True, "motivo": "..."}` **sem gravar nada**. Desde 2026-11-05, em vez de um
+`window.confirm()`, isso vira `this.bloqueio = {motivo, forcar()}` em `combate.js` e um banner
+inline no painel do token (`.combate-painel__bloqueio`, role="alert") com "Cancelar"/"Forçar mesmo
+assim" — Forçar chama de novo com `forcar: true`, que ignora o bloqueio e consome mesmo assim (loga
+"forçado" na entrada do log). `conjurar_magia` também valida que o nível do espaço escolhido é
+suficiente pra magia (`Magia.nivel <= nivel_slot`) — conjurar num espaço maior que o mínimo é
+permitido, de propósito. Os outros `window.confirm`/`window.prompt` do arquivo (remover
+participante, oferecer reação, teste de morte, checagem de concentração) não entraram nessa
+reversão — ficaram como estavam.
+
+Cargas de item mágico (`Equipamento.cargas_maximo`, estático no catálogo; `FichaEquipamento.
+cargas_atual`, por instância — `None` = ainda não usado, conta como cheio) só existem quando o
+catálogo define `cargas_maximo`; item sem isso continua se comportando como consumível normal
+(decrementa `FichaEquipamento.quantidade`, igual a antes). Pra monstro (cópia), a função cai no
+mesmo branch de `CombateParticipanteRecursoCopia` usado pra slot de magia — não tenta decrementar
+`quantidade` de uma cópia, que não existe.
 
 ## Lógica (`admin/combate_api.py`)
 

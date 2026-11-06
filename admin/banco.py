@@ -34,16 +34,22 @@ class Campanha(Base):
 
 
 class Fonte(Base):
+    """Também serve de registro de quais livros já alimentaram os catálogos (ver scripts/
+    importar_*.py, 2026-11-05): `importado_em`/`arquivo_origem` ficam `None` até um importador
+    rodar com sucesso sobre o `.md` convertido dessa fonte — ex. Guia de Xanathar fica assim de
+    propósito, por ora, até o markdown convertido dele (corrompido pelo OCR) ser limpo."""
     __tablename__ = "fontes"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     nome: Mapped[str] = mapped_column(String(200))
     abreviacao: Mapped[str] = mapped_column(String(20))
     edicao: Mapped[str] = mapped_column(String(10))  # "2014" ou "2024"
+    importado_em: Mapped[datetime.datetime | None] = mapped_column(DateTime, nullable=True)
+    arquivo_origem: Mapped[str | None] = mapped_column(String(300), nullable=True)
 
 
 # Tipos válidos de Personagem — monstro (docs/monstros/), npc nomeado (docs/personagens/, fora de
-# genericos/) e jogador (docs/mestre/jogadores/). NPCs genéricos, figurantes de sessão sem página
+# genericos/) e jogador (docs/wiki/jogadores/). NPCs genéricos, figurantes de sessão sem página
 # própria e a ficha de cidade ficam de fora de propósito — ver .claude/contexto/personagens.md.
 TIPOS_ATOR = ("monstro", "npc", "jogador")
 
@@ -67,6 +73,20 @@ MODOS_RESISTENCIA_DANO = ("imune", "resistente", "vulneravel")
 # "curto" reseta só os de descanso curto; um "longo" (personagens_api.descanso_longo) reseta os
 # dois, junto com PV e espaços de magia.
 TIPOS_DESCANSO = ("curto", "longo")
+
+# Tipo de ação gasta pra usar o item — alimenta o filtro da lista de Favoritos na aba Atributos da
+# ficha (docs/javascripts/ficha.js). Existe em paralelo a Habilidade.tipo (traço/ação/reação, que é
+# a categoria do catálogo): aqui é especificamente "quanto custa pra usar", por isso Equipamento e
+# Magia também ganham o campo, não só Habilidade.
+TIPOS_ACAO = ("acao", "acao_bonus", "reacao", "nenhuma")
+
+# Categoria de uma Interacao (Master's Shield) — o que aconteceu, não quem/onde/quando (isso são
+# colunas próprias). "xp"/"loot" são escritos automaticamente por combate_api.distribuir_xp/
+# aplicar_loot (ver sessao_viva_api.registrar_interacao), o resto é lançado manualmente pelo Mestre.
+TIPOS_INTERACAO = (
+    "teste_habilidade", "ataque", "dano", "cura", "dialogo", "xp", "loot", "evento_livre",
+)
+PAPEIS_INTERACAO_PARTICIPANTE = ("ator", "alvo", "testemunha")
 
 
 class Personagem(Base):
@@ -159,6 +179,9 @@ class Ficha(Base):
     # o "motor de regras" que precisaria disso de verdade ainda não existe (ver ARQUITETURA.md).
     classe: Mapped[str | None] = mapped_column(String(150), nullable=True)
     subclasse: Mapped[str | None] = mapped_column(String(150), nullable=True)
+    # Raça estruturada (ver Raca/RacaTraco, 2026-11-05) — aditivo, igual a FichaClasse: nenhum
+    # código que já lê a ficha precisa mudar, só quem for aplicar traços raciais automaticamente.
+    raca_id: Mapped[int | None] = mapped_column(ForeignKey("racas.id"), nullable=True)
     antecedente: Mapped[str | None] = mapped_column(String(100), nullable=True)
     bonus_proficiencia: Mapped[int] = mapped_column(default=2)
     forca: Mapped[int] = mapped_column(default=10)
@@ -235,6 +258,10 @@ class Ficha(Base):
     resistencias_dano_vinculo: Mapped[list["FichaResistenciaDano"]] = relationship(
         back_populates="ficha", cascade="all, delete-orphan",
     )
+    classes_vinculo: Mapped[list["FichaClasse"]] = relationship(
+        back_populates="ficha", cascade="all, delete-orphan",
+    )
+    raca: Mapped["Raca"] = relationship()
 
 
 class Equipamento(Base):
@@ -260,10 +287,20 @@ class Equipamento(Base):
     ca_formula: Mapped[str | None] = mapped_column(String(100), nullable=True)
     raridade: Mapped[str | None] = mapped_column(String(50), nullable=True)
     fonte: Mapped[str | None] = mapped_column(String(20), nullable=True)
+    fonte_id: Mapped[int | None] = mapped_column(ForeignKey("fontes.id"), nullable=True)
     descricao: Mapped[str | None] = mapped_column(Text, nullable=True)
     slug_origem: Mapped[str | None] = mapped_column(String(200), nullable=True)
     origem_tipo: Mapped[str | None] = mapped_column(String(100), nullable=True)
     origem_personagem_slug: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    tipo_acao: Mapped[str | None] = mapped_column(String(20), nullable=True)  # ver TIPOS_ACAO
+    # Definição estática de item com carga (ex.: Varinha de Mísseis Mágicos = 7) — None = item sem
+    # cargas, continua usando FichaEquipamento.quantidade como consumível de uso único (poção etc.).
+    # A quantidade restante de cada instância fica em FichaEquipamento.cargas_atual, não aqui.
+    cargas_maximo: Mapped[int | None] = mapped_column(nullable=True)
+    # Marca o item como cantêiner (Mochila, Bolsa de Componentes...) — cresce pelo mesmo picker
+    # "criar no catálogo" que já existe, sem rota nova. capacidade_kg só importa quando e_container.
+    e_container: Mapped[bool] = mapped_column(default=False)
+    capacidade_kg: Mapped[float | None] = mapped_column(nullable=True)
 
 
 class Magia(Base):
@@ -283,8 +320,10 @@ class Magia(Base):
     dano_tipo: Mapped[str | None] = mapped_column(String(50), nullable=True)
     resistencia: Mapped[str | None] = mapped_column(String(50), nullable=True)
     fonte: Mapped[str | None] = mapped_column(String(20), nullable=True)
+    fonte_id: Mapped[int | None] = mapped_column(ForeignKey("fontes.id"), nullable=True)
     descricao: Mapped[str | None] = mapped_column(Text, nullable=True)
     slug_origem: Mapped[str | None] = mapped_column(String(200), nullable=True)
+    tipo_acao: Mapped[str | None] = mapped_column(String(20), nullable=True)  # ver TIPOS_ACAO
 
 
 class Habilidade(Base):
@@ -304,6 +343,8 @@ class Habilidade(Base):
     descricao: Mapped[str | None] = mapped_column(Text, nullable=True)
     origem_tipo: Mapped[str | None] = mapped_column(String(100), nullable=True)
     origem_personagem_slug: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    tipo_acao: Mapped[str | None] = mapped_column(String(20), nullable=True)  # ver TIPOS_ACAO
+    fonte_id: Mapped[int | None] = mapped_column(ForeignKey("fontes.id"), nullable=True)
 
 
 class Idioma(Base):
@@ -335,12 +376,14 @@ class Pericia(Base):
     nome: Mapped[str] = mapped_column(String(100), unique=True, index=True)
     atributo: Mapped[str | None] = mapped_column(String(20), nullable=True)
     fonte: Mapped[str | None] = mapped_column(String(20), nullable=True)
+    fonte_id: Mapped[int | None] = mapped_column(ForeignKey("fontes.id"), nullable=True)
     slug_origem: Mapped[str | None] = mapped_column(String(200), nullable=True)
 
 
 class FichaEquipamento(Base):
     """Vínculo N:N entre ficha e Equipamento — com quantidade/equipado, por isso é uma tabela
-    própria em vez de uma `secondary=` simples."""
+    própria em vez de uma `secondary=` simples. `favorito` é por ficha, mesma lógica de
+    FichaHabilidade.favorito/FichaMagia.favorito."""
     __tablename__ = "ficha_equipamentos"
 
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -348,6 +391,15 @@ class FichaEquipamento(Base):
     equipamento_id: Mapped[int] = mapped_column(ForeignKey("equipamentos.id"))
     quantidade: Mapped[int] = mapped_column(default=1)
     equipado: Mapped[bool] = mapped_column(default=True)
+    favorito: Mapped[bool] = mapped_column(default=False)
+    # Cargas restantes desta instância — só relevante quando Equipamento.cargas_maximo não é nulo;
+    # None enquanto o catálogo não define cargas pra esse item (consumível normal via quantidade).
+    cargas_atual: Mapped[int | None] = mapped_column(nullable=True)
+    # Autorreferencial: aponta pro FichaEquipamento (da mesma ficha) que é o cantêiner guardando este
+    # item. None = solto. Só itens cujo Equipamento.e_container é True fazem sentido como destino.
+    guardado_em_vinculo_id: Mapped[int | None] = mapped_column(
+        ForeignKey("ficha_equipamentos.id"), nullable=True
+    )
 
     ficha: Mapped["Ficha"] = relationship(back_populates="equipamentos_vinculo")
     equipamento: Mapped["Equipamento"] = relationship()
@@ -538,6 +590,7 @@ class CombateParticipante(Base):
     acao_usada: Mapped[bool] = mapped_column(default=False)
     acao_bonus_usada: Mapped[bool] = mapped_column(default=False)
     reacao_usada: Mapped[bool] = mapped_column(default=False)
+    movimento_usado: Mapped[bool] = mapped_column(default=False)
     concentrando_em: Mapped[str | None] = mapped_column(String(200), nullable=True)
     death_save_sucessos: Mapped[int] = mapped_column(default=0)
     death_save_falhas: Mapped[int] = mapped_column(default=0)
@@ -547,6 +600,9 @@ class CombateParticipante(Base):
     combate: Mapped["Combate"] = relationship(back_populates="participantes")
     ficha: Mapped["Ficha"] = relationship()
     condicoes_vinculo: Mapped[list["CombateParticipanteCondicao"]] = relationship(
+        back_populates="participante", cascade="all, delete-orphan",
+    )
+    recursos_copia_vinculo: Mapped[list["CombateParticipanteRecursoCopia"]] = relationship(
         back_populates="participante", cascade="all, delete-orphan",
     )
 
@@ -564,6 +620,27 @@ class CombateParticipanteCondicao(Base):
     participante: Mapped["CombateParticipante"] = relationship(back_populates="condicoes_vinculo")
 
 
+class CombateParticipanteRecursoCopia(Base):
+    """Pool de recurso consumível (slot de magia ou carga de item) isolado de um participante
+    **monstro** — mesmo princípio de `copia_pv_atual`: a mesma Ficha de "Goblin Xamã" pode estar em
+    várias cópias simultâneas no combate, cada uma gastando seus próprios slots/cargas, sem tocar
+    a Ficha real do catálogo. Semeado a partir dos pools da Ficha em
+    `combate_api.adicionar_participante`. Para npc/jogador, o Combat Tracker lê/escreve direto em
+    `FichaEspacoMagia`/`FichaEquipamento.cargas_atual` (não usa esta tabela — ver
+    combate_api._e_copia)."""
+    __tablename__ = "combate_participante_recursos_copia"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    participante_id: Mapped[int] = mapped_column(ForeignKey("combate_participantes.id"))
+    tipo: Mapped[str] = mapped_column(String(20))  # "slot_magia" | "carga_item"
+    # slot_magia: nível do espaço (1-9). carga_item: id de FichaEquipamento (vínculo na Ficha base).
+    referencia: Mapped[int] = mapped_column()
+    maximo: Mapped[int] = mapped_column(default=0)
+    usado: Mapped[int] = mapped_column(default=0)
+
+    participante: Mapped["CombateParticipante"] = relationship(back_populates="recursos_copia_vinculo")
+
+
 class CombateLogEntrada(Base):
     """Uma linha do log de combate (módulo 5.2 do pedido) — texto pronto pra exibir e exportar em
     JSON/TXT, não recalculado a partir de outra coisa."""
@@ -579,6 +656,309 @@ class CombateLogEntrada(Base):
     tipo: Mapped[str | None] = mapped_column(String(20), nullable=True)
 
     combate: Mapped["Combate"] = relationship(back_populates="log_vinculo")
+
+
+class EncontroPlanejado(Base):
+    """Um rascunho de encontro preparado antes da sessão, numa página de sessão
+    (docs/mestre/sessoes/sessao-N-*.md) — uma página pode ter vários (ex. "Emboscada na ponte",
+    "Boss final"). Ao iniciar o Combat Tracker a partir dele, os participantes planejados viram
+    CombateParticipante de verdade (ver admin/encontro_api.py::carregar_no_combate); o rascunho em
+    si nunca participa do combate, só serve de molde."""
+    __tablename__ = "encontros_planejados"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    pagina_rel_docs: Mapped[str] = mapped_column(String(300), index=True)
+    nome: Mapped[str] = mapped_column(String(200))
+    criado_em: Mapped[datetime.datetime] = mapped_column(
+        DateTime, default=lambda: datetime.datetime.now(datetime.UTC)
+    )
+
+    participantes_vinculo: Mapped[list["EncontroParticipantePlanejado"]] = relationship(
+        back_populates="encontro", cascade="all, delete-orphan",
+        order_by="EncontroParticipantePlanejado.ordem",
+    )
+
+
+class EncontroParticipantePlanejado(Base):
+    """Um participante dentro de um EncontroPlanejado — mesmo formato de CombateParticipante
+    (ficha_id + nome_exibicao), só que antes do Combate existir; `ordem` define a posição na lista
+    (não é iniciativa, que só é sorteada/digitada quando o combate de fato começa)."""
+    __tablename__ = "encontro_participantes_planejados"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    encontro_id: Mapped[int] = mapped_column(ForeignKey("encontros_planejados.id"))
+    ficha_id: Mapped[int] = mapped_column(ForeignKey("fichas.id"))
+    nome_exibicao: Mapped[str | None] = mapped_column(String(200), nullable=True)
+    ordem: Mapped[int] = mapped_column(default=0)
+
+    encontro: Mapped["EncontroPlanejado"] = relationship(back_populates="participantes_vinculo")
+    ficha: Mapped["Ficha"] = relationship()
+
+
+PROGRESSOES_CONJURACAO = ("completo", "meio", "terco", "pacto")
+
+
+def bonus_proficiencia_por_nivel(nivel: int) -> int:
+    """Tabela universal do 5e (igual pra qualquer classe) — 2 no nível 1-4, +1 a cada 4 níveis."""
+    return 2 + (max(1, nivel) - 1) // 4
+
+
+# Slots de magia por nível de conjurador "completo" combinado (Mago/Clérigo/Druida/Bardo/
+# Feiticeiro contam o nível inteiro; meio-conjurador como Paladino/Patrulheiro conta nível÷2;
+# terço-conjurador conta nível÷3 — soma tudo e consulta esta mesma tabela, regra padrão de
+# multiclasse do 5e SRD). Índice = nível de conjurador combinado (1-20); valor = {nível da magia:
+# quantidade de espaços}.
+TABELA_SLOTS_CONJURADOR_COMPLETO = {
+    1: {1: 2},
+    2: {1: 3},
+    3: {1: 4, 2: 2},
+    4: {1: 4, 2: 3},
+    5: {1: 4, 2: 3, 3: 2},
+    6: {1: 4, 2: 3, 3: 3},
+    7: {1: 4, 2: 3, 3: 3, 4: 1},
+    8: {1: 4, 2: 3, 3: 3, 4: 2},
+    9: {1: 4, 2: 3, 3: 3, 4: 3, 5: 1},
+    10: {1: 4, 2: 3, 3: 3, 4: 3, 5: 2},
+    11: {1: 4, 2: 3, 3: 3, 4: 3, 5: 2, 6: 1},
+    12: {1: 4, 2: 3, 3: 3, 4: 3, 5: 2, 6: 1},
+    13: {1: 4, 2: 3, 3: 3, 4: 3, 5: 2, 6: 1, 7: 1},
+    14: {1: 4, 2: 3, 3: 3, 4: 3, 5: 2, 6: 1, 7: 1},
+    15: {1: 4, 2: 3, 3: 3, 4: 3, 5: 2, 6: 1, 7: 1, 8: 1},
+    16: {1: 4, 2: 3, 3: 3, 4: 3, 5: 2, 6: 1, 7: 1, 8: 1},
+    17: {1: 4, 2: 3, 3: 3, 4: 3, 5: 2, 6: 1, 7: 1, 8: 1, 9: 1},
+    18: {1: 4, 2: 3, 3: 3, 4: 3, 5: 3, 6: 1, 7: 1, 8: 1, 9: 1},
+    19: {1: 4, 2: 3, 3: 3, 4: 3, 5: 3, 6: 2, 7: 1, 8: 1, 9: 1},
+    20: {1: 4, 2: 3, 3: 3, 4: 3, 5: 3, 6: 2, 7: 2, 8: 1, 9: 1},
+}
+
+# Magia de Pacto do Bruxo (pool separado, rotulo="Pacto" em FichaEspacoMagia) — nível do Bruxo ->
+# (quantidade de espaços, nível de cada espaço). Não combina com a tabela acima.
+TABELA_SLOTS_PACTO_BRUXO = {
+    1: (1, 1), 2: (2, 1), 3: (2, 2), 4: (2, 2), 5: (2, 3), 6: (2, 3), 7: (2, 4), 8: (2, 4),
+    9: (2, 5), 10: (2, 5), 11: (3, 5), 12: (3, 5), 13: (3, 5), 14: (3, 5), 15: (3, 5), 16: (3, 5),
+    17: (4, 5), 18: (4, 5), 19: (4, 5), 20: (4, 5),
+}
+
+
+class Classe(Base):
+    """Catálogo de classes (Guerreiro, Mago, ...) — reabre, a pedido explícito do autor
+    (2026-11-04), a decisão anterior de não ter multiclasse estruturada (ver
+    .claude/contexto/personagens.md). Até 2026-11-05 crescia só sob demanda, criada pelo próprio
+    Mestre ao usar "Subir de nível" numa classe nova; desde então as classes base do Livro do
+    Jogador vêm semeadas por `scripts/importar_classes_livro.py` — continua podendo crescer sob
+    demanda pra classes homebrew."""
+    __tablename__ = "classes"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    nome: Mapped[str] = mapped_column(String(100), unique=True, index=True)
+    dado_vida: Mapped[int] = mapped_column()  # 6, 8, 10 ou 12
+    atributo_conjuracao: Mapped[str | None] = mapped_column(String(20), nullable=True)  # for/des/con/int/sab/car
+    progressao_conjuracao: Mapped[str | None] = mapped_column(String(10), nullable=True)  # ver PROGRESSOES_CONJURACAO
+    fonte_id: Mapped[int | None] = mapped_column(ForeignKey("fontes.id"), nullable=True)
+    pagina_rel_docs: Mapped[str | None] = mapped_column(String(300), nullable=True)
+
+    subclasses_vinculo: Mapped[list["Subclasse"]] = relationship(
+        back_populates="classe", cascade="all, delete-orphan",
+    )
+    features_vinculo: Mapped[list["ClasseFeature"]] = relationship(
+        back_populates="classe", cascade="all, delete-orphan",
+    )
+
+
+class Subclasse(Base):
+    __tablename__ = "subclasses"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    classe_id: Mapped[int] = mapped_column(ForeignKey("classes.id"))
+    nome: Mapped[str] = mapped_column(String(150))
+
+    classe: Mapped["Classe"] = relationship(back_populates="subclasses_vinculo")
+
+
+class ClasseFeature(Base):
+    """O que uma classe (ou subclasse, se `subclasse_id` preenchido) concede num nível — ao subir
+    de nível, cada feature do nível vira (get-or-create) uma `Habilidade` de catálogo +
+    `FichaHabilidade` vinculada (ver personagens_api.subir_de_nivel). Opcional: uma classe sem
+    nenhuma feature cadastrada ainda funciona normalmente pra PV/bônus de proficiência/slots, só
+    não desbloqueia nada sozinha."""
+    __tablename__ = "classe_features"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    classe_id: Mapped[int] = mapped_column(ForeignKey("classes.id"))
+    subclasse_id: Mapped[int | None] = mapped_column(ForeignKey("subclasses.id"), nullable=True)
+    nivel: Mapped[int] = mapped_column()
+    nome: Mapped[str] = mapped_column(String(200))
+    descricao: Mapped[str | None] = mapped_column(Text, nullable=True)
+
+    classe: Mapped["Classe"] = relationship(back_populates="features_vinculo")
+    subclasse: Mapped["Subclasse"] = relationship()
+
+
+class FichaClasse(Base):
+    """Nível de uma Ficha numa Classe — uma ficha pode ter várias linhas (multiclasse). Substitui
+    `Ficha.classe`/`subclasse`/`nivel` como fonte de verdade quando preenchida; esses três campos
+    continuam existindo só como texto derivado (recalculado a cada subida de nível, ver
+    personagens_api.subir_de_nivel), pra não quebrar nada que já lê esses campos direto."""
+    __tablename__ = "ficha_classes"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    ficha_id: Mapped[int] = mapped_column(ForeignKey("fichas.id"))
+    classe_id: Mapped[int] = mapped_column(ForeignKey("classes.id"))
+    subclasse_id: Mapped[int | None] = mapped_column(ForeignKey("subclasses.id"), nullable=True)
+    nivel: Mapped[int] = mapped_column(default=1)
+
+    ficha: Mapped["Ficha"] = relationship(back_populates="classes_vinculo")
+    classe: Mapped["Classe"] = relationship()
+    subclasse: Mapped["Subclasse"] = relationship()
+
+
+class Raca(Base):
+    """Catálogo de raças/linhagens (Elfo, Humano, ...) — semeado por
+    scripts/importar_racas_livro.py (2026-11-05) a partir do Livro do Jogador convertido.
+    Sub-raça/linhagem é a mesma tabela, com `raca_pai_id` apontando pra raça base (ex.: "Elfo das
+    Florestas" → pai "Elfo") — sem tabela separada de sub-raça, mesma ideia de `Lugar.lugar_pai_id`.
+    `pagina_rel_docs` casa com a página já existente em docs/racas/*.md (hand-written, não gerada
+    por aqui — esta tabela só alimenta a ficha/mecânica, não o texto da wiki)."""
+    __tablename__ = "racas"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    nome: Mapped[str] = mapped_column(String(100), index=True)
+    raca_pai_id: Mapped[int | None] = mapped_column(ForeignKey("racas.id"), nullable=True)
+    fonte_id: Mapped[int | None] = mapped_column(ForeignKey("fontes.id"), nullable=True)
+    pagina_rel_docs: Mapped[str | None] = mapped_column(String(300), nullable=True)
+    tamanho: Mapped[str | None] = mapped_column(String(50), nullable=True)
+    deslocamento: Mapped[int | None] = mapped_column(nullable=True)
+    descricao: Mapped[str | None] = mapped_column(Text, nullable=True)
+
+    raca_pai: Mapped["Raca"] = relationship(remote_side="Raca.id")
+    tracos_vinculo: Mapped[list["RacaTraco"]] = relationship(
+        back_populates="raca", cascade="all, delete-orphan",
+    )
+
+
+class RacaTraco(Base):
+    """Um traço racial (Visão no Escuro, Ancestral Feérico...) — mesmo princípio de
+    `ClasseFeature`, uma linha por traço em vez de um texto corrido."""
+    __tablename__ = "raca_tracos"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    raca_id: Mapped[int] = mapped_column(ForeignKey("racas.id"))
+    nome: Mapped[str] = mapped_column(String(200))
+    descricao: Mapped[str | None] = mapped_column(Text, nullable=True)
+
+    raca: Mapped["Raca"] = relationship(back_populates="tracos_vinculo")
+
+
+class Lugar(Base):
+    """Um local, dentro ou fora da wiki — Master's Shield (2026-11-05). `canonico=True` +
+    `pagina_rel_docs` preenchido = já existe página própria em docs/lugares/ (ver
+    scripts/importar_lugares.py, que semeia essas linhas a partir das páginas já existentes).
+    `canonico=False` = local provisório criado ao vivo durante a sessão (ex.: "Loja do
+    Alquimista" dentro de "Dodixie", via `lugar_pai_id`) — fica provisório até o Mestre revisar
+    depois da sessão e decidir se cria a página de verdade (não há automação pra isso ainda)."""
+    __tablename__ = "lugares"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    nome: Mapped[str] = mapped_column(String(200))
+    slug: Mapped[str] = mapped_column(String(100), unique=True, index=True)
+    pagina_rel_docs: Mapped[str | None] = mapped_column(String(300), nullable=True)
+    lugar_pai_id: Mapped[int | None] = mapped_column(ForeignKey("lugares.id"), nullable=True)
+    canonico: Mapped[bool] = mapped_column(default=True)
+    criado_em: Mapped[datetime.datetime] = mapped_column(
+        DateTime, default=lambda: datetime.datetime.now(datetime.UTC)
+    )
+
+    lugar_pai: Mapped["Lugar"] = relationship(remote_side="Lugar.id")
+
+
+class SessaoAoVivo(Base):
+    """Estado "ao vivo" do Master's Shield numa página de sessão — nome temporário (a renomear
+    depois, ver .claude/contexto/combate.md). Uma linha por `pagina_rel_docs`, criada sob demanda
+    na primeira vez que o painel carrega (mesmo padrão de `Combate`). Guarda só o momento atual
+    (ano/mes/dia/hora/minuto — texto livre pro mês, já que docs/mundo/calendario.md deixa a
+    duração dos meses em aberto) e a localidade atual; o histórico mora em `Interacao`, não aqui."""
+    __tablename__ = "sessoes_ao_vivo"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    pagina_rel_docs: Mapped[str] = mapped_column(String(300), unique=True, index=True)
+    ano: Mapped[int | None] = mapped_column(nullable=True)
+    mes: Mapped[str | None] = mapped_column(String(30), nullable=True)
+    dia: Mapped[int | None] = mapped_column(nullable=True)
+    hora: Mapped[int | None] = mapped_column(nullable=True)
+    minuto: Mapped[int | None] = mapped_column(nullable=True)
+    lugar_atual_id: Mapped[int | None] = mapped_column(ForeignKey("lugares.id"), nullable=True)
+    criado_em: Mapped[datetime.datetime] = mapped_column(
+        DateTime, default=lambda: datetime.datetime.now(datetime.UTC)
+    )
+
+    lugar_atual: Mapped["Lugar"] = relationship()
+
+
+class Interacao(Base):
+    """Uma linha do log de interações do Master's Shield — o "o que aconteceu", relacional (ver
+    `InteracaoParticipante`/`Rolagem`), não texto livre. `tipo` "xp"/"loot" são gravados por
+    dentro de combate_api.distribuir_xp/aplicar_loot (antes ficavam fora de qualquer log).
+    Momento/local copiados de SessaoAoVivo no instante do registro — não há tabela de calendário
+    separada, cada Interacao já carrega seu próprio "quando"."""
+    __tablename__ = "interacoes"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    pagina_rel_docs: Mapped[str] = mapped_column(String(300), index=True)
+    combate_id: Mapped[int | None] = mapped_column(ForeignKey("combates.id"), nullable=True)
+    lugar_id: Mapped[int | None] = mapped_column(ForeignKey("lugares.id"), nullable=True)
+    ano: Mapped[int | None] = mapped_column(nullable=True)
+    mes: Mapped[str | None] = mapped_column(String(30), nullable=True)
+    dia: Mapped[int | None] = mapped_column(nullable=True)
+    hora: Mapped[int | None] = mapped_column(nullable=True)
+    minuto: Mapped[int | None] = mapped_column(nullable=True)
+    tipo: Mapped[str] = mapped_column(String(20))  # ver TIPOS_INTERACAO
+    pericia_ou_atributo: Mapped[str | None] = mapped_column(String(50), nullable=True)
+    cd: Mapped[int | None] = mapped_column(nullable=True)
+    sucesso: Mapped[bool | None] = mapped_column(nullable=True)
+    descricao: Mapped[str | None] = mapped_column(Text, nullable=True)
+    criado_em: Mapped[datetime.datetime] = mapped_column(
+        DateTime, default=lambda: datetime.datetime.now(datetime.UTC)
+    )
+
+    lugar: Mapped["Lugar"] = relationship()
+    participantes_vinculo: Mapped[list["InteracaoParticipante"]] = relationship(
+        back_populates="interacao", cascade="all, delete-orphan",
+    )
+    rolagens_vinculo: Mapped[list["Rolagem"]] = relationship(
+        back_populates="interacao", cascade="all, delete-orphan",
+    )
+
+
+class InteracaoParticipante(Base):
+    """Liga uma Interacao a uma Ficha (sempre Ficha, nunca Personagem direto — mesmo padrão de
+    CombateParticipante/EncontroParticipantePlanejado), com um papel (ver
+    PAPEIS_INTERACAO_PARTICIPANTE) — é o "quais tokens interagiram"."""
+    __tablename__ = "interacao_participantes"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    interacao_id: Mapped[int] = mapped_column(ForeignKey("interacoes.id"))
+    ficha_id: Mapped[int] = mapped_column(ForeignKey("fichas.id"))
+    papel: Mapped[str] = mapped_column(String(20))
+
+    interacao: Mapped["Interacao"] = relationship(back_populates="participantes_vinculo")
+    ficha: Mapped["Ficha"] = relationship()
+
+
+class Rolagem(Base):
+    """Uma rolagem de dado presa a uma Interacao (uma interação pode ter mais de uma — ex.:
+    ataque + dano). `online=False` = resultado de um dado físico, digitado pelo Mestre/jogador;
+    `online=True` = rolado pelo próprio sistema (sessao_viva_api.rolar_online)."""
+    __tablename__ = "rolagens"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    interacao_id: Mapped[int] = mapped_column(ForeignKey("interacoes.id"))
+    dado: Mapped[str] = mapped_column(String(30))  # ex.: "1d20+5"
+    vantagem: Mapped[str | None] = mapped_column(String(15), nullable=True)
+    resultado_bruto: Mapped[int | None] = mapped_column(nullable=True)
+    resultado_total: Mapped[int | None] = mapped_column(nullable=True)
+    online: Mapped[bool] = mapped_column(default=False)
+
+    interacao: Mapped["Interacao"] = relationship(back_populates="rolagens_vinculo")
 
 
 def caminho_banco(root: Path) -> Path:
@@ -629,6 +1009,20 @@ def apagar_fonte(sessao: Session, id_fonte: int) -> None:
     if fonte is not None:
         sessao.delete(fonte)
         sessao.commit()
+
+
+def marcar_fonte_importada(sessao: Session, abreviacao: str, arquivo_origem: str) -> Fonte | None:
+    """Registra que um importador (ver scripts/importar_*.py) alimentou os catálogos a partir
+    desta fonte — `importado_em` vira "já processada alguma vez"; `arquivo_origem` guarda só o
+    último arquivo/processo que a tocou (várias rodadas podem marcar a mesma Fonte de novo, não
+    há lista acumulada). Devolve `None` sem erro se a abreviação não existir em `Fonte` ainda."""
+    fonte = sessao.query(Fonte).filter(Fonte.abreviacao == abreviacao).first()
+    if fonte is None:
+        return None
+    fonte.importado_em = datetime.datetime.now(datetime.UTC)
+    fonte.arquivo_origem = arquivo_origem
+    sessao.commit()
+    return fonte
 
 
 FONTES_SEED = [

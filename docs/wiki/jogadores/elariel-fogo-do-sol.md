@@ -1,16 +1,15 @@
 ---
 tags:
-- Mestre
 - Jogador
 hide:
 - toc
 jogador:
-  jogador: Ana
-  raca_classe: Elfo Patrulheiro
+  jogador: Bel
+  raca_classe: Elfo Mago
   resumo: ''
 ---
 
-# Faeris Thalendar
+# Elariel Fogo do Sol
 
 *(Descrição a preencher.)*
 

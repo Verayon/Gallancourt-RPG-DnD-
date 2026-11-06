@@ -51,6 +51,11 @@
   --gc-purple: #7d6179;
   --gc-purple-deep: #342a34;
   --gc-red: #9c5347;
+  --gc-green: #7a9b6e;
+  --gc-blue: #6f93b0;
+  --gc-sym-acao: #7fb36f;
+  --gc-sym-bonus: #e0913f;
+  --gc-sym-reacao: #a98acb;
 
   --md-default-bg-color: var(--gc-bg);
   --md-default-fg-color: var(--gc-ink);
@@ -94,6 +99,11 @@
   --gc-purple: #6b5367;
   --gc-purple-deep: #342a38;
   --gc-red: #8a5347;
+  --gc-green: #4f7a47;
+  --gc-blue: #3f6686;
+  --gc-sym-acao: #3f7a35;
+  --gc-sym-bonus: #b0601a;
+  --gc-sym-reacao: #7a56a3;
 
   --md-default-bg-color: var(--gc-bg);
   --md-default-fg-color: var(--gc-ink);
@@ -1992,6 +2002,197 @@ th[aria-sort="descending"] .magia-ordenar::after { content: " ▼"; opacity: 1; 
   gap: .2rem;
 }
 
+/* Painel "Subir de nível" (docs/javascripts/ficha.js::_painelNivel) — mesma caixa do
+   ficha-personagem__picker acima, reusa ficha-personagem__picker-novo-campos pros formulários
+   de criar classe/subclasse. */
+.md-typeset .ficha-personagem__nivel-painel {
+  margin-top: .5rem;
+  padding: .6rem .8rem;
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 6px;
+  background: var(--gc-bg-alt);
+}
+
+.md-typeset .ficha-personagem__nivel-linha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  align-items: flex-end;
+  margin: .5rem 0;
+}
+
+.md-typeset .ficha-personagem__nivel-linha label {
+  display: flex;
+  flex-direction: column;
+  font-size: .72rem;
+  gap: .2rem;
+}
+
+.md-typeset .ficha-personagem__nivel-acoes {
+  display: flex;
+  gap: .5rem;
+  margin-bottom: .5rem;
+}
+
+/* Símbolo de ação/ação bônus/reação (docs/javascripts/ficha.js::simAcao) — bolinha/triângulo/
+   losango, mesma linguagem visual em qualquer lista que mostre tipo_acao. */
+.md-typeset .sim {
+  display: inline-block;
+  width: .6rem;
+  height: .6rem;
+  margin-right: .3rem;
+  flex: none;
+  vertical-align: middle;
+}
+.md-typeset .sim-acao { background: var(--gc-sym-acao); border-radius: 50%; }
+.md-typeset .sim-bonus { background: var(--gc-sym-bonus); clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.md-typeset .sim-reacao { background: var(--gc-sym-reacao); border-radius: 2px; }
+
+/* Barra de experiência do cabeçalho (ficha.js::_barraXp) — o botão "⇧" mora aqui agora, não mais
+   solto nos chips do topo (ver ficha-personagem__faixa-atributos). */
+.md-typeset .ficha-personagem__barra-xp {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  flex: 1 1 220px;
+  min-width: 200px;
+}
+
+.md-typeset .ficha-personagem__barra-xp-linha {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+}
+
+.md-typeset .ficha-personagem__barra-xp-topo {
+  display: flex;
+  justify-content: space-between;
+  font-size: .72rem;
+  color: var(--gc-ink-dim);
+  text-transform: uppercase;
+  letter-spacing: .03em;
+}
+
+.md-typeset .ficha-personagem__rotulo-mini {
+  color: var(--gc-gold-soft);
+}
+
+.md-typeset .ficha-personagem__barra-xp-trilho {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--gc-bg-alt);
+  border: 1px solid var(--gc-panel-border);
+  overflow: hidden;
+}
+
+.md-typeset .ficha-personagem__barra-xp-preenchimento {
+  height: 100%;
+  background: var(--gc-purple);
+}
+
+.md-typeset .ficha-personagem__botao-nivel {
+  flex: none;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 50%;
+  border: 1.5px solid var(--gc-panel-border);
+  background: var(--gc-bg-alt);
+  color: var(--gc-ink-dim);
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.md-typeset .ficha-personagem__botao-nivel--pronto {
+  border-color: var(--gc-gold-soft);
+  background: var(--gc-gold);
+  color: #1a1711;
+  box-shadow: 0 0 0 3px rgba(183, 145, 79, .35);
+}
+
+/* Inventário com cantêiner (ficha.js::_listaEquipamentos) — item solto vs. guardado dentro de um
+   cantêiner marcado em Equipamento.e_container; capacidade só avisa, não bloqueia. */
+.md-typeset .ficha-personagem__lista-equipamentos {
+  list-style: none;
+  margin: .3rem 0;
+  padding: 0;
+}
+
+.md-typeset .ficha-personagem__item-equipamento {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .4rem;
+  padding: .35rem 0;
+  border-bottom: 1px solid var(--gc-panel-border);
+}
+
+.md-typeset .ficha-personagem__botao-equipar {
+  padding: .15rem .6rem;
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 999px;
+  background: var(--gc-bg-alt);
+  color: var(--gc-ink-dim);
+  font-size: .78rem;
+  cursor: pointer;
+}
+
+.md-typeset .ficha-personagem__botao-equipar--ativo {
+  border-color: var(--gc-gold);
+  background: var(--gc-gold);
+  color: #1a1711;
+  font-weight: 700;
+}
+
+.md-typeset .ficha-personagem__item-equipamento .input-pequeno {
+  width: 3.4rem;
+}
+
+.md-typeset .ficha-personagem__container {
+  margin-top: .6rem;
+  padding: .6rem .8rem;
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 6px;
+  background: var(--gc-bg-alt);
+}
+
+.md-typeset .ficha-personagem__container--cheio {
+  border-color: var(--gc-red);
+}
+
+.md-typeset .ficha-personagem__container-cabeca {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: .6rem;
+}
+
+.md-typeset .ficha-personagem__barra-carga {
+  height: 6px;
+  margin-top: .3rem;
+  border-radius: 999px;
+  background: var(--gc-panel);
+  border: 1px solid var(--gc-panel-border);
+  overflow: hidden;
+}
+
+.md-typeset .ficha-personagem__barra-carga-preenchimento {
+  height: 100%;
+  background: var(--gc-gold);
+}
+
+.md-typeset .ficha-personagem__barra-carga--estourada .ficha-personagem__barra-carga-preenchimento {
+  background: var(--gc-red);
+}
+
+.md-typeset .ficha-personagem__campo-checkbox {
+  flex-direction: row !important;
+  align-items: center;
+  gap: .4rem !important;
+}
+
 /* Controles de formulário dentro do widget — mesmo visual do Painel do Mestre (ver
    admin/static/estilo.css), reaproveitado aqui pra não ficar com o estilo padrão do navegador. */
 .md-typeset .ficha-personagem input,
@@ -2369,17 +2570,119 @@ th[aria-sort="descending"] .magia-ordenar::after { content: " ▼"; opacity: 1; 
   font-weight: bold;
 }
 
+/* Fileira de atributos + barra de PV — sempre visível no cabeçalho (fora das abas), estilo
+   D&D Beyond: os 6 atributos ficam ao lado da barra em telas largas, cada um empilha por cima do
+   outro em telas estreitas. */
+.md-typeset .ficha-personagem__faixa-atributos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 1rem;
+  margin: .6rem 0 .2rem;
+}
+
+.md-typeset .ficha-personagem__faixa-atributos .ficha-personagem__atributos {
+  flex: 1 1 18rem;
+  margin: 0;
+}
+
+/* Barra de PV — mesma faixa verde/âmbar/vermelho da barra do Combat Tracker (ver
+   .combate-painel__barra-pv mais abaixo e barraPv() em combate.js), duplicada em
+   Widget.prototype._barraPv (docs/javascripts/ficha.js) porque os <script> deste projeto não usam
+   módulos. */
+.md-typeset .ficha-personagem__barra-pv {
+  position: relative;
+  flex: 1 1 14rem;
+  align-self: center;
+  height: 1.3rem;
+  border-radius: 999px;
+  background: var(--gc-bg-alt);
+  border: 1px solid var(--gc-panel-border);
+  overflow: hidden;
+}
+
+.md-typeset .ficha-personagem__barra-pv-preenchimento {
+  position: absolute;
+  inset: 0;
+  width: 0;
+  transition: width .2s ease;
+}
+
+.md-typeset .ficha-personagem__barra-pv-preenchimento--ok { background: #4caf7a; }
+.md-typeset .ficha-personagem__barra-pv-preenchimento--ferido { background: #d98c3a; }
+.md-typeset .ficha-personagem__barra-pv-preenchimento--critico { background: #a53125; }
+
+.md-typeset .ficha-personagem__barra-pv-texto {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: .78rem;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .6);
+}
+
+/* Lista de Favoritos (★) no topo da aba Atributos — agrega Equipamento/Magias/Habilidades
+   marcados, com filtro por tipo de ação (ver Widget.prototype._listaFavoritos). */
+.md-typeset .ficha-personagem__filtros-acao {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .3rem;
+  margin: .3rem 0 .6rem;
+}
+
+.md-typeset .ficha-personagem__filtro-acao {
+  padding: .2rem .7rem;
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 999px;
+  background: var(--gc-bg-alt);
+  color: var(--gc-ink-dim);
+  font-family: 'EB Garamond', serif;
+  font-size: .78rem;
+  cursor: pointer;
+}
+
+.md-typeset .ficha-personagem__filtro-acao--ativo {
+  background: var(--gc-gold);
+  border-color: var(--gc-gold);
+  color: #1a1711;
+}
+
+.md-typeset .ficha-personagem__favorito-grupo {
+  margin-bottom: .5rem;
+}
+
+.md-typeset .ficha-personagem__favorito-grupo ul {
+  list-style: none;
+  margin: .2rem 0;
+  padding: 0;
+}
+
+.md-typeset .ficha-personagem__favorito-item {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .4rem;
+  padding: .3rem .5rem;
+  border-bottom: 1px solid var(--gc-panel-border);
+}
+
 /* --------------------------------------------------------------------------
-   Combat Tracker (aba "Combat Tracker" das páginas de sessão — ver
-   docs/javascripts/combate.js). A raiz leva a classe `ficha-personagem` também, só pra herdar
-   os estilos de botão/input/pilula/chip acima sem duplicar — aqui só o layout específico do
-   tracker (cabeçalho, grade de duas colunas, cards de participante, modais).
+   Master's Shield (aba "Master's Shield" das páginas de sessão — ver
+   docs/javascripts/sessao_viva.js/combate.js). `.sessao-viva-painel` é o painel sempre visível
+   (calendário/localidade/log); `.combate-painel` é o Combat Tracker (iniciativa/turnos), aninhado
+   abaixo dele mesmo, mesmo sub-modo de sempre. As duas raízes levam a classe `ficha-personagem`
+   também, só pra herdar os estilos de botão/input/pilula/chip acima sem duplicar.
 
    Tons escuros fixos de VTT (pedido do autor na especificação original): a sala de jogo fica
    escura mesmo com o site no tema claro — redefine as variáveis --gc-* (mesmos valores do tema
-   "slate" global, ver topo do arquivo) só dentro de .combate-painel, então todo componente
+   "slate" global, ver topo do arquivo) dentro das duas raízes, então todo componente
    compartilhado (botão/input/pilula/chip) já herda escuro de graça, sem duplicar regra nenhuma. */
-.md-typeset .combate-painel {
+.md-typeset .combate-painel,
+.md-typeset .sessao-viva-painel {
   --gc-bg: #1d1a16;
   --gc-bg-alt: #221e19;
   --gc-panel: #28241e;
@@ -2398,8 +2701,112 @@ th[aria-sort="descending"] .magia-ordenar::after { content: " ▼"; opacity: 1; 
 }
 
 .md-typeset .combate-painel h3,
-.md-typeset .combate-painel h4 {
+.md-typeset .combate-painel h4,
+.md-typeset .sessao-viva-painel h3,
+.md-typeset .sessao-viva-painel h4 {
   color: var(--gc-gold-soft);
+}
+
+.sessao-viva-painel {
+  margin-bottom: 1rem;
+}
+
+.sessao-viva__grade {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .8rem;
+  margin-bottom: .8rem;
+}
+
+@media (max-width: 760px) {
+  .sessao-viva__grade {
+    grid-template-columns: 1fr;
+  }
+}
+
+.md-typeset .sessao-viva__bloco {
+  background: var(--gc-bg-alt);
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 8px;
+  padding: .7rem .8rem;
+}
+
+.md-typeset .sessao-viva__bloco h4 {
+  margin: 0 0 .4rem;
+}
+
+.sessao-viva__momento {
+  margin: 0 0 .5rem;
+  font-size: 1.05em;
+}
+
+.sessao-viva__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+}
+
+.sessao-viva__form-tempo,
+.sessao-viva__form-lugar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin-top: .5rem;
+  align-items: center;
+}
+
+.md-typeset .sessao-viva__lista-interacoes {
+  list-style: none;
+  margin: 0 0 .6rem;
+  padding: 0;
+  max-height: 16rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+}
+
+.md-typeset .sessao-viva__interacao {
+  background: var(--gc-bg);
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 6px;
+  padding: .4rem .6rem;
+  font-size: .92em;
+}
+
+.sessao-viva__form-interacao {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  align-items: center;
+  margin-top: .5rem;
+  border-top: 1px dashed var(--gc-panel-border);
+  padding-top: .6rem;
+}
+
+.sessao-viva__form-rolagem {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  align-items: center;
+  width: 100%;
+}
+
+.md-typeset .sessao-viva__pendentes {
+  list-style: none;
+  margin: .3rem 0;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+}
+
+.md-typeset .sessao-viva__pendentes li {
+  background: var(--gc-bg);
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 6px;
+  padding: .2rem .5rem;
 }
 
 .md-typeset .combate-painel__cabecalho {
@@ -2418,6 +2825,54 @@ th[aria-sort="descending"] .magia-ordenar::after { content: " ▼"; opacity: 1; 
   flex-wrap: wrap;
   gap: .5rem;
   align-items: center;
+}
+
+/* Encontro planejado (docs/javascripts/encontro.js) — rascunho de combate na aba NPCs, reusa o
+   mesmo vocabulário visual do Combat Tracker (card com borda, pilula, busca-topo) acima. */
+.md-typeset .encontro-planejado__lista {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  margin-bottom: .6rem;
+}
+
+.md-typeset .encontro-planejado__cartao {
+  padding: .6rem .8rem;
+  border: 1px solid var(--gc-panel-border);
+  border-radius: 8px;
+  background: var(--gc-panel);
+}
+
+.md-typeset .encontro-planejado__cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem;
+  cursor: pointer;
+}
+
+.md-typeset .encontro-planejado__participantes {
+  list-style: none;
+  margin: .5rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+}
+
+.md-typeset .encontro-planejado__participante {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+}
+
+.md-typeset .encontro-planejado__novo,
+.md-typeset .encontro-planejado__busca {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  align-items: center;
+  margin-top: .5rem;
 }
 
 .combate-painel__layout {
@@ -2682,6 +3137,80 @@ th[aria-sort="descending"] .magia-ordenar::after { content: " ▼"; opacity: 1; 
   margin: .5rem 0;
 }
 
+/* Pips de pool de magia/carga de item (combate.js::pips) — bolinha preenchida = espaço/carga
+   disponível, mesma ideia do .ponto de ficha-personagem mas sem o anel de proficiência. */
+.md-typeset .combate-painel__pool {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  margin: .2rem .8rem .2rem 0;
+}
+
+.md-typeset .combate-painel__pips {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.md-typeset .pip {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  box-sizing: border-box;
+  border: 1.5px solid var(--gc-gold);
+  border-radius: 50%;
+}
+
+.md-typeset .pip--on {
+  background: var(--gc-gold);
+}
+
+/* Chip de ação rápida (conjurar magia / usar item com carga) — mesma família visual do
+   chip-passo, mas de texto, com um estado "sem recurso" pra reforçar o banner de bloqueio. */
+.md-typeset .chip {
+  font-size: .78rem;
+  padding: .2rem .6rem;
+  border-radius: 6px;
+  border: 1px solid var(--gc-panel-border);
+  background: var(--gc-bg-alt);
+  color: var(--gc-ink);
+  cursor: pointer;
+}
+
+.md-typeset .chip:hover {
+  border-color: var(--gc-gold);
+  color: var(--gc-gold-soft);
+}
+
+.md-typeset .chip--gated {
+  border-color: var(--gc-red);
+  color: var(--gc-red);
+}
+
+/* Banner "Ação bloqueada" (combate.js::_chamarComForca/_painelToken) — substitui o window.confirm()
+   antigo de conjurar-magia/usar-item; Cancelar fecha, Forçar repete a chamada com forcar=true. */
+.md-typeset .combate-painel__bloqueio {
+  margin: .6rem 0;
+  padding: .7rem .9rem;
+  border-radius: 8px;
+  border: 1px solid var(--gc-red);
+  background: rgba(156, 83, 71, .12);
+}
+
+.md-typeset .combate-painel__bloqueio-titulo {
+  margin: 0;
+  font-family: 'Cinzel', serif;
+  font-size: .78rem;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--gc-red);
+}
+
+.md-typeset .combate-painel__bloqueio-acoes {
+  display: flex;
+  gap: .5rem;
+  margin-top: .4rem;
+}
+
 /* Modal de resistência em área / resumo pós-combate — mesmo padrão de overlay fixo de
    .modo-mestre-popup (ver docs/javascripts/modo-mestre.js), com cores em fallback hexadecimal
    pra funcionar mesmo fora do escopo .md-typeset. */
@@ -2770,6 +3299,36 @@ th[aria-sort="descending"] .magia-ordenar::after { content: " ▼"; opacity: 1; 
   background: var(--gc-bg-alt, #221e19);
   border: 1px solid var(--gc-panel-border, #453f34);
   color: var(--gc-ink-dim, #a99b82);
+}
+
+/* Cartões do modal "Iniciar combate" (combate.js::_modalIniciarCombate) — escolher um encontro
+   planejado (ou começar vazio) antes de criar o Combate. */
+.combate-modal__opcoes {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  margin: .8rem 0;
+}
+
+.combate-modal__opcao {
+  width: 100%;
+  text-align: left;
+  font-family: 'EB Garamond', serif;
+  padding: .6rem .8rem;
+  border-radius: 6px;
+  border: 1px solid var(--gc-panel-border, #453f34);
+  background: var(--gc-bg-alt, #221e19);
+  color: inherit;
+  cursor: pointer;
+}
+
+.combate-modal__opcao:hover {
+  border-color: var(--gc-gold, #b7914f);
+}
+
+.combate-modal__opcao--sel {
+  border-color: var(--gc-gold, #b7914f);
+  background: rgba(183, 145, 79, .18);
 }
 
 /* --------------------------------------------------------------------------

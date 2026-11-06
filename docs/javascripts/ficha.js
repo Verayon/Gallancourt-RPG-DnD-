@@ -56,6 +56,10 @@
   ];
   var MODOS_RESISTENCIA_DANO = [["imune", "Imune"], ["resistente", "Resistente"], ["vulneravel", "Vulnerável"]];
 
+  // Mesma lista fixa do servidor (admin/banco.py::TIPOS_ACAO) — filtro da lista de Favoritos.
+  var ROTULOS_TIPO_ACAO = { acao: "Ação", acao_bonus: "Ação Bônus", reacao: "Reação", nenhuma: "—" };
+  var FILTROS_ACAO = [["todas", "Todas"], ["acao", "Ação"], ["acao_bonus", "Ação Bônus"], ["reacao", "Reação"]];
+
   // Colunas extras (além de Nome) mostradas na tabela do seletor "+ adicionar", por tipo —
   // mesmas informações da página de cada catálogo (itens/magias), não só o nome.
   var COLUNAS_PICKER = {
@@ -68,7 +72,9 @@
   };
   var CAMPOS_NOVO_CATALOGO = {
     equipamentos: [["nome", "Nome", "text"], ["categoria", "Categoria", "text"], ["dano_formula", "Dano (ex.: 1d6+2)", "text"],
-      ["dano_tipo", "Tipo de dano", "text"], ["ca_bonus", "Bônus de CA", "number"], ["peso_kg", "Peso (kg)", "number"], ["descricao", "Descrição", "text"]],
+      ["dano_tipo", "Tipo de dano", "text"], ["ca_bonus", "Bônus de CA", "number"], ["peso_kg", "Peso (kg)", "number"],
+      ["e_container", "É contêiner (ex.: mochila)", "checkbox"], ["capacidade_kg", "Capacidade (kg, se contêiner)", "number"],
+      ["descricao", "Descrição", "text"]],
     habilidades: [["nome", "Nome", "text"], ["tipo", "Tipo (traco/acao/reacao)", "text"], ["bonus_acerto", "Bônus de acerto", "number"],
       ["dano_formula", "Dano (ex.: 1d6+2)", "text"], ["dano_tipo", "Tipo de dano", "text"], ["descricao", "Descrição", "text"]],
     magias: [["nome", "Nome", "text"], ["nivel", "Nível", "number"], ["escola", "Escola", "text"], ["descricao", "Descrição", "text"]],
@@ -80,6 +86,22 @@
     equipamentos: "equipamento", habilidades: "traço/ação/reação", magias: "magia",
     idiomas: "idioma", sentidos: "sentido", pericias: "perícia",
   };
+
+  // XP acumulada pra alcançar cada nível (D&D 5e SRD) — só pra desenhar a barra de experiência no
+  // cabeçalho, indexada por `f.nivel`; não existe campo novo no banco pra isso (ver Ficha.xp/nivel).
+  var XP_POR_NIVEL = {
+    1: 0, 2: 300, 3: 900, 4: 2700, 5: 6500, 6: 14000, 7: 23000, 8: 34000, 9: 48000, 10: 64000,
+    11: 85000, 12: 100000, 13: 120000, 14: 140000, 15: 165000, 16: 195000, 17: 225000, 18: 265000,
+    19: 305000, 20: 355000,
+  };
+
+  // Símbolo de ação/ação bônus/reação (bolinha/triângulo/losango, ver extra.css .sim-*) — usado em
+  // qualquer lista que hoje só mostra tipo_acao como pílula de texto.
+  var CLASSE_SIM_ACAO = { acao: "sim-acao", acao_bonus: "sim-bonus", reacao: "sim-reacao" };
+  function simAcao(tipoAcao) {
+    var classe = CLASSE_SIM_ACAO[tipoAcao];
+    return classe ? '<span class="sim ' + classe + '" title="' + escapeHtml(ROTULOS_TIPO_ACAO[tipoAcao]) + '"></span>' : "";
+  }
 
   var ABAS_CONTEUDO = [
     ["atributos", "Atributos"], ["inventario", "Inventário"], ["grimorio", "Grimório"],
@@ -117,7 +139,10 @@
     this.autenticado = false;
     this.abaAtiva = 0;
     this.abaConteudo = "atributos";
+    this.filtroAcao = "todas"; // ver _listaFavoritos — "todas"/"acao"/"acao_bonus"/"reacao"
     this.pickerAberto = null; // {tipo, busca, resultados}
+    this.nivelAberto = null; // {classeId, subclasseId} — painel "Subir de nível", ver _painelNivel
+    this.classesCatalogo = null; // cache de /api/classes, carregado ao abrir o painel de nível
     this._buscaTimer = null;
     this.ligarEventos();
     this.carregar();
@@ -322,13 +347,127 @@
     return partes.join("");
   };
 
+  // Mesmo cálculo de faixa de cor (ok/ferido/crítico) de docs/javascripts/combate.js::barraPv —
+  // duplicada aqui porque os <script> do projeto não usam módulos (sem import/export).
+  Widget.prototype._barraPv = function (f) {
+    var atual = f.pv_atual != null ? f.pv_atual : f.pv_maximo;
+    var maximo = f.pv_maximo || 1;
+    var pct = maximo > 0 ? Math.max(0, Math.min(100, (atual / maximo) * 100)) : 0;
+    var nivel = pct <= 25 ? "critico" : (pct <= 50 ? "ferido" : "ok");
+    var texto = (f.pv_atual != null ? f.pv_atual : "—") + "/" + f.pv_maximo + (f.pv_temporario ? " (+" + f.pv_temporario + ")" : "");
+    return (
+      '<div class="ficha-personagem__barra-pv">' +
+      '<div class="ficha-personagem__barra-pv-preenchimento ficha-personagem__barra-pv-preenchimento--' + nivel + '" style="width:' + pct + '%"></div>' +
+      '<span class="ficha-personagem__barra-pv-texto">PV ' + escapeHtml(texto) + "</span>" +
+      "</div>"
+    );
+  };
+
   Widget.prototype._cartao = function (f) {
     var editavel = this.autenticado;
     return (
       '<div class="stat-block" data-ficha-id="' + f.id + '">' +
       '<div class="stat-block__topo"><div class="stat-block__chips">' +
       (editavel ? this._chipsEdicao(f) : this._chipsLeitura(f)) +
-      "</div></div></div>"
+      "</div></div>" +
+      (this.nivelAberto ? this._painelNivel(f) : "") +
+      '<div class="ficha-personagem__faixa-atributos">' +
+      this._atributosGrid(f, editavel) +
+      this._barraPv(f) +
+      this._barraXp(f) +
+      "</div>" +
+      "</div>"
+    );
+  };
+
+  // Barra de experiência do cabeçalho — cálculo de exibição a partir de Ficha.xp/nivel (XP_POR_NIVEL
+  // acima), sem campo novo no banco. O botão "⇧" mora aqui agora (era solto nos chips do topo) e só
+  // habilita o painel de nível quando já tem XP suficiente pro próximo nível.
+  Widget.prototype._barraXp = function (f) {
+    if (this.tipo === "monstro") return "";
+    var editavel = this.autenticado;
+    var nivel = f.nivel || 1;
+    var proximo = XP_POR_NIVEL[nivel + 1];
+    var xp = f.xp || 0;
+    var pronto = proximo != null && xp >= proximo;
+    var pct = proximo ? Math.max(0, Math.min(100, (xp / proximo) * 100)) : 100;
+    var botaoNivel = editavel
+      ? '<button type="button" class="ficha-personagem__botao-nivel' + (pronto ? " ficha-personagem__botao-nivel--pronto" : "") +
+        '" data-acao="abrir-nivel" title="' + (pronto ? "Pronto para subir de nível" : "Experiência insuficiente para subir de nível") + '">⇧</button>'
+      : "";
+    return (
+      '<div class="ficha-personagem__barra-xp">' +
+      '<div class="ficha-personagem__barra-xp-linha">' +
+      '<div class="ficha-personagem__barra-xp-topo"><span class="ficha-personagem__rotulo-mini">Experiência</span>' +
+      "<span>" + xp.toLocaleString("pt-BR") + (proximo != null ? " / " + proximo.toLocaleString("pt-BR") : " (nível máximo)") + "</span></div>" +
+      '<div class="ficha-personagem__barra-xp-trilho"><div class="ficha-personagem__barra-xp-preenchimento" style="width:' + pct + '%"></div></div>' +
+      "</div>" + botaoNivel +
+      "</div>"
+    );
+  };
+
+  // "Subir de nível" (ver admin/personagens_api.py::subir_de_nivel) — reabre a decisão antiga de
+  // classe/subclasse serem só rótulo livre (2026-11-04, a pedido do autor). Painel inline, mesmo
+  // padrão do ficha-personagem__picker (não um modal flutuante — o projeto não usa overlay aqui).
+  Widget.prototype._painelNivel = function (f) {
+    var self = this;
+    var n = this.nivelAberto;
+    if (this.classesCatalogo === null) {
+      return '<div class="ficha-personagem__nivel-painel"><p class="ajuda">Carregando classes…</p></div>';
+    }
+    var catalogo = this.classesCatalogo;
+    var opcoesClasse = catalogo.map(function (c) {
+      return '<option value="' + c.id + '"' + (c.id === n.classeId ? " selected" : "") + ">" + escapeHtml(c.nome) + "</option>";
+    }).join("");
+    var classeEscolhida = catalogo.filter(function (c) { return c.id === n.classeId; })[0];
+    var opcoesSubclasse = classeEscolhida
+      ? classeEscolhida.subclasses.map(function (s) {
+          return '<option value="' + s.id + '"' + (s.id === n.subclasseId ? " selected" : "") + ">" + escapeHtml(s.nome) + "</option>";
+        }).join("")
+      : "";
+    var classesAtuais = (f.classes || []).map(function (c) {
+      return "<li>" + escapeHtml(c.classe_nome) + " " + c.nivel + (c.subclasse_nome ? " (" + escapeHtml(c.subclasse_nome) + ")" : "") + "</li>";
+    }).join("");
+
+    return (
+      '<div class="ficha-personagem__nivel-painel">' +
+      (classesAtuais
+        ? "<p><strong>Classes atuais</strong></p><ul class=\"ficha-personagem__lista-simples\">" + classesAtuais + "</ul>"
+        : '<p class="ajuda">Nenhuma classe cadastrada ainda nesta ficha.</p>') +
+      '<div class="ficha-personagem__nivel-linha">' +
+      '<label>Classe a subir<select data-acao="nivel-classe"><option value="">(escolher)</option>' + opcoesClasse + "</select></label>" +
+      (classeEscolhida && classeEscolhida.subclasses.length
+        ? '<label>Subclasse<select data-acao="nivel-subclasse"><option value="">(nenhuma)</option>' + opcoesSubclasse + "</select></label>"
+        : "") +
+      '<label>PV ganho<input type="number" class="input-pequeno" placeholder="automático" data-nivel-pv></label>' +
+      "</div>" +
+      '<div class="ficha-personagem__nivel-acoes">' +
+      '<button type="button" class="botao-principal" data-acao="confirmar-nivel"' + (n.classeId ? "" : " disabled") + ">Confirmar subida de nível</button>" +
+      '<button type="button" class="botao-remover" data-acao="fechar-nivel">Cancelar</button>' +
+      "</div>" +
+      '<details class="ficha-personagem__picker-novo"><summary>+ nova classe no catálogo</summary>' +
+      '<div class="ficha-personagem__picker-novo-campos">' +
+      '<label>Nome<input type="text" data-novo-classe="nome"></label>' +
+      '<label>Dado de vida<select data-novo-classe="dado_vida">' +
+      [6, 8, 10, 12].map(function (d) { return '<option value="' + d + '"' + (d === 8 ? " selected" : "") + ">d" + d + "</option>"; }).join("") +
+      "</select></label>" +
+      '<label>Atributo de conjuração<select data-novo-classe="atributo_conjuracao">' +
+      '<option value="">(não conjura)</option><option value="int">Inteligência</option>' +
+      '<option value="sab">Sabedoria</option><option value="car">Carisma</option></select></label>' +
+      '<label>Progressão de conjuração<select data-novo-classe="progressao_conjuracao">' +
+      '<option value="">(não conjura)</option><option value="completo">Completa</option>' +
+      '<option value="meio">Metade</option><option value="terco">Terço</option>' +
+      '<option value="pacto">Pacto (Bruxo)</option></select></label>' +
+      "</div>" +
+      '<button type="button" class="botao-secundario" data-acao="criar-classe-nivel">Criar classe</button>' +
+      "</details>" +
+      (classeEscolhida
+        ? '<details class="ficha-personagem__picker-novo"><summary>+ nova subclasse de ' + escapeHtml(classeEscolhida.nome) + "</summary>" +
+          '<input type="text" placeholder="Nome da subclasse" data-nova-subclasse-nome>' +
+          '<button type="button" class="botao-secundario" data-acao="criar-subclasse-nivel" data-classe="' + classeEscolhida.id + '">Criar subclasse</button>' +
+          "</details>"
+        : "") +
+      "</div>"
     );
   };
 
@@ -366,10 +505,67 @@
     }
   };
 
+  // Agrega equipamento/magia/habilidade favoritados (★) num só painel no topo da aba Atributos,
+  // com filtro por tipo de ação — pedido do autor a partir da aba "Attributes" do D&D Beyond, que
+  // reúne os itens de acesso rápido do jogador num só lugar em vez de espalhados pelas abas.
+  Widget.prototype._listaFavoritos = function (f) {
+    var grupos = [
+      ["Equipamento", (f.equipamentos || []).filter(function (e) { return e.favorito; }), function (e) {
+        return e.quantidade > 1 ? e.quantidade + "×" : "";
+      }],
+      ["Magias", (f.magias || []).filter(function (e) { return e.favorito; }), function (e) {
+        return e.componentes || "";
+      }],
+      ["Habilidades", (f.habilidades || []).filter(function (e) { return e.favorito; }), function (e) {
+        return e.usos_maximo != null ? e.usos_restantes + "/" + e.usos_maximo : (e.usos || "");
+      }],
+    ].filter(function (g) { return g[1].length; });
+
+    if (!grupos.length) return "";
+
+    var filtro = this.filtroAcao;
+    var filtros = FILTROS_ACAO.map(function (par) {
+      return '<button type="button" class="ficha-personagem__filtro-acao' + (par[0] === filtro ? " ficha-personagem__filtro-acao--ativo" : "") +
+        '" data-acao="filtrar-acao" data-filtro="' + par[0] + '">' + par[1] + "</button>";
+    }).join("");
+
+    var corpo = grupos.map(function (g) {
+      var itens = g[1].filter(function (e) {
+        return filtro === "todas" || (e.tipo_acao || "nenhuma") === filtro;
+      });
+      if (!itens.length) return "";
+      var linhas = itens.map(function (e) {
+        var extra = g[2](e);
+        var chipAcao = e.tipo_acao && e.tipo_acao !== "nenhuma"
+          ? '<span class="pilula">' + escapeHtml(ROTULOS_TIPO_ACAO[e.tipo_acao] || e.tipo_acao) + "</span>"
+          : "";
+        return (
+          '<li class="ficha-personagem__favorito-item">' +
+          simAcao(e.tipo_acao) +
+          "<strong>" + escapeHtml(e.nome) + "</strong>" +
+          (extra ? ' <span class="ajuda">' + escapeHtml(extra) + "</span>" : "") +
+          chipAcao + "</li>"
+        );
+      }).join("");
+      return (
+        '<div class="ficha-personagem__favorito-grupo"><p><strong>' + g[0] + " (" + itens.length + ")</strong></p>" +
+        "<ul>" + linhas + "</ul></div>"
+      );
+    }).join("");
+
+    return (
+      '<div class="ficha-personagem__grupo ficha-personagem__favoritos">' +
+      '<p><strong>★ Favoritos</strong></p>' +
+      '<div class="ficha-personagem__filtros-acao">' + filtros + "</div>" +
+      (corpo || '<p class="ajuda">Nenhum item com esse filtro.</p>') +
+      "</div>"
+    );
+  };
+
   Widget.prototype._abaAtributos = function (f, editavel) {
     return (
       '<div class="ficha-personagem__painel-aba">' +
-      this._atributosGrid(f, editavel) +
+      this._listaFavoritos(f) +
       this._listaPericias(f, editavel) +
       this._listaIdiomas(f, editavel) + this._listaSentidos(f, editavel) +
       this._listaResistenciasDano(f, editavel) +
@@ -429,9 +625,91 @@
     return (
       '<div class="ficha-personagem__painel-aba">' +
       resumoCarga +
-      this._listaCatalogo(f, editavel, "equipamentos", f.equipamentos) +
+      this._listaEquipamentos(f, editavel) +
       '<div class="ficha-personagem__grupo"><p><strong>Moeda e carga</strong></p>' +
       '<div class="ficha-personagem__moedas">' + moedas + carga + "</div></div>" +
+      "</div>"
+    );
+  };
+
+  // Equipamento com cantêiner (ver admin/banco.py::Equipamento.e_container/capacidade_kg e
+  // FichaEquipamento.guardado_em_vinculo_id) — substitui _listaCatalogo só pra esta aba: cada item
+  // pode ser equipado, ter a quantidade editada e ser guardado dentro de outro item marcado como
+  // cantêiner (Mochila, Bolsa de Componentes...). Passar da capacidade avisa, não bloqueia — decisão
+  // de UX do próprio design (ver PUT /api/fichas/<id>/equipamentos/<vinculo>).
+  Widget.prototype._listaEquipamentos = function (f, editavel) {
+    var itens = f.equipamentos || [];
+    if (!itens.length && !editavel) return "";
+    var containers = itens.filter(function (e) { return e.e_container; });
+
+    function pesoDe(e) { return (e.peso_kg || 0) * (e.quantidade || 1); }
+
+    function linhaItem(e) {
+      var detalhe = [
+        e.categoria, e.ca_bonus ? "CA +" + e.ca_bonus : e.ca_formula,
+        e.dano_formula ? (e.dano_formula + " " + (e.dano_tipo || "")) : null,
+        e.peso_kg != null ? e.peso_kg + " kg" : null,
+      ].filter(Boolean).join(" · ");
+      var simb = simAcao(e.tipo_acao);
+      var favorito = editavel
+        ? '<button type="button" class="botao-favorito' + (e.favorito ? " botao-favorito--ativo" : "") +
+          '" data-acao="alternar-favorito" data-tipo="equipamentos" data-vinculo="' + e.vinculo_id + '" title="Favoritar">★</button>'
+        : (e.favorito ? "★" : "");
+      if (!editavel) {
+        return (
+          "<li>" + favorito + simb + " <strong>" + escapeHtml(e.nome) + "</strong>" +
+          (e.quantidade > 1 ? " ×" + e.quantidade : "") +
+          (e.equipado ? ' <span class="pilula pilula--ativa">Equipado</span>' : "") +
+          (detalhe ? " — " + escapeHtml(detalhe) : "") + "</li>"
+        );
+      }
+      var opcoesContainer = ['<option value="">Solto</option>'].concat(
+        containers.filter(function (c) { return c.vinculo_id !== e.vinculo_id; }).map(function (c) {
+          return '<option value="' + c.vinculo_id + '"' + (e.guardado_em_vinculo_id === c.vinculo_id ? " selected" : "") + ">" + escapeHtml(c.nome) + "</option>";
+        })
+      ).join("");
+      var remover = ' <button type="button" class="botao-remover" data-acao="remover-vinculo" data-tipo="equipamentos" data-vinculo="' + e.vinculo_id + '" title="Remover">×</button>';
+      return (
+        '<li class="ficha-personagem__item-equipamento">' +
+        favorito + simb + " <strong>" + escapeHtml(e.nome) + "</strong>" +
+        (detalhe ? ' <span class="ajuda">' + escapeHtml(detalhe) + "</span>" : "") +
+        '<button type="button" class="ficha-personagem__botao-equipar' + (e.equipado ? " ficha-personagem__botao-equipar--ativo" : "") +
+        '" data-acao="alternar-equipado" data-vinculo="' + e.vinculo_id + '">' + (e.equipado ? "✓ Equipado" : "Equipar") + "</button>" +
+        '<input type="number" min="1" class="input-pequeno" data-acao="editar-quantidade" data-vinculo="' + e.vinculo_id + '" value="' + e.quantidade + '">' +
+        '<label class="ajuda">Guardado em <select data-acao="mover-item" data-vinculo="' + e.vinculo_id + '">' + opcoesContainer + "</select></label>" +
+        remover + "</li>"
+      );
+    }
+
+    var soltos = itens.filter(function (e) { return !e.guardado_em_vinculo_id; });
+    var corpo = soltos.length ? '<ul class="ficha-personagem__lista-equipamentos">' + soltos.map(linhaItem).join("") + "</ul>" : "";
+
+    var blocosContainer = containers.map(function (c) {
+      var dentro = itens.filter(function (e) { return e.guardado_em_vinculo_id === c.vinculo_id; });
+      var peso = dentro.reduce(function (s, e) { return s + pesoDe(e); }, 0);
+      var cap = c.capacidade_kg;
+      var pct = cap ? Math.max(0, Math.min(100, (peso / cap) * 100)) : 0;
+      var cheio = cap != null && peso > cap;
+      return (
+        '<div class="ficha-personagem__container' + (cheio ? " ficha-personagem__container--cheio" : "") + '">' +
+        '<div class="ficha-personagem__container-cabeca"><strong>' + escapeHtml(c.nome) + "</strong>" +
+        (cap != null ? '<span class="ajuda">' + arredondarPasso(peso) + "/" + arredondarPasso(cap) + " kg" + (cheio ? " — cheio!" : "") + "</span>" : "") +
+        "</div>" +
+        (cap != null ? '<div class="ficha-personagem__barra-carga' + (cheio ? " ficha-personagem__barra-carga--estourada" : "") +
+          '"><div class="ficha-personagem__barra-carga-preenchimento" style="width:' + pct + '%"></div></div>' : "") +
+        (dentro.length ? '<ul class="ficha-personagem__lista-equipamentos">' + dentro.map(linhaItem).join("") + "</ul>" : '<p class="ajuda">Vazio.</p>') +
+        "</div>"
+      );
+    }).join("");
+
+    var botaoAdicionar = editavel
+      ? '<button type="button" class="botao-secundario ficha-personagem__adicionar" data-acao="abrir-picker" data-tipo="equipamentos">+ adicionar equipamento</button>'
+      : "";
+
+    return (
+      '<div class="ficha-personagem__grupo"><p><strong>Equipamento</strong></p>' +
+      corpo + blocosContainer +
+      botaoAdicionar + this._pickerSeAberto("equipamentos") +
       "</div>"
     );
   };
@@ -613,14 +891,11 @@
         detalhe = [e.nivel != null ? "nível " + e.nivel : null, e.escola, e.alcance];
       }
       detalhe = detalhe.filter(Boolean).join(" · ");
-      var favorito = "";
-      if (tipo === "magias") {
-        favorito = editavel
-          ? '<button type="button" class="botao-favorito' + (e.favorito ? " botao-favorito--ativo" : "") +
-            '" data-acao="alternar-favorito" data-tipo="magias" data-vinculo="' + e.vinculo_id + '" title="Favoritar">★</button> '
-          : (e.favorito ? "★ " : "");
-      }
-      return "<li>" + favorito + "<strong>" + escapeHtml(e.nome) + "</strong>" + (detalhe ? " — " + escapeHtml(detalhe) : "") + remover + "</li>";
+      var favorito = editavel
+        ? '<button type="button" class="botao-favorito' + (e.favorito ? " botao-favorito--ativo" : "") +
+          '" data-acao="alternar-favorito" data-tipo="' + tipo + '" data-vinculo="' + e.vinculo_id + '" title="Favoritar">★</button> '
+        : (e.favorito ? "★ " : "");
+      return "<li>" + favorito + simAcao(e.tipo_acao) + "<strong>" + escapeHtml(e.nome) + "</strong>" + (detalhe ? " — " + escapeHtml(detalhe) : "") + remover + "</li>";
     }).join("");
     var titulo = tipo === "equipamentos" ? "Equipamento" : "Magias";
     var botaoAdicionar = editavel
@@ -665,7 +940,7 @@
         var remover = editavel
           ? ' <button type="button" class="botao-remover" data-acao="remover-vinculo" data-tipo="habilidades" data-vinculo="' + h.vinculo_id + '" title="Remover">×</button>'
           : "";
-        corpo += "<li>" + favorito + "<strong>" + escapeHtml(h.nome) + ".</strong> " + escapeHtml(h.descricao || "") +
+        corpo += "<li>" + favorito + simAcao(h.tipo_acao) + "<strong>" + escapeHtml(h.nome) + ".</strong> " + escapeHtml(h.descricao || "") +
           (sufixo.length ? ' <span class="ajuda">(' + escapeHtml(sufixo.join(", ")) + ")</span>" : "") + usos + remover + "</li>";
       });
       corpo += "</ul>";
@@ -770,7 +1045,10 @@
       '<details class="ficha-personagem__picker-novo"><summary>Criar entrada nova no catálogo</summary>' +
       '<div class="ficha-personagem__picker-novo-campos">' +
       CAMPOS_NOVO_CATALOGO[tipo].map(function (c) {
-        return '<label>' + c[1] + '<input type="' + c[2] + '"' + (c[2] === "number" ? ' min="0"' : "") + ' data-novo-campo="' + c[0] + '"></label>';
+        if (c[2] === "checkbox") {
+          return '<label class="ficha-personagem__campo-checkbox"><input type="checkbox" data-novo-campo="' + c[0] + '"> ' + c[1] + "</label>";
+        }
+        return '<label>' + c[1] + '<input type="' + c[2] + '"' + (c[2] === "number" ? ' min="0" step="any"' : "") + ' data-novo-campo="' + c[0] + '"></label>';
       }).join("") +
       "</div>" +
       '<button type="button" class="botao-principal" data-acao="criar-e-usar" data-tipo="' + tipo + '">Criar e usar</button>' +
@@ -867,6 +1145,21 @@
         self.chamar("PUT", "/api/fichas/" + ficha.id + "/habilidades/" + ev.target.getAttribute("data-vinculo") + "/usos",
           { tipo_descanso: ev.target.value || null });
       }
+      if (ev.target.matches && ev.target.matches('[data-acao="nivel-classe"]')) {
+        self.nivelAberto.classeId = ev.target.value ? parseInt(ev.target.value, 10) : null;
+        self.nivelAberto.subclasseId = null;
+        self.renderizar();
+      }
+      if (ev.target.matches && ev.target.matches('[data-acao="nivel-subclasse"]')) {
+        self.nivelAberto.subclasseId = ev.target.value ? parseInt(ev.target.value, 10) : null;
+      }
+      if (ev.target.matches && ev.target.matches('[data-acao="mover-item"]')) {
+        self.atualizarEquipamento(ficha.id, ev.target.getAttribute("data-vinculo"),
+          { guardado_em_vinculo_id: ev.target.value || null });
+      }
+      if (ev.target.matches && ev.target.matches('[data-acao="editar-quantidade"]')) {
+        self.atualizarEquipamento(ficha.id, ev.target.getAttribute("data-vinculo"), { quantidade: ev.target.value });
+      }
     });
 
     this.raiz.addEventListener("click", function (ev) {
@@ -893,6 +1186,9 @@
       } else if (acao === "trocar-aba2") {
         self.abaConteudo = botao.getAttribute("data-aba2");
         self.pickerAberto = null;
+        self.renderizar();
+      } else if (acao === "filtrar-acao") {
+        self.filtroAcao = botao.getAttribute("data-filtro");
         self.renderizar();
       } else if (acao === "nova-variante") {
         var rotulo = window.prompt("Nome curto da variante (ex.: Arqueiro):", "");
@@ -953,6 +1249,28 @@
         self.novaEntradaDiario(botao.closest(".ficha-personagem__diario-novo"));
       } else if (acao === "remover-diario") {
         self.chamar("DELETE", self._base() + "/diario/" + botao.getAttribute("data-vinculo"));
+      } else if (acao === "abrir-nivel") {
+        self.nivelAberto = { classeId: null, subclasseId: null };
+        self.renderizar();
+        if (!self.classesCatalogo) {
+          fetch("/api/classes").then(function (r) { return r.json(); }).then(function (d) {
+            self.classesCatalogo = d.classes || [];
+            self.renderizar();
+          });
+        }
+      } else if (acao === "fechar-nivel") {
+        self.nivelAberto = null;
+        self.renderizar();
+      } else if (acao === "criar-classe-nivel") {
+        self.criarClasseNivel(botao.closest(".ficha-personagem__nivel-painel"));
+      } else if (acao === "criar-subclasse-nivel") {
+        self.criarSubclasseNivel(botao.getAttribute("data-classe"), botao.closest(".ficha-personagem__nivel-painel"));
+      } else if (acao === "confirmar-nivel") {
+        self.confirmarNivel(ficha, botao.closest(".ficha-personagem__nivel-painel"));
+      } else if (acao === "alternar-equipado") {
+        var vinc = botao.getAttribute("data-vinculo");
+        var atual = (ficha.equipamentos || []).filter(function (e) { return String(e.vinculo_id) === vinc; })[0];
+        self.atualizarEquipamento(ficha.id, vinc, { equipado: !(atual && atual.equipado) });
       }
     });
   };
@@ -1026,11 +1344,22 @@
     });
   };
 
+  // Edita quantidade/equipado/guardado_em_vinculo_id de um item já vinculado — a única rota que
+  // muda esses campos depois que o item foi adicionado (ver admin/personagens_api.py::
+  // atualizar_vinculo_equipamento). O aviso de cantêiner cheio não bloqueia a gravação.
+  Widget.prototype.atualizarEquipamento = function (fichaId, vinculoId, campos) {
+    var self = this;
+    this.chamar("PUT", "/api/fichas/" + fichaId + "/equipamentos/" + vinculoId, campos).then(function (ok) {
+      if (ok && self.dados && self.dados.aviso) window.alert(self.dados.aviso);
+    });
+  };
+
   Widget.prototype.criarEUsar = function (tipo, painelPicker) {
     var self = this;
     var campos = {};
     painelPicker.querySelectorAll("[data-novo-campo]").forEach(function (el) {
-      if (el.value) campos[el.getAttribute("data-novo-campo")] = el.value;
+      if (el.type === "checkbox") { campos[el.getAttribute("data-novo-campo")] = el.checked; }
+      else if (el.value) { campos[el.getAttribute("data-novo-campo")] = el.value; }
     });
     if (!campos.nome) { window.alert("Dê um nome."); return; }
     fetch("/api/catalogo/" + tipo, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(campos) })
@@ -1040,6 +1369,49 @@
         var ficha = self.fichaAtual();
         self.chamar("POST", "/api/fichas/" + ficha.id + "/" + tipo, { item_id: item.id });
       });
+  };
+
+  Widget.prototype.criarClasseNivel = function (painel) {
+    var self = this;
+    var campos = {};
+    painel.querySelectorAll("[data-novo-classe]").forEach(function (el) {
+      if (el.value) campos[el.getAttribute("data-novo-classe")] = el.value;
+    });
+    if (!campos.nome) { window.alert("Dê um nome à classe."); return; }
+    fetch("/api/classes", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(campos) })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d.erro) { window.alert(d.erro); return; }
+        self.classesCatalogo.push(Object.assign({ subclasses: [] }, d.classe));
+        self.nivelAberto.classeId = d.classe.id;
+        self.renderizar();
+      });
+  };
+
+  Widget.prototype.criarSubclasseNivel = function (classeId, painel) {
+    var self = this;
+    var nome = painel.querySelector("[data-nova-subclasse-nome]").value;
+    if (!nome) { window.alert("Dê um nome à subclasse."); return; }
+    fetch("/api/classes/" + classeId + "/subclasses", {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ nome: nome }),
+    }).then(function (r) { return r.json(); }).then(function (d) {
+      if (d.erro) { window.alert(d.erro); return; }
+      var classe = self.classesCatalogo.filter(function (c) { return c.id === parseInt(classeId, 10); })[0];
+      if (classe) classe.subclasses.push(d.subclasse);
+      self.nivelAberto.subclasseId = d.subclasse.id;
+      self.renderizar();
+    });
+  };
+
+  Widget.prototype.confirmarNivel = function (ficha, painel) {
+    var n = this.nivelAberto;
+    if (!n || !n.classeId) return;
+    var pvInput = painel.querySelector("[data-nivel-pv]");
+    var corpo = { classe_id: n.classeId, subclasse_id: n.subclasseId };
+    if (pvInput && pvInput.value !== "") corpo.pv_ganho = pvInput.value;
+    this.chamar("POST", this._base() + "/fichas/" + ficha.id + "/subir-nivel", corpo).then(function (ok) {
+      if (ok) { this.nivelAberto = null; this.renderizar(); }
+    }.bind(this));
   };
 
   Widget.prototype.novoEfeito = function (ficha, painel) {

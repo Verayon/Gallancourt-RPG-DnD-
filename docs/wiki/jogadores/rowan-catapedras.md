@@ -1,16 +1,15 @@
 ---
 tags:
-- Mestre
 - Jogador
 hide:
 - toc
 jogador:
-  jogador: Tinker
-  raca_classe: Meio-Orc Paladino
+  jogador: Miguel
+  raca_classe: Meio-Anão Patrulheiro
   resumo: ''
 ---
 
-# Trembolinha
+# Rowan CataPedras
 
 *(Descrição a preencher.)*
 

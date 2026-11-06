@@ -27,6 +27,8 @@ import gerador_npc as gn
 import banco
 import personagens_api as ma
 import combate_api as ca
+import encontro_api as ea
+import sessao_viva_api as sv
 
 ROOT = Path(os.environ.get("GALLANCOURT_ADMIN_ROOT", wd.DEFAULT_ROOT)).resolve()
 SITE_DIR = ROOT / "site"
@@ -149,6 +151,7 @@ def api_auth_sair():
 # login). Checado só em GET: POST/PUT/DELETE nesses mesmos prefixos continuam exigindo login.
 _PREFIXOS_API_LEITURA_LIVRE = (
     "/api/personagens", "/api/catalogo", "/api/auth/", "/api/roadmap", "/api/combate",
+    "/api/encontros", "/api/classes", "/api/sessao-viva",
 )
 
 
@@ -751,6 +754,20 @@ def api_alternar_favorito_vinculo(ficha_id, tipo, vinculo_id):
         return jsonify(ma.serializar_personagem(ficha.personagem))
 
 
+@app.put("/api/fichas/<int:ficha_id>/equipamentos/<int:vinculo_id>")
+def api_atualizar_vinculo_equipamento(ficha_id, vinculo_id):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        ficha = ma.obter_ficha(sessao, ficha_id)
+        if ficha is None:
+            return _erro_json("Ficha não encontrada.")
+        try:
+            resultado = ma.atualizar_vinculo_equipamento(sessao, ficha, vinculo_id, dados)
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        return jsonify(aviso=resultado["aviso"], **ma.serializar_personagem(ficha.personagem))
+
+
 @app.put("/api/fichas/<int:ficha_id>/habilidades/<int:vinculo_id>/usos")
 def api_definir_usos_habilidade(ficha_id, vinculo_id):
     dados = request.get_json(silent=True) or {}
@@ -1008,6 +1025,55 @@ def api_descanso_curto(tipo, slug, ficha_id):
         return jsonify(ma.serializar_personagem(ma.obter_personagem(sessao, tipo, slug)))
 
 
+@app.get("/api/classes")
+def api_listar_classes():
+    with SessaoBanco() as sessao:
+        return jsonify(classes=ma.listar_classes(sessao))
+
+
+@app.post("/api/classes")
+def api_criar_classe():
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        try:
+            classe = ma.criar_classe(sessao, dados)
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        return jsonify(classe=classe)
+
+
+@app.post("/api/classes/<int:classe_id>/subclasses")
+def api_criar_subclasse(classe_id):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        try:
+            subclasse = ma.criar_subclasse(sessao, classe_id, dados.get("nome", ""))
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        return jsonify(subclasse=subclasse)
+
+
+@app.post("/api/personagens/<tipo>/<slug>/fichas/<int:ficha_id>/subir-nivel")
+def api_subir_de_nivel(tipo, slug, ficha_id):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        ficha = ma.obter_ficha(sessao, ficha_id)
+        if ficha is None or ficha.personagem.slug != slug or ficha.personagem.tipo != tipo:
+            return _erro_json("Ficha não encontrada.")
+        classe_id = dados.get("classe_id")
+        if not classe_id:
+            return _erro_json("Informe classe_id.", 400)
+        subclasse_id = dados.get("subclasse_id")
+        try:
+            ma.subir_de_nivel(
+                sessao, ficha, int(classe_id),
+                int(subclasse_id) if subclasse_id else None, dados.get("pv_ganho"),
+            )
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        return jsonify(ma.serializar_personagem(ma.obter_personagem(sessao, tipo, slug)))
+
+
 @app.get("/api/personagens-busca")
 def api_buscar_personagens():
     with SessaoBanco() as sessao:
@@ -1039,8 +1105,13 @@ def api_ver_combate(pagina):
 
 @app.post("/api/combate/<path:pagina>/iniciar")
 def api_iniciar_combate(pagina):
+    dados = request.get_json(silent=True) or {}
     with SessaoBanco() as sessao:
         combate = ca.iniciar_combate(sessao, pagina)
+        encontro_id = dados.get("encontro_id")
+        if encontro_id and not combate.participantes:
+            ea.carregar_no_combate(sessao, combate, int(encontro_id))
+            combate = ca.obter_combate(sessao, combate.id)
         return _combate_json(combate)
 
 
@@ -1160,6 +1231,40 @@ def api_alternar_economia_acao(combate_id, participante_id):
         if combate is None:
             return _erro_json("Combate não encontrado.")
         return _combate_json(combate)
+
+
+@app.post("/api/combate/<int:combate_id>/participantes/<int:participante_id>/conjurar")
+def api_conjurar_magia(combate_id, participante_id):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        try:
+            resultado = ca.conjurar_magia(
+                sessao, participante_id, int(dados.get("magia_vinculo_id")),
+                int(dados.get("nivel_slot")), bool(dados.get("forcar", False)),
+            )
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        combate = ca.obter_combate(sessao, combate_id)
+        if combate is None:
+            return _erro_json("Combate não encontrado.")
+        return jsonify(combate=ca.serializar_combate(combate), resultado=resultado)
+
+
+@app.post("/api/combate/<int:combate_id>/participantes/<int:participante_id>/usar-item")
+def api_usar_carga_item(combate_id, participante_id):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        try:
+            resultado = ca.usar_carga_item(
+                sessao, participante_id, int(dados.get("equipamento_vinculo_id")),
+                bool(dados.get("forcar", False)),
+            )
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        combate = ca.obter_combate(sessao, combate_id)
+        if combate is None:
+            return _erro_json("Combate não encontrado.")
+        return jsonify(combate=ca.serializar_combate(combate), resultado=resultado)
 
 
 @app.post("/api/combate/<int:combate_id>/participantes/<int:participante_id>/reacao")
@@ -1300,8 +1405,147 @@ def api_aplicar_loot(combate_id):
 
 
 # --------------------------------------------------------------------------
+# API JSON de Encontros planejados (ver admin/banco.py: EncontroPlanejado/
+# EncontroParticipantePlanejado, admin/encontro_api.py) — rascunho de combate preparado antes da
+# sessão, na aba "NPCs" da página; "Iniciar combate" no Combat Tracker pode carregar um desses
+# (ver api_iniciar_combate acima). GET público, igual ao resto de /api/combate.
+# --------------------------------------------------------------------------
+
+@app.get("/api/encontros/<path:pagina>")
+def api_listar_encontros(pagina):
+    with SessaoBanco() as sessao:
+        encontros = ea.listar_encontros(sessao, pagina)
+        return jsonify(encontros=[ea.serializar_encontro(e) for e in encontros])
+
+
+@app.post("/api/encontros/<path:pagina>")
+def api_criar_encontro(pagina):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        encontro = ea.criar_encontro(sessao, pagina, dados.get("nome", ""))
+        return jsonify(encontro=ea.serializar_encontro(encontro))
+
+
+@app.delete("/api/encontros/<int:encontro_id>")
+def api_excluir_encontro(encontro_id):
+    with SessaoBanco() as sessao:
+        ea.excluir_encontro(sessao, encontro_id)
+        return jsonify(ok=True)
+
+
+@app.post("/api/encontros/<int:encontro_id>/participantes")
+def api_adicionar_participante_planejado(encontro_id):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        try:
+            encontro = ea.adicionar_participante_planejado(
+                sessao, encontro_id, int(dados.get("ficha_id")), dados.get("nome_exibicao"),
+            )
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        if encontro is None:
+            return _erro_json("Encontro não encontrado.")
+        return jsonify(encontro=ea.serializar_encontro(encontro))
+
+
+@app.delete("/api/encontros/participantes/<int:participante_id>")
+def api_remover_participante_planejado(participante_id):
+    with SessaoBanco() as sessao:
+        encontro = ea.remover_participante_planejado(sessao, participante_id)
+        if encontro is None:
+            return _erro_json("Participante não encontrado.")
+        return jsonify(encontro=ea.serializar_encontro(encontro))
+
+
+# --------------------------------------------------------------------------
+# API JSON do Master's Shield — fundação (ver admin/banco.py: SessaoAoVivo/Lugar/Interacao/
+# InteracaoParticipante/Rolagem, admin/sessao_viva_api.py). Painel sempre visível na página de
+# sessão, onde hoje só aparecia o Combat Tracker (que continua existindo, aninhado, em
+# /api/combate/... acima). GET público, igual ao resto de /api/combate.
+# --------------------------------------------------------------------------
+
+@app.get("/api/sessao-viva/lugares")
+def api_listar_lugares_master_shield():
+    with SessaoBanco() as sessao:
+        return jsonify(lugares=[sv.serializar_lugar(l) for l in sv.listar_lugares(sessao)])
+
+
+@app.get("/api/sessao-viva/<path:pagina>")
+def api_ver_sessao_viva(pagina):
+    with SessaoBanco() as sessao:
+        viva = sv.obter_ou_criar_sessao_viva(sessao, pagina)
+        interacoes = sv.listar_interacoes(sessao, pagina)
+        return jsonify(
+            sessao_viva=sv.serializar_sessao_viva(viva),
+            interacoes=[sv.serializar_interacao(i) for i in interacoes],
+        )
+
+
+@app.put("/api/sessao-viva/<path:pagina>/tempo")
+def api_atualizar_tempo(pagina):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        viva = sv.obter_ou_criar_sessao_viva(sessao, pagina)
+        if "minutos" in dados:
+            sv.avancar_tempo(sessao, viva, dados.get("minutos"))
+        else:
+            sv.atualizar_momento(sessao, viva, dados)
+        return jsonify(sessao_viva=sv.serializar_sessao_viva(viva))
+
+
+@app.put("/api/sessao-viva/<path:pagina>/lugar")
+def api_definir_lugar_atual(pagina):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        viva = sv.obter_ou_criar_sessao_viva(sessao, pagina)
+        try:
+            sv.definir_lugar_atual(sessao, viva, dados.get("lugar_id"))
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        return jsonify(sessao_viva=sv.serializar_sessao_viva(viva))
+
+
+@app.post("/api/sessao-viva/<path:pagina>/lugares-provisorio")
+def api_criar_lugar_provisorio(pagina):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        try:
+            lugar = sv.criar_lugar_provisorio(sessao, dados.get("nome", ""), dados.get("lugar_pai_id"))
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        return jsonify(lugar=sv.serializar_lugar(lugar))
+
+
+@app.get("/api/sessao-viva/<path:pagina>/interacoes")
+def api_listar_interacoes(pagina):
+    with SessaoBanco() as sessao:
+        interacoes = sv.listar_interacoes(sessao, pagina)
+        return jsonify(interacoes=[sv.serializar_interacao(i) for i in interacoes])
+
+
+@app.post("/api/sessao-viva/<path:pagina>/interacoes")
+def api_registrar_interacao(pagina):
+    dados = request.get_json(silent=True) or {}
+    with SessaoBanco() as sessao:
+        try:
+            interacao = sv.registrar_interacao(sessao, pagina, dados)
+        except ValueError as exc:
+            return _erro_json(str(exc), 400)
+        return jsonify(interacao=sv.serializar_interacao(interacao))
+
+
+@app.post("/api/rolar")
+def api_rolar_online():
+    dados = request.get_json(silent=True) or {}
+    try:
+        return jsonify(**sv.rolar_online(dados.get("dado", ""), dados.get("vantagem")))
+    except ValueError as exc:
+        return _erro_json(str(exc), 400)
+
+
+# --------------------------------------------------------------------------
 # API JSON de criação/listagem de entidades — usada pelos widgets embutidos direto nas páginas
-# do site (docs/personagens/index.md, docs/lugares/index.md, docs/mestre/jogadores/index.md),
+# do site (docs/personagens/index.md, docs/lugares/index.md, docs/wiki/jogadores/index.md),
 # para não precisar mais abrir o Painel em outra aba. As rotas HTML abaixo (/npc/novo etc.)
 # continuam existindo, como caminho manual de reserva.
 # --------------------------------------------------------------------------

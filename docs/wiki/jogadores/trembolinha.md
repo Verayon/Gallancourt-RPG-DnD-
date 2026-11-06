@@ -1,16 +1,15 @@
 ---
 tags:
-- Mestre
 - Jogador
 hide:
 - toc
 jogador:
-  jogador: Luke
-  raca_classe: Meio-Elfo Bardo
+  jogador: Tinker
+  raca_classe: Meio-Orc Paladino
   resumo: ''
 ---
 
-# Vivien Elaris
+# Trembolinha
 
 *(Descrição a preencher.)*
 

@@ -352,7 +352,7 @@ def teste_painel_lugar(copia: Path):
 def teste_painel_jogador(copia: Path):
     c = _painel(copia)
     _ok(c.post("/jogador/novo", data={"nome": "Personagem de teste", "jogador": "Jogador de teste"}))
-    pagina = copia / "docs" / "mestre" / "jogadores" / "personagem-de-teste.md"
+    pagina = copia / "docs" / "wiki" / "jogadores" / "personagem-de-teste.md"
     assert pagina.exists(), "página do jogador não foi criada"
 
 
@@ -366,16 +366,16 @@ def teste_painel_sessao(copia: Path):
 @verificacao("7. Painel", "Salvar participantes da sessão")
 def teste_painel_participantes(copia: Path):
     pastas_sessao = list((copia / "docs" / "mestre" / "sessoes").glob("sessao-99-*.md"))
-    pagina_jogador = copia / "docs" / "mestre" / "jogadores" / "personagem-de-teste.md"
+    pagina_jogador = copia / "docs" / "wiki" / "jogadores" / "personagem-de-teste.md"
     if not pastas_sessao or not pagina_jogador.exists():
         raise Pulado("depende dos testes 'Criar sessão nova' e 'Adicionar jogador'")
     c = _painel(copia)
     pagina_sessao = pastas_sessao[0].relative_to(copia / "docs").as_posix()
     _ok(c.post("/sessoes/participantes", data={
-        "pagina": pagina_sessao, "jogadores": ["mestre/jogadores/personagem-de-teste.md"],
+        "pagina": pagina_sessao, "jogadores": ["wiki/jogadores/personagem-de-teste.md"],
     }))
     assert front_matter(ler(pastas_sessao[0])).get("participantes", {}).get("jogadores") == [
-        "mestre/jogadores/personagem-de-teste.md",
+        "wiki/jogadores/personagem-de-teste.md",
     ], "participantes não gravados no front-matter da sessão"
 
 
@@ -395,7 +395,7 @@ def teste_painel_api_entidades(copia: Path):
     assert (copia / "docs" / "lugares" / "lugar-via-api.md").exists(), "POST /api/lugares não criou a página"
 
     _ok(c.post("/api/jogadores", data={"nome": "Jogador via API"}))
-    assert (copia / "docs" / "mestre" / "jogadores" / "jogador-via-api.md").exists(), "POST /api/jogadores não criou a página"
+    assert (copia / "docs" / "wiki" / "jogadores" / "jogador-via-api.md").exists(), "POST /api/jogadores não criou a página"
 
     resposta_erro = c.post("/api/lugares", data={"tipo": "sem nome"})
     assert resposta_erro.status_code == 400, "POST /api/lugares sem nome deveria devolver 400"
@@ -405,13 +405,13 @@ def teste_painel_api_entidades(copia: Path):
 def teste_painel_api_criar_sessao(copia: Path):
     pagina_npc = copia / "docs" / "personagens" / "npc-via-api.md"
     pagina_lugar = copia / "docs" / "lugares" / "lugar-via-api.md"
-    pagina_jogador = copia / "docs" / "mestre" / "jogadores" / "jogador-via-api.md"
+    pagina_jogador = copia / "docs" / "wiki" / "jogadores" / "jogador-via-api.md"
     if not (pagina_npc.exists() and pagina_lugar.exists() and pagina_jogador.exists()):
         raise Pulado("depende do teste 'API JSON: listar e criar NPC/lugar/jogador'")
     c = _painel(copia)
     r = c.post("/api/sessoes/nova", json={
         "numero": 98, "titulo": "Sessão via API", "campos": {"data": "2026-11-01"},
-        "npcs": ["personagens/npc-via-api.md"], "jogadores": ["mestre/jogadores/jogador-via-api.md"],
+        "npcs": ["personagens/npc-via-api.md"], "jogadores": ["wiki/jogadores/jogador-via-api.md"],
         "lugares": ["lugares/lugar-via-api.md"], "prompt": "Quero uma sessão de teste.",
     })
     assert r.status_code == 200, f"HTTP {r.status_code}: {r.get_json()}"

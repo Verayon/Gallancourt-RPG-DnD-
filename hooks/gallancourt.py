@@ -9,7 +9,7 @@ Registrado em `mkdocs.yml` (chave `hooks:`). Roda durante a geração do site e:
 - gera a tabela de NPCs em `personagens/index.md` (marcador `<!-- npcs:tabela -->`);
 - gera a lista de sessões em `mestre/sessoes/index.md` (marcador `<!-- sessoes:lista -->`);
 - gera a lista de lugares em `lugares/index.md` (marcador `<!-- lugares:lista -->`) e a de
-  jogadores em `mestre/jogadores/index.md` (marcador `<!-- jogadores:lista -->`);
+  jogadores em `wiki/jogadores/index.md` (marcador `<!-- jogadores:lista -->`);
 - gera as tabelas de magias: por nível em `magias/index.md` (marcador `<!-- magias:niveis -->`)
   e por classe em `magias/por-classe/*.md` (marcador `<!-- magias:classe -->`), lendo o bloco
   `magia:` do front matter de cada página em `magias/*.md`; e, na página de cada magia, acrescenta
@@ -595,7 +595,7 @@ def _lista_pericias(docs: Path, config) -> str:
 
 def _lista_jogadores(docs: Path, config) -> str:
     linhas = []
-    pasta = docs / "mestre" / "jogadores"
+    pasta = docs / "wiki" / "jogadores"
     if pasta.is_dir():
         resumo_bd = _resumo_personagens_bd(docs, tipo="jogador")
         for arquivo in sorted(pasta.glob("*.md")):
@@ -918,9 +918,23 @@ def _ficha_dinamica_personagem(conteudo: str, tipo: str, slug: str) -> str:
     return conteudo.replace("<!-- personagem:ficha-dinamica -->", raiz)
 
 
+def _sessao_viva_dinamica(conteudo: str, pagina_rel_docs: str) -> str:
+    """Troca o marcador `<!-- sessaoviva:painel -->` (aba "Master's Shield" das páginas de
+    sessão, ver admin/wiki_data.py::_modelo_sessao) por uma raiz vazia — mesmo padrão de
+    `_combate_dinamico`: docs/javascripts/sessao_viva.js busca `/api/sessao-viva/<pagina>` ao
+    carregar e desenha calendário/localidade/log de interações ali. Fica **sempre** visível
+    (marcador separado, raiz própria) — diferente de `_combate_dinamico` abaixo, que só mostra
+    algo além do botão "Iniciar combate" quando existe um Combate ativo."""
+    raiz = (
+        f'<div class="sessao-viva-painel ficha-personagem" data-pagina="{html.escape(pagina_rel_docs)}">'
+        '<p class="ajuda"><em>Carregando Master\'s Shield…</em></p></div>'
+    )
+    return conteudo.replace("<!-- sessaoviva:painel -->", raiz)
+
+
 def _combate_dinamico(conteudo: str, pagina_rel_docs: str) -> str:
-    """Troca o marcador `<!-- combate:painel -->` (aba "Combat Tracker" das páginas de sessão,
-    ver admin/wiki_data.py::_modelo_sessao) por uma raiz vazia — mesmo padrão de
+    """Troca o marcador `<!-- combate:painel -->` (dentro da aba "Master's Shield" das páginas de
+    sessão, ver admin/wiki_data.py::_modelo_sessao) por uma raiz vazia — mesmo padrão de
     `_ficha_dinamica_personagem`: docs/javascripts/combate.js busca `/api/combate/<pagina>` ao
     carregar e desenha o tracker ali. Substitui o antigo alternador Normal/Mestre + Painel de
     Iniciativa (admin/sessao_viva.py) — o combate agora é só mais uma aba, sem split de HTML."""
@@ -929,6 +943,19 @@ def _combate_dinamico(conteudo: str, pagina_rel_docs: str) -> str:
         '<p class="ajuda"><em>Carregando Combat Tracker…</em></p></div>'
     )
     return conteudo.replace("<!-- combate:painel -->", raiz)
+
+
+def _encontro_dinamico(conteudo: str, pagina_rel_docs: str) -> str:
+    """Troca o marcador `<!-- encontro:planejado -->` (aba "NPCs" das páginas de sessão, ver
+    admin/wiki_data.py::_modelo_sessao) por uma raiz vazia — mesmo padrão de `_combate_dinamico`:
+    docs/javascripts/encontro.js busca `/api/encontros/<pagina>` ao carregar e desenha a lista de
+    rascunhos de encontro ali. O botão "Iniciar combate" do Combat Tracker lê esses rascunhos pra
+    pré-carregar participantes (ver admin/encontro_api.py)."""
+    raiz = (
+        f'<div class="encontro-planejado ficha-personagem" data-pagina="{html.escape(pagina_rel_docs)}">'
+        '<p class="ajuda"><em>Carregando encontros planejados…</em></p></div>'
+    )
+    return conteudo.replace("<!-- encontro:planejado -->", raiz)
 
 
 # --------------------------------------------------------------------------
@@ -970,7 +997,7 @@ def on_page_markdown(markdown: str, page, config, files):
         markdown = markdown.replace("<!-- sessoes:lista -->", _lista_sessoes(docs, config))
     if src == "lugares/index.md" and "<!-- lugares:lista -->" in markdown:
         markdown = markdown.replace("<!-- lugares:lista -->", _lista_lugares(docs, config))
-    if src == "mestre/jogadores/index.md" and "<!-- jogadores:lista -->" in markdown:
+    if src == "wiki/jogadores/index.md" and "<!-- jogadores:lista -->" in markdown:
         markdown = markdown.replace("<!-- jogadores:lista -->", _lista_jogadores(docs, config))
     if src == "magias/index.md" and "<!-- magias:niveis -->" in markdown:
         markdown = markdown.replace("<!-- magias:niveis -->", _tabela_magias_por_nivel(docs, config))
@@ -1060,6 +1087,10 @@ def on_page_content(conteudo: str, page, config, files):
         conteudo = _paginar_npc(conteudo)
     elif isinstance(page.meta.get("monstro"), dict) and "<!-- personagem:ficha-dinamica -->" in conteudo:
         conteudo = _ficha_dinamica_personagem(conteudo, "monstro", slug)
+    if "<!-- sessaoviva:painel -->" in conteudo:
+        conteudo = _sessao_viva_dinamica(conteudo, page.file.src_uri)
     if "<!-- combate:painel -->" in conteudo:
         conteudo = _combate_dinamico(conteudo, page.file.src_uri)
+    if "<!-- encontro:planejado -->" in conteudo:
+        conteudo = _encontro_dinamico(conteudo, page.file.src_uri)
     return conteudo + _rodape_global()

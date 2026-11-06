@@ -16,10 +16,6 @@ de consulta rápida. Ferramentas e convenções do projeto ficam em
     Uma página por sessão, com resumo, NPCs e fichas de combate, cenas, pistas, lugares e o
     segredo do Mestre. O botão **Nova sessão** cria a próxima com o mesmo layout.
 
--   **[Jogadores](jogadores/index.md)**
-
-    Os personagens dos jogadores da mesa: ficha de combate, biografia e tabela filtrável.
-
 -   **[Diário de Sessões](../diario/index.md)**
 
     O registro do que aconteceu em cada sessão jogada, com a data real e a data na campanha.

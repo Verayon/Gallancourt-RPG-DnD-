@@ -36,6 +36,14 @@
       .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   }
 
+  // Grade de pips (bolinha preenchida = espaço/carga disponível) pro pool de magia/item com carga
+  // no painel do token — ver .combate-painel__pips/.pip em extra.css.
+  function pips(total, preenchidos) {
+    var out = "";
+    for (var i = 0; i < total; i++) out += '<span class="pip' + (i < preenchidos ? " pip--on" : "") + '"></span>';
+    return out;
+  }
+
   function barraPv(atual, maximo, temporario, classeExtra) {
     var pct = maximo > 0 ? Math.max(0, Math.min(100, (atual / maximo) * 100)) : 0;
     var nivel = pct <= 25 ? "critico" : (pct <= 50 ? "ferido" : "ok");
@@ -56,8 +64,11 @@
     this.foco = null; // id do participante mostrado no Painel do Token
     this.alvos = {}; // id do participante -> true, pra ataque/cura/resistência
     this.busca = null; // { tipo, q, resultados, nomeExibicao, iniciativa }
-    this.modal = null; // { tipo: "resistencia" } | { tipo: "resumo", xp, loot }
+    this.modal = null; // { tipo: "resistencia" } | { tipo: "resumo", xp, loot } | { tipo: "iniciar" }
+    this.bloqueio = null; // { motivo, forcar() } — recurso sem espaço (ver _chamarComForca)
     this.ultimoResultado = "";
+    this.encontros = []; // encontros planejados desta página (ver encontro.js), pra pré-carregar
+    this.encontroEscolhido = "";
     this.ligarEventos();
     this.carregar();
   }
@@ -71,9 +82,11 @@
     Promise.all([
       fetch(this._url()).then(function (r) { return r.json(); }),
       fetch("/api/auth/estado").then(function (r) { return r.json(); }).catch(function () { return { autenticado: false }; }),
+      fetch("/api/encontros/" + encodeURIComponent(this.pagina)).then(function (r) { return r.json(); }).catch(function () { return { encontros: [] }; }),
     ]).then(function (resultados) {
       self.dados = resultados[0].combate;
       self.autenticado = !!resultados[1].autenticado;
+      self.encontros = resultados[2].encontros || [];
       self.renderizar();
     }).catch(function (erro) {
       self.raiz.innerHTML = '<p class="ajuda">⚠️ Não consegui falar com o Painel do Mestre. ' +
@@ -100,6 +113,49 @@
         return res.dados;
       })
       .catch(function (erro) { window.alert("Erro: " + erro.message); return null; });
+  };
+
+  // Conjurar magia / usar item com carga — bloqueia sem recurso disponível, com opção de forçar
+  // (ver admin/combate_api.py::conjurar_magia/usar_carga_item). Sem espaço, não grava nada e guarda
+  // o motivo em `this.bloqueio`; o painel do token mostra o banner "Ação bloqueada" com Cancelar/
+  // Forçar (ver _painelToken) em vez do window.confirm() antigo.
+  Widget.prototype._chamarComForca = function (caminho, corpo) {
+    var self = this;
+    return fetch(caminho, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(corpo) })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d.erro) { window.alert(d.erro); return; }
+        if (d.resultado && d.resultado.bloqueado) {
+          self.bloqueio = {
+            motivo: d.resultado.motivo,
+            forcar: function () {
+              corpo.forcar = true;
+              self.bloqueio = null;
+              self._chamarComForca(caminho, corpo);
+            },
+          };
+          self.renderizar();
+          return;
+        }
+        self.bloqueio = null;
+        self.dados = d.combate;
+        self.renderizar();
+      })
+      .catch(function (erro) { window.alert("Erro: " + erro.message); });
+  };
+
+  Widget.prototype.conjurarMagia = function (participanteId, vinculoId, nivelSlot, forcar) {
+    this._chamarComForca(
+      "/api/combate/" + this.dados.id + "/participantes/" + participanteId + "/conjurar",
+      { magia_vinculo_id: vinculoId, nivel_slot: nivelSlot, forcar: !!forcar },
+    );
+  };
+
+  Widget.prototype.usarItem = function (participanteId, vinculoId, forcar) {
+    this._chamarComForca(
+      "/api/combate/" + this.dados.id + "/participantes/" + participanteId + "/usar-item",
+      { equipamento_vinculo_id: vinculoId, forcar: !!forcar },
+    );
   };
 
   Widget.prototype._atualizarUltimoResultado = function (dados) {
@@ -147,7 +203,42 @@
     }
     return (
       '<p class="ajuda">Nenhum combate em andamento nesta sessão.</p>' +
-      '<button type="button" class="botao-principal" data-acao="iniciar-combate">Iniciar combate</button>'
+      '<button type="button" class="botao-principal" data-acao="abrir-iniciar-combate">Iniciar combate</button>' +
+      (this.modal && this.modal.tipo === "iniciar" ? this._modalIniciarCombate() : "")
+    );
+  };
+
+  // Modal de "Iniciar combate" — escolhe um encontro planejado (ver encontro.js/admin/encontro_api.py)
+  // pra pré-carregar o tracker, ou começa vazio. Substitui o <select> solto por cartões clicáveis
+  // com nome/contagem/prévia da ordem, mesma família .combate-modal já usada no resumo pós-combate.
+  Widget.prototype._modalIniciarCombate = function () {
+    var self = this;
+    var sel = this.encontroEscolhido;
+    var cartoes = this.encontros.map(function (e) {
+      var ativo = String(e.id) === sel;
+      var nomes = e.participantes.slice(0, 5).map(function (p) { return escapeHtml(p.nome); }).join(", ") +
+        (e.participantes.length > 5 ? "…" : "");
+      return (
+        '<button type="button" class="combate-modal__opcao' + (ativo ? " combate-modal__opcao--sel" : "") +
+        '" aria-pressed="' + ativo + '" data-acao="escolher-encontro-modal" data-encontro="' + e.id + '">' +
+        "<strong>" + escapeHtml(e.nome) + "</strong> <span class=\"ajuda\">" + e.participantes.length + " participante(s)</span>" +
+        (nomes ? "<br><span class=\"ajuda\">" + nomes + "</span>" : "") +
+        "</button>"
+      );
+    }).join("");
+    return (
+      '<div class="combate-modal"><div class="combate-modal__caixa">' +
+      '<button type="button" class="botao-remover combate-modal__fechar" data-acao="fechar-modal">× Fechar</button>' +
+      "<h3>Iniciar combate</h3>" +
+      (this.encontros.length
+        ? '<div class="combate-modal__opcoes">' +
+          '<button type="button" class="combate-modal__opcao' + (!sel ? " combate-modal__opcao--sel" : "") +
+          '" aria-pressed="' + !sel + '" data-acao="escolher-encontro-modal" data-encontro="">' +
+          "<strong>Começar vazio</strong> <span class=\"ajuda\">Sem encontro planejado</span></button>" +
+          cartoes + "</div>"
+        : '<p class="ajuda">Nenhum encontro planejado nesta sessão — vai começar vazio.</p>') +
+      '<button type="button" class="botao-principal" data-acao="confirmar-iniciar-combate">Iniciar combate</button>' +
+      "</div></div>"
     );
   };
 
@@ -284,20 +375,50 @@
         (h.dano_formula ? " — " + escapeHtml(h.dano_formula) + " " + escapeHtml(h.dano_tipo || "") : "") + usar + "</li>";
     }).join("");
     var magias = p.magias.map(function (m) {
+      var conjurar = editavel
+        ? ' <input type="number" class="input-pequeno" min="' + (m.nivel || 0) + '" max="9" value="' + (m.nivel || 0) +
+          '" data-nivel-slot="' + m.vinculo_id + '" title="Nível do espaço a gastar">' +
+          ' <button type="button" class="chip" data-acao="conjurar-magia" data-participante="' + p.id + '" data-vinculo="' + m.vinculo_id + '">Conjurar</button>'
+        : "";
       return "<li>" + (m.favorito ? "★ " : "") + "<strong>" + escapeHtml(m.nome) + "</strong>" + (m.nivel != null ? " (nível " + m.nivel + ")" : "") +
-        (m.resistencia ? " — resistência: " + escapeHtml(m.resistencia) : "") + "</li>";
+        (m.resistencia ? " — resistência: " + escapeHtml(m.resistencia) : "") + conjurar + "</li>";
     }).join("");
     var slots = (p.espacos_magia || []).map(function (e) {
-      return '<span class="pilula">Nv.' + e.nivel + (e.rotulo ? " " + escapeHtml(e.rotulo) : "") + ": " + e.usado + "/" + e.maximo + "</span>";
-    }).join(" ");
+      var restante = e.maximo - e.usado;
+      return (
+        '<span class="combate-painel__pool"><span class="lbl">Nv.' + e.nivel + (e.rotulo ? " " + escapeHtml(e.rotulo) : "") + "</span>" +
+        '<span class="combate-painel__pips">' + pips(e.maximo, restante) + "</span>" +
+        '<span class="ajuda">' + restante + "/" + e.maximo + "</span></span>"
+      );
+    }).join("");
+    var itensCarga = (p.equipamentos || []).filter(function (e) { return e.cargas; }).map(function (e) {
+      var usar = editavel
+        ? ' <button type="button" class="chip' + (e.cargas.restante <= 0 ? " chip--gated" : "") +
+          '" data-acao="usar-item" data-participante="' + p.id + '" data-vinculo="' + e.vinculo_id + '">usar</button>'
+        : "";
+      return (
+        "<li>" + escapeHtml(e.nome) + ' <span class="combate-painel__pips">' + pips(e.cargas.maximo, e.cargas.restante) + "</span> " +
+        e.cargas.restante + "/" + e.cargas.maximo + " cargas" + usar + "</li>"
+      );
+    }).join("");
 
     var economia = editavel
-      ? ["acao_usada", "acao_bonus_usada", "reacao_usada"].map(function (campo, i) {
-          var rotulos = ["1 Ação", "1 Ação Bônus", "1 Reação"];
+      ? ["acao_usada", "acao_bonus_usada", "reacao_usada", "movimento_usado"].map(function (campo, i) {
+          var rotulos = ["1 Ação", "1 Ação Bônus", "1 Reação", "1 Movimento"];
           return '<label class="combate-painel__economia-item' + (p[campo] ? " combate-painel__economia-item--gasta" : "") + '">' +
             '<input type="checkbox" data-acao="economia-acao" data-participante="' + p.id + '" data-campo="' + campo + '"' +
             (p[campo] ? " checked" : "") + "> " + rotulos[i] + "</label>";
         }).join("")
+      : "";
+
+    var banner = (editavel && this.bloqueio)
+      ? '<div class="combate-painel__bloqueio" role="alert">' +
+        '<p class="combate-painel__bloqueio-titulo">Ação bloqueada · nada foi gravado</p>' +
+        '<p>' + escapeHtml(this.bloqueio.motivo) + "</p>" +
+        '<div class="combate-painel__bloqueio-acoes">' +
+        '<button type="button" class="botao-secundario" data-acao="cancelar-bloqueio">Cancelar</button>' +
+        '<button type="button" class="botao-remover" data-acao="forcar-bloqueio">Forçar mesmo assim</button>' +
+        "</div></div>"
       : "";
 
     var concentracao = editavel
@@ -321,6 +442,7 @@
       '<div class="combate-painel__token-titulo"><h4>' + escapeHtml(p.nome) + "</h4>" +
       '<span class="combate-painel__ca-chip" title="Classe de Armadura"><strong>CA</strong> ' + p.ca_total + "</span></div>" +
       "</div>" +
+      banner +
       barraPv(p.pv_atual, p.pv_maximo, p.pv_temporario, "combate-painel__barra-pv--grande") +
       (concentracao ? '<div class="combate-painel__grupo">' + concentracao + "</div>" : "") +
       (economia ? '<div class="combate-painel__economia">' + economia + "</div>" : "") +
@@ -328,6 +450,7 @@
       (slots ? '<div class="combate-painel__grupo"><strong>Espaços de magia</strong><br>' + slots + "</div>" : "") +
       (acoes ? '<div class="combate-painel__grupo"><strong>Ações/Traços</strong><ul class="ficha-personagem__lista-simples">' + acoes + "</ul></div>" : "") +
       (magias ? '<div class="combate-painel__grupo"><strong>Magias</strong><ul class="ficha-personagem__lista-simples">' + magias + "</ul></div>" : "") +
+      (itensCarga ? '<div class="combate-painel__grupo"><strong>Itens com carga</strong><ul class="ficha-personagem__lista-simples">' + itensCarga + "</ul></div>" : "") +
       "</div>"
     );
   };
@@ -516,6 +639,7 @@
       var card = ev.target.closest("[data-acao='focar']");
       if (card && !ev.target.closest("input, button, select, label")) {
         self.foco = parseInt(card.getAttribute("data-participante"), 10);
+        self.bloqueio = null;
         self.renderizar();
         return;
       }
@@ -526,8 +650,15 @@
       var pid = botao.getAttribute("data-participante");
       var cid = self.dados && self.dados.id;
 
-      if (acao === "iniciar-combate") {
-        self.chamar("POST", self._url("/iniciar"));
+      if (acao === "abrir-iniciar-combate") {
+        self.modal = { tipo: "iniciar" };
+        self.renderizar();
+      } else if (acao === "escolher-encontro-modal") {
+        self.encontroEscolhido = botao.getAttribute("data-encontro") || "";
+        self.renderizar();
+      } else if (acao === "confirmar-iniciar-combate") {
+        self.chamar("POST", self._url("/iniciar"), self.encontroEscolhido ? { encontro_id: self.encontroEscolhido } : undefined)
+          .then(function (ok) { if (ok) { self.modal = null; self.renderizar(); } });
       } else if (acao === "proximo-turno") {
         self.chamar("POST", "/api/combate/" + self.dados.id + "/turno/proximo");
       } else if (acao === "encerrar-combate") {
@@ -552,6 +683,17 @@
       } else if (acao === "usar-habilidade") {
         fetch("/api/fichas/" + botao.getAttribute("data-ficha") + "/habilidades/" + botao.getAttribute("data-vinculo") + "/usar", { method: "POST" })
           .then(function () { self.carregar(); });
+      } else if (acao === "conjurar-magia") {
+        var vinculoMagia = botao.getAttribute("data-vinculo");
+        var nivelInput = self.raiz.querySelector('[data-nivel-slot="' + vinculoMagia + '"]');
+        self.conjurarMagia(pid, vinculoMagia, nivelInput ? parseInt(nivelInput.value, 10) || 0 : 0, false);
+      } else if (acao === "usar-item") {
+        self.usarItem(pid, botao.getAttribute("data-vinculo"), false);
+      } else if (acao === "cancelar-bloqueio") {
+        self.bloqueio = null;
+        self.renderizar();
+      } else if (acao === "forcar-bloqueio") {
+        if (self.bloqueio) self.bloqueio.forcar();
       } else if (acao === "oferecer-reacao") {
         var rotuloInput = botao.closest(".combate-painel__reacao").querySelector("[data-reacao-rotulo]");
         var rotulo = (rotuloInput.value || "").trim() || "Reação";

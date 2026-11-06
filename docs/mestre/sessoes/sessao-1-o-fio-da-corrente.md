@@ -6,13 +6,13 @@ sessao:
   numero: 1
 participantes:
   jogadores:
-  - mestre/jogadores/astraelle.md
-  - mestre/jogadores/elariel-fogo-do-sol.md
-  - mestre/jogadores/faeris-thalendar.md
-  - mestre/jogadores/perry.md
-  - mestre/jogadores/rowan-catapedras.md
-  - mestre/jogadores/trembolinha.md
-  - mestre/jogadores/vivien-elaris.md
+  - wiki/jogadores/astraelle.md
+  - wiki/jogadores/elariel-fogo-do-sol.md
+  - wiki/jogadores/faeris-thalendar.md
+  - wiki/jogadores/perry.md
+  - wiki/jogadores/rowan-catapedras.md
+  - wiki/jogadores/trembolinha.md
+  - wiki/jogadores/vivien-elaris.md
   npcs:
   - personagens/alaric-duvant.md
 ---
@@ -288,7 +288,8 @@ participantes:
     ## Índice desta aba
 
     [Aliados](#aliados) · [Inimigos](#inimigos) · [Fichas de combate](#fichas-de-combate) ·
-    [Figurantes](#figurantes) · [O vilão oculto](#o-vilao-oculto)
+    [Encontro planejado](#encontro-planejado) · [Figurantes](#figurantes) ·
+    [O vilão oculto](#o-vilao-oculto)
 
     ## Aliados
 
@@ -309,7 +310,7 @@ participantes:
 
     !!! tip "Fichas de monstros genéricos ficam no catálogo, não duplicadas aqui"
         Goblins, lobos, bandidos e o capitão bandido já têm ficha completa na página de
-        **Monstros** — ao montar o combate na aba **Combat Tracker**, você pode adicionar a
+        **Monstros** — ao montar o combate na aba **Master's Shield**, você pode adicionar a
         ficha deles de lá diretamente, sem precisar copiar nada para esta página.
 
     ## Fichas de combate
@@ -376,6 +377,10 @@ participantes:
     </div>
     <!-- /bloco:ficha -->
     <!-- fim:statblock:o-intermediario -->
+
+    ## Encontro planejado
+
+    <!-- encontro:planejado -->
 
     ## Figurantes
 
@@ -479,6 +484,8 @@ participantes:
     compras, viagem e talvez o Posto Cinzento). Não force tudo numa noite só — está previsto e
     está tudo bem se a sessão terminar na estrada ou na chegada ao posto, continuando na Sessão 2.
 
-=== "Combat Tracker"
+=== "Master's Shield"
+
+    <!-- sessaoviva:painel -->
 
     <!-- combate:painel -->
